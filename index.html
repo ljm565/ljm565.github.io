@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>여행 초짜 이야기</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>        
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="homeHead">여행 초짜 이야기</h1>
+                    </div>
+                </div>
+
+                <div id="mainImg">
+                    <ul class="slides" style="left:0px;">
+                        <li>
+                            <img class="h" src="init/index_img/main_img1.jpg">
+                            <p><b>Foss a Sidu</b> © 여행 초짜. Southern Iceland, Jul. 2019.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img2.jpg">
+                            <p><b>Mission Bay</b> © 여행 초짜. Auckland in New Zealand, Jan. 2018.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img3.jpg">
+                            <p><b>Glaumbær</b> © 여행 초짜. Northern Iceland, Jul. 2019.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img4.jpg">
+                            <p><b>Haifoss</b> © 여행 초짜. Southern Iceland, Jul. 2019.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img5.jpg">
+                            <p><b>Marjan</b> © 여행 초짜. Split in Croatia, Aug. 2018.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img6.jpg">
+                            <p><b>Český Krumlov Castle</b> © 여행 초짜. Český Krumlov in Czech, Aug. 2018.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img7.jpg">
+                            <p><b>Zermatt Trekking</b> © 여행 초짜. Zermatt in Switzerland, Jul. 2016.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img8.jpg">
+                            <p><b>Setas de Sevilla</b> © 여행 초짜. Sevilla in Spain, Jun. 2015.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img9.jpg">
+                            <p><b>Bled Castle</b> © 여행 초짜. Bled in Slovenia, Aug. 2018.</p>
+                        </li><!-- 
+                        --><li>
+                            <img class="w" src="init/index_img/main_img10.jpg">
+                            <p><b>Harder Kulm</b> © 여행 초짜. Interlaken in Switzerland, Jul. 2016.</p>
+                        </li>
+                    </ul>
+                    <div class="controller">
+                        <span class="prev" onclick="movePrev();">&lang;</span> 
+                        <span class="next" onclick="moveNext();">&rang;</span>
+                    </div>   
+                </div>
+
+                <script>
+                    headHighlightColorChanger();
+                </script> 
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
