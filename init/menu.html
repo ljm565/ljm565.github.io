@@ -5,7 +5,15 @@
     <input type="checkbox" id="development">
     <label for="development">딥러닝 이야기</label>
     <ul>
-        <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">AE</a></li>
+        <li>
+            <input type="checkbox" id="ManifoldLearning" checked>
+            <label for="ManifoldLearning">Manifold Learning</label>
+            <ol>
+                <li><a onclick="pjaxPage('ManifoldLearning1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Autoencoder (오토인코더)</a></li>
+                <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">t-SNE, UMAP</a></li>
+                <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Autoencoder 구현</a></li>
+            </ol>
+        </li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">VAE</a></li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GAN</a></li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DCGAN</a></li>
