@@ -62,7 +62,7 @@
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.02</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.03</span>
                     </div>
                 </div>
 
@@ -75,7 +75,7 @@
                         그리고 기존에 사람이 하지 못했던, 혹은 하더라도 오래 걸리던 작업이 딥러닝을 이용하면 높은 정확도로 해결이 되는 경우도 많아지고 있습니다.</span>
                         <br><br>또한 빅데이터가 많아짐에 따라 분석이 필요한 데이터들이 생겨나고 혹은 분석을 하고 싶은 부분도 많아지는 것도 사실입니다.
                         따라서 최근에는 전산학과 전공이 아니더라도 비전공자분들도 딥러닝을 접해보신 분들도 많으며, 계속 꾸준히 사용하는 사람들도 많습니다.
-                        <br><br>따라서 저는 아주 간단한 linear layer(pytorch: Linear, tensorflow: dense)를 쌓아서 과제를 수행하는 아주 간단한 이야기는 다루지 않으려고 합니다(물론 추후에 간단하게 설명을 해볼까 합니다).
+                        <br><br>따라서 저는 아주 간단한 linear layer (pytorch: Linear, tensorflow: dense)를 쌓아서 과제를 수행하는 아주 간단한 이야기는 다루지 않으려고 합니다(물론 추후에 간단하게 설명을 해볼까 합니다).
                         물론 딥러닝의 가장 초기의 형태인 linear layer를 이용한 간단한 MLP (Multilayer Perceptron), XOR 문제의 해결 등도 딥러닝이 발전하는 데 있어 큰 기여를 했습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">다만 저는 딥러닝의 조금 더 학술적이고, 딥러닝 분야에서 특별한 의미를 가지는 알고리즘, 모델들을 설명하고 구현하는 데 초점을 맞추려 합니다.</span>
                         따라서 딥러닝에 대해 조금 깊게 어렵지 않은 선에서 알고 싶은 분들이 쉽게 생각을 정리하고, 적용해보는 데 도움이 되는 글을 적고자 합니다.
@@ -92,9 +92,9 @@
                         <br>먼저 autoencoder (오토인코더)를 설명하기 앞서 잠재 변수(Latent Variable)을 짚고 넘어가려 합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수는 데이터에 직접적으로 보이지 않지만 어떠한 데이터 분포를 만드는데 큰 역할을 하는 변수라고 보시면 됩니다.</span>
                         예를 들어 내가 가지고 있는 데이터가 사람 사진이라고 가정을 하면, 사람들은 이 사진이 여자인지, 남자인지 높은 확률로 구분할 수 있을 것입니다.
-                        <br><br>아래 사람 사진의 예시를 보면 우리는 왼쪽이 여자고 오른쪽이 남자라는 사실을 알 수 있을 겁니다. 하지만 컴퓨터는 이를 어떻게 분간할 수 있을까요?
+                        <br><br>아래 사람 사진의 예시를 보면 우리는 왼쪽이 여자고 오른쪽이 남자라는 사실을 알 수 있을 겁니다. <b>하지만 컴퓨터는 이를 어떻게 분간할 수 있을까요?</b>
                         만약 우리가 현재 여자와 남자를 구분하는 과제를 수행 중이라 가정한다면, 컴퓨터는 아래 사진들을 보고 사진 속의 사람이 <span class="highlight" style="color: rgb(0, 3, 206);">수염 유무, 머리 길이, 화장, 장신구 등 사진에서 많은 특징들을 추출할 것입니다.</span>
-                        하지만 우리는 이 사진들을 보고 감각적으로 이 사람이 여자인지 남자인지 구분을 하지만, 컴퓨터는 그럴 수 없는 노릇이죠. 그럼 컴퓨터는 어떠한 방식으로 사진들의 특징을 추출할 수 있을까요?
+                        하지만 우리는 이 사진들을 보고 감각적으로 이 사람이 여자인지 남자인지 구분을 하지만, 컴퓨터는 그럴 수 없는 노릇이죠. <b>그럼 컴퓨터는 어떠한 방식으로 사진들의 특징을 추출할 수 있을까요?</b>
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAWUweWJNP-JgKmjv6zx79R8-_gthuVQeA1Pas02n_Jxx_eNw1R9t73-XeMBmBhGnMdZ3KQz3zNA8dSGx3FsaHvjeUt5DxHbeo1MFUNrOMm_V9L0HudQiEK4IxhwQ9j-Yo3AW-BdXmUyCcnlLZSwzT51PxZJNCjUsX-t1dhtn6-7sgHmKKYwhxwYOWsxcOYgA3dP5lfogyhNMf2R0L2gptAMw2uCQ4XmCuX-2AY-XxVStsUeVHZSRmPQVJgTRPYKZtrtI6KlhZjcPknWaZSma2WRI3dYk2j14SgnQCPQ_o-viopU9_Tzpxjbj31zBiS4fIwcBfLEvg92ncZT-KaO-QMQteyoj1N-5vpDpos7ekT88j3q928RwJQ_L-st0BnRUgZEaALkQP41nxD5KMUdlb1a8H6DWBRXAdP2A0Jfk6G-Fe1T5DWS4zsQEcnLDH3-8pBbuWobBN4YJXnLk7NI7bl6HCr1Qw-EhtuFOrMSZISbbuykJ7wOczwLLPe1O-SIgkpYp9ZU6gaDhGpGmP5dljcXHyWndlcEN45NAkp_1onIzCoDb2PobZ96J7twzcQjHv8fDHUELMjRO1nXBRiuS5Y7Aq5t95BzfMAzTw4MVQPsGnilTDLQRXp1OdQ7TweUoOfhjVbDf_1cVN1Z7VP2DEK6OQJ0SD1KFiF1mokzZW47M8BfWQOnDxJn_AMp1S7CewbNXeH0pSRzrKDsQCh5rQ4Z0mcb7fL3u-ay=ft" style="width: 70%;">
@@ -106,10 +106,11 @@
                         <br><br>각각의 이미지의 픽셀들은 0과 1사이의 gray-scale의 값을 가지고 있을 것이며, 이또한 28&times;28로 표현할 수 있습니다.
                         우리는 이 픽셀들을 모두 이어붙여서 28&times;28의 이미지 형태에서 1&times;784의 벡터 형태로 나타낼 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 나란히 벡터로 표현한 이유는 우리가 잘 아는 linear 혹은 hidden 레이어를 거치기 위함입니다.</span>
-                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 이미지를 벡터화한 데이터에 non-linear (linear layer 혹은 hidden layer) 혹은 linear 변환과 같은 모종의 변환 과정을 거쳐 4차원의 데이터로 만든다고 가정하면, 총 784개(28&times;28)의 픽셀 값을 가지던 이미지는 각각 4개의 값으로 표현할 수 있습니다. <b>그리고 이렇게 4개의 값으로 표현 된 것이 바로 잠재 변수입니다.</b></span>
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 이미지를 벡터화한 데이터에 non-linear (linear layer or hidden layer) 변환 혹은 linear 변환과 같은 모종의 변환 과정을 거쳐 4차원의 데이터로 만든다고 가정하면, 총 784개(28&times;28)의 픽셀 값을 가지던 이미지는 각각 4개의 값으로 표현할 수 있습니다. <b>그리고 이렇게 4개의 값으로 표현 된 것이 바로 잠재 변수입니다.</b></span>
                         그리고 딥러닝 모델은 잠재 변수를 바탕으로 사용자가 원한는 task를 수행하며, 그 task의 loss function(손실 함수)에 맞춰 최적의 잠재 변수를 추출하려 노력할 것입니다.
                         모델이 학습이 됨에 따라 어느 하나의 데이터에서 추출되는 잠재 변수 값은 학습을 하는 도중에는 계속 바뀌게 됩니다(계속 학습을 하면서 최적의 잠재 변수를 찾기 때문).
                         그리고 최종적으로 모델 학습이 완료 되었다면 그 모델은 어느 하나의 데이터에 대해 같은 잠재 변수를 내어줄 것이며, 여러 데이터가 들어왔을 때 각 데이터들의 특징을 잘 잡을 수 있는 각각의 잠재 변수를 만들어서 task를 수행하게 될 것입니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 컴퓨터 혹은 딥러닝 모델은 이러한 방식으로 잠재 변수를 추출하며 이것이 컴퓨터가 사진, 즉 데이터의 특징을 추출하는 방법입니다.</span>
 
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이러한 잠재 변수의 형태와 잠재 변수가 존재하는 잠재 공간(latent space)은 데이터의 종류와 수행하는 과제에 따라 다 다를 것입니다.</span>
                         컴퓨터는 이렇게 구한 잠재 변수를 이용하여 이진 분류(binary classification), 다중 분류(multi-label classification), 회귀(regression), 단어 임베딩(word embedding) 등 사용자가 지정한 과제를 수행하게 됩니다.
@@ -141,31 +142,134 @@
                         따라서 현재 많은 사람들이 설명 가능(interpretability, explainability) 딥러닝을 연구하고 있으며 이를 XAI (eXplainable AI)라고 부릅니다.</span>
                     </p>
                     
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>매니폴드</span><br>
+                        <span>Manifold</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <br>Autoencoder는 manifold learning (매니폴드 러닝)을 위한 모델 구조입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);"><b>그럼 manifold란 무엇일까요?</b> Manifold는 바로 모든 데이터를 최대한 오차 없이 잘 아우를 수 있는 subspace (부분 공간)를 의미합니다.</span>
+                        예를 들어 위에서 예시로 보여준 사진은 한 사진당 모두 784개의 픽셀을 가지고 있으며, 이는 각 데이터가 784차원이라고 볼 수 있습니다.
+                        즉 데이터 각각을 784차원의 공간에 점을 찍어 각 데이터가 찍힌 점들을 분석하여 각 데이터의 특징을 반영하여 모든 데이터들을 잘 아우를 수 있도록 하는 공간이 바로 manifold (매니폴드) 입니다(이러한 개념 때문에 manifold는 위상수학(topology)에 등장합니다).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 manifold learning은 이러한 manifold를 잘 찾는 것을 목표로 하는 학습입니다.</span>
+
+                        <br><br><b>그렇다면 manifold learning이 왜 필요할까요?</b> <span class="highlight" style="color: rgb(0, 3, 206);">고차원의 manifold를 잘 찾아낸다면, 고차원의 manifold를 저차원으로 압축했을 때 각 데이터들의 특징을 유지하면서 압축이 가능하기 때문입니다.</span>
+                        아래 예시를 보면 고차원(이미지의 784차원을 그림으로 나타낼 수 없어서 3차원으로 대체)에서 모든 데이터들의 오차를 최소로하는 manifold를 찾았다면, 이 manifold를 바탕으로 저차원(그림에서 2차원)으로 효과적으로 압축할 수 있기 때문입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 이렇게 데이터의 특징을 잘 추출하여 압축한 저차원의 데이터가 바로 위에서 언급한 각 데이터들의 latent variable, 즉 잠재 변수라고 판단할 수 있습니다.</span>
+                        위의 그림을 예시로 들자면, 784차원으로 표현할 수 있는 데이터의 manifold를 잘 찾아서 4차원의 잠재 변수로 나타내는 것이 바로 autoencoder가 하는 역할입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 잠재 변수의 차원이 가진 데이터의 수보다 너무 높으면 데이터의 공통된 특징을 찾지 못하고 압축된 데이터의 특징 분포가 중구난방으로 퍼질 수 있으며, 차원이 너무 작게 되면 정보 손실이 일어나서 각 데이터의 특징이 희미할 수 있습니다.
+                        따라서 적당한 차원을 가진 잠재 변수를 찾아 각 데이터의 특징으로 사용하는 것이 중요합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXhNk5DtIWKeLQLnMsQDIWxmHXp4rMRIauSTX0PF_BZoTSjt9IDopLXlM4lkUw9iaFYJWgwvIYlRAc2bCR3hyvu-VCAHifukkZDru9CyXHLgnu2lQXCsewUGnVu3v1eZs4c6EzyCeLO6hvZLwRJp89UfeHKP5gEgkN8RqlF24hzPQGNyO9CqJW-z5251a9jIBv46wuhsIUHDyy7Bm_yocQ131hLEc1gi7OUbpVSXq9b0rFcLG29nK3bcOpFaS7wGpTdnXaBlG2wBCWJtcg3K1XF82MNe5pcwNKhgC36ZQyAtj8S154EdJTYH5ulxEhvmTF_mpUiVcXrOzUW8fFdYXbyD3kn3DbZ0XZ3BLAYpX-T6agk8Pv0MAqPCSHcXVdFX7CPb-OOO4MQIv3UlJ3Uy_XI4OqwBzu_dBOIpYJpkKBlLBWGOhhbYhxPpecZrtSzskGDtzmt9JkhEUVnqMDQrExzmPGeBXEjRyikMxoKfMVLgJSgU4cS9rv-iEGu2_OTHFHDyZaRnlFUQ7lfV_YRd4IbBBc5Yp8Jslloh1MOJYBWc_nq30bivALj7qq3oD6aFg-bloRG6eIggnJFDXGoiGR8MBi3Wi809-TMR7JD3XFYRjuGzq9qYb00gJChZble-RIImavaP2EEuopdwonJNpaEJc0dqpHaTy8VQOMHpZrh2MvspNvpfLM6jy5O1TX6rTZU9JKVg7LjJeG-AV7kMDv_Zfgi7IRn=ft" style="width: 100%;">
+                        <p class="caption">차원 축소(3D &rarr; 2D)</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">추가로 데이터를 잘 아우르는 manifold를 찾았다면, 이론적으로 딥러닝 모델을 학습하기 위해 구축한 데이터에 존재하지 않는 새로운 데이터를 형성할 수 있다는 의미도 될 수 있습니다.</span>
+                        예를 들어 여자 사진의 고차원의 특징을 고차원 평면에 점을 찍을 수 있을 것입니다.
+                        이렇게 찍힌 점들을 활용하여 각 점들을 잘 아우르는 manifold를(부분 공간)을 예측 할 수 있을 것입니다(e.g. (2, 4), (3, 6)이 존재하는 선은 우리가 y=2x라고 예측 가능함).
+                        만약 우리가 점들을 잘 아우르는 subspace, 즉 manifold를 찾았다면, 학습 데이터에 존재하지 않았던 새로운 점을 추출하여(sampling) 데이터에 없던 새로운 여자 사진을 생성할 수 있을 것입니다(e.g. y=2x로 예측한 선에서 (4, 8)의 데이터를 추출 가능).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이는 우리가 가정한 특정 분포에서 새롭게 데이터를 생성하는 VAE (Variational Autoencoder)와 연관이 있으며, VAE는 본 글에서 설명하는 autoencoder와 이름은 비슷하지만 전혀 다른 특징을 가진 모델입니다.</span>
+                        이에 관해서는 아래에 추가로 설명하도록 하겠습니다.
+                    </p>
                     
-                    
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>오토인코더</span><br>
+                        <span>Autoencoder</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <br>위에서 manifold learning은 고차원의 데이터를 각 데이터의 의미있는 특징을 추출하여 저차원으로 압축시키는 학습이라고 설명하였습니다. 쉽게 말하면 그냥 고차원의 데이터를 저차원으로 잘 만드는 것이라고 생각하면 되겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 유추할 수 있듯이, manifold learning의 가장 큰 역할 중 하나가 바로 <b>차원 축소(dimension reduction)</b>입니다.</span>
+
+                        <br><br><b>그럼 차원 축소 말고도 autoencoder의 다른 역할은 무엇이 있을까요?</b>
+                        <ol style="font-size: 17px;">
+                            <li>차원 축소(Dimension reduction, Data compression)</li>
+                            <li>의미 있는 특징 추출(Feature extaction)</li>
+                            <li>데이터 가시화(Data visualization)</li>
+                            <li>차원의 저주 해결(Curse of dimensionality)</li>
+                        </ol>
+                        사실 autoencoder의 위의 네 가지 특징 중, 1, 2, 3번은 비슷한 맥락이라 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">고차원의 데이터로 의미 있는 특징을 가진 저차원 데이터로 만드는 것이 바로 1, 2번이라 볼 수 있습니다.
+                        <b>그리고 이러한 행위를 우리는 잠재 변수(latent variable)를 추출하는 것이라고 볼 수 있습니다.</b>
+                        그리고 이렇게 저차원의 데이터로 줄이는 이유는 우리가 데이터를 특정 공간에 가시화하고 싶은 것일 수 있습니다.
+                        왜냐하면 784차원의 데이터를 사람이 볼 수 있게 그릴 수 없는 노릇이니, 사람이 직접 데이터 분포를 볼 수 있도록 고차원의 데이터를 3차원 혹은 2차원으로 압축시키는 것이지요.
+                        이것이 바로 3번의 역할입니다.</span>
+                        
+                        <br><br>
+                        <span style="font-size: 20px;"><b>차원의 저주 해결</b></span>
+                        <br><b>그럼 4번의 차원의 저주 해결이란 무엇일까요?</b>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">우리가 극단적으로 생각했을 때 위에 예시로 들었던 사람 사진의 데이터가 10장밖에 없다고 가정해봅시다.
+                        각 이미지의 데이터는 784차원(28&times;28)이며, 10장밖에 없는 데이터로 여자, 남자를 구분해야한다면, 모델의 성능이 잘 안나올 수 있습니다.
+                        왜냐하면 각 데이터가 너무나도 큰 차원을 가지기 때문에 10장만으로 784차원 중 각 차원이 무엇을 나타내는지, 혹은 784개의 특징들의 순서/조합이 어떤 것을 의미하는지 표본이 적기 때문에 모델은 알기 어려울 것입니다(좀 더 자세히 말하자면 모델이 크면 10장의 데이터는 높은 정확도로 여자인지 남자인지 구분을 잘 할 것이지만, 새로운 데이터가 들어왔을 때 여자/남자를 구분하는 정확도가 떨어질 것입니다. 이것이 바로 모델이 overfitting (과적합)되었다고 표현합니다).</span>
+                        이런 경우를 차원의 저주(Curse of Dimensionality)라고 표현합니다. 즉 '데이터의 차원이 높아질 수록 데이터의 양은 기하급수적으로 많아져야한다'라는 뜻입니다.
+                        
+                        <br><br>즉 우리가 분석하고싶은 데이터가 고차원인데 그 수가 적다면 의미있는 학습을 못합니다. 이러한 문제점을 해결하기 위해서는 데이터 수를 늘리거나 차원을 줄이는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">만약 우리가 데이터 수를 늘리기에 한계가 있을 때, 차원의 저주 문제를 해결하기 위해 autoencoder를 사용할 수 있는 것입니다. 즉 autoencoder를 사용하여 고차원의 데이터에서 저차원의 잠재 변수를 추출할 수 있고, 각각의 잠재 변수는 각각의 데이터를 대표할 수 있다는 의미가 됩니다.</span>
+                        따라서 기존 고차원의 데이터를 그대로 분석에 사용하는 것 보다 저차원으로 잘 압축된 잠재 변수를 각각의 데이터 대신에 분석에 사용해도 괜찮다는 것과 같은 뜻입니다.
+                        아래 그림은 차원의 저주를 해결하면 고차원의 적은 데이터로 볼 수 없었던 의미있는 특징들이 저차원으로 낮췄을 때 보이는 것을 보여주는 예시입니다.
+                        고차원에서 데이터의 수가 적어 공간 대비 밀도가 낮았던 데이터들이 저차원이 되면서 밀도가 높아지는 효과를 얻는 것이지요.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXNPqDm3CZyqGayQv0L3tVhemwSJS5cq7-5l0BGZHIejw5sLl_3xEhqlBvj3Cd3Q97j89W3Zv8L0K3I96YI56j_RkJqqVP-KCPeFGC47jmcGrnyNxa4415OvObWK9ohaYezGZ-aoxDUe8wi5QIsHqZN28uK425vRkAvMoVmbSKY80jzU2ZhW5mL_KtXAbQytxJUuXNo-XYcBep9SYBdgVjnhFtNjC9J2hYvQNnoI778-D1IIMhIJfLa6kltB0chUSS9ztZL4hJWX3k5cYnMDGtSPX7E1tD9B20SoX-2tN7U1cvDeqQxd4R4E3ONuBbnIZgJpp_CGwII9ZZoS9URxMfEdjcQOpc3jzVyN38M-GevXu3mfmont2rdX961oZ9d8BW_zRNVZLNAyLERr-N_6izNN7cuSnxTHNaxqP0skXFMhEiHK1ic3sY_7iyTfcMPbluA4azcQn3NYsKOquhcbmFrNAmKWm8u-BNF9b7SrHhiW9XQpEnLz0zLmGkASJuREzCvud_t_BW7w0P_iM2g6ueNISzZwn6O00bwlExTxQCotCoNkp3fen9bFxFuFYQHs7Qdn-8_lof4DLg_pKAkH8OMKoA31R_1TACFHvzkRDNPzXDHHO-Zn5kOAY7JFIKKM_5c9-DJVxIdM9F4Bsujrx1wtLNMyCLpf_kK5WLHawm9KrfhUCBMiKbJ4wxX560BlkbQL2jagjGL3N6mnffbCsnlv8my54An=ft" style="width: 100%;">
+                        <p class="caption">차원의 저주를 고차원의 데이터로 저차원으로 낮추어서 해결</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>의미 있는 특징 추출</b></span>
+                        <br><b>이제 autoencoder를 사용하는 대부분의 이유를 차지하는 2번 역할인 특징 추출에 관해 좀 더 자세히 이야기 해보도록 하겠습니다.</b>
+                        아래에서 A1, A2, B는 이미지가 압축된 잠재 변수이며 데이터의 manifold 위에 존재하고, C는 manifold 위에 존재하지 않는 데이터라고 가정해봅시다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">사실 유클리드 거리(Euclidean distance)는 B-A2, A1-A2보다 B-C, A1-C가 더 가깝습니다. 하지만 C의 데이터를 추출해보면 그림과 같이 B와 A1 그림을 단순 합성한 의미없는 그림이 되어버립니다.
+                        그러나 C와 다르게 A2는 다른 점들과의 유클리드 거리는 더 멀지만 우리가 골프 행위의 순서를 생각해보면 더 합리적인 그림이 나오는 것을 확인할 수 있습니다.</span>
+                        따라서 autoencoder를 통해 추출된 특징은 단순히 비슷한 것끼리 거리만 가깝게 학습 되는 것이 아니라, 데이터의 순서와 같은 의미론적인 부분도 학습을 잘해야한다는 것을 알 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW_pf1QqPK-rxAlxnq3h6jocZyWzpcUmdLABg9qtri_i5vXEtq_7I9mMVE7nRdm0gaC30FCKKPyv41FcpMvkjyRaduRkPquXZYD-VGvhYP8vVToK0s6s2drtrMeRB3L3lUrcPrvyM7qT237TWtZ-1vqYav5iR_j5o8_yp-llLHXKR1bE5OIWIRgC3YhSS5sO-VAM6urbcKFh0xj8qlR1Ac-DcDWpLWduJBNWC7ClcZjTnneNH_CYTbp0J10TYS58XB-ET2LYhNY4E-rUG_Flx7wrbteGXNI1sjW8kT1IIxZt4WD9fOZWFJC0mQTwzN4mdR6Xky5IAPK1WQYtOqEbHrsLvWDs8huS7UnrQCZO3PBFAj0408kp4E7C4nmaTDzV4IMiSADGUxIgMC5wF-6dIgYhoI_c7TABK5FS9SyZFLoZUiQ97R_gxYN8MKokxiqW7qZJvcXZnqlJ-JeX0HQEOHZ8JKYuAvNwWG8OrxHsSPXc1ZzVEqCvstoffzZOCfXB0RqWk281gfkTJ3mNrJ8NH3V6luLUBcl2H8W_ZvpubJ-fj-x7h5e4PtfbL9phu2kWZ4QvBY6UxHO1s2atETKtVcbQDk9bcNEORHgt_R9iaeaxbFNea1lqCmECVMcoXUQw94GJfn9YIur8H_n7Vyx1uKGBDmSvKi8PfR7WfgGhwApG3qE-gDWaDxU22OVkVXtiIbzfoq_0jA3eaH0wNOUlE8MBaRnefEy=ft" style="width: 100%;">
+                        <p class="caption">특징 추출의 예시, 출처: 오토인코더의 모든 것</p>
+                    </div>
+                    <p>
+                        <br>그리고 이제 위의 그림의 D를 생각해보도록 합시다. D는 분명 manifold 위에 존재하지만, 우리의 학습 데이터에는 없는 이미지라 가정을 합시다.
+                        우리는 학습 데이터에 없는 이미지지만 manifold의 순서를 생각해본다면, 골프공을 치고 난 후의 모습이라는 것을 예측할 수 있을 것입니다.
+                        <b>그럼 우리가 D의 값을 추출하여 그림을 그릴 수 있을까요?</b> 아쉽게도 우리가 명시적으로 압축된 데이터(잠재 변수)를 포함하는 manifold (subspace) 식을 구할 수 없다면 D 지점의 데이터를 추출할 수 없을 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 여기서 설명하는 autoencoder는 명시적으로 manifold의 식을 구하는 것이 아니라서, autoencoder 목적은 <b>'적어도 학습 데이터에 존재하는 데이터만 특징 추출을 잘하자!'</b>로 국한됩니다.
+                        따라서 위에서 잠깐 언급한 VAE는 이러한 국한된 목적을 넘어서 <b>'명시적으로 잠재 변수가 존재하는 manifold의 분포를 가정하고 그 분포 내에서 데이터를 추출하여 학습 데이터에 없는 데이터를 생성하자!'</b>는 목적을 가지게 됩니다.</span>
+                        <ol style="font-size: 17px;">
+                            <li><b>Autoencoder의 목적:</b> 적어도 학습 데이터 내에 있는 것만을 가지고 다른 데이터가 들어왔을 때 특징만(잠재 변수) 잘 잡아내도록 학습하자</li>
+                            <li><b>VAE의 목적:</b> 잠재 변수가 존재하는 manifold를 명시적으로 가정하고, 가정한 manifold 분포 내에서 학습 데이터에 없는 데이터를 생성해보자</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 autoencoder와 VAE는 그 이름이 비슷하지만, 전혀 다른 목적을 지니고 있습니다.
+                        즉 autoencoder는 데이터의 특징을 추출하여 각 데이터를 대표할 수 있는 잠재 변수를 추출하거나, 그 잠재 변수를 이용하여 데이터의 분포를 가시화하는 데 목적이 치중된 manifold learning, representation learning이라면, VAE는 새로운 데이터를 생성하고자 하는 목적이 강한 generative model입니다.</span>
+                        이러한 VAE는 딥러닝 역사에 아주 중요한 의의를 지닙니다. 이는 추후에 VAE 부분의 글에서 더 자세히 설명하도록 하겠습니다.
+                    </p>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>데이터 가시화</b></span>
+                        <br><b>그럼 VAE는 잠시 잊고, autoencoder가 잘 학습되어 의미있는 잠재 변수를 잘 추출한다는 것은 어떻게 증명할 수 있을까요?</b>
+                        증명할 수 있는 방법은 바로 데이터를 차원 축소하여 추출한 잠재 변수를 가시화 해보는 것뿐입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수를 우리가 볼 수 있는 2, 3차원으로 그려보았을 때 비슷한 것끼리 군집이 잘 된다면, 특징 추출해주는 autoencoder 모델은 잘 학습 되었다고 판단할 수 있겠지요.</span>
+
+                        <br><br>아래 그림은 실제 784차원의 MNIST 데이터를 저차원의 잠재 변수로 만든 후, t-SNE (t-distributed Stochastic Neighbor Embedding)라는 또다른 manifold learning을 통해 2차원의 데이터로 가시화한 모습입니다.
+                        Manifold Learning에는 이렇게 autoencoder뿐 아니라 t-SNE, UMAP (Uniform Manifold Approximation & Projection) 등 다양한 기법들이 있습니다.
+                        그리고 데이터의 분포를 가시화하기 위해서는 이들을 섞어서 쓸 수도 있습니다(e.g. 잠재 변수는 autoencoder로 추출한 후, 잠재 변수를 다시 더 작은 차원인 2,3차원으로 t-SNE 등으로 압축하여 가시화).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이 글 마지막에는 manifold learning의 종류를 간단히 알아보고 t-SNE와 UMAP은 다음 포스팅에서 더 자세히 알아보도록 하겠습니다.</span>
+                   </p>
+                   <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweX3VARbqZoKiZcLUTPlZdVHjOnNAs6BhUldhH-T3Pt-AlgXgmj5uZoNpalA1fNK9EDg__2tOGY2ZYErzEsPFcJzREy2r_nykG0Q0VYLWbuBKAbljxHOluS4qZ4GRWaTxrcp-oE839AP7-hAvvXNAxVNPyy-kU7vzEMS_a0AyqjIZapT7KcmPdh5av6d6n5WX7jgMwYs69EBnuhMsYuW0fA5NmTny30xjukUQxFsl9EhyuGFNcMba6xD77k1jo2C9EbRnADXfq__qsiRDO2pxkstKTDynQSHIhchFCsmiC1XiWqquRMmgJVR1hhenipLfq865jbGYlADrDNnuqfM4wkhTHdQaQGUue8I-GD5kEZ-IL1wdT-6kXabHuknHrT3XhfExYo9t0_w6NprbbaP8Z5P3jYccw3r4blBa2vi4ajuhyZPmG6GOHJYokf_cillY66jQi2Ne54QqB3OwoA1LBlxTTPJZLA3dJl5GN7LuqWsi1JaDwZQnosRVrmiFoPki0bqWMKOcQTO5G9EbNtRgkk4aLML_9fCyyNf48d32zzUTKESkraapiee-BF8uLzYxpX5y-1oC4xEHFRT5shTkDTyq0HQkI3D4KtH669TrBcst7TjkCJD4AejB7KKr_ZKcQ4UaEXGQS_vstJMC2FNcBRGGAddMcw3P42fuVvDJJTCMidUssV-zeNKYEL8Qn8VJCeDhFzTMNjhn4A7ptZfss0Rf2m_b-Ua=ft" style="width: 80%;">
+                        <p class="caption">t-SNE를 이용한 MNIST 데이터의 잠재 변수 가시화</p>
+                    </div>
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>오토인코더의 구조</span><br>
+                        <span>Architecture of Autoencoder</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
 
 
 
 
-
-                <p style="font-size: 30px;">작성중</p>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <p style="font-size: 30px;">작성중</p>
 
 
 
@@ -178,11 +282,11 @@
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
-                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('spain2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <span><a style="position: absolute; left: 0;" onclick="alert('첫 게시물 입니다.\n\nThis is the first post.')" onmouseout="colorOff(this);">&lang; 이전글</a>
                         <br></span>
                     </div>
                     <div class="pageTurnerRight">
-                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('spain4.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('ManifoldLearning2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
                         <br>t-SNE, UMAP</span>
                     </div>
                 </div>
