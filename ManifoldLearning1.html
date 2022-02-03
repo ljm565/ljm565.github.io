@@ -63,7 +63,7 @@
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.03</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.04</span>
                     </div>
                 </div>
 
@@ -106,7 +106,7 @@
                         흑백 이미지이므로 채널의 수는 1로 가정하여(RGB 값이 없음) 그 크기가 1&times;28&times;28이지만, 1을 생락하여 28&times;28로 나타내었습니다.
                         <br><br>각각의 이미지의 픽셀들은 0과 1사이의 gray-scale의 값을 가지고 있을 것이며, 이또한 28&times;28로 표현할 수 있습니다.
                         우리는 이 픽셀들을 모두 이어붙여서 28&times;28의 이미지 형태에서 1&times;784의 벡터 형태로 나타낼 수 있습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 나란히 벡터로 표현한 이유는 우리가 잘 아는 linear 혹은 hidden 레이어를 거치기 위함입니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 나란히 벡터로 표현한 이유는 우리가 잘 아는 linear 혹은 hidden layer를 거치기 위함입니다.</span>
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 이미지를 벡터화한 데이터에 non-linear (linear layer or hidden layer) 변환 혹은 linear 변환과 같은 모종의 변환 과정을 거쳐 4차원의 데이터로 만든다고 가정하면, 총 784개(28&times;28)의 픽셀 값을 가지던 이미지는 각각 4개의 값으로 표현할 수 있습니다. <b>그리고 이렇게 4개의 값으로 표현 된 것이 바로 잠재 변수입니다.</b></span>
                         그리고 딥러닝 모델은 잠재 변수를 바탕으로 사용자가 원한는 task를 수행하며, 그 task의 loss function(손실 함수)에 맞춰 최적의 잠재 변수를 추출하려 노력할 것입니다.
                         모델이 학습이 됨에 따라 어느 하나의 데이터에서 추출되는 잠재 변수 값은 학습을 하는 도중에는 계속 바뀌게 됩니다(계속 학습을 하면서 최적의 잠재 변수를 찾기 때문).
@@ -286,14 +286,66 @@
                         디코더는 이렇게 원래 데이터 \(x\) 대비 정보 손실이 일어난 잠재 변수만을 가지고 최대한 원래 데이터와 비슷하게 \(x'\)를 \(x\)로 복구해야합니다.
                         이러한 과정에서 인코더는 디코더에게 넘겨줄 잠재 변수의 정보를 최대화 하는 방향으로 학습하게 되며, 의미있는 잠재 변수를 만들어내게 됩니다.
                         </span>
-                        
-
                     </p>
                    <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAWUweUJ_wDHNaH2fPPorWmAMy3bJBbZfFnrYxUYM0hfXz6Obn27C-TQZuLeWpkYV78uSSdCDkvQTAo60ubwgfInqbdCIRK-Ro3qST7CA2HkilmNwB3oGA8PNLxEigM49jT1_3PlpYtDUP85NLua40xYq9-fVxhNFXEWzhn_buKQ7Sb5QOUc4w-hkA5bR_gumGot7svY1FjU1KAOAkDk3ipuXNjZh13ztkOU0yZfoV_dE-C4i4Ohb9NeKsTUrYBe4XmCjzfHzZLelWQDcihya9MRQEtzhrPR0n1NRqBWW0taBdgrx8Cq-y7m6twCbILzr6ouAGzzFgc9O0NqB6JfSqPxd6M-3IYp0Xvm2caX-m-HWlWX3zXPB09HBU8uvlydo0dYyvm-rWTGPsqfwq6CCgW86s9gDmo4OcOT1uVkr3u14A7A7VsoselA4teWLPKojF-zo5HUKlClcHf4FS2m6rGgvqlfynH44XvQPj1ZtKs9vDwQFduCjEwmSmGIfC-yW_Di5-VLIN4gEng4Pd9QRE4PH9VqHJcQ9HEzWe10XUx_GerFoJavlq_LrAxFzLJnwjDkeycro6E-OXWOjmWYQRTlz53YHKI5bCzi6wmqksSC2YSrUgzAoT_xG02wl_qbhBee2_rllawsYTHhXpVBGcODcjrbq7lioCRl2sJ_9ObFASxfDJ5U75oy0qncXjF4MLIa5l0v6hgfxWw-2kVmJyOaKf_gdPXqbpA2=ft" style="width: 100%;">
                         <p class="caption">Autoencoder (오토인코더)의 구조</p>
                     </div>
+                    <p>
+                        <br>지금부터는 간단한 수식과 함께 autoencoder를 정의해보겠습니다.
+                        사실 실제로 사용하는 데 있어서 수식이 그리 중요하지 않으니, 관심이 없으신 분들은 넘어가셔도 무방합니다.
+                        하지만 딥러닝과 관련된 논문들을 읽거나, 조금 더 깊게 들어가고싶다면 수식에 익숙해지는 것이 매우 중요하다고 생각합니다.
+                        지금 볼 수식은 아주 조금만 이해를 하려고 노력한다면 어렵지 않은 수식이니 참고하시기 바랍니다.
 
+                        <br><br> 먼저 원래 데이터 \(x\)와 복구된 결과를 나타내는 \(x'\)는 \(d\)차원을 가집니다(위 그림 예시에서는 \(d\)는 784차원).
+                        따라서 아래와 같이 표현할 수 있습니다.
+                        <br>\[x, x' \in \mathbb{R}^d\]
+
+                        <br><br> 그리고 이 중에서 \(x\)는 인코더 \(f_\theta\)를 통과합니다. 이 인코더는 가중치(Weight)를 포함하고 있는 모델이며, 가중치 \(W\)와 bias \(b\)를 거칩니다.
+                        이렇게 인코더를 거친 \(x\)는 잠재 변수 \(z\)가 되며 이러한 과정은 아래와 같이 쓸 수 있습니다. <span class="highlight" style="color: rgb(0, 3, 206);">아래 식은 인코더의 layer가 하나라고 가정했을 때를 나타냅니다.</span>
+                        <br>\[z = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
+
+                        <br><br> 이렇게 구한 \(z\)는 디코더 \(g_\phi\)를 통과하여 \(x'\)가 됩니다. 이 디코더 역시 가중치와 bias를 가지고 있으므로 아래와 같이 쓸 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">또한 아래 식은 인코더와 동일하게 디코더의 layer가 하나라고 가정했을 때를 나타냅니다.</span>
+                        <br>\[x' = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
+
+                        <br><br>그럼 여기서 잠시 위의 인코더/디코더와 다르게 각각의 layer가 한 개 이상이라면 어떻게 될까요?
+                        위의 autoencoder 그림의 구조에서는 \(x\)에서 바로 잠재 변수로 압축되었지만 아래 그림 처럼 하나 이상의 hidden layer를 거친 후, 잠재 변수로 압축될 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그럼 아래 그림처럼 인코더 \(f_\theta\)와 디코더 \(g_\phi\)가 두 개의 hidden layer를 가지고 있다고 가정을 한다면 이는 아래와 같이 쓸 수 있을 것입니다. 그리고 이를 응용한다면 multiple layers를 가진 모델에 대해서도 수학적으로 나타낼 수 있을 것입니다.</span>
+                        <br>\[h_1 = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
+                        \[z = f_\theta(W^{\theta}_2h_1+b^{\theta}_2)\]
+                        \[h_2 = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
+                        \[x' = g_\phi(W^{\phi}_2h_2+b^{\phi}_2)\]<br>
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweVLheYpStfcrP6Htg0oMq81eXZQISAw_qNR1exjaqdHJt0RE5T7k83fN-JlhrbNi_Hh3d5FxhS67CNG7kNVQ7T8F2lMgKajhQttUa6dkgFQEnHACsWZWMcfKiTcbVsnbl2N_SjZhA9bOUkJ_TFv_DmRu1mnYDSgpETPA-Hj_30Vy2r-yv_avyQWjy_DVO-_nDDkkj6rCdeXmz6VQgOXTqTVNkRUA0G_BtdnZ031SnqT102NwOXK74U1npfiYR8ctLNi17InJH2lasPoHxj26IxI8ub7P-5mno2vnQxHJvyFWFxERb--4MIosCyU1RReXCqz0lq-2QjbrQRPs4Do4ilCeV6G4MqEGmWGL-TCj5KMuk8nERgHgf1zHhYDFOUWJ4cwNUsCkqv5AJlqGfk_RPSJdDva_DZ3eiOMizOPgpukUaDjXag0DgayGif2Fc-RqLc_vIvum76chiU6CQaGdPNNAbhgXlQm2yqzG4Cu5Y_lhH_yijzmKS-07MraC3Ze7NjIDECAXVNS58SUD5PwPJyon1aaRKpSy8CRlIhj-cwwsop12q2CXMbtrDhaznKzZ3BLH1AKolEPR-hITII6lCHfjEpOn84njExGBpPN9XcZ6b1GsBX82A6BTrjXug18XOUbZrFLRBNc02UeY0mMJjTQTRxYHcGXU0wfRhW8_a2Cqd2GHFLNun14YqQNObGjuwwbj5YP6PTJ0RGFlMJKK5ffV1VqZ1GY=ft" style="width: 100%;">
+                            <p class="caption">Autoencoder (오토인코더)의 구조</p>
+                        </div>
+                        <br>다시 본론으로 돌아와서 이제 이렇게 구한 \(x\)와 \(x'\)는 MSE loss 함수에 들어가게 됩니다. 위에서 잠깐 나온 MSE loss 식을 가져와셔 \(x\)와 \(x'\)에 대해 표현하면 아래와 같습니다.
+                        <br><br>\[MSE\,Loss: L(x, x') = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+                        <br>이렇듯 autoencoder의 수식은 직관적이기 때문에 그리 어렵지 않습니다.
+
+                        <br><br>지금까지 살펴보았듯이 vanilla autoencoder의 가장 기본적인 구조는 위에서 설명한 것처럼 압축과 팽창을 하는 구조로 이루어져 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">최종적으로 autoencoder가 어떻게 데이터의 특징을 잘 잡아서 의미있는 잠재 변수를 추출하게 되는지 정리하자면 아래와 같습니다.</span>
+                        <ol style="font-size: 17px;">
+                            <li>잠재 변수는 원래의 고차원 데이터에서 저차원으로 압축된 데이터이다.</li>
+                            <li>잠재 변수는 저차원으로 압축이 되었기 때문에 원래의 데이터에 비해 정보 손실이 일어난다.</li>
+                            <li>디코터는 저차원으로 압축되어 정보 손실이 일어난 잠재 변수를 바탕으로 각 잠재 변수에 해당하는 원래의 데이터로 복구해야한다.</li>
+                            <li>인코더는 디코더를 위해서 원래 데이터에서 최대한 의미있는 잠재 변수(특징)을 추출하는 방향으로 학습된다.</li>
+                            <li>따라서 autoencoder는 데이터에서 의미있는 특징, 잠재 변수를 추출할 수 있게 된다.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);"><br>위에서 vanilla autoencoder라고 잠깐 언급하였습니다. Vanilla는 다들 아시다시피 모델의 가장 기본적인 형태임을 의미합니다.
+                        그렇다면 위의 구조가 아닌 다른 구조를 가진 autoencoder가 존재한다는 의미인데, 어떤 종류의 autoencoder가 있는지는 아래에서 살펴보도록 하겠습니다.
+                        이와 더불어 autoencoder 뿐만이 아닌, manifold learning을 위한 다른 모델들은 어떤 것들이 있는지 간단하게 알아보도록 하겠습니다.</span>
+                    </p>
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>매니폴드 학습을 위한 모델 & 오토인코더의 종류</span><br>
+                        <span>Models for Manifold Learning & Other Autoencoders</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
 
                    
 
