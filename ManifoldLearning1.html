@@ -29,6 +29,20 @@
         
         <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
 
+        <!-- MathJax Begin -->
+        <script>
+            MathJax = {
+            tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+            };
+        </script>
+
+        <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+        </script>
+        <!-- MathJax End -->
+
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
         <script>
@@ -55,7 +69,7 @@
                     </div>
                 </div>
                 
-                <div class="title" style="background-image:url();">
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweUJ_wDHNaH2fPPorWmAMy3bJBbZfFnrYxUYM0hfXz6Obn27C-TQZuLeWpkYV78uSSdCDkvQTAo60ubwgfInqbdCIRK-Ro3qST7CA2HkilmNwB3oGA8PNLxEigM49jT1_3PlpYtDUP85NLua40xYq9-fVxhNFXEWzhn_buKQ7Sb5QOUc4w-hkA5bR_gumGot7svY1FjU1KAOAkDk3ipuXNjZh13ztkOU0yZfoV_dE-C4i4Ohb9NeKsTUrYBe4XmCjzfHzZLelWQDcihya9MRQEtzhrPR0n1NRqBWW0taBdgrx8Cq-y7m6twCbILzr6ouAGzzFgc9O0NqB6JfSqPxd6M-3IYp0Xvm2caX-m-HWlWX3zXPB09HBU8uvlydo0dYyvm-rWTGPsqfwq6CCgW86s9gDmo4OcOT1uVkr3u14A7A7VsoselA4teWLPKojF-zo5HUKlClcHf4FS2m6rGgvqlfynH44XvQPj1ZtKs9vDwQFduCjEwmSmGIfC-yW_Di5-VLIN4gEng4Pd9QRE4PH9VqHJcQ9HEzWe10XUx_GerFoJavlq_LrAxFzLJnwjDkeycro6E-OXWOjmWYQRTlz53YHKI5bCzi6wmqksSC2YSrUgzAoT_xG02wl_qbhBee2_rllawsYTHhXpVBGcODcjrbq7lioCRl2sJ_9ObFASxfDJ5U75oy0qncXjF4MLIa5l0v6hgfxWw-2kVmJyOaKf_gdPXqbpA2=ft);">
                     <div>
                         <span class="mainTitle">Autoencoder (오토인코더)</span>
                         <br><br>
@@ -251,7 +265,7 @@
 
                         <br><br>아래 그림은 실제 784차원의 MNIST 데이터를 저차원의 잠재 변수로 만든 후, t-SNE (t-distributed Stochastic Neighbor Embedding)라는 또다른 manifold learning을 통해 2차원의 데이터로 가시화한 모습입니다.
                         Manifold Learning에는 이렇게 autoencoder뿐 아니라 t-SNE, UMAP (Uniform Manifold Approximation & Projection) 등 다양한 기법들이 있습니다.
-                        그리고 데이터의 분포를 가시화하기 위해서는 이들을 섞어서 쓸 수도 있습니다(e.g. 잠재 변수는 autoencoder로 추출한 후, 잠재 변수를 다시 더 작은 차원인 2,3차원으로 t-SNE 등으로 압축하여 가시화).
+                        그리고 데이터의 분포를 가시화하기 위해서는 이들을 섞어서 쓸 수도 있습니다(e.g. 잠재 변수는 autoencoder로 추출한 후, 잠재 변수를 다시 더 작은 차원인 2, 3차원으로 t-SNE 등으로 압축하여 가시화).
                         <span class="highlight" style="color: rgb(0, 3, 206);">이 글 마지막에는 manifold learning의 종류를 간단히 알아보고 t-SNE와 UMAP은 다음 포스팅에서 더 자세히 알아보도록 하겠습니다.</span>
                    </p>
                    <div class="contentImg">
@@ -265,9 +279,36 @@
                         <span>Architecture of Autoencoder</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
+                    <p>
+                        <br>이제 autoencoder의 구조를 알아볼 차례입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림처럼 autoencoder의 전체적인 구조는 원래 데이터를 잠재 변수 혹은 데이터 특징으로 압축하는 인코더 부분과 압축된 잠재 변수를 다시 원래의 데이터로 복구하는 디코더 부분으로 이루어져 있습니다.</span>
+                        <br><br>위에서 보았던 예시를 기준으로 부가적인 설명을 해보겠습니다. 먼저 28&times;28 크기의 이미지는 모두 한 줄로 이어붙여서 최종적으로 784차원의 벡터로 변환할 수 있습니다.
+                        이렇게 변환된 이미지가 여자/남자 각각 한 장씩 있으므로 데이터는 총 2&times;784의 크기를 같습니다(2&times;28&times;28 &rarr; 2&times;784). 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 2&times;784의 크기를 가지는 데이터를 \(x\)라고 표현합니다.
+                        그리고 사진에서 볼 수 있듯이 \(x\)를 인코더에 넣어서 4차원의 잠재 변수로 압축합니다. 이렇게 구한 잠재 변수를 보통 \(z\)로 표현합니다.
+                        그리고 잠재 변수 \(z\)는 데이터 특징, code, representation 등으로 다양하게 부릅니다.
+                        이렇게 압축된 잠재 변수를 다시 디코더로 넣어서 확장시켜 원래의 크기인 2&times;784의 데이터로 복구합니다. 이를 \(x'\)라 표현합니다.</span>
+
+                        <br><br>이렇게 데이터를 압축했다가 다시 확장시켜서 나온 결과인 \(x'\)와 원래 데이터인 \(x\)의 오차를 구하면서 모델은 학습을 하게 됩니다.
+                        이 둘의 손실 즉 loss는 <b>mean squared error (MSE) loss</b> 함수를 사용하여 구합니다. 아래 식은 MSE loss를 나타낸 식입니다. 
+                        \(N\)은 전체 데이터의 개수를 의미하기 때문에 모든 데이터의 mean squared 값의 평균을 구하기 위해 나누어준 것입니다.
+                        
+                        <br><br>\[MSE\,Loss = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 원래 차원보다 작아진 잠재 변수는 어쩔 수 없이 원래 데이터 \(x\)가 가지고 있는 정보량보다 적을 수밖에 없습니다(차원이 현저히 작기 때문).
+                        디코더는 이렇게 원래 데이터 \(x\) 대비 정보 손실이 일어난 잠재 변수만을 가지고 최대한 원래 데이터와 비슷하게 \(x'\)를 \(x\)로 복구해야합니다.
+                        이러한 과정에서 인코더는 디코더에게 넘겨줄 잠재 변수의 정보를 최대화 하는 방향으로 학습하게 되며, 의미있는 잠재 변수를 만들어내게 됩니다.
+                        </span>
+                        
+
+                    </p>
+                   <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUJ_wDHNaH2fPPorWmAMy3bJBbZfFnrYxUYM0hfXz6Obn27C-TQZuLeWpkYV78uSSdCDkvQTAo60ubwgfInqbdCIRK-Ro3qST7CA2HkilmNwB3oGA8PNLxEigM49jT1_3PlpYtDUP85NLua40xYq9-fVxhNFXEWzhn_buKQ7Sb5QOUc4w-hkA5bR_gumGot7svY1FjU1KAOAkDk3ipuXNjZh13ztkOU0yZfoV_dE-C4i4Ohb9NeKsTUrYBe4XmCjzfHzZLelWQDcihya9MRQEtzhrPR0n1NRqBWW0taBdgrx8Cq-y7m6twCbILzr6ouAGzzFgc9O0NqB6JfSqPxd6M-3IYp0Xvm2caX-m-HWlWX3zXPB09HBU8uvlydo0dYyvm-rWTGPsqfwq6CCgW86s9gDmo4OcOT1uVkr3u14A7A7VsoselA4teWLPKojF-zo5HUKlClcHf4FS2m6rGgvqlfynH44XvQPj1ZtKs9vDwQFduCjEwmSmGIfC-yW_Di5-VLIN4gEng4Pd9QRE4PH9VqHJcQ9HEzWe10XUx_GerFoJavlq_LrAxFzLJnwjDkeycro6E-OXWOjmWYQRTlz53YHKI5bCzi6wmqksSC2YSrUgzAoT_xG02wl_qbhBee2_rllawsYTHhXpVBGcODcjrbq7lioCRl2sJ_9ObFASxfDJ5U75oy0qncXjF4MLIa5l0v6hgfxWw-2kVmJyOaKf_gdPXqbpA2=ft" style="width: 100%;">
+                        <p class="caption">Autoencoder (오토인코더)의 구조</p>
+                    </div>
 
 
-
+                   
 
                     <p style="font-size: 30px;">작성중</p>
 
