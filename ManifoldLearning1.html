@@ -63,7 +63,7 @@
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.04</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.05</span>
                     </div>
                 </div>
 
@@ -124,7 +124,7 @@
                     <p>
                         <br>아래의 각 이미지에서 추출한 잠재 변수가 다음과 같이 의미를 가진다고 가정해보겠습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">첫 번째는 짧은 머리인지, 두 번째는 넥타이가 없는지, 세 번째는 화장을 했는지, 네 번째는 수염이 있는지 여부를 확률로 알려주는 값이라고 해보겠습니다.</span>
-                        그럼 여자 사진에서 여자는 머리가 길기 때문에 첫 번째 잠재 변수 값은 낮은 값이 나올 것이며, 여자는 넥타이가 없기 때문에 두 번째 값은 넥타이가 없으니 높게 나올 것입니다. 남자의 사진에서는 반대로 나올 것이고요.
+                        그럼 여자 사진에서 여자는 머리가 길기 때문에 첫 번째 잠재 변수 값은 낮은 값이 나올 것이며, 여자는 넥타이가 없기 때문에 두 번째 값은 높게 나올 것입니다. 남자의 사진에서는 반대로 나올 것이고요.
                         그리고 마지막 값에서 여자와 남자 모두 수염이 없으니 0.5에 가까운 값이 나올 것입니다.
                         <br><br>만약 사용자가 사진이 여자인지 남자인지 구분을 하고싶다고 하면 딥러닝 모델은 내부에서 데이터에서 의미있는 잠재 변수를 추출하려 노력할 것이고, 이렇게 추출한 잠재 변수를 바탕으로 최종적으로 사진이 여자인지 남자인지 구분할 것입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">따라서 잘 학습된 모델은 어떠한 사진이 들어와도 들어온 사진에 대해 의미있는 잠재 변수를 잘 추출할 것이고, 구분도 잘하게 될 것입니다.</span>
@@ -301,7 +301,7 @@
                         따라서 아래와 같이 표현할 수 있습니다.
                         <br>\[x, x' \in \mathbb{R}^d\]
 
-                        <br><br> 그리고 이 중에서 \(x\)는 인코더 \(f_\theta\)를 통과합니다. 이 인코더는 가중치(Weight)를 포함하고 있는 모델이며, 가중치 \(W\)와 bias \(b\)를 거칩니다.
+                        <br><br> 그리고 이 중에서 \(x\)는 인코더 \(f_\theta\)를 통과합니다. 이 인코더는 가중치(weight)를 포함하고 있는 모델이며, 가중치 \(W\)와 bias \(b\)를 거칩니다.
                         이렇게 인코더를 거친 \(x\)는 잠재 변수 \(z\)가 되며 이러한 과정은 아래와 같이 쓸 수 있습니다. <span class="highlight" style="color: rgb(0, 3, 206);">아래 식은 인코더의 layer가 하나라고 가정했을 때를 나타냅니다.</span>
                         <br>\[z = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
 
@@ -346,19 +346,207 @@
                         <span>Models for Manifold Learning & Other Autoencoders</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Manifold Learning을 위한 모델 종류</b></span>
+                        <br>먼저 manifold learning을 위해 사용되는 모델들을 알아보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">지금 소개할 모델들은 바로 위에서 언급한 autoencoder의 역할과 비슷한 역할을 하기 위해 사용되는 모델들입니다(차원 축소, 의미 있는 특징 추출, 데이터 가시화, 차원의 저주 해결).</span>
+                        <ul>
+                            <li><b>선형 변환(Linear Transformation)</b>
+                                <ol>
+                                    <li>주성분 분석(Principal Component Analysis, PCA)</li>
+                                    <li>잠재 디리클레 할당(Latent Dirichlet Allocation, LDA)</li>
+                                </ol>
+                            </li>
+                            <br>
+                            <li><b>비선형 변환(Non-linear Transformation)</b>
+                                <ol>
+                                    <li>오토인코더(Autoencoder, AE)</li>
+                                    <li>t-SNE (t-distributed Stochastic Neighbor Embedding)</li>
+                                    <li>UMAP (Uniform Manifold Approximation & Projection)</li>
+                                    <li>Isomap</li>
+                                    <li>LLE (Locally-linear Embedding)</li>
+                                    <li>자기조직화 지도(Self-organizing Map, SOM)</li>
+                                </ol>
+                            </li>
+                        </ul>
 
-                   
+                        위에서 보듯이 manifold 혹은 데이터의 특징을 추출하고 데이터 분포를 가시화하는 알고리즘 혹은 모델은 이렇게 선형 변환과 비선형 변환으로 나눌 수 있습니다.
+                        그리고 각각에 대해 간단히 알아보도록 하겠습니다.
+                        <br><br><b>PCA</b>는 기존 변수를 선형 조합하여 새로운 변수를 만들어 내는 분산 기반 선형 변환 기법입니다.
+                        각 데이터가 차원 축소를 했을 때 최대한 겹치지 않는 eigenvector를 구한 후, 그 벡터에 맞춰서 선형 변환하는 것입니다.
+                        즉 분산이 커지는 방향으로 학습을 하는 것이지요. PCA를 좀 더 자세히 공부해보시면 공분산과 eigenvector의 내용이 나옵니다.
+                        본 글은 PCA에 대한 글이 아니므로 자세한 부분은 넘어가도록 하겠습니다.
+                        <br><br><b>LDA</b>는 토픽 모델링(Topic Modeling) 기법 중 하나입니다. 토픽 모델링은 문서들 속에서 어떠한 토픽이 존재하는지 찾아내는 과정입니다.
+                        토픽 모델링은 실제로 고객을 대상으로하는 서비스와 검색 엔진에 중요하게 사용되는 개념입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">LDA는 문서 속에 여러 토픽들이 들어있다고 가정을 합니다(e.g. "나는 상추와 배추를 직접 재배해서 먹어"라는 문서에는 일상이라는 토픽이 30 %, 식물이라는 토픽이 70 %존재함).
+                        그리고 그 문서의 토픽을 결정하는 데 단어가 기여를 한다고 가정합니다.</span> 그리고 LDA를 통해 문서가 만들어지게 된 과정을 예측하고 분석하여 토픽을 찾아줍니다.
 
-                    <p style="font-size: 30px;">작성중</p>
+                        <br><br><b>t-SNE</b>는 고차원에서의 데이터간 거리와 저차원으로 임베딩 후 데이터간 거리를 유사하게 유지하면서 차원 축소하는 비선형 변환입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">실제로 고차원(e.g. 256차원) 데이터에서 저차원(e.g 32차원)으로 잠재 변수를 학습하는 데 autoencoder를 사용한 후, 이 잠재 변수를 다시 사람이 볼 수 있는 2, 3차원으로 압축하는 데 t-SNE가 많이 사용됩니다.</span>
+                        여기서 우리가 알 수 있는 사실은 우리가 꼭 하나의 manifold learning model를 사용할 필요는 없다는 것입니다. 이렇게 autoencoder와 t-SNE를 같이 조합하여 사용하여도 무방합니다.
+                        <br><br><b>UMAP</b>은 고차원에서의 그래프와 저차원에서의 그래프를 유사하게 최적화하여 변환하는 기법입니다.
+                        t-SNE와 UMAP은 다음 포스팅에서 더 자세히 다뤄볼 예정입니다.
+                        <br><br><b>Isomap</b>은 모든 데이터에 대해 각각의 k개의 이웃한 정보와 graph를 구성합니다. 그리고 각 데이터 간의 거리를 graph의 최단 거리로 정의합니다.
+                        그리고 각 데이터간의 거리 정보를 보존하면서 차원을 축소하는 기법입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 그림에서 처럼 B와 A1의 직선 거리를 두 데이터간의 거리로 정의하는 것이 아니라, B와 A1을 잇는 빨간 선을 두 데이터간의 거리로 정의하여 학습을 하는 것이지요.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW_pf1QqPK-rxAlxnq3h6jocZyWzpcUmdLABg9qtri_i5vXEtq_7I9mMVE7nRdm0gaC30FCKKPyv41FcpMvkjyRaduRkPquXZYD-VGvhYP8vVToK0s6s2drtrMeRB3L3lUrcPrvyM7qT237TWtZ-1vqYav5iR_j5o8_yp-llLHXKR1bE5OIWIRgC3YhSS5sO-VAM6urbcKFh0xj8qlR1Ac-DcDWpLWduJBNWC7ClcZjTnneNH_CYTbp0J10TYS58XB-ET2LYhNY4E-rUG_Flx7wrbteGXNI1sjW8kT1IIxZt4WD9fOZWFJC0mQTwzN4mdR6Xky5IAPK1WQYtOqEbHrsLvWDs8huS7UnrQCZO3PBFAj0408kp4E7C4nmaTDzV4IMiSADGUxIgMC5wF-6dIgYhoI_c7TABK5FS9SyZFLoZUiQ97R_gxYN8MKokxiqW7qZJvcXZnqlJ-JeX0HQEOHZ8JKYuAvNwWG8OrxHsSPXc1ZzVEqCvstoffzZOCfXB0RqWk281gfkTJ3mNrJ8NH3V6luLUBcl2H8W_ZvpubJ-fj-x7h5e4PtfbL9phu2kWZ4QvBY6UxHO1s2atETKtVcbQDk9bcNEORHgt_R9iaeaxbFNea1lqCmECVMcoXUQw94GJfn9YIur8H_n7Vyx1uKGBDmSvKi8PfR7WfgGhwApG3qE-gDWaDxU22OVkVXtiIbzfoq_0jA3eaH0wNOUlE8MBaRnefEy=ft" style="width: 100%;">
+                        <p class="caption">특징 추출의 예시, 출처: 오토인코더의 모든 것</p>
+                    </div>
+                    <p>
+                        <br><b>LLE</b>는 모든 데이터에 대해 각각 가장 가까운 이웃 k개를 찾습니다. 이 기법의 특징은 이웃한 데이터, 즉 locality만을 고려한다는 특징이 있습니다.
+                        따라서 고차원에서의 한 데이터와 각 이웃한 데이터가 특정 weight (가중치)와 선형 결합이 될 것이라 가정을 합니다.
+                        그리고 고차원에서 학습한 weight를 고정시킨 후, 저차원으로 내려와서 고정된 weight를 이용하여 저차원에 매핑 될 공간을 학습하는 방식으로 이루어집니다.
+
+                        <br><br><b>SOM</b>는 사람이 볼 수 있는 2, 3차원 격자에 각 고차원 벡터 값들을 대응시켜 neural network (NN)과 유사한 방식으로 결과 도출하는 방법입니다.
+                    </p>
+                    <p>
+                        <br><br>
+                        <span style="font-size: 20px;"><b>Autoencoder의 종류</b></span>
+                        <br>Autoencoder의 유명한 모델로는 아래의 예시가 있습니다.
+                        <ol>
+                            <li>Vanilla Autoencoder (AE)</li>
+                            <li>Linear Autoencoder</li>
+                            <li>Denoising Autoencoder (DAE)</li>
+                            <li>Sparse Autoencoder</li>
+                            <li>Stacking Autoencoder</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);"><b>1. Vanilla Autoencoder (AE)</b>는 앞에서 autoencoder의 구조를 설명할 때 소개했던 모델과 동일합니다.</span>
+                        이 AE 모델에서 사용되는 인코더와 디코더의 hidden layer의 수는 하나가 될 수 있고, 여러 개가 될 수도 있습니다.
+
+                        <br><br><b>2. Linear autoencoder</b>는 vanilla autoencoder와 구조가 거의 유사합니다. 그럼 다른 부분은 무엇일까요? 
+                        딥러닝 모델들은 단순히 weight라고 불리는 가중치 행렬을 데이터에 곱해주는 것인데, 왜 우리는 딥러닝 모델들을 비선형 즉 non-linear하다고 표현을 할까요?
+                        바로 ReLU (Rectified Linear Unit), GELU (Gaussian Error Linear Unit)과 같은 비선형성을 추가해주는 activation function을 거치기 때문이죠.
+                        바로 위에서 언급한 vanilla autoencoder도 이러한 activation function이 추가되어 있기에 비선형적 변환이라고 표현합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 여기서 설명하는 linear autoencoder는 이러한 activation function이 들어가있지 않은 구조입니다.
+                        따라서 linear autoencoder로 차원을 축소하거나, 특징을 추출한 결과를 보면 PCA와 유사한 manifold를 학습한다고 합니다.</span>
+                    </p>
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweUSXQJt-8wjbCRVhATl_l7ZosCPZ5_noPBojx_m2DpsxWguIPOY4SWIj6pn8TtwcNslGdU6fk2rL63VTrrLoDpq6ML3dwtqLWDJfmL-B1H688WaCT9UV528dk4NHaOqGyYlH9-GgW1NKJl7-bwggM_3FvmW7aTkEtAjVbjbPGx_a-0I7LL7PjVsLMudeYtTO3HGNIilSY1oDNM00h6NEhLHDf5uM60DjoRdnkncQDRqIHhK47KdmgVa38tUnXgIn3jGldjX0h-XhaqZ3axNMTSkyC1G09-njCeReBT5HpJOPSh8JV7cYkg3DwOB-z_Z6KgMgWjRuRPm3BYbIcf-OWwTxLamIWbXUNOMuNYMTYEoNmQq9sdg-CgBqWXNYf6YJ5p9ROO7BtRfLpmiM2oKVwhuszTIZlwQakQRtZpzWJafVGK8jpD-PP2v52W58hE-cWH4Si4Pww2Psv6dq_8cUtrwZ4q3I7QB1k7gg6oH2cQAhskPdRHQ4L31GN7WdTzTls9CYIoUABdea4Un6UtGqFR7ViFrPM5XFE5ZJnKnhiej5IaZGL3XJ73mZQytt6uk0sBpPvbjPavR6pVJaXw8gLFANR1Rz9YdEOKgAIn1TT-xP0Cf30WI5jo9AHYKXkF3kHwtORrf8VRySWkH74-lGBhv0S59nxndYxQDDm6u9e9Nv1UvKUSHiwvlEPmKlLz-AgvUGwMqEzyaR14h6OScxIZNW8Z08suu=ft" style="width: 70%;">
+                            <p class="caption">ReLU, GELU 활성화 함수(Activation Function)</p>
+                        </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);"><b>3. Denoising AE (DAE)</b>는 autoencoder에 들어가는 데이터를 망가뜨린 후 모델에 넣는 방법입니다.</span>
+                        이를 corrupted 된 데이터를 넣는다고 표현합니다. DAE의 구조는 아래 그림과 같습니다. 구조는 vanilla autoencoder와 동일하지만 중간에 데이터가 망가지는 부분이 추가되는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVLx2DU5Zv7xRu-2RQ9ti_2FTUIeWNa6BxvGYF0aHmA4MWSkCCa2EsgJUc-xzNIhsM9luTV24wZRmqyN1jqBu7jEDZz1ewhWpEUntWVnYBKQty4bjvHfQlH3jSMfhow9K0IcvZ4VaI3QcXub7mNadNid6tGRy8It6hzfhJT7AyixyU7faNhiwdnFUHPfDfwrCxiW9QXBd1zb_0wo_uHIQk9CI2fjYnI0Tkcsu0BpyODzPPIJTC75rukgXcta5qgZjqVMAuOkw0BofgO0yP2kVwbP7lkdfh0DY6ZYM0zs86_OGu7b-O97OCirpNjQjbZSLNojH8gKi1LKS8JarwBw-wjwzemDhXwmxd-Zm-KZKQv3gMvg9gCfqEhEQQRLvoM0k7_vp0_gBR2sKsBQs7oVQ5fkM16AX1h6-KqzC1jwd7jvZXbyFwZTehb_5i5q2UeSYKMwkHAJ4690b7yYzvh8Cw5D9wCNyMoBAgCXvh9DWtDxUUCrHeghZVsGsr-6YHOK0_tTAd-6ehTi5pFof3cOYJE1gqhAQQIRl9di4aKDzEsh51VL7phnmK6v27wuW_0JkS2rlfogp9UPZms9K_XUdCQOABm4LEZGMXMrIRwAIhbMP0gY-nT1jOBqZSXPkO08VMgZm8LUlunSNEW3z6Z6C0dy9B0iP6S59swnSw5eWfdOanMkktZCIeWqDszq-LPRILOYYcfZihJUVLTvUr_nkAtPBfpnUSg=ft" style="width: 100%;">
+                        <p class="caption">DAE의 학습 방법</p>
+                    </div>
+                    <p>
+                        <br>DAE를 사용할 때는 loss function을 주의 깊게 봐야합니다. <span class="highlight" style="color: rgb(0, 3, 206);">분명 모델에 들어가는 것은 노이즈가 낀 손상된 이미지인데, 정작 loss는 손상되기 이전의 원래 이미지와 나온 결과를 가지고 계산합니다.</span>
+                        \(x\)를 원래 이미지, \(\widetilde{x}\)를 손상된 이미지, \(x'\)가 복구된 이미지라고 했을 때 DAE의 loss function은 아래와 같습니다.
+                        <br>\[MSE\,Loss: L(x, \widetilde{x})\,(wrong)\]
+                        \[MSE\,Loss: L(x, x')\,(correct)\]
+                        <br>즉 vanilla autoencoder와 동일하게 \(x\)와 \(x'\)를 가지고 MSE loss를 구하게 되는 것이지요.
+                        <br><br><b>그렇다면 도대체 노이즈는 어떤 노이즈를 주게 될까요?</b> 노이즈는 보통 인풋으로 들어오는 데이터 크기와 동일한 Gaussian noise를 주게 됩니다. 혹은 때때로 dropout을 추가하는 것도 이러한 효과를 낼 수 있습니다.
+                        <br><br><b>데이터에 노이즈를 추가하는데 모델의 성능에는 과연 문제가 없을까요?</b> 물론 노이즈를 데이터를 분간할 수 없을 정도로 주면은 그것은 문제가 되겠지만, 작은 노이즈를 주는 것은 higher level representation에 큰 영향을 주지 않습니다(e.g. raw image).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">오히려 손상된 이미지만을 보고 모델은 손상되기 이전의 이미지로 복구해야하니, 더 의미 있는 잠재 변수를 학습하게 됩니다.</span>
+                        
+                        <br><br><br><br><b>4. Sparse AE</b>는 인코더의 결과로 나온 잠재 변수에 sparsity, 즉 희소성을 강제하는 것입니다. 기존의 autoencoder의 잠재 변수는 인코딩 과정에서 모든 데이터를 참조하여 구성됩니다.
+                        하지만 sparse autoencoder는 잠재 변수에서 활성화 되는 뉴런의 수를 제한하여, 모든 잠재 변수를 디코더가 참조하지 못하도록 강제하는 기법입니다. 매번 학습이 될 때마다 활성화 되는 뉴런이 랜덤으로 바뀌면서, 디코더는 다른 조합의 잠재 변수를 참조하게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">우리가 정답을 아는 상황에서 정답을 다시 복구하는 것보다, 정답을 완전히 다 모르는 상태에서 더듬더듬 조금씩 만져가며 정답을 완성해가는 과정이 더 의미있는 잠재 변수가 나오며 robust한 모델이 학습된다는 효과를 기대하는 것이지요.</span>
+                        아래 그림은 sparse autoencoder가 매 학습 iteration마다 다른 잠재 변수의 뉴런이 활성화 되는 모습을 묘사한 것입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXt8rw_CBGVzu2xkbBVc47iE_pbGC0KDiY0M_jZHNJbnPlcTXkbS1oxbeLvWPQxBKTY85dG1J4-77bfrocklkoYJx5EcsDA7p01vTkiy_cB0MZ8spIL533AHSU2kYtgOo06jXN1LzqYbK4rB-RtEdAsyHU70VF03c7orUs7JOrKnjV479T7iohB4Xt5J18kgOuKN76BjoaiUuKWCfB3F1DSX4lM3oQGu4o6vTg45sG1mqzuSEmV3zkyqNgmO3KN0EQI2wiQkCKtXyVx0IzKjW4joOL5SLyiCeSdTQ2VZo_5aD1X-gjNwMQ43uQRwoAok5mXt-1XmAHQQ8uOF3reAqswsI75k4WBgBdIz31RJCkpj7GM-HLSkPh0DFsqf3mehfIkVWGAmFp7Z6rxoohF-7YYh_HwFfzfY1c2GMCWTYqd1G0RFUSh-AaYPLGuAgZ4O5fyNsof4ioMFPydgDWsa2_uHsX9oEBESsXKPsVTkP_cJMSeDfTlpE6xuSTtlNUS_wPVnsCzDQ-lN_sY6ISBKq4FryhltRHn8swuJBbfW5jdvJjg1g4ma9a5HqwukrxTZZSu6ivhXJeyoifA1HirzrbzUlY_wV7U6tE_ZjrpS_McKuc_EP544Aa9QVSnZq5lrz6f61oXNwNUdK5UxbAL6OKSXFvlTMsSnt9_6_37axyFU5-TZp6k4ztVK1qtjFjGETUcQr9qXq6SKrhaK5MDjBaWVWgtTQKc=ft" style="width: 100%;">
+                        <p class="caption">Sparse Autoencoder</p>
+                    </div>
+                    <p>
+                        <b>그렇다면 어떻게 잠재 변수에 활성화 되는 뉴런의 수를 조절할 수 있을까요?</b> 바로 loss function에 sparsity를 강제하는 term을 추가하여 학습하게 됩니다.
+                        <br>\[Loss: L(x, x')\,+\,\Omega(z)\]
+                        \[L(x, x'):\,reconstruction\,loss\]
+                        \[\Omega(z):\,sparsity\,inducing\,term\]
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위의 식에서 \(L(x, x')\)는 이때까지 많이 봐왔던 디코더에서 나온 결과를 원래 데이터로 복구하는 MSE term인 것을 알 수 있습니다. 그런데 sparse autoencoder에서는 \(\Omega(z)\) term이 추가된 것을 볼 수 있습니다.
+                        \(\Omega(z)\)가 바로 sparsity를 강제하는 부분입니다. 이 \(\Omega(z)\) 부분의 식은 보통 두 가지의 방법을 사용하여 sparsity를 강제합니다.</span>
+                        <ol>
+                            <li>\(\Omega(z)\,=\,\sum_{i}KL(\rho||\hat{\rho}_i)\)
+                                <br>(\(\rho:\,average\,of\,target\,Bernoulli\,distribution\), \(\hat{\rho}_i:\,average\,activation\,of\,z\))
+                            </li>
+                            <li>\(\Omega(z)\,=\,\lambda\sum_{i}|z_i|\)</li>
+                        </ol>
+                        <b>1번 식</b>이 의미하는 것은 Kullback-Leibler divergence (쿨백 라이블러 발산)식을 추가하는 것입니다.
+                        이 방법은 모델이 매 학습 iteration 때마다 활성화 된 잠재 변수 비율을 구하고, 목표로 하는 활성화 비율과 그 분포차이를 줄이는 것입니다.
+                        예를 들어 현재 학습 중에 활성화 되는 잠재 변수 비율이 0.5(절반)이고, 목표로하는 비율은 0.3이라면 그 둘 사이의 오차를 줄이도록 학습하는 것이지요.
+                        즉 여기서 \(\hat{\rho}_i\)는 0.3, \(\rho\)는 0.5가 되겠지요.
+                        <br><br><b>2번 식</b>이 의미하는 것은 바로 L1 regularization (L1 규제)를 사용하는 것입니다.
+                        L1 regularization을 사용하게 되면 L1 norm의 특성으로 인하여 기울기가 0이 발생하는 경우도 발생하고, 해당 잠재 변수가 비활성화되는 효과를 바란 것입니다.
+
+                        <br><br><br><br><b>5. Stacking AE</b>는 과거 Xavier 초기화 방법 등 모델의 가중치 초기화 방법이 없을 때 종종 사용한 방법입니다.
+                        먼저 아래 그림을 보면 hidden layer가 네 종류 있는 것을 확인할 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Stacked autoencoder는 차례로 각각 hidden layer의 해당하는 가중치들을 학습하는 방식입니다.</span>
+                        첫 번째로 아래 그림에서 'input &rarr; 1000 hidden layer &rarr; input'과 같은 오토인코더의 구조를 이용하여 첫 번째 hidden layer의 가중치를 학습합니다.
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweXXpTNWBEdZxODdFLDbaYeEuzeSWIGYIlOU6PkUhNy9RZMDfxZxUunryDkTJA52xb4Ee20VKcwr5T9CAyw1Ys1li33WFXF1p4xdvuuz3QWUfkNwnOw5-fRhWMjH8puoxJ0BpVY29xfQBRLHkTxfl7qS_LLyh1cVm_Nzy5UZ1nhZVcIy4piFCcD6obqe65vrQ0322Pqb-oZ-Ey46l9IWmHoO_lg-drJlyQ4V0s3unIOwi24MbHrpFFInYvGQMd2GR5xquIwvN-RYyE3H9jvnY2EH8hOjvEF-NvcGbtLkNC7gyJksnpaIT_g4syN9SxlBZg-4eGlrZZ-_jNNHgYynhMYh8CN5aYKczIF3Gw347FKJtwlJWP2iYU5WpknqzWXvl7wPrykKhm1yllME0DY83VVzNQndXMmzdIjpaJZRkgnR9aGpjl1yW-aziXpm3nk-XHgLwIFEzwoBnGS5-o5nvWQCqRqW_3CJNw1B9wbHB1KEFG22uPfzaNeXLP4GORyL7cvd-E_ujg2XNlVenbXT7neQFdg5sMOb8Lay7EZTq_SfRk1myIqHZ25WvZhhYNSroQl0nFpCDMIsqJcMpcITOPr4B442zvE77Uwvzb81QMoY3apmpkwFMNnCrVlR1OTBhAfToK6sbDxhnCcVrzcIbELT_VN1oLDEcU5lfAc5vju-QjDLF5xXJqQ1q9wR0cHRxpy4imYWOZhMzyueC4ExN7qiTVg-4JSD=ft" style="width: 70%;">
+                            <p class="caption">Stacked Autoencoder, 출처: http://speech.ee.ntu.edu.tw/course/ML_2017/Lecture/auto.pptx</p>
+                        </div>
+                        <br>두 번째도 hidden layer의 가중치도 위의 방법과 동일하게 가중치가 정해진 첫 번째 hidden layer를 통과한 결과를 바탕으로 학습합니다.
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweWRVDGUufQD_zch3R59_nsjQpICcVQwjCZR54Z-GgeRIc6oFTIGJxMOXvyOtUpWVA7QgSqIahflOvM48TCYub4Ff4m55WAUVobn9e9eiNlsIqepsgn_3QAPMx--EHxvFlDeEvbhaMrurr8EvM5QY_Tjb0lxynD_xZ9kpGvQYcHpFlgdYfJXHyPWdFnf8MMjBwbUkS0_q6ZwhAuGRZr2ZL33j0Ts_Mkdmp3DmHbDcR5xFWLHBkB3lWy8OEa3V9MhVsn_JmP81na14jeNa8AAO5sgm2tC9UIs9d2XYc4C0tXJJkncr8oiYKHnIQLC7mazh-7U_5HEht_SGQbSrqpL30v1hrMbUNL1k9lc03zdr0LE48Sm2EZ_Iwhak27kXYIlZ5Tr6IfPsWVIC4ka-elnAW7CZQlC7pOCAHqSksCnyYmmb9Oz_Na3BnHw_xwrz9CVBU28ojjy5XU9ZA2drP7bVsPXCugIccw1yiLpN5H31uoJ6vfbhqc7vS6fTpqKjihUFkcCyTfRPsh3UDF-SwRkcZeuKtjhxSiF8a5dlS4aqHxWQpNzzkmViiBil20X8DnEnWQBwGv5b5Te3AZqnJF4PUfODwRO9LF8K27HlcnzTdzX3LqJO3azMJBrWxY7gxTIOxIDddiiJ2pf2IdJmne-M7tOj8J_1bO0lfgDGuwvsrGmqtzgjiTCcguI2wfMa1nX0DVONS8rdkoa57INfELLnK6wyYMLa2HZ=ft" style="width: 70%;">
+                            <p class="caption">Stacked Autoencoder, 출처: http://speech.ee.ntu.edu.tw/course/ML_2017/Lecture/auto.pptx</p>
+                        </div>
+                        <br>세 번째 hidden layer도 동일합니다. 
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweWMor6geoJoGq2kD0I-D8IAoeVGixIHsNwAm2cjtVghWd2C8ei_A5ErRwgcQEst-Lk6TEBRKLrtbpzTcuVt9WlkU1FKjSpCINOpRr1N5ORIO83XGY7-NCtRkpx5LJmWkWugEh4kOmAww7rJXRMM_GeSyIX1snUs8py8eDAAI6LJs53SZJO-8OHGL9BO_1KQYQ1-mBtzuf6X4KHjILwA6Fa4n12Frvp-B9xSRpxVQdFTfyoWNh_RJu8xo6BFgEvwbxudIgOJrQlzQyl4Y9qLgHBODrprEvJ4F1Nmi0TpXpYVFdjXfmPv_eLO_3g-8Hcy5djpmdDrK4PEfemhztXK03haxaHG7iJHfz5wFvLKlTwDOxfteAogY-YEB2oX1QsWvUMsP6c_dFNgEYgopaTaNQKloyHvEiLPhH20hNbd7dtaFmYLqGYwvW7ZCt8CUFc6fVwS6xl_vr2QkEuW5lCeyeABsJfDXOOnQX0iI0EnoEBZKD8Mw1sVO-XyuRTq2VtoajUfuDWdtvJpyjKacjSEb2GpGrD-yS4X7Bcgktx8a5TNflYcJsmFyREexiGywZjL829Q1cuj1yGrvr9xD4YRepidObrBk46h9rMiNYwNVKwLPwXQYas7BZ3OEZMZja9_vgvQYTHvp8CjofPKRh2ywoG6bO40dEUt1_VSWrfLTmyjXsmORfVpAkHs1xvbOpwVwA4Zf4OKYVHfQviG9KWhGd055J9alcOd=ft" style="width: 70%;">
+                            <p class="caption">Stacked Autoencoder, 출처: http://speech.ee.ntu.edu.tw/course/ML_2017/Lecture/auto.pptx</p>
+                        </div>
+                        <br>이런식으로 계속 진행하다보면 마지막 hidden layer만 빼고 다 학습이 가능하며, 마지막 hidden layer는 랜덤으로 초기화 합니다.
+                        <div class="contentImg">
+                            <img src="https://lh3.googleusercontent.com/fife/AAWUweVftgdTPW2Kk_qIKXeiYkMZRKJWsOGkVtCLRgJITsH1fMWWQCP8wW-N8Sb52JGZSLphMMcJED8fzHfayOdeCsyHi5DzXRxrVZvW0iQCy3t7lAL-j4Kdu5ZDpvjJlzP93sk3U4krBP5sooKqDbn3lqNYYTxowC3X7sZknTlVT4ZS58AX5XL7vEXWnEsrdj-sY9NB4TrglXST8LpwxVt2DL1ccU3SweNgCRyG7KoL1Ju06b5hjbDQsYqRc4LdSOtZ9Fc4cb5PeFD5wbYB1YyYB9QRvIqbS9GJmhlox6nzxAyvZVznyJUE8g-8lfL9WMF0JoTSl5Ln2LUzqIcpYVN6iXJ4ytQPu3TIQmu3gjvcXXyrbVTt4MYIMSMdDiN7dbMrTIUGwulmlISyJJNAmVCoPKQUEIxUQW_eVIybQ8FfpmB3v0kAvEvB-MrxCPgJf02milGsYVcC-RYXSAF8Ncz0mjQj6l2CFxj1ambtALaO-9DtpJVXXYkXiilwWZTa3WlOAxjTz73silrQxh_yNiz7IMEfB7_WeWmT-GU_rmkKBqPz7mSXjZT0ChKWKuCOZc-jE07mKbhf-YBwguTNnvfETo3GGVSkw8UioXvAcjTqPEjZSxJMhhdyKra45ryZ65jKMKyJxDVdvGFpzXi3CQq01Yo-82a5i-yfZ-5whBLaCbczbUCRFjzrPQ9gkP2EHrrbX1Txo1l4rmA2RmX7MfhyhQtYsECzb4hg=ft" style="width: 90%;">
+                            <p class="caption">Stacked Autoencoder, 출처: http://speech.ee.ntu.edu.tw/course/ML_2017/Lecture/auto.pptx</p>
+                        </div>
+                        <br>다시 정리해보자면 stacked autoencoder는 autoencoder 기법을 부분적으로 여러번 사용하는 것입니다. 따라서 이름도 stacked autoencoder인 것이지요.
+
+                        <br><br>그리고 번외로 stacked denoising autoencoder (SDAE)라는 모델도 존재하는데, 이는 위에서 설명한 DAE기법을 stacked autoencoder에 적용하는 방법이라고 보시면 무방할 것입니다.
+                    </p>
 
 
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>오토인코더의 응용</span><br>
+                        <span>Applications of Autoencoder</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <br>그럼 autoencoder는 어디에 쓰일까요? 지금까지 예시는 모두 이미지로 국한된 예시들이었습니다.
+                        그리고 언뜻 생각해보면 적용할 수 있는 분야가 이미지 분야밖에 없는듯 합니다.
+                        하지만 곰곰이 생각해보면 이미지도 모두 숫자로 구성된 벡터입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그럼 autoencoder는 숫자로 나타낼 수 있는 모든 데이터에 적용할 수 있다는 뜻이 됩니다.
+                        즉 이미지 뿐 아니라, 이미지가 아닌 어느 숫자로 된 데이터, 자연어 데이터, 음성 데이터에도 모두 autoencoder를 적용할 수 있는 것이지요.</span>
 
+                        <br><br>그리고 위에서 우리가 다양한 autoencoder의 종류를 보긴 하였지만, 모델의 레이어가 모두 linear hidden layer 였습니다.
+                        그렇다면 우리는 CNN에서 사용되는 convolution layer, RNN 계열에서 사용되는 recurrent layer는 사용될 수 없는 것일까요?
+                        그렇게 생각하면 오산입니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 차원을 압축하는 인코더 부분에서는 convolutional layer를 사용하고, 압축 된 잠재 변수를 다시 확장시키는 디코더에서는 데이터를 interpolate 하고 convolutional layer를 사용하거나 transposed convolutional layer를 사용할 수도 있습니다.
+                        그리고 자연어 처리 분야(NLP)의 번역 모델의 초기 형태인 seq2seq (sequence to sequence) 모델을 응용하여 autoencoder를 구현할 수 도 있습니다.</span>
+                        아래 그림은 convolutional autoencoder (CAE)와 t-SNE를 같이 조합하여 사용하는 모습을 나타낸 그림입니다.
+                        위에서 t-SNE 이야기를 할 때 말했던 것처럼 꼭 하나의 manifold learning model를 사용해야하는 것은 아닙니다.
+                        아래처럼 두 가지의 모델을 같이 조합하여 사용해도 되는 것이지요.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweX9Em4JyTV-L9FXhabZX-0Kt0dPxIUD5I_bt-pVn_28NbyqSB0NXJMLhDz2OkFAnB7rmhpLXoAGqL1LuglgbumpS9bT7siPI_nos78jS3mb73jXlnXU5KYdoQbq3T85iB4RzJ1NlblFZGwMRhXaZlfCMZWBHVEP2Ek9x5jLjBQRqCBsqU9QQogwMEuE4BPLobo3orYSAiWVMiWH6BbOYlE53tr5dNdo-j8tWvb2vfpsj9T3CmIrytDYZ_0p9vqWWVlfO-ywVMR3beBzleXlFlhpWY1fxyRGw2MzacQnk3eqBO7i7kSe0IMDcRNkcrnHZY4otCrV0X_gWMYWf_-BZ7rSeH2J1FuhORjnKPQHruclMavydyG85_0JzJ1KyNLuzfflizoHjV4OavonI8iuv7W5u_TINs1HaL3nqQMyjrCRKxTUAaB4-Dg83AJhHQHDlMbJN7MmKD2R0-7PMWHH6nHqGbeE4hgyxamkP4vusiP08C2OxL7T0ccnAb-MWiHFHbDFfMxfNI1njgFtPojc0GU5_g_gZiHJP-EmOadRU7rLxa7t_d5uNujvKsE0tlAyHOaaC_WCWIkQ2QApoS-br9KrpP3kGGUFKXunnPk8Wunc1BCscVqKlwFS_r01Gqs6HVKi-_sbVaM-FnSsBwvftrGJvGQtTQC5wjDSdgxa9BMaijn-_e0v4cRJyood8GPpcVER_WWqk9pJcWMCB7jZMIfBW9Rr8-9L=ft" style="width: 100%;">
+                        <p class="caption">Convolutional Autoencoder와 t-SNE의 사용</p>
+                    </div>
+                    <p>
+                        <br>또한 나중에 글을 작성할테지만 transformer와 같은 구조에서도 autoencoder는 나올 수 있습니다.
+                        실제로 transformer 구조와 거의 유사한 모델 구조를 지닌 autoencoder가 바로 비교적 최근에 나온 BART (Bidirectional and Auto-Regressive Transformers) 모델입니다
+                        (BART 논문에서는 BERT+GPT 구조라고 언급). 이 모델은 단순한 linear layer를 사용한 모델은 아니지만, 위에서 설명한 DAE의 기법을 추가한 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 transformer 형태의 모델을 사용하였지만, 우리가 알고있는 DAE 방법도 섞어서 사용한 모델이 바로 BART인 것이죠(자연어에서 noise를 주는 방법은 단어를 마스킹, 문장의 순서를 섞는 등의 방법이 존재).</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVzuD4MD2t7CpVU77v4Ay_z40gfoHFkxQA6ESgaHsIFsfvFkCgAiniW1ZnzwvEHNwaSsu-eITLwU-4cRWaj4AJMq8bXIFNJCp8nPg0MDWRYclRLrlkhpb3RJ0KVR3LBk_MDqVSD2b1Aazr7B2pSaTKSJ7ouR6KRPRVGYe9Zr9EnyoJHpLCWe_-uhvYudfBnxcxE_o0ftEeScttD45GV4LQ0RMgZMMpkE5b0KaGVv0O59TWG1othZvhIwPSvT0a0U9HfvT6yp9gPRBBTqwim_pkVza6CqybM0Iy0iNtl1Sxb5AtxAfN3R_mtABvacJnAKp_U4SQw4Eg5HQeVLa1ay8wrQYAjCwHAQRKJghn44p_NrBnU_uq5LTP7JTzNmpGqWkeFJipmCB4yX_cH2mN9mU8be-a6I5HxPikXLr4VPg7BtyJBq3sOjNhV1AMBRm5o_aVh5icBIcbJr1UmkNdCu4hPBDcU0kCp5cftDhJ_Q38-0-x7YlbnLmcULlBipxkyWWS_L0gCS44DjMbTST2IiYfREElt2WFyqWqdUZgK7Ek_m37EB8e5_H5zT2V7XJoSkf6ErCSUSzOKXSZ7zVpX-vJG6aRYK97hagoTNwx0T8OLc4WtE9j0NWiM1cXhrqM0yE_dKkVrTWHmjCGZh2trhcyPbD69MwGyUewqM7HqMDrJ5uFhOrZvCPofDPygTXsGFT0kzrTto5Ll2QryQyBLiWRAbxuA556e=ft" style="width: 100%;">
+                        <p class="caption">BART 모델 구조, 출처: BART paper</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">마지막으로 글을 마치면서 위의 이야기로 우리가 알 수 있는 가장 중요한 사실은 바로 autoencoder의 개념만 알면 구조, 학습 방법에 제약 받지 않고 다양한 형태의 모델이 나올 수 있다는 것입니다.
+                        그리고 이러한 사실은 우리가 꼭 이미지에 대해서만 적용할 수 있는 것이 아니라, 자연어, 음성 등 우리가 분석하고자 하는 모든 데이터에 대해 적용할 수 있다는 또다른 사실로 이어지죠.</span>
 
-
-
+                        <br><br>이제 오토인코더에 관한 글은 여기서 마무리 하고 다음에는 앞서 얘기한 t-SNE와 UMAP에 대해 이야기 해보도록 하겠습니다.
+                    </p>
                 </div> 
                 <div class="tag">
-                    <b>태그</b> <!-- &emsp;#프랑스여행&emsp;#파리여행&emsp;#기차여행&emsp;#메르시상점&emsp;#루브르박물관&emsp;#튈르리정원&emsp;#콩코르드광장&emsp;#샹젤리제거리&emsp;#개선문&emsp;#몽마르트언덕-->
+                    <b>태그</b>&emsp;#Manifold&emsp;#잠재변수&emsp;#오토인코더
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
