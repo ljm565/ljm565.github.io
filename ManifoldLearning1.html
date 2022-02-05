@@ -90,7 +90,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        <br>먼저 autoencoder (오토인코더)를 설명하기 앞서 잠재 변수(Latent Variable)을 짚고 넘어가려 합니다.
+                        먼저 autoencoder (오토인코더)를 설명하기 앞서 잠재 변수(Latent Variable)을 짚고 넘어가려 합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수는 데이터에 직접적으로 보이지 않지만 어떠한 데이터 분포를 만드는데 큰 역할을 하는 변수라고 보시면 됩니다.</span>
                         예를 들어 내가 가지고 있는 데이터가 사람 사진이라고 가정을 하면, 사람들은 이 사진이 여자인지, 남자인지 높은 확률로 구분할 수 있을 것입니다.
                         <br><br>아래 사람 사진의 예시를 보면 우리는 왼쪽이 여자고 오른쪽이 남자라는 사실을 알 수 있을 겁니다. <b>하지만 컴퓨터는 이를 어떻게 분간할 수 있을까요?</b>
@@ -150,7 +150,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        <br>Autoencoder는 manifold learning (매니폴드 러닝)을 위한 모델 구조입니다.
+                        Autoencoder는 manifold learning (매니폴드 러닝)을 위한 모델 구조입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);"><b>그럼 manifold란 무엇일까요?</b> Manifold는 바로 모든 데이터를 최대한 오차 없이 잘 아우를 수 있는 subspace (부분 공간)를 의미합니다.</span>
                         예를 들어 위에서 예시로 보여준 사진은 한 사진당 모두 784개의 픽셀을 가지고 있으며, 이는 각 데이터가 784차원이라고 볼 수 있습니다.
                         즉 데이터 각각을 784차원의 공간에 점을 찍어 각 데이터가 찍힌 점들을 분석하여 각 데이터의 특징을 반영하여 모든 데이터들을 잘 아우를 수 있도록 하는 공간이 바로 manifold (매니폴드) 입니다(이러한 개념 때문에 manifold는 위상수학(topology)에 등장합니다).
@@ -183,7 +183,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        <br>위에서 manifold learning은 고차원의 데이터를 각 데이터의 의미있는 특징을 추출하여 저차원으로 압축시키는 학습이라고 설명하였습니다. 쉽게 말하면 그냥 고차원의 데이터를 저차원으로 잘 만드는 것이라고 생각하면 되겠습니다.
+                        위에서 manifold learning은 고차원의 데이터를 각 데이터의 의미있는 특징을 추출하여 저차원으로 압축시키는 학습이라고 설명하였습니다. 쉽게 말하면 그냥 고차원의 데이터를 저차원으로 잘 만드는 것이라고 생각하면 되겠습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">여기서 유추할 수 있듯이, manifold learning의 가장 큰 역할 중 하나가 바로 <b>차원 축소(dimension reduction)</b>입니다.</span>
 
                         <br><br><b>그럼 차원 축소 말고도 autoencoder의 다른 역할은 무엇이 있을까요?</b>
@@ -267,7 +267,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        <br>이제 autoencoder의 구조를 알아볼 차례입니다.
+                        이제 autoencoder의 구조를 알아볼 차례입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림처럼 autoencoder의 전체적인 구조는 원래 데이터를 잠재 변수 혹은 데이터 특징으로 압축하는 인코더 부분과 압축된 잠재 변수를 다시 원래의 데이터로 복구하는 디코더 부분으로 이루어져 있습니다.</span>
                         <br><br>위에서 보았던 예시를 기준으로 부가적인 설명을 해보겠습니다. 먼저 28&times;28 크기의 이미지는 모두 한 줄로 이어붙여서 최종적으로 784차원의 벡터로 변환할 수 있습니다.
                         이렇게 변환된 이미지가 여자/남자 각각 한 장씩 있으므로 데이터는 총 2&times;784의 크기를 같습니다(2&times;28&times;28 &rarr; 2&times;784). 
@@ -461,7 +461,8 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">위의 식에서 \(L(x, x')\)는 이때까지 많이 봐왔던 디코더에서 나온 결과를 원래 데이터로 복구하는 MSE term인 것을 알 수 있습니다. 그런데 sparse autoencoder에서는 \(\Omega(z)\) term이 추가된 것을 볼 수 있습니다.
                         \(\Omega(z)\)가 바로 sparsity를 강제하는 부분입니다. 이 \(\Omega(z)\) 부분의 식은 보통 두 가지의 방법을 사용하여 sparsity를 강제합니다.</span>
                         <ol>
-                            <li>\(\Omega(z)\,=\,\sum_{i}KL(\rho||\hat{\rho}_i)\)
+                            <li>
+                                \(\Omega(z)\,=\,\sum_{i}KL(\rho||\hat{\rho}_i)\)
                                 <br>(\(\rho:\,average\,of\,target\,Bernoulli\,distribution\), \(\hat{\rho}_i:\,average\,activation\,of\,z\))
                             </li>
                             <li>\(\Omega(z)\,=\,\lambda\sum_{i}|z_i|\)</li>
@@ -509,7 +510,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        <br>그럼 autoencoder는 어디에 쓰일까요? 지금까지 예시는 모두 이미지로 국한된 예시들이었습니다.
+                        그럼 autoencoder는 어디에 쓰일까요? 지금까지 예시는 모두 이미지로 국한된 예시들이었습니다.
                         그리고 언뜻 생각해보면 적용할 수 있는 분야가 이미지 분야밖에 없는듯 합니다.
                         하지만 곰곰이 생각해보면 이미지도 모두 숫자로 구성된 벡터입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그럼 autoencoder는 숫자로 나타낼 수 있는 모든 데이터에 적용할 수 있다는 뜻이 됩니다.
