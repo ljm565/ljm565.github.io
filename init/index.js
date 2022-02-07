@@ -119,7 +119,7 @@ function colorOff(self){
     $(self).css('font-weight', 'initial');
 }
 
-function fetchPage(file, selector, head=false){
+function fetchPage(file, selector){
     fetch(file).then(function(response){
       response.text().then(function(text){
         document.querySelector(selector).innerHTML = text;
