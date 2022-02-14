@@ -214,3 +214,11 @@ function detectScroll(){
         lastScrollTop = st;
     }
 }
+
+
+function initMathJax() {
+    MathJax = null;
+    if(typeof(MathJax) !== 'undefined') {
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
+}
