@@ -524,7 +524,7 @@
                         그렇다면 우리는 CNN에서 사용되는 convolution layer, RNN 계열에서 사용되는 recurrent layer는 사용될 수 없는 것일까요?
                         그렇게 생각하면 오산입니다. 
                         <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 차원을 압축하는 인코더 부분에서는 convolutional layer를 사용하고, 압축 된 잠재 변수를 다시 확장시키는 디코더에서는 데이터를 interpolate 하고 convolutional layer를 사용하거나 transposed convolutional layer를 사용할 수도 있습니다.
-                        그리고 자연어 처리 분야(NLP)의 번역 모델의 초기 형태인 seq2seq (sequence to sequence) 모델을 응용하여 autoencoder를 구현할 수 도 있습니다.</span>
+                        그리고 자연어 처리 분야(NLP)의 번역 모델의 초기 형태인 seq2seq (sequence to sequence) 모델을 응용하여 autoencoder를 구현할 수도 있습니다.</span>
                         아래 그림은 convolutional autoencoder (CAE)와 t-SNE를 같이 조합하여 사용하는 모습을 나타낸 그림입니다.
                         위에서 t-SNE 이야기를 할 때 말했던 것처럼 꼭 하나의 manifold learning model를 사용해야하는 것은 아닙니다.
                         아래처럼 두 가지의 모델을 같이 조합하여 사용해도 되는 것이지요.

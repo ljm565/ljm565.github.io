@@ -60,14 +60,14 @@
                     </div>
                 </div>
                 
-                <div class="title" style="background-image:url();">
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweX3VARbqZoKiZcLUTPlZdVHjOnNAs6BhUldhH-T3Pt-AlgXgmj5uZoNpalA1fNK9EDg__2tOGY2ZYErzEsPFcJzREy2r_nykG0Q0VYLWbuBKAbljxHOluS4qZ4GRWaTxrcp-oE839AP7-hAvvXNAxVNPyy-kU7vzEMS_a0AyqjIZapT7KcmPdh5av6d6n5WX7jgMwYs69EBnuhMsYuW0fA5NmTny30xjukUQxFsl9EhyuGFNcMba6xD77k1jo2C9EbRnADXfq__qsiRDO2pxkstKTDynQSHIhchFCsmiC1XiWqquRMmgJVR1hhenipLfq865jbGYlADrDNnuqfM4wkhTHdQaQGUue8I-GD5kEZ-IL1wdT-6kXabHuknHrT3XhfExYo9t0_w6NprbbaP8Z5P3jYccw3r4blBa2vi4ajuhyZPmG6GOHJYokf_cillY66jQi2Ne54QqB3OwoA1LBlxTTPJZLA3dJl5GN7LuqWsi1JaDwZQnosRVrmiFoPki0bqWMKOcQTO5G9EbNtRgkk4aLML_9fCyyNf48d32zzUTKESkraapiee-BF8uLzYxpX5y-1oC4xEHFRT5shTkDTyq0HQkI3D4KtH669TrBcst7TjkCJD4AejB7KKr_ZKcQ4UaEXGQS_vstJMC2FNcBRGGAddMcw3P42fuVvDJJTCMidUssV-zeNKYEL8Qn8VJCeDhFzTMNjhn4A7ptZfss0Rf2m_b-Ua=ft);">
                     <div>
                         <span class="mainTitle">t-SNE, UMAP</span>
                         <br><br>
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.05</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.18</span>
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                     </p>
                     <h1 class="subHead">t-SNE</h1>
                     <p>
-                        t-SNE의 t는 t 분포를 의미합니다. 따라서 t-SNE에 대해 알아보기 전에 t 분포에 대해 먼저 집고 넘어가야합니다.
+                        t-SNE는 t-distributed Stochastic Neighbor Embedding의 약자로써 이때 t-distributed는 t 분포를 의미합니다. 따라서 t-SNE에 대해 알아보기 전에 t 분포에 대해 먼저 집고 넘어가야합니다.
                         그리고 정규분포(normal distribution)에 대한 개념을 이해한다면, t 분포에 대해 이해를 더 수월하게 할 수 있으므로 아주 간단하게 정규분포에 대해 집고 넘어가도록 하겠습니다. 
                     </p>
                     <div class="doubleSubHead">
@@ -299,20 +299,330 @@
                             <li>30이상의 표본의 t 분포는 정규분포와 비슷해지며, 이때부터는 정규분포를 사용한다.</li>
                             <li><span class="highlight" style="color: rgb(0, 3, 206);">t 분포의 자유도는 표본 크기와 관련 있으며, 자유도(표본 크기)가 작아지면 꼬리 부분의 예측 범위를 넓히기 위해 t 분포의 꼬리 부분이 두꺼워진다.</span></li>
                             <li>t 분포는 정규분포와 다르게 확률 계산을 위해 사용되는 것이 아니라 신뢰구간, 신뢰도, 가설 검정을 위해 사용된다.</li> 
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">적은 표본으로 모평균을 추정하고 모집단이 정규분포를 따르는 것을 예측할 수 있지만, 모 표준편차를 모를 때 t 분포를 사용한다.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">적은 표본으로 모평균을 추정하고 모집단이 정규분포를 따르는 것을 예측할 수 있지만, 모표준편차를 모를 때 t 분포를 사용한다.</span></li>
                         </ol>
                     </p>
-                
-                    <span style="font-size: 50px;">작성중</span>
-
-
-                
 
 
 
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>t-SNE</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        그럼 이제 t-SNE에 대해 이야기 해보겠습니다.
+                        먼저 t-SNE는 데이터의 manifold를 잘 학습하여 <span class="highlight" style="color: rgb(0, 3, 206);">데이터의 차원을 축소하거나 의미있는 특징 추출 혹은 데이터를 가시화하기 위한 manifold learning의 일종입니다</span>(Manifold와 manifold Learning에 대한 설명은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다).
+
+                        <br><br>먼저 아주 간단히 t-SNE의 원리에 대해 설명을 해보겠습니다. <span class="highlight" style="color: rgb(0, 3, 206);">t-SNE의 기본적인 원리는 고차원의 데이터간 거리를 저차원으로 축소하였을 때도 똑같이 유지하는 것입니다.</span>
+                        물론 여기서 말하는 거리는 유클리드 거리(Euclidean distance)가 아니라 확률로써 나타내긴 합니다만, t-SNE가 사용한 기본 개념은 앞서 말한 것처럼 단순합니다.
+
+                        <br><br>먼저 아래 그림에서 고차원의 원래의 데이터를 \(x_1,\,x_2,\,x_3,\,x_4,\,x_5,\,x_6\)이라고 하고, 각각의 저차원에 대응된 데이터를 \(y_1,\,y_2,\,y_3,\,y_4,\,y_5,\,y_6\)라고 가정 합시다.
+                        아래 그림에서 \(x_1\)을 기준점이라고 가정했을 때, 고차원에서든 저차원에서든 \(x_1\)과 그 나머지 데이터들(\(x_2,\,x_3,\,x_4,\,x_5,\,x_6\))간의 거리(유사도)를 우리는 모종의 방법으로 측정할 수 있을 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 모종의 방법으로 구한 실제 데이터들이 분포하고 있는 고차원에서의 데이터들간의 거리(유사도)를 저차원으로 압축했을 때도 비슷하게 유지하게끔 학습을 하는 것입니다.
+                        즉 맨 처음에 저차원에서 랜덤으로 분포된 \(y_1,\,y_2,\,y_3,\,y_4,\,y_5,\,y_6\)에 대해서도 저차원에서의 기준점 \(y_1\)(\(x_1\)에 대응되는 점)에 대해 나머지 데이터와의 거리를 고차원에서의 결과와 유사하게끔 학습을 하는 것이지요.</span>
+                        그럼 차츰차츰 학습이 진행될수록 처음에 저차원에 무작위로 분포된 \(y_1,\,y_2,\,y_3,\,y_4,\,y_5,\,y_6\)들이 실제 고차원에서와의 거리와 유사하게끔 배치가 될 것이고 우리는 그 결과(데이터의 분포)를 가시화하여 볼 수 있는 것 입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWnIcAPI9LfQN46DNNIBMbZ2ZvVifeW9p2EmTUnbfUKwQ7hGmWHpjqTfvT3dbblZV5Nz2byF0k9cBuaQUOTsroO3hnNiM0p_CHGv2Ivhu4OFouhnAryoYb8LxFUi9ZuObFzG93NQFzkO_Z3b-7ECI3PgeaQH9v-7RuOqTtPZzj85lwhJWbv-KlnhabTp4dimYU_yAkxFiH2Mls2Q51nyOqZDgEokSnXotEEv8khtEo-WWwP0x9ILig8NN5E79PgUJAuokCmqfFdKX_cZuUh0ONROuPa0OmIBncSlbDYgAa8bXd6tXbo8O2nPr-Fcj8-dAoqFcLTFuhabwT8nU9AJHJkkWb_eOPiEQoGXdOC51VXkG6PQwqsk7XeSQg9yzDt_GoPEA4oCT3VxV4JJJ2xfMWtyfo7DH5bT2xC36ao61NNlYRjabuEfCwOaorAlGttLVjVUoLMKOK4k2fyQgAd9TRwN-0gUcHy_LF5icOme0x9oSkJKqAKvhyZ_G8NSxZznVyihop1nuXdW2qesWqvAN0uKzy5gkEfNYTG94-ewsQc7AuKy2aERJHJidux4rdRhQfc3CO44NNIklcJ-No6uujVqcGwvWP-Q_ZjuUYFFysHjQlFGO4UiFRJcKEKK7zSL42dIgS-ZCwJNvRyfAMohR7WkpCCJQfV__rIvUyc1ch2LI7X0swjq9FZi_kQpJwwWDkHe1Tn8RIDmQZUZ5cewI-SGcH7_mJU" style="width: 100%;">
+                        <p class="caption">t-SNE의 기본 원리</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>고차원에서의 데이터간의 거리(유사도)</b></span>
+                        <br><b>그렇다면 구체적으로 어떻게 데이터간의 거리(유사도)를 구할까요?</b> 결론부터 말하자면 고차원의 원래의 데이터는 정규분포를, 저차원으로 임베딩 된 데이터는 t 분포를 이용하여 데이터간의 거리(유사도)를 구합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 고차원의 총 \(n\)개의 데이터에 대해 특정 두개의 데이터 \(x_i\)와 \(x_j\)의 정규분포에 관한 거리(유사도) \(p_{ij}\)는 아래와 같이 정의됩니다.</span>
+                        \[p_{ij}\,=\,\frac{p_{i|j}+p_{j|i}}{2n}\]
+
+                        <br><b>그렇다면 \(p_{i|j}\)와 \(p_{j|i}\)의 정의는 무엇이길래 두 데이터 \(x_i\)와 \(x_j\)의 유사도가 저렇게 표현 될까요?</b> 
+                        먼저 \(x_i\)를 기준으로 바라본 \(x_j\)의 유사도 \(p_{j|i}\)는 아래와 같이 정의됩니다.
+                        \[p_{j|i}\,=\,\frac{e^{-\frac{|x_i-x_j|^2}{2{\sigma_i}^2}}}{\sum_{k\ne i}e^{-\frac{|x_i-x_k|^2}{2{\sigma_i}^2}}}\]
+
+                        <br>그럼 이제 우리는 \(x_j\)를 기준으로 바라본 \(x_i\)의 유사도 \(p_{i|j}\)의 정의도 유추할 수 있게 됩니다.
+                        \[p_{i|j}\,=\,\frac{e^{-\frac{|x_i-x_j|^2}{2{\sigma_j}^2}}}{\sum_{k\ne j}e^{-\frac{|x_j-x_k|^2}{2{\sigma_j}^2}}}\]
+
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그럼 우리는 여기서 의문이 듭니다. \(x_i\)를 기준으로 \(x_j\)를 바라보나, \(x_j\)의 기준으로 \(x_i\)를 바라보나 두 점간의 유사도는 항상 같아야할 것 같은데 \(p_{j|i}\)와 \(p_{i|j}\)는 수식적으로 다른 값을 가지게 됩니다.</span>
+                        그 이유는 아래 그림으로 설명 가능합니다.
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 \(x_1\)과 \(x_2\)를 기준으로 \(x_4\)는 비슷한 거리에 위치합니다.
+                        하지만 \(x_1\)을 기준으로 가장 가까운 점은 \(x_2\)이고 가장 먼 점은 \(x_3\)입니다.
+                        그리고 \(x_2\)를 기준으로 가장 가까운 점은 \(x_3\)이고 가장 먼 점은 \(x_3\)가 아닙니다. 즉 기준을 어디로 삼느냐에 따라 다른 데이터 간의 거리의 분포가 달라지기 때문에 결국 \(p_{j|i}\)와 \(p_{i|j}\)가 달라지는 것입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWljoqgEuK8zr2j0ppLJRHxFAHsljxAPgVBZDOK6CyKNq7N2gyPoVRByvPaGEZ8vLipOLvK75eosD57hr6650v-DcyRKSxJ0u0FC34jUBNPN9uu9_BKyg9-huzAlGMBiee44fKSa900fCOTmquEntCcdti8VXPR48ZfjoqtfamM6l5-JZGUjjP-eR6nsPYGZfScvaHMWS1UXH8O6GsjLT9ZONi-Quj1oCFQs3P4fMvJwEmUgEPoS9AONeAZXr55FKbx6HF7QjzV17vXPbAPlGghGEiF8BUWcgBX9b6kYVfY-KOq4oTsYAwSGy9sY1uJ6mom6lwtOcv8171wli05rXEm-SQLkLeEdyTER1TfIndd06rKIr6HWB1yoaNlTVKJbqyl12jZxv7Bd7hKPE5kqQDxYla4XUfRaRxSNPvOGHUdiAWPd-ikblvEnZ68iXtUhePLSeUOdmjIyH3Lsx7rKqGHo5EBLcl49lylZEfkugxVtd3P3n9DG0tH7B1XRp4fPLkoyl4AWMkKm30xbFbF0TlNedSF1retli7k93tZH-GDNO2AaEYxG_uOxQoAZezMqdx1qQE1ZBGX9lE_PTGLG3yu5P9PtQzgbt1wbxFpncgfdzeP9DGvCft8PfBWtomwpxfVB-IpxWaIRmuelBnAtUzGTlrKJ5DSO8jEk2QtRsnp8sXUJU2uVXERAyiBPpMfsZcM-4Uz7fDA2VE6fDDytLf1xOYyME0a" style="width: 100%;">
+                        <p class="caption">두 데이터간의 기준에 따른 유사도가 다르게 나타나는 이유</p>
+                    </div>
+                    <p>
+                        <br>따라서 우리는 두 점 혹은 두 데이터 \(x_1\)과 \(x_2\) 사이의 거리(유사도)가 어느 기준을 잡아도 똑같아지기를 원하기 때문에 <span class="highlight" style="color: rgb(0, 3, 206);">각 두 확률 \(p_{j|i}\)와 \(p_{i|j}\)의 평균값을 최종적인 두 점의 유사도로 정의합니다.</span>
+                        \[p_{ij}\,=\,\frac{p_{i|j}+p_{j|i}}{2n}\]
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>저차원에서의 데이터간의 거리(유사도)</b></span>
+                        <br>위에서 잠깐 저차원의 데이터간 거리는 t 분포를 이용하여 구한다고 하였습니다.
+                        저차원에서 t 분포를 사용하는 이유는 뒤에서 알아보기로 하고, <span class="highlight" style="color: rgb(0, 3, 206);">먼저 저차원에 임베딩 된 데이터에 대해 특정 두개의 데이터 \(y_i\)와 \(y_j\)의 t 분포에 관한 거리(유사도) \(q_{ij}\)는 아래와 같이 정의됩니다.</span>
+                        \[q_{ij}\,=\,\frac{(1+|y_i-y_j|^2)^{-1}}{\sum_{k\ne l}(1+|y_k-y_l|^2)^{-1}}\]
+                         
+                        <br>위의 식이 바로 t 분포를 의미하며, \(q_{ij}\)는 \(y_i\)와 \(y_j\) 중 어떤 기준을 잡더라도 같기 때문에 위의 정의 그대로 사용합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">두 점 \(y_i\)와 \(y_j\) 중 어떤 기준을 잡더라도 \(q_{ij}\)가 같은 이유는 정의의 분모에서 \(k\)와 \(l\)이 서로 다른 데이터의 쌍에 대해 계산한 값을 모두 더하기 때문입니다.
+                        그리고 기준에 따라 달라지는 분산에 해당하는 \(\sigma^2\) 부분이 사라졌기 때문이죠.</span>
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>고차원에서 정규분포를 사용하는 이유</b></span>
+                        <br>그럼 여기서 의문이 한 가지 들 수 있습니다.
+                        저차원에 대해서는 t 분포를 이용해서 한 번만 계산하여 \(q_{ij}\)를 구할 수 있는데, 왜 고차원에 대해서는 번거롭게 \(p_{j|i}\)와 \(p_{i|j}\)를 각각 계산하여 최종적으로 \(p_{ij}\)를 구할까요?
+                        바로 정규분포를 이용하여 들어가게 되는 \(\sigma_i\)와 \(\sigma_j\)가 중요한 역할을 하게 되기 때문입니다.
+                        <br><br>먼저 \(p_{ij}\)를 구하는 정의가 위에서 언급한 \(q_{ij}\)와 비슷하게 아래의 정의라고 가정해보겠습니다. 추가로 \(x_1\)이 다른 점들에 비해 엄청 멀리 떨어져있는 outlier (이상치)라고 가정해보겠습니다. 
+                        \[Assumption:\,p_{ij}\,=\,\frac{e^{\frac{-|x_i-x_j|^2}{2\sigma^2}}}{\sum_{k\ne l}e^{\frac{-|x_k-x_l|^2}{2\sigma^2}}}\]
+                        <br>위에서 언급하였듯이, \(x_1\)은 다른 점들에 비해 멀리 떨어져있기 때문에 \(|x_i-x_j|^2\)은 커지게 되고 전체적인 \(p_{ij}\)값은 작아지게 됩니다.
+                        이렇게 \(p_{ij}\)값이 작아지면 자연스레 \(q_{ij}\)가 받는 영향도 작아지고 학습이 잘 일어나지 않게 되는 것이지요. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 위 방법을 사용할 경우, 이상치에 대해 치명적이기 때문에 \(p_{ij}\)를 구하기 위해서 \(p_{j|i}\)와 \(p_{i|j}\)를 각각 구해 각 데이터들에 대한 정보를 모두 잘 수용할 수 있도록 하는 것 입니다.
+                        그리고 이것이 t-SNE 알고리즘을 robust하게 만들게 되고, 지금까지 많은 사람들이 사용하는 이유이기도 합니다.</span>
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>저차원에서 t 분포를 사용하는 이유</b></span>
+                        <br>위에서 고차원 데이터 사이의 거리(유사도)를 구하기 위해서 정규분포를 사용한 이유에 대해 알아보았습니다.
+                        그럼 저차원에서도 고차원에서의 정의와 비슷하게 사용하면 되는데 굳이 t 분포를 사용한 것에 대한 의문이 생길 것입니다.
+                        <br>
+                        <ol>
+                            <li>아래와 같이 \(q_{ij}\)도 \(p_{ij}\)와 비슷하게 정의 된다고 가정해보겠습니다.
+                            \[Assumption:\,q_{ij}\,=\,\frac{(|y_i-y_j|^2)^{-1}}{\sum_{k\ne l}(|y_k-y_l|^2)^{-1}}\]
+                            <br>위와 같이 \(q_{ij}\)를 정의 한다면, \(y_i\)와 \(y_j\)가 거의 유사해서 \((|y_i-y_j|^2)^{-1}\)은 무한대(\(\infty\))에 가까워질 것입니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">따라서 이러한 문제점을 해결하기 위해서 1을 더하여 최소한 1 이상인 값이 나오도록 만드는 것입니다.
+                            이것이 바로 t 분포이며, 기존 SNE 알고리즘을 개선하여 t-SNE가 더 안정적으로 작동하게 되는 이유 중 하나입니다.</span><br><br></li>
+                            <li>그리고 윗 부분에서 t 분포에 대해 설명을 진행할 때, t 분포는 기본적으로 낮은 확률에 대해 선택의 폭을 넓히기 위해 분포의 꼬리 부분이 정규분포(가우스 분포)보다 두껍다고 언급하였습니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">만약 저차원으로 임베딩 된 두 점 \(y_i\)와 \(y_j\)가 초기에 너무 가깝게 배치가 되었다고 가정하였을 때, t 분포의 이러한 특성은 학습 중 gradient를 크게 가져올 수 있기 때문에 빠르게 학습이 된다는 장점도 있습니다.
+                            즉 너무 가깝게 초기화 된 noise 데이터들의 영향을 덜 받게 되는 것이지요.<br><br></span></li>
+                            <li>마지막으로 저차원에서 t 분포를 사용하는 이유는 고차원에서 가까웠던 두 데이터를 저차원에서는 상대적으로 더 가깝게끔, 고차원에서 멀었던 두 데이터는 저차원에서 상대적으로 더 멀게끔 학습이 가능하기 때문입니다.
+                            아래 그림과 같이 고차원에서의 기준점과 저차원으로 임베딩 된 기준점을 각각 \(x_1\), \(y_1\)으로 가정을 했을 때 가까운 점과 멀리 떨어진 점을 비교해봅시다.
+                            
+                            <br><br>그림에서 빨간 분포가 꼬리쪽인 두꺼운 t 분포이고 검은색은 표준정규분포입니다. 
+                            <span class="highlight" style="color: rgb(0, 3, 206);">그리고 우리는 각 데이터간의 거리(유사도)룰 확률로써 판단합니다. 즉 우리는 데이터간의 거리를 세로축인 확률로 비교하고, 그 확률이 같은 지점에 해당되는 가로축이 바로 데이터가 분포한 위치가 됩니다.</span>
+                            실제로 가까운 지점인 \(x_2\)와 \(y_2\)는 각각 고차원, 저차원에 분포된 데이터이므로 정규분포와 t 분포에 매칭이 됩니다.
+                            아래 그림에서 거리가 같은, 즉 확률이 같은 \(x_2\)와 \(y_2\)가 위치한 가로축의 지점이 각각 고차원, 저차원에서 \(x_1\)와 \(y_1\)에 비해 떨어진 지점이 되는 것입니다.
+                            그 결과 저차원에서의 거리(\(y_1\)과 \(y_2\) 사이의 거리)가 고차원에서의 거리(\(x_1\)과 \(x_2\) 사이의 거리)거리 보다 가까운 것을 알 수 있습니다.
+                            반대로 멀리 떨어진 데이터인 \(x_3\)과 \(x_3\)는 저차원 사이의 거리가 고차원 사이의 거리보다 먼 것을 확인할 수 있죠.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">결과로 볼 수 있듯이 저차원에서 t 분포를 사용할 경우 가까운 지점은 더 가깝게, 멀리있는 지점은 더 멀게 배치가 되는 것을 확인할 수 있습니다. 
+                            이는 데이터의 특징을 더 분명하게 해주기 때문에 저차원(2, 3차원)밖에 볼 수 없는 사람이 결과를 보기에 더 효과적으로 보이게끔 해주는 것이지요.</span></li>
+                        </ol>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVG0D8xZUkE4RrSYGEMlBunbJhoKYR4y2lxOX0FNGP172Hax1Zx81aRczH6vbzTO38k5WWxVTa7bJKmJdNYi_vPC50I29bmtAt3Kv3niCv4vHUByj0J6HmFAT-zDlpLHIBe3o_fRpF2MTW8-P-wUzydfPzJCDczAbUBrFSIoXglLMfGd2SdvOE0wotCzNde7Xp9l7I2dU4dDFamz3C3Pk8GZiTNxOanGJojM53dB3yqMBPhRhtXQRQGetWq8ceG-CK1M6M6k_bf-k6zJ7N7XlB8w4cBkmdinvjX2oynbLbUF7VCmf4A9QaKrlx3d0zv8LDJAHA6v2vr0qq2TzBgnK7Su5AUocDlg0nG8nPo8IG-nKpMGNRdwxM2qPws-DmfMGLPrwAcEMhBQV6PMUPEU4W8Cu5GY8jitUB9KysnXy8Jdw9Whvsj180nLLz9ezCzM21o0ByAzHXo0u7INNRBxlE0L01nplLyRgsQW5W4I5k-g7ulMD528j0eXLKZ1Ep2XZwKHyOuFzO_u8rC5GR_Y_QArfE6b6BSEhmbRrAQ63H-3ArpeDteprKQrIfZCS2tZ-ScbRaR6Kln-3_k54Nf3OnBLx5_NDkFjxjKOP03IUQ_-R87jfkv3TDtYhWbYaGwb96K91L17hdAnQRT2uZ-8ypU95aZa8xuKzJw18a3echtaTcA6U3Dtm3V2MrUCmVA65R95J0RZ84TS-VT_Bbk5AaYrWB4GMMm" style="width: 100%;">
+                        <p class="caption">저차원 임베딩에서 t 분포를 사용하는 이유</p>
+                    </div>
+                    <p>
+                        <br>실제로 아래 그림은 0 ~ 9까지의 손글씨 데이터인 MNIST를 가시화 한 결과입니다. 
+                        t-SNE를 사용했을 때, 숫자별로 그 특징이 잘 묶이고 구분이 잘 되는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweX3VARbqZoKiZcLUTPlZdVHjOnNAs6BhUldhH-T3Pt-AlgXgmj5uZoNpalA1fNK9EDg__2tOGY2ZYErzEsPFcJzREy2r_nykG0Q0VYLWbuBKAbljxHOluS4qZ4GRWaTxrcp-oE839AP7-hAvvXNAxVNPyy-kU7vzEMS_a0AyqjIZapT7KcmPdh5av6d6n5WX7jgMwYs69EBnuhMsYuW0fA5NmTny30xjukUQxFsl9EhyuGFNcMba6xD77k1jo2C9EbRnADXfq__qsiRDO2pxkstKTDynQSHIhchFCsmiC1XiWqquRMmgJVR1hhenipLfq865jbGYlADrDNnuqfM4wkhTHdQaQGUue8I-GD5kEZ-IL1wdT-6kXabHuknHrT3XhfExYo9t0_w6NprbbaP8Z5P3jYccw3r4blBa2vi4ajuhyZPmG6GOHJYokf_cillY66jQi2Ne54QqB3OwoA1LBlxTTPJZLA3dJl5GN7LuqWsi1JaDwZQnosRVrmiFoPki0bqWMKOcQTO5G9EbNtRgkk4aLML_9fCyyNf48d32zzUTKESkraapiee-BF8uLzYxpX5y-1oC4xEHFRT5shTkDTyq0HQkI3D4KtH669TrBcst7TjkCJD4AejB7KKr_ZKcQ4UaEXGQS_vstJMC2FNcBRGGAddMcw3P42fuVvDJJTCMidUssV-zeNKYEL8Qn8VJCeDhFzTMNjhn4A7ptZfss0Rf2m_b-Ua=ft" style="width: 80%;">
+                        <p class="caption">t-SNE를 이용한 MNIST 데이터의 2차원 가시화</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>t-SNE의 장점</b></span>
+                        <br>t-SNE는 특징을 추출하거나, 데이터의 특징을 가시화하기에 아주 robust한 알고리즘입니다.
+                        <ol>
+                            <li>기존 PCA (주성분 분석)과 같은 선형 변환은 데이터를 저차원으로 임베딩하여 가시화할 때 겹쳐서 뭉게지는 부분이 많이 생겼지만 unsupervised learning의 일종인 t-SNE를 사용한다면 그런 문제점이 많이 해소됩니다.<br><br></li>
+                            <li>또한 저차원 임베딩을 t 분포 기반으로하기 때문에 기존 SNE 방법과 같이 저차원 임베딩에서 정규분포(가우스 분포)를 사용했을 때 나타나는 crowding 문제점이 해결됩니다(특정 거리 이상부터는 학습에 반영이 되지 않는 문제점).<br><br></li>
+                            <li>또한 다른 차원 축소 알고리즘에 비해 hyperparameter의 영향이 적고 이상치(outlier)에 둔감하다는 장점이 있습니다.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>t-SNE의 단점</b></span>
+                        <br>t-SNE는 특징을 추출하거나, 데이터의 특징을 가시화하기에 아주 robust한 알고리즘이지만 문제점 역시 존재합니다.
+                        <ol>
+                            <li>먼저 시간이 오래 걸립니다. 특정 기준 데이터를 정하고 나머지 데이터에 대해 확률로써 거리(유사도)를 계산합니다.
+                                <span class="highlight" style="color: rgb(0, 3, 206);"> 이 과정을 모든 데이터를 돌면서 한 번씩 기준을 삼으며 돌기때문에 time complexity (시간 복잡도)가 \(O(n^2)\)입니다(알고리즘의 시간 복잡도를 이야기할 때 big O notation을 사용합니다).</span>
+                                따라서 데이터 수가 많고 그 데이터를 모두 가시화 하려 한다면 몇 시간 이상 걸리는 경우도 많습니다. 아래에서 설명할 UMAP을 사용한다면 이러한 문제점을 해결할 수 있습니다.<br><br>
+                            </li>
+                            <li>
+                                또한 너무 높은 차원을 가진 데이터를 바로 2, 3차원으로 축소하는 것이 불가능합니다. 성능이 떨어지는 것은 물론이고 시간이 너무 오래 걸리게 됩니다.
+                                <span class="highlight" style="color: rgb(0, 3, 206);">따라서 보통 128차원의 raw 데이터를 autoencoder를 통해 32차원으로 줄어든 잠재 변수(latent variable)를 구한 후, 32차원을 2, 3차원으로 줄이기 위해 t-SNE를 사용합니다.
+                                즉 raw 데이터의 차원을 한 단계 축소 한 후, 한 단계 축소 된 데이터를 다시 한 번 축소하여 가시화 합니다.</span> 보통 50차원 이내로 raw 데이터를 압축 후 t-SNE를 사용합니다.<br><br>
+                            </li>
+                            <li>저차원으로 임베딩되어 가시화 된 결과에서 각 데이터간의 거리는 실제 데이터 간의 거리를 의미하지 않습니다. 또한 데이터들의 군집의 크기 역시 의미가 없습니다.<br><br></li>
+                            <li>저차원으로 임베딩 되는 과정에 어쩔 수 없이 정보 손실이 발생하며 데이터 왜곡이 일어납니다.<br><br></li>
+                            <li>
+                                t-SNE를 이용할 때 저차원 데이터들은 처음에 랜덤으로 분포하게 됩니다. 이렇게 랜덤으로 분포된 데이터들이 학습을 진행하며서 가까운 것끼리 묶이고 다른 것끼리 멀어지는 것이지요.
+                                <span class="highlight" style="color: rgb(0, 3, 206);">하지만 맨 처음 랜덤으로 저차원에 데이터가 분포되기 때문에 매번 돌릴 때 마다 결과가 다르게 나옵니다. 맨 처음에 딥러닝 모델의 가중치들을 초기화할 때 랜덤으로 하게 한다면 학습된 모델의 결과가 조금씩 다른 것과 같은 원리입니다.</span>
+                                하지만 결과가 다르다고 해서 어쩔 땐 결과가 잘 나오고 어쩔 땐 안나오고 이런 것은 아니라, 아래 그림과 같이 약간의 분포의 위치만 달라지는 정도입니다.
+                                이 문제를 해결하기 위해서는 매번 할 때마다 같은 random seed로 고정하고 t-SNE를 돌리면 됩니다.
+                                <span class="highlight" style="color: rgb(0, 3, 206);">이러한 이유 때문에 어떤 특정 데이터들을 t-SNE의 결과로 representation 하기에 한계가 존재합니다(따라서 데이터를 representation 하기 위해서는 autoencoder의 결과인 잠재 변수를 많이 사용합니다).
+                                그래서 대부분 t-SNE는 데이터의 특징 분포를 가시화 하는 용도로 사용됩니다.</span><br><br>
+                            </li>
+                            <li>마지막으로 큰 데이터셋에 대해 t-SNE를 사용하게 되면, 특징의 구분이 여럽고 명확해지지 않는다는 단점이 있습니다. 아래에서 설명할 UMAP을 사용한다면 이러한 문제점이 해결 될 수 있습니다.</li>
+                        </ol>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWT5ts5Md_psMuoG42HSEt25kOhUqpD3BJE6l7yHGpMNnJitwTm2L7J7flMLiEQbhH0GMjgtAqDAyxfMaunqV5rNCgG7PUX0hbA0XeI4x1rPvk6PH6deU1p6Ci5O8Y0J6cL2hE3cwhr8AQZq7lO9aJZyeN6Y-gaDBseqviu6GxSyEQAM5U9NcFKUzpRXOvXkguABcTFHf3GLDr1OLdgunme7L8ZYEn685oZeOheH-_PtmoVzAgScFOAXnNmQDyuoYlJ6UmFun_06LE77wlutc93ZkJ_vF_2KzzHh5R-wVIOI13Ee-NU6duJ_7YpT5KIxJzetetxdFDbjZqNjToqxhTPbGiGvF5u_48O9ULHHlmKwWwkc4dN5RnIyErSwrjPuVQiKR4pO5NR-jtDGYMH3Qg9EDQhMHZWXrxxatxfhbRY8GoIVeY9y2m3HVsIGBp3aWnSgYbumRRXsyAsfLdhzdL9NEB16sd4WZhDPyHFFRVX_5aZuTUX3rE-KuP7veaNdcPk_LOaE21YaFVnzYLB2R4ye_4t-2Ib5GAe_9bqgWqMpsoHRcBkxZHHrb9kiS8q9t2oeyAXRYNxG_m0A6QRy6c7dHS9aKVUW1sdICy_sbdhPEZo-Qk2tngxpXT9CwMQkTg05Epz3dDA3iRvgY_jbGyQihsFb5usEG_Eask_FuuAW3oL7LiH4V7cUxeY-9f8BNMs1w0aWiJAlfVsVr8OY38OoS_HaS4z" style="width: 100%;">
+                        <p class="caption">매번 다르게 나오는 t-SNE의 분포 결과 예시</p>
+                    </div>
+                    <p>
+                        <br>t-SNE는 위와 같은 정의와 원리로 작동하며, 데이터의 특징을 가시화 하는 데 아주 강건한 알고리즘 입니다.
+                        그리고 t 분포를 기반으로 저차원으로 임베딩 된 데이터간의 거리(유사도)를 구하고, 데이터의 거리(유사도)는 확률로써 나타내기 때문에 t-distributed Stochastic Neighbor Embedding (t-SNE)이라는 이름이 붙여진 것입니다.
+                        그리고 아래에 t-SNE의 논문 링크를 달아놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://www.jmlr.org/papers/volume9/vandermaaten08a/vandermaaten08a.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">t-SNE 논문</a>
+                    </div>
 
 
+                    <h1 class="subHead">UMAP</h1>
+                    <p>
+                        UMAP은 Uniform Manifold Approximation and Projection의 약자입니다. UMAP은 성능이 좋고 t-SNE의 많은 문제점을 해결한 것에 의의가 있습니다(나중에 UMAP과 t-SNE의 성능 차이는 별반 다를 것이 없고 둘을 적용하기 전 데이터 전처리, 초기화 방법이 더 중요하다는 논문이 등장).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">UMAP의 컨셉도 서로 먼 데이터는 더 멀리, 가까운 데이터는 더 가깝게 하려고하는 t-SNE와 매우 유사합니다.
+                        하지만 UMAP이 사용하는 방법은 t-SNE와 전혀 다른 수학적 원리를 기반으로 합니다. 이러한 수학적 기반을 이용하여 t-SNE보다 더 global한 데이터 분포를 학습할 수 있게 됩니다.</span>
+                    </p>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>UMAP</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 UMAP의 원리를 설명하기 앞서 UMAP의 결과와 t-SNE의 결과부터 보고, t-SNE와 UMAP의 차이점을 알아보도록 하겠습니다.
+                        아래는 UMAP과 t-SNE를 통해 여러 옷가지의 이미지를 종류별로 가시화한 결과입니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">t-SNE와 UMAP 모두 신발은 신발끼리 옷은 옷끼리 등 잘 묶이는 것을 확인할 수 있지만, UMAP으로 데이터 특징을 가시화 한 결과가 군집이 더 확실하게 되어있는 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVrESgWHNylZsRKa3WWRjJcnwemgDOiZYPoHCteHEvBL1iGdab8ScFf3iogokjUh3Pli_wVvWH6-hShvpFhnmJISPsPSPWtaGGq8DwtnNXORBxvww4w67Ecg4SfXsRSbpZlddCNfoifx05k2IY2ZZeT87iLfDBpkrqh3SLk5FW51EgW5Hu9v_NeN9xlCAVn1KwGZZG4HkHcIyZGHPmx4XocgZK_OSkaZsa2_h_YViq7t1HLtTWw-p0YBwTUbHhQxNWu1tYWqt6qeIW8dxU9nNamhGcJ7N0PQgZCJqbEOxyMc8Y8CrYvXqDngIrPBIlUZXUq63Nsmp5k2Esk4e9qQJwsB562NE_KQA0fJmnf3bUA1VkD1hYGujnHjXe12NqgxjRgSraY-WikeKUTss8snnB2NTzZQhns0k_VUs6ZGDl-i5sVczGogXucPDzPdSXAQIOPsQLil2dvxzoWTx64bCHfXItEA2Bb-HIv9pl7zMzohxqqyAxNq3dskh86gpqqpvxz_OZYgt_lfVG7iOozNkeDpzW9zalofneaI02i6Hj2_MaC4g263vPJqA0m_FjjeMUwHuxqO6DmzkBIOOI8F_7BiEM5JYcA9WYdEsi4Na2OqEuX-9rzyY3DzIqTsB3hDZQvtiNZRNUhnzfS0MkBCs6sOWuyavU00jd-EuJE8gCSLgmRkMJ-IlCXtuH_g-lydUVnSNvcxpraNb86AndkGBgL7EkjUlUK" style="width: 100%;">
+                        <p class="caption">UMAP과 t-SNE를 사용한 옷가지 이미지 특징 가시화 결과, 출처:https://pair-code.github.io/understanding-umap/</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>UMAP의 장점 및 t-SNE에 비해 개선된 점</b></span>
+                        <br>그럼 t-SNE의 어떤 부분이 UMAP에서 개선 되었는지, 그리고 UMAP의 장점이 무엇인지 간단히 알아보겠습니다.
+                        <ol>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">t-SNE에 비해 UMAP을 이용하여 결과를 가시화 하는 시간이 현저히 빨라졌습니다.</span>
+                            실제로 위의 이미지의 결과를 내기 위해서 UMAP은 4분이 걸렸지만 t-SNE는 27분이 걸렸다고 합니다.<br><br></li>
+                            <li>UMAP이 t-SNE의 결과에 비해 global한 구조를 잘 유지합니다. <span class="highlight" style="color: rgb(0, 3, 206);">이는 UMAP이 더 견고한 수학적 이론이 바탕으로 되었기 때문입니다</span>(t-SNE에 사용된 확률분포의 이론이 더 하등하다는 뜻이 아니라, 데이터의 특징을 학습한다는 목적에 있어서 더 적절한 수학적 이론을 도입했다는 뜻).</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>UMAP의 원리</b></span>
+                        <br>크게 봤을 때, UMAP과 t-SNE의 동작 방식은 유사합니다.
+                        t-SNE는 고차원에서 각 두 점들에 대해 데이터가 비슷하면 높은 확률을, 데이터가 다르면 낮은 확률을 부여합니다.
+                        그리고 저차원으로 임베딩 된 데이터에 대해서도 고차원의 확률 관계를 유사하게 맞추는 방식으로 학습 됩니다.
+                        이는 우리가 두 데이터를 node로 볼 수 있고, 각 데이터 사이의 확률이 그 둘을 잇는 edge의 weight라고 생각할 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 우리는 각 데이터가 분포되어 있고, 각 데이터를 잇는 edge의 weight는 확률인 weighted graph 형태로 생각할 수 있습니다.
+                        UMAP 또한 이러한 고차원에서 각 데이터의 graph 관계를 저차원으로 임베딩 했을 때도 유사하게 잘 유지가 될 수 있도록 하는 학습이며, 전체적인 그림은 t-SNE와 유사하다고 할 수 있습니다.
+                        그리고 UMAP이 더욱 적절한 수학적 이론을 기반으로 제작된 알고리즘이기에 고차원 데이터 간의 graph 구조(global 구조)가 저차원에서 t-SNE에 비해 더 잘 유지가 된다고 합니다.</span>
 
+                        <br><br><b>그렇다면 UMAP은 그래프를 형성하는 과정이 어떻게 이루어질까요?</b>먼저 논문에서는 고차원의 데이터 구조를 잘 형성하기 위해 <span class="highlight" style="color: rgb(0, 3, 206);">"fuzzy simplicial complex"</span>를 구성한다고 합니다.
+                        이는 <span class="highlight" style="color: rgb(0, 3, 206);">"모호한 단순 복합체"</span>로 해석할 수 있는데 왜 이러한 표현을 했는지는 아래 그림과 같이 설명하겠습니다.
+                        <br><br>아래 그림에서 윗 줄의 두 그림은 extent의 값이 다릅니다. <span class="highlight" style="color: rgb(0, 3, 206);">따라서 우리는 extent 값이 커질수록, 각 데이터의 주변의 범위 즉 반지름이 커지는 것을 확인할 수 있습니다.</span>
+                        아래 그림에서 아랫 줄의 두 그림은 n-nearest 값이 다릅니다. <span class="highlight" style="color: rgb(0, 3, 206);">따라서 우리는 n-nearest 값이 커질수록, 각 데이터가 연결된 다른 데이터의 수가 늘어나는 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUgHw_qlD4k2Ik2aqA0jQqitRoHd9PdZ82pjtdTULIMCAAkv8W3sxZ5_fvBSyPVKxMvstnzF7FEnsXJv6f8LL21_rG5viFQB_FXS4hd3ezc8l3J-dQoc3lPQlVmRIIOCWtMegUmp1tXXLWw_Pgft3UEebmvlTFtbWTdLgpkTgqk49paD1dYBU9o09PEjo12rmwYZgMRXwdUooH5atI48tub34v5HCRARBzkGHGBfZF6q9DYDKvaBE7oH0c1gE1y0Vx0VXUDtkE0sg_rFwUURr7owFQ0DwkiaFn1wyEkLu3kQwmrm6hJTxwXh3WtnHYmiDVqHfMBrGmjiAQAv48ukb-fx3ZmZhzv9Q7B-lnPIIJo-jbRPAc--glxaAf5d0J9aBXCqLkllod_E_UwiFpu6BP6GjOPGl9PYXL1ZoBJHrqEA0G5sKi2do99vz4Yj7g2SbDGO14BO1tfwh_HoNB2sAUsIXlrHGWkgRlJ62rgCRnTH7Qf0M0l0L0xj2iT30sfP18SyZpvdaC5TuB6WRvrbgb4aZlufLctBIagaZOho4HCPPWkPRpRfg0F1by6ft1VMJnpE4n11taVPNPoooxVzhbFpPZZwcnU8gtyPaxUBCQFY6VtYO1P50osQUG22nDafLLPej6o8PtrlxrHaUWnesBaxYZdSxGIwkkuGIrZY1ZosN8kFrF3AyupKLDvVz-cub2Th_FeZxqRQFqbx8axuLOIer3QTcMC" style="width: 100%;">
+                        <p class="caption">UMAP이 데이터간 graph를 형성하는 방법, 출처:https://pair-code.github.io/understanding-umap/</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">UMAP에서는 데이터를 감싸고 있는 원이 만나는 두 데이터는 연결되기 때문에 각 데이터를 둘러싼 원의 크기는 매우 중요한 역할을 합니다.
+                        왜냐하면 원이 너무 커지면 모든 데이터가 연결되고, 너무 작으면 고립된 데이터가 많이 생겨나기 때문이죠. 따라서 적절한 원의 크기를 정하는 것이 중요해집니다.</span>
+                        위에서 보았듯이, 데이터의 원의 크기는 extent와 각 데이터들의 n-nearest 데이터의 거리를 바탕으로 모종의 규칙을 적용하여 정해집니다.
+                        따라서 각 데이터는 다른 반지름을 가진 원을 가지게 되고 이러한 원이 만나는 두 데이터는 연결 되는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 여기서 만약 모든 데이터에 대해 원이 커지게 되면 모든 데이터가 연결되는 문제가 발생하기 때문에, fuzzy 개념을 이용하여 해결합니다.
+                        즉 원의 반지름이 너무 커지게 되면 경계를 모호하게 하여 각 데이터간의 연결을 제한합니다.</span>
+                        그리고 이러한 규칙 때문에 특정 데이터가 하나도 연결이 안되는 경우가 발생하는 것을 방지하기 위해 가장 가까운 두 데이터는 무조건 연결하도록 합니다.
+                        마지막으로 이러한 규칙으로 데이터를 연결한 후, 가까운 데이터들은 연결된 정도가 강하게(edge weight 크게), 먼 데이터는 연결된 정도가 약하게(edge weight 작게) 설정됩니다.
+                        이는 위 그림에서 연결된 edge의 두께를 통해 확인할 수 있습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 위에서 논문에서 언급한 "fuzzy simplicial complex"가 "모호한 단순 복합체"로 해석될 수 있다 하였는데, 이는 결국 모호한 weighted graph라고 볼 수 있습니다.</span>
+                        그리고 이렇게 고차원에서 형성된 global 구조(graph 구조)를 저차원에서 동일하게 유지하려고 하는 것이 UMAP 입니다.
+                        이는 t-SNE와 유사한 개념이지만, 최적화하는 데 트릭을 이용하여 t-SNE의 느린 시간을 개선하였습니다.
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>UMAP의 수학적 이론</b></span>
+                        <br>위에서 UMAP의 기본 원리에 대해 전체적으로 살펴보았다면, 여기서는 조금 더 자세한 이야기를 해보겠습니다.
+                        UMAP의 수학적 이론은 토폴로지 조합을 나타낼 수 있는 Čech complex를 기반으로 합니다(여기서 토폴로지(topology)란 위상수학을 의미하며, 수학 학문 중 꽤 최근에 등장한 학문입니다.
+                        여기서 토폴로지라 함은 위상 즉 구조로 간단하게 생각하면 편할 것 같습니다). Čech complex에 도달하기 위해서는 simplex라는 개념을 사용합니다. 기하학적으로 k-simplex란 k+1개의 점으로 이루어진 블록이라는 뜻입니다.
+                        예를 들어 0-simplex는 1개로 이루어진 점, 1-simplex는 2개의 점으로 이루어진 선, 2-simplex는 3개의 점으로 이루어진 삼각형 블록을 의미하는 것입니다. 아래 그림은 몇가지 simplex들의 예시입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 우리는 여러 데이터를 이어 simplex를 만들 수 있으며, 여러개의 simplex를 결합하여 전체 데이터가 분포된 토폴로지(구조)를 알 수 있습니다.
+                        그리고 이는 결국 Čech complex를 형성할 수 있게 되고, 이를 지표로 삼아 데이터 구조가 어떠한지 판단할 수 있게 됩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWHEKE6yNZ1K9KcKrkKNBO3SGVjZN2iJjDmwN40BlZ5gC7ESYPV7xPAMcs3JTt6YbmgUbtCiiBxOUOYsRUpV5QpWkBuTQ8UPiGJVnLrzgCuidR3XPAzJYyg2UJ9131tRPNRpw-QMwj1jldkfj5MPRmfe99yMZukEr6QgJivlc-p4YOtLqcrd1oHGXNpnj1NUwQT3mAENHMeuEVjDZR5yoZ0jjmR4Gg3FeTj6_muSh0E6MGLqMVqqsyoLSkX4FlCug80B73IsMwv5HTmAdXV-RKyIEYl7nrJvMDw-CJl8RAgZ0etTYnqM596jrBpdmAvCAuwCumg3XwDo3q6TZ6Hn3GmvNwiDK83DdsipM1HHYsre-Wyne-8hXjohx_253YFsRW7Itoxf6m2tsmdE55nRRVCxbH3fdCaIjmj9G5_MZc5TkFLeI52gTEKGivx4bkT3XmBivItEkGiyVl72G3tyKold6_UItokT0RSOl6keyaDd0DKsLm7z6fdAqadUzLN2wC7eX_s4wLA5eExFuT52N3b5d7YXCv2wCRVu6Sj3B3IJ4qC2VPFXnl6uXiLbZzA8LMVh8bgfMhA88cEvoh8fvgALE6c83nk9hH-40KL_lSfoaUKKmlAuaW4UPBZsCc_XVBIO9fWVJu6iTSdveKVLpdKYahtDg1Qq-k3UX8mzh-_NZUjm81mR1NaBfAFVMwuQJbmwEtcU4DRpjfAb0bziuec-f61edX6" style="width: 100%;">
+                        <p class="caption">k-simplex 예시, 출처: https://umap-learn.readthedocs.io/en/latest/how_umap_works.html</p>
+                    </div>
+                    <p>
+                        <br><b>그렇다면 Čech complex는 과연 무엇을 의미할까요?</b> Čech complex는 point cloud를 이용하여 토폴로지 정보, 즉 기하학 정보를 표현하는 simplicial complex (단순 복합체)입니다. 
+                        위에서 잠깐 "fuzzy simplicial complex"에 대해 이야기를 할 때 "단순 복합체라고 해석될 수 있다"라고 표현한 부분이 바로 Čech complex와 관련된 부분이지요.
+                        Čech complex의 예시는 아래 그림을 통해 쉽게 이해할 수 있습니다.
+                        아래에서 가장 왼쪽 그림 처럼 데이터가 분포되어있다고 가정해봅시다. 그럼 이 분포의 토폴로지, 즉 기하학적 의미는 어떻게 표현할 수 있을까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그것은 이제 \(\varepsilon\)에 따라 데이터의 토폴로지는 달라집니다. 중간 그림은 \(\varepsilon\) 값이 5일 때, 가장 오른쪽 그림은 \(\varepsilon\) 값이 8일 때 point cloud를 표현한 그림입니다.
+                        그리고 각 데이터의 원(cloud)이 만나는 데이터를 연결한 것이 바로 Čech complex이고, Čech complex는 그 모양이 \(\varepsilon\) 값에 따라 달리지는 것을 알 수 있죠.
+                        마지막으로 이러한 Čech complex를 형성하는 것은 바로 위에서 언급한 k-simplex들인 것입니다.</span>
+                        그리고 각 데이터를 연결하여 여러 simplex를 만드는 edge의 두께는 원(cloud)이 많이 겹치면 두껍게, 덜 겹치면 얇게 표현 되어있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW8Djv6ooLo5COeaCK-EeXCljMO6VqvUkv9tfzJX9jvjVBfR34LGZ7EHfuaKXCp_J67xyLSJNkfXJ9LO-x4AsEzpVa4POK56-Rt6WDr-yUiYGkq8zUmpPBKvBMMnPfLB7z9QsBUkpr4nv8VXdP_nkH_X-Ao15QLpgh1JTDx1MA70IRe5_YtHdETzrE3FKm4XPxy8NX-svALnDFEoMvKwFz00Vl-llOG_8H0KSBMQ8GXimlSLZCyn6iuqCL0QWm717cYrmOXpvhxbML8BnWRvcGbH2o2FlNjm5IaBzEIUTfMB0ZrpyuJ5g3A7BFotF_t3jgg6uAm0kLEjuGkPmf1y6Xjwn3g_QcoirN5fqpl-m9k3GKs0ckk3KOYMB_iyPJDfCJBy4KhZOcz2fd6FVE9RZ6582huPRR1FYWA-eW1hrfyW0afRrLYTvFCSN7hj9V-D9_LxJjTELPw7m_1JKV6DFRbdOzLE8Mp0v76qcvHK2pUjHJ0RbJ59ht2MgZOP_x8ZgOV98Fy3znNv_XqKEEjJDsgeRY9DxyHRMsEZVG4FyJO-bm8qkjbNl1Db_CJttyfgtn1CduMTWOELA9AJ-hnqg27jNFU-WI3RHJXSTUli1gOm46QZ6zNQyDWeDyW4lSPM5DhTmEt9QdAvL81XynG3JnvwsOdEt3DbWZU8V-BrZy5K9PL82F597A6v1oG11juB6uXxT9HN96NoJw10hUcX1W4aXp2fB-9" style="width: 100%;">
+                        <p class="caption">Čech complex 예시</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 UMAP의 원리 부분에서 언급하였듯이 Čech complex를 형성하기 위해 simplex를 만드는 과정에서 필요한 각 데이터를 둘러싸는 원(cloud)의 크기는 중요합니다.
+                        왜냐하면 이 원의 크기에 따라 데이터가 분포한 토폴로지(global 구조)가 달라지기 때문이지요.</span>
+                        예를 들어 각 데이터를 둘러싼 원(cloud)의 크기가 너무 크면 모든 데이터가 연결되어 의미있는 구조가 나타나지 않고, 너무 작으면 연결이 하나도 되지 않는 점이 많이 생기게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 적절한 데이터의 토폴로지를 만들기 위하여 UMAP에서는 extent와 각 데이터의 n-nearest 데이터 거리를 바탕으로 모종의 규칙을 통해 데이터 별로 다 다른 크기의 원(cloud)를 가지게끔 해주었습니다.
+                        그래서 실제로 UMAP에서는 위의 Čech complex 예시 그림과 다르게 데이터를 감싸는 원(cloud)의 크기가 다른 것입니다.</span>
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 이렇게 각 데이터 별로 다른 원(cloud)의 크기를 부여하였음에도 불구하고, 원의 크기가 커지면 모든 데이터가 연결되는 것은 불가피합니다.
+                        따라서 원(cloud)의 반경에도 fuzzy 개념을 도입해서 자기를 감싸는 원 커져서 멀리 있는 데이터의 원(cloud)과 만나더라도 연결될 확률을 낮추는 개념을 도입하여, 데이터들이 무분별하게 연결되는 것을 막습니다.
+                        그리고 fuzzy 때문에 하나도 연결이 안 된 데이터가 남아있지 않도록 방지하기 위해 가장 가까이 있는 데이터는 fuzzy와 상관없이 연결하게 하여, 모든 데이터가 하나 이상 연결 되게 강제하는 조건을 추가합니다.</span>
+
+                        <br><br>아래 그림은 위에서 말한 데이터를 둘러싼 원(cloud)의 크기를 정하는 일련의 과정을 나타냅니다.
+                        1번 그림에서 데이터는 uniform하게 분포가 되어있습니다. 이러한 경우라면 사실 데이터마다 원(cloud)의 크기를 다르게 할 이유가 없이, 적절한 원의 크기를 찾기만 한다면 전체적인 데이터의 manifold, 즉 토폴로지(global 구조)를 잘 찾을 수 있게 됩니다.
+                        하지만 실제 세상에서는 2번 그림과 같이 데이터가 uniform하게 분배 되어있지 않습니다. 따라서 위에서 말한 방법으로 데이터 별로 데이터를 둘러싼 원(cloud)의 크기를 다르게 하는 것입니다.
+                        그리고 3번은 각 데이터의 원(cloud)의 반격에서 멀어질수록 흐릿해지는 것을 볼 수 있는데, 이는 확률이 작아짐을 의미하는 fuzzy 이론을 적용시킨 그림입니다.
+                        4번 그림은 이 모든 것을 고려하여 최종적인 데이터의 토포롤지를 형성할 수 있는 원(cloud)이 결정된 모습입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWiS07peLy0WZq-k0YGAz8Mfy8MkeQyS_7gCM1MDPwcUn2Mwz1pCGeZ-aDMIDYP2N4TWogXg7-S6b_h3jlpDv17mt1Dfihq3z9UfHw51kP8vZ25oME-DyNbFq_0IU8aFsMWaUAk7c9Usc6BMaNtzRQFLbirDWioTmav5lv7ASg9Tfp5hgaKe2OizYOGJnzHR3EUr-GCbTobUe2BnpFbitP0UDybtOY2v2znE8lO3F3FSnGaKHbPGur4r7svde-reQovLD4ykd1KHDWOlGisov7WyKavVy7gIEJyZNIkJSrY1uWPXUJ5awYz1X671RnMdB2pcqB5AupQAwSHSJsrhyvaqFQedsa5aogjEgltBacMBxc2K2y8gCbqeUvL3pUg4pfDOznNoUKS57hMxg3IlgbBU2CLrSzdtod-9hU-y2GMokv-rAwlQWTfkDtEaS4TuttAzy879Ji5siLFDnoB6pu2yEa7sccTCA56xFgT_qzKR_b3umDYDj529H2L2s0KIJD0H5AGeFEHCHZoJE31yaG10C9PphwyfzuIFK49ys8VD5oGgvwouAVEc9JORuQLPP9_6RL9H0a-77F1Umfzy6W79lihS1TahExWqQOp6gjW3orFrPYJTWOTDskD8KOqVKY7hP1KLGieGJPdNaFc-RbsEop0CSBHol09zHxioceG_4efpNu2wtyjJiGYv25kZ-EbmUBgfEAythFK4Al9LN2vT5znENV1" style="width: 100%;">
+                        <p class="caption">데이터의 원(cloud)를 정하는 과정, 출처: https://umap-learn.readthedocs.io/en/latest/how_umap_works.html</p>
+                    </div>
+                    <p>    
+                        <br>따라서 논문에서는 고차원에서 데이터 구조(토폴로지)를 잘 파악하기 위해 Čech complex를 형성하고, 이를 "fuzzy simplicial complex"라고 부릅니다.
+                        위와 같은 방법으로 고차원 데이터의 토폴로지(global 구조)를 형성한 후, 저차원으로 임베딩 된 데이터에서도 고차원의 토폴로지와 동일하게 유지가 되게끔 학습하는 방법이 바로 UMAP인 것입니다.
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>UMAP이 빠른 이유</b></span>
+                        <br>위에서는 UMAP이 고차원 데이터에 대해 토폴로지(global 구조)를 형성하는 방법에 대해 알아보았습니다.
+                        하지만 UMAP의 전체적인 컨셉은 t-SNE와 비슷하다고 하였지만 왜 t-SNE보다 빠른 것일까요?
+                        <ol>
+                            <li>UMAP은 각 데이터에 대해 가까운 몇 개의 이웃 데이터에 대해서만 계산을 합니다. 왜냐하면 fuzzy 이론 때문에 데이터 중심에서 멀리 떨어질수록 다른 데이터와 결합확률은 0에 가까워진다고 합니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">따라서 각 데이터에 대해 가까운 몇 개의 이웃 데이터에 대해서만 계산을 수행하여도 토폴로지(global 구조)를 잘 학습 한다고 합니다.</span><br><br></li>
+                            <li>그리고 1번과 비슷한 맥락이지만 가까운 데이터에 대해서만 계산을 하고, 멀리 떨어진 데이터 몇 개만 추려서 멀리 떨어진 경우에 대해서 계산을 합니다. <span class="highlight" style="color: rgb(0, 3, 206);">즉 negative sampling을 수행하여 모든 데이터 연결 고리에 대해 하지 않는 것이지요.</span>
+                            즉 가까운 데이터 몇 개, 멀리 떨어진 데이터 몇 개 이런식으로 학습을 하는 것입니다. 여기서 사용된 negative sampling의 개념은 추후 word2vec을 구현할 때 학습 시간을 줄이기 위해 사용된 기법입니다.
+                            이는 추후에 word2vec에 대한 글을 적을 때 한 번 더 등장할 것입니다.
+                            <br><br>(Negative sampling 예시: 예를 들어 모델이 queen이라는 단어에 대해 학습한다고 할 때, 모델은 queen과 유사한 단어와 유사하지 않은 단어들을 모두 학습하여 queen이란 단어의 의미를 파악할 것입니다.
+                            이때 queen과 유사한 단어는 girl, woman과 같이 적은 반면에, queen과 관련이 없는 단어는 car, cookie, book, house, country, university 등 수많은 단어가 존재합니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">우리는 유사한 단어에 대해서는 모두 학습을 하지만, 모델의 학습 시간을 줄이기 위해 수많은 유사하지 않은 모든 단어를 학습하지 않고 몇 개를 추려서 car, cookie, house 대해서만 학습을 하게 됩니다. 이렇게 유사하지 않은 수많은 단어 중 몇 개만 추려서 학습하는 것을 "negative sampling하여 학습한다"라고 표현합니다.</span>)<br><br></li>
+                            <li>또한 UMAP은 저차원 데이터에 대해서 각 데이터의 연결 정도를 계산할 때 실제 사용되는 함수가 아닌 근사 함수를 사용하여 미분 속도를 높였습니다.<br><br></li>
+                            <li>마지막으로 저차원 임베딩 데이터를 초기화할 때 랜덤으로 하지 않고 spectral embedding 기술을 이용하여 학습이 더 빨리 되게 만들었습니다.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>UMAP의 단점</b></span>
+                        <br>위에서 UMAP의 장점과 t-SNE에 비해 어떠한 점이 개선 되었는지 살펴보았습니다. 그리고 UMAP의 원리를 간단히 알아보았습니다.
+                        UMAP이 많은 점을 개선하였지만, 단점도 여전히 존재합니다.
+                        <ol>
+                            <li>Hyperparameter의 영향이 상대적으로 크게 작용합니다. 하지만 시간이 빠르다는 장점은 여러번 실험할 수 있다는 것을 방증하기 때문에 큰 문제점은 되지 않습니다.<br><br></li>
+                            <li>t-SNE에도 해당되는 문제점이며, 저차원으로 임베딩되어 가시화 된 결과에서 각 데이터간의 거리는 실제 데이터 간의 거리를 의미하지 않습니다. 또한 데이터들의 군집의 크기 역시 의미가 없습니다.<br><br></li>
+                            <li>t-SNE에도 해당되는 문제점이며, 저차원으로 임베딩 되는 과정에 어쩔 수 없이 정보 손실이 발생하며 데이터 왜곡이 일어납니다.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><br>마지막으로 아래에 UMAP 논문 링크를 걸어놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1802.03426.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">UMAP 논문</a>
+                    </div>
+                    <p>
+                        <br>추가로 t-SNE와 UMAP의 결과를 즉석으로 비교해볼 수 있고, 설명 잘 되어있는 글 링크를 걸어놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://pair-code.github.io/understanding-umap/" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">t-SNE와 UMAP 작동 원리 및 결과 비교 글</a>
+                    </div>
+                    <p>
+                        <br><br><br><br>이렇게 해서 manifold learning의 일종인 t-SNE와 UMAP 알고리즘에 대해 알아보았습니다.
+                        다음에는 MNIST 숫자 손글씨 데이터를 바탕으로 vanilla autoencoder, convolutional autoencoder를 구현해보고 각각에 대해서 노이즈를 추가하는 denoising autoencoder도 구현해보겠습니다.
+                        그리고 추가로 각 autoencoder로 추출한 잠재 변수(latent variable)를 t-SNE를 통해 데이터 특징을 가시화하고, 실제로 숫자별로 잠재 변수가 잘 묶이고 분리가 되는지 확인해보겠습니다.
+                    </p>
                 </div> 
                 <div class="tag">
                     <b>태그</b>&emsp;#정규분포&emsp;#t분포&emsp;#t-SNE&emsp;#UMAP
