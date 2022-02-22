@@ -41,7 +41,7 @@ function darkMode(self){
         $('.controller span').css('color', 'white');
         $('#menuRelated .menu').css('background-color', 'rgb(22, 22, 22)');
         $('a').css('color', 'white');
-        $('.highlight').css('color', 'rgb(255, 153, 0)');
+        $('.highlight').css('color', 'rgb(159, 204, 255)');
         hoveringOn(self);
     } else{
         self.value = 'dark'
@@ -105,7 +105,7 @@ function colorOn(self){
     if ($('#modeButton button').val() === 'dark'){
         $(self).css('color', 'rgb(0, 3, 206)');
     } else{
-        $(self).css('color', 'rgb(255, 153, 0)'); 
+        $(self).css('color', 'rgb(159, 204, 255)');
     } 
     $(self).css('font-weight', 900);
 }
@@ -180,7 +180,7 @@ function headHighlightColorChanger(){
         $('#mainHead h1').css('color', 'rgb(200, 200, 200)');
         $('.subHead').css('color', 'rgb(200, 200, 200)');
         $('#mainHead h1').css('background-color', 'rgb(50, 50, 50)');
-        $('.highlight').css('color', 'rgb(255, 153, 0)');
+        $('.highlight').css('color', 'rgb(159, 204, 255)');
         $('.prev').css('color', 'white');
         $('.next').css('color', 'white');
         $('a').css('color', 'white');
