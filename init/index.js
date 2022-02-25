@@ -246,3 +246,12 @@ function initMathJax() {
         MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
 }
+
+function lineMaking(id, line_num) {
+    str = '';
+    for(i=1; i<=line_num; i++) {
+        str += i;
+        str += '\n';
+    }
+    document.getElementById(id).innerHTML = str;
+}

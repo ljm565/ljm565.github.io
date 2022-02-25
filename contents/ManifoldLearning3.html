@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Autoencoder (오토인코더) 구현</title>
+        <meta name="description" content="Vanilla autoencoder, convolutional autoencoder, denoising autoencoder를 구현하고 t-SNE를 통한 데이터 특징을 가시화 합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Manifold Learning / 3. Autoencoder (오토인코더) 구현</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweWUi3lCQqPs4NSRWSSmz9ArerhTv5F2GhAOXCao91VJL4VlLRI6bS9CYujGyqNo-eQiJVyzyAX9SEdkPaVASWmcLY46LR5pdStb7f8i4UMyp_E6XWg7y_-3wiS5wreQQ7L6zPNLo_BqLAUjRuQkVUzBoRHc6DyLYYHIGVDFjJCUf3Pvij4xRXGrePqxovvtr6eViBW9hqRjnXCQVk7Gg7YGsUuIkMtgF0Q2jkibc8k9xV36U5nLStkE-OgPDbPKxde248I8evhZiMpjBxjH3PStLOz89Zz_XRqVdPfS6wiyoLSwqiKQwftrMgZT_3VBlWGit6U1-GuzHNCLgh4P5Sn3sPIwb1Wf4zypMbhCJJQYJdZcFADKjF93P6vyWg2eXx-q8TqaV0WlZqfvxhadiGeNf9qRzpWUjEcXJuebRb62HqG0qvlGv-5f9JehiuNotUB4MwwTc-6GsvlNpI7CEggoceXkaGkyufvOQgm_SXnbbasmx8Kdr_LfRVKEcTJTHT5iXbgJqntmyV4fBjiwRNGuAzM599_6lO2zSQJ-00_s0I31hbsJU6XTmsfA1whUEvoIHIn46e6wsAw_PaiiyHwXm5Oe5-9XN4C2jsKDTLfNq5BzxUXSepuCqWnvSqEDEotqzKKKnTN5r3bZkcQfFm-ywBE17TbRW_2Cupq8wRggM_clp-Pbi4PssB6aNzNUVnbYR3DwDlko8fCNCjTa9pICnwlaRug);">
+                    <div>
+                        <span class="mainTitle">Autoencoder (오토인코더) 구현</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.02.24</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>지금까지 manifold learning의 이야기를 latent variable (잠재 변수)부터 시작하여 manifold와 autoencoder (오토인코더), 그리고 t-SNE, UMAP에 대해 설명하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">오늘은 python의 pytorch를 이용하여 vanilla autoencoder, convolutional autoencoder, denoising autoencoder를 구현하여 MNIST 데이터에 대해 적용해보겠습니다.
+                        그리고 MNIST 데이터의 잠재 변수(latent variable)를 추출하여 t-SNE로 가시화 해보도록 하겠습니다.</span>
+
+                        <br><br>그리고 manifold learning과 autoencoder에 대한 글은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>,
+                        t-SNE, UMAP에 관한 글은 <a onclick="pjaxPage('ManifoldLearning2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>를 참고하시기 바랍니다.
+                        이렇게 구현한 autoencoder의 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현과 잠재 변수 가시화에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/Autoencoders" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Autoencoder GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">Autoencoder (오토인코더) 구현 및 잠재 변수(latent variable) 가시화</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Vanilla Autoencoder (오토인코더) 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 가장 기본적인 vanilla autoencoder 구현 코드를 살펴보겠습니다.
+                        코드는 pytorch로 작성 되었으며, vanilla autoencoder의 전체적인 구조는 단순히 linear layer을 여러개 쌓은 모습입니다.
+                        한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">AE</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">AE</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
+        <span class="var">self</span>.<span class="var">latent_dim</span> = <span class="var">config</span>.latent_dim
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+        
+        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">latent_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+        <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">latent_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">color_channel</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
+        <span class="var">latent_variable</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">latent_variable</span>)
+        <span class="var">output</span> = <span class="var">output</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>, <span class="var">self</span>.<span class="var">height</span>, <span class="var">self</span>.<span class="var">width</span>)
+
+        <span class="return">return</span> <span class="var">output</span>, <span class="var">latent_variable</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 33);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>모델 초기화</b></span>
+                        <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
+                        <a href="https://github.com/ljm565/Autoencoders"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
+                            <li>6, 7번째 줄: hidden layer의 차원 및 데이터를 represenation할 잠재 변수(latent variable) 차원</li>
+                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율</li>
+                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
+                            <li>11 ~ 17번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * latent variable dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 더 작게 압축</span>)</li>
+                            <li>18 ~ 24번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim), 두 번째 hidden layer는 (hidden dim * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 다시 원래 크기로 복구</span>)</li>
+                        </ul>
+                        
+                        <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
+                        <br>다음은 forward 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분은 모델을 정의 하고나서 실제로 데이터가 학습할 때 직접적으로 거치게 되는 부분입니다.</span>
+                        Pytorch의 모델을 정의할 때 nn.Module을 상속 받기 때문에 자동으로 데이터가 forward라는 method를 거치게 됩니다.
+                        그리고 pytorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
+                        <ul>
+                            <li>27번째 줄: 데이터가 들어왔을 때 batch size를 저장</li>
+                            <li>28번째 줄: 데이터의 크기를 변화<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환)</li>
+                            <li>29번째 줄: encoder를 거쳐 latent variable 추출<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출)</li>
+                            <li>30번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원래의 크기로 복구<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구)</li>
+                            <li>31번째 줄: 복구된 데이터를 원래 raw data의 크기로 변환<br>(e.g. 128 * 300 크기로 복구된 데이터를 128 * 3 * 10 * 10의 원래 데이터 크기로 변환)</li>
+                            <li>33번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄</li>
+                        </ul>
+                    </p>
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Convolutional Autoencoder (오토인코더) 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 convolutional autoencoder 구현 코드를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Convolutional autoencoder와 vanilla autoencoder의 데이터를 압축하고 복구한다는 컨셉은 동일합니다.
+                        다만 압축하고 복구하는 과정에서 vanilla autoencoder는 linear hidden layer를 사용하였다면, convolutional autoencoder는 이름에서 알 수 있듯이 convolutional layer를 사용합니다.</span>
+                        바로 그 유명한 CNN (Convolutional Neural Network)에서 사용하는 레이어이죠.
+                        Convolutional layer는 좀 더 복잡한 데이터에 대해 모델의 성능을 향상 시키고 싶을 때 사용할 수 있습니다.
+                        코드는 pytorch로 작성 되었으며, 한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">CAE</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">CAE</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+        
+        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channel</span>=<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">out_channel</span>=<span class="num">32</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">32</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channel</span>=<span class="num">32</span>, <span class="var">out_channel</span>=<span class="num">64</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">64</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channel</span>=<span class="num">64</span>, <span class="var">out_channel</span>=<span class="num">128</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">128</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+            <span class="clazz">nn</span>.<span class="clazz">MaxPool2d</span>(<span class="var">kernel_size</span>=<span class="num">1</span>, <span class="var">stride</span>=<span class="num">2</span>),
+
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channel</span>=<span class="num">128</span>, <span class="var">out_channel</span>=<span class="num">64</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">256</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+            <span class="clazz">nn</span>.<span class="clazz">MaxPool2d</span>(<span class="var">kernel_size</span>=<span class="num">1</span>, <span class="var">stride</span>=<span class="num">2</span>)
+        )
+
+        <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">ConvTranspose2d</span>(<span class="var">in_channel</span>=<span class="num">64</span>, <span class="var">out_channel</span>=<span class="num">128</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">128</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+            <span class="clazz">nn</span>.<span class="clazz">ConvTranspose2d</span>(<span class="var">in_channel</span>=<span class="num">128</span>, <span class="var">out_channel</span>=<span class="num">64</span>, <span class="var">kernel_size</span>=<span class="num">2</span>, <span class="var">stride</span>=<span class="num">2</span>, <span class="var">padding</span>=<span class="num">0</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">64</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+            <span class="clazz">nn</span>.<span class="clazz">ConvTranspose2d</span>(<span class="var">in_channel</span>=<span class="num">64</span>, <span class="var">out_channel</span>=<span class="num">32</span>, <span class="var">kernel_size</span>=<span class="num">2</span>, <span class="var">stride</span>=<span class="num">2</span>, <span class="var">padding</span>=<span class="num">0</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">64</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+            <span class="clazz">nn</span>.<span class="clazz">ConvTranspose2d</span>(<span class="var">in_channel</span>=<span class="num">32</span>, <span class="var">out_channel</span>=<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">latent_variable</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">latent_variable</span>)
+
+        <span class="return">return</span> <span class="var">output</span>, <span class="var">latent_variable</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 50);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>모델 초기화</b></span>
+                        <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
+                        이 부분은 위의 vanilla autoencoder와 유사합니다.
+                        <ul>
+                            <li>4 ~ 6번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기 및 color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
+                            <li>8 ~ 26번째 줄: convolutional layer로 구성된 encoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 잠재 변수(latent variable)로 압축하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용</span>)</li>
+                            <li>28 ~ 43번째 줄: convolutional transposed layer로 구성된 decoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수(latent variable)를 복구하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용, 이 부분은 transposed layer 대신 데이터 자체를 interpolate 하여 convolutional layer를 사용해도 됨</span>)</li>
+                        </ul>
+                        
+                        <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
+                        <br>다음은 forward 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분은 모델을 정의 하고나서 실제로 데이터가 학습할 때 직접적으로 거치게 되는 부분입니다.</span>
+                        이 부분 역시 위의 vanilla autoencoder와 유사합니다.
+                        <ul>
+                            <li>47번째 줄: vanilla autoencoder와 다르게 데이터의 크기를 변화하지 않고 데이터를 encoder에 넣어서 잠재 변수를 구함(convolutional layer는 4차원의 데이터를 인자로 받기 때문 e.g. batch * color channel * height * width)</li>
+                            <li>48번째 줄: 이렇게 압축된 잠재 변수(latent variable)를 decoder를 통해 다시 복구</li>
+                            <li>50번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄</li>
+                        </ul>
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Denoising Autoencoder (오토인코더) 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서는 linear layer를 사용한 vanilla autoencoer, convolutional layer를 사용한 convolutional autoencoer에 대해 살펴보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">보통은 위에서 살펴본 모델에 사용할 데이터는 온전한 상태의 데이터가 사용됩니다.
+                        하지만 좀 더 의미있는 특징, 잠재 변수(latent variable)를 추출하기 위해서 데이터에 노이즈를 추가하여 사용하기도 합니다.
+                        이렇게 노이즈가 낀 데이터를 사용하면 그것이 바로 denoising autoencoder가 되는 것입니다.</span>
+                        따라서 위의 모델에 노이즈가 낀 데이터가 사용되어 학습을 시켰다면, 각각 denoising vanilla autoencoer, denoising convolutional autoencoder가 되는 것이지요.
+
+                        <br><br>이렇듯 denoising 데이터를 사용하는지 여부에 따라 모델의 종류가 바뀌므로 모델 자체의 코드를 변형할 필요는 없습니다(위의 모델 코드 그대로 사용합니다).
+                        다만 학습을 하기 위해 dataloader를 통해 데이터를 불러오는 과정에서 데이터에 노이즈를 섞어줄지 여부를 판단하여, denoising autoencoder를 만들 것이냐 말것이냐 결정을 하게 됩니다.
+                        자세한 코드에 대한 설명은 코드 아래를 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">if</span> <span class="var">self</span>.<span class="var">model_type</span> == <span class="str">'AE'</span>:
+    <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">AE</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="return">elif</span> <span class="var">self</span>.<span class="var">model_type</span> == <span class="str">'CAE'</span>:
+    <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">CAE</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="var">start</span> = <span class="clazz">time</span>.<span class="method">time</span>()
+    <span class="method">print</span>(<span class="var">epoch</span>+<span class="num">1</span>, <span class="str">'/'</span>, <span class="var">self</span>.<span class="var">epochs</span>)
+    <span class="method">print</span>(<span class="str">'-'</span>*<span class="num">10</span>)
+
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="var">total_loss</span> = <span class="num">0</span>
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">x</span>, <span class="var">_</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="return">if</span> <span class="var">self</span>.<span class="var">denoising</span>:
+                <span class="var">noise</span> = <span class="clazz">torch</span>.<span class="method">zeros_like</span>(<span class="var">x</span>)
+                <span class="var">noise</span> = <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">normal_</span>(<span class="var">noise</span>, <span class="var">mean</span>=<span class="var">self</span>.<span class="var">config</span>.noise_mean, <span class="var">std</span>=<span class="var">self</span>.<span class="var">config</span>.noise_std)
+                <span class="var">x</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">noise</span> = <span class="var">noise</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">noise_x</span> = <span class="var">x</span> + <span class="var">noise</span>
+            <span class="return">else</span>:
+                <span class="var">x</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+
+            <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">output</span>, <span class="var">latent_variable</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">noise_x</span>) <span class="return">if</span> <span class="var">self</span>.<span class="var">denoising</span> <span class="return">else</span> <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
+                <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>, <span class="var">x</span>)
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 36);
+</script>
+                    <p>
+                        <br>먼저 설명하기 앞서 위에 보이는 코드들의 변수 앞에 self.라는 것이 붙어있는데 이는 실제 학습을 하기 위한 코드를 class로 제작하였기 때문에 나타난 것입니다.
+                        이는 <a href="https://github.com/ljm565/Autoencoders"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에서 train.py를 보면 알 수 있을 것입니다.
+                        여기서는 무시해도 무방합니다. 
+
+                        <br><br><span style="font-size: 20px;"><b>모델 정의</b></span>
+                        <ul>
+                            <li>1 ~ 4번째 줄: 먼저 학습에 사용할 모델을 vanilla autoencoder (AE), convolutional autoencoder (CAE) 중 선택하여 정의</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Denoising Autoencoder 제작</b></span>
+                        <ul>
+                            <li>18번째 줄: dataloader를 이용하여 이미지를 batch size만큼 내어주어 변수 x에 저장</li>
+                            <li>19 ~ 24번째 줄: denoising autoencoder를 학습하다면, 이미지 데이터 x에 가우시안 노이즈 noise를 더하여 최종적으로 noise_x 제작</li>
+                            <li>25 ~ 26번째 줄: denoising autoencoder를 학습하지 않는다면 그냥 이미지 데이터 x를 사용</li>
+                            <li>31번째 줄: denoising autoencoder라면 위에서 정의한 모델에 noise_x를 넣고, 그냥 autoencoder라면 x를 위에서 정의한 모델에 넣음</li>
+                            <li>32번째 줄: denoising autoencoder 여부와 상관없이 loss는 x와 복구된 output을 통해서 구함<br>(<span class="highlight" style="color: rgb(0, 3, 206);">denoising autoencoder 모델이여도 noise_x와 loss를 계산 하지 않는다는 것에 주의</span>)</li>
+                        </ul>
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Autoencoder (오토인코더) 결과 및 t-SNE를 통한 잠재 변수 가시화</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Autoencoder (오토인코더) 결과</b></span>
+                        <br>위에서 구현한 autoencoder 모델이 잘 학습이 되었다면, 그 모델은 인풋 데이터에 대해서 아주 잘 복구할 수 있는 모델이 되어있을 것입니다.
+                        그렇다면 autoencoder를 통해 복구된 이미지의 결과와 실제 인풋으로 들어간 이미지를 비교해보겠습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 결과에서 왼쪽은 vanilla autoencoder, 오른쪽은 denoising vanilla autoencoder의 결과를 나타냅니다.
+                        이 결과를 내기 위해 사용된 데이터는 학습에 전혀 관여하지 않은 test 데이터입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWUi3lCQqPs4NSRWSSmz9ArerhTv5F2GhAOXCao91VJL4VlLRI6bS9CYujGyqNo-eQiJVyzyAX9SEdkPaVASWmcLY46LR5pdStb7f8i4UMyp_E6XWg7y_-3wiS5wreQQ7L6zPNLo_BqLAUjRuQkVUzBoRHc6DyLYYHIGVDFjJCUf3Pvij4xRXGrePqxovvtr6eViBW9hqRjnXCQVk7Gg7YGsUuIkMtgF0Q2jkibc8k9xV36U5nLStkE-OgPDbPKxde248I8evhZiMpjBxjH3PStLOz89Zz_XRqVdPfS6wiyoLSwqiKQwftrMgZT_3VBlWGit6U1-GuzHNCLgh4P5Sn3sPIwb1Wf4zypMbhCJJQYJdZcFADKjF93P6vyWg2eXx-q8TqaV0WlZqfvxhadiGeNf9qRzpWUjEcXJuebRb62HqG0qvlGv-5f9JehiuNotUB4MwwTc-6GsvlNpI7CEggoceXkaGkyufvOQgm_SXnbbasmx8Kdr_LfRVKEcTJTHT5iXbgJqntmyV4fBjiwRNGuAzM599_6lO2zSQJ-00_s0I31hbsJU6XTmsfA1whUEvoIHIn46e6wsAw_PaiiyHwXm5Oe5-9XN4C2jsKDTLfNq5BzxUXSepuCqWnvSqEDEotqzKKKnTN5r3bZkcQfFm-ywBE17TbRW_2Cupq8wRggM_clp-Pbi4PssB6aNzNUVnbYR3DwDlko8fCNCjTa9pICnwlaRug" style="width: 100%;">
+                        <p class="caption">Autoencoder (오토인코더) 결과</p>
+                    </div>
+                    <p>
+                        <br>위 그림을 보면 denoising autoencoder에 사용된 인풋 데이터가 일반 데이터에 비해 noise가 많이 있는 데이터인 것을 확인할 수 있습니다.
+                        그리고 양쪽 두 모델 모두 MNIST 데이터를 인풋 데이터와 비교했을 때 거의 유사하게 복구하는 것을 볼 수 있습니다.
+          
+                        <br><br><br><span style="font-size: 20px;"><b>잠재 변수(latent variable) 가시화 결과</b></span>
+                        <br>위에서 말하였듯이 구현한 autoencoder 모델이 잘 학습이 되었다면, 그 모델은 데이터의 복구 뿐 아니라 각 데이터의 특징을 잘 잡아내고 데이터의 의미 있는 잠재 변수를 추출할 수 있습니다.
+                        그렇다면 autoencoder를 통해 구한 각 데이터의 잠재 변수 가시화 결과를 비교해보겠습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 결과에서 왼쪽은 vanilla autoencoder, 오른쪽은 denoising vanilla autoencoder의 결과를 나타냅니다.
+                        여기서도 역시 결과를 내기 위해 사용된 데이터는 학습에 전혀 관여하지 않은 test 데이터입니다. 즉 test 데이터에 대한 잠재 변수 가시화의 결과입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUOxd0HqzftzxPzKH2i6up_TiMKdybusxy7PydWctfPddAgurSflA04RFKNrlAnGGkBBlz37v3oxcSqWMlZ24-xDYBwoRb0hUbwOnQ1fICQiw4j6wMa7YjFzm8Gwo3Vu536NHlLDI6SbsRcbRMdMOPkHlechxgOmeyG6ftNnz3xm50mIUemXgK2QGs8mUSvhxfGbagVJmdA0ix2oRRYrX-SzmC5ceTlvZCASzeL2f5wHJS-iOZX97owlqYfWp9W8SvfIuJ0BsJ-ophed-7VjSj96ULziITCEV3uFVeoSaUvI3KyKM4G9G3L1-PL9ST90ZaTa8d3bLcEfDpH7vgIXAE1UENVduoMj0YYp7ak55ABiTMebeZEon2FnPOF_oiekd7LKszGo1oAgWo0FP-Nf480Ih2HKyDEE7Epq4byz6PLIfEL9kF-Z1cN-V1hXHG02Ulu3o6SFVC_Hurknoodddtyd6Ewk_VvRNQUdqWL4t8h1v8k1HhMhlCp3_zK26esZADa6zNECwrxh4qCk_5RTFEWcTbqUQbTwu_WxTag58s-Crbnq_HnIGPsdLySO6RntM-9Zmk7lb1wI2c8n_S0DuMDH6j8TI2e6012-fkIKj2egvdI73idrsFAo8OvRaU1Cq-OznxsIUG9thS3Y4Hc0sKtjNp5cmQHyLdu2bUdj996TKkryhHihb9fhmQ6bEC5YrrnJGEpQHB2wpMv5gqSPF-agG4IE_k" style="width: 100%;">
+                        <p class="caption">t-SNE를 통한 잠재 변수(latent variable) 가시화 결과</p>
+                    </div>
+                    <p>
+                        <br>위 그림을 보면 숫자별로 그 특징을 잘 잡아내어 의미있는 잠재 변수(latent variable)를 추출한 것을 확인할 수 있습니다.
+                        데이터의 숫자별로 잘 군집이 된 것을 볼 수 있으며, denoising vanilla autoencoder의 군집 결과가 살짝 더 잘 군집화 된 것을 볼 수 있습니다.
+                        이러한 denoising autoencoder의 결과에 대한 이유는 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>t-SNE를 이용한 잠재 변수(latent variable) 가시화 코드</b></span>
+                        <br>그렇다면 이제 t-SNE를 통해 구한 데이터의 잠재 변수(latent variable)를 가시화 하는 코드에 대해 살펴보겠습니다.
+                        t-SNE를 사용하는 코드는 sklearn 라이브러리를 이용하기 때문에 어렵지 않게 사용할 수 있습니다.
+                    </p>
+                    <pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code4">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">from</span> <span class="clazz">sklearn</span>.<span class="clazz">manifold</span> <span class="return">import</span> <span class="clazz">TSNE</span>
+
+<span class="clazz">np</span>.<span class="clazz">random</span>.<span class="var">seed</span>(<span class="num">42</span>)
+<span class="var">tsne</span> = <span class="clazz">TSNE</span>()
+<span class="var">total_latent_variable</span> = <span class="var">total_latent_variable</span>.<span class="method">view</span>(<span class="var">total_latent_variable</span>.<span class="method">size</span>(<span class="num">0</span>), <span class="num">-1</span>)
+<span class="var">x_test_2D</span> = <span class="var">tsne</span>.<span class="method">fit_transform</span>(<span class="var">total_latent_variable</span>)
+<span class="var">x_test_2D</span> = (<span class="var">x_test_2D</span> - <span class="var">x_test_2D</span>.min())/(<span class="var">x_test_2D</span>.max() - <span class="var">x_test_2D</span>.min())
+
+<span class="clazz">plt</span>.<span class="method">figure</span>(<span class="var">figsize</span>=(<span class="num">10</span>, <span class="num">10</span>))
+<span class="clazz">plt</span>.<span class="method">scatter</span>(<span class="var">x_test_2D</span>[:, <span class="num">0</span>], <span class="var">x_test_2D</span>[:, <span class="num">1</span>], <span class="var">s</span>=<span class="num">10</span>, <span class="var">cmap</span>=<span class="str">'tab10'</span>, c=<span class="var">total_y</span>.<span class="method">numpy</span>())
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code4", 10);
+</script>
+                    <p>
+                        <ul>
+                            <li>1번째 줄: t-SNE를 사용하기 위해서 sklearn의 라이브러리를 로드</li>
+                            <li>3번째 줄: t-SNE는 돌릴 때 마다 그 모양이 조금씩 변하게 되는데 그것을 방지하기 위해 random seed를 설정</li>
+                            <li>5번째 줄: total_latent_variable의 크기를 변환<br>(e.g. total data 수 * latent dim 크기로 변환, 여기서는 10,000 * 32)</li>
+                            <li>6번째 줄: t-SNE가 적용되여 축소된 최종적인 가시화 데이터 추출<br>(e.g. total data 수 * 2(3차원이면 가시화를 한다면 3) 크기로 변환, 여기서는 10,000 * 2)</li>
+                            <li>7번째 줄: t-SNE의 결과를 0 ~ 1 범위로 정규화</li>
+                            <li>9 ~ 10번째 줄: t-SNE를 통한 잠재 변수(latent variable)결과 가시화</li>
+                        </ul>
+                    </p>
+                    
+                    <span style="font-size: 20px;">github 링크 작성</span>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#VanillaAutoencoder&emsp;#ConvolutionalAutoencoder&emsp;#DenoisingAutoencoder&emsp;#t-SNE
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('ManifoldLearning2.html');" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>t-SNE, UMAP</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('마지막 게시물 입니다.\n\nThis is the last post.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>

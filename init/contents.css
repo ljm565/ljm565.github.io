@@ -120,6 +120,58 @@
 }
 
 
+
+.codeWrapper{
+    display: table;
+    width: 100%;
+}
+.lineNo, .code{
+    display: table-cell;
+    border: #E3EDF3 1px solid;
+    background-color: rgb(30, 30, 30);
+}
+.lineNo{
+    width: 3px;
+    border-right-width: 0;
+}
+pre{
+    white-space: pre;
+    padding: 7px;
+    font-size: 0.9rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    white-space: pre;
+    overflow: auto;
+    line-height: 1.6;
+    color: white;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none
+}
+pre .clazz{
+    color:rgb(78, 201, 176);
+}
+pre .reserved{
+    color:rgb(86, 155, 214);
+}
+pre .method{
+    color:rgb(221, 220, 170);
+}
+pre .var{
+    color:rgb(157, 220, 254);
+}
+pre .num{
+    color: rgb(182, 206, 168);
+}
+pre .return{
+    color: rgb(197, 134, 192);
+}
+pre .str{
+    color: rgb(200, 141,117);
+}
+
+
 #disqus_thread{
     margin: 8% 20%;
     background-color: rgb(207, 207, 207);
