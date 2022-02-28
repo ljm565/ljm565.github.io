@@ -64,6 +64,9 @@
     color: white;
     margin:0 15%;
 }
+.title .mainTitle{
+    word-break: keep-all;
+}
 .title .subTitle{
     font-size: 15px;
     font-weight: 100;
