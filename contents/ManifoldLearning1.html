@@ -284,7 +284,9 @@
                         이 둘의 손실 즉 loss는 <b>mean squared error (MSE) loss</b> 함수를 사용하여 구합니다. 아래 식은 MSE loss를 나타낸 식입니다. 
                         \(N\)은 전체 데이터의 개수를 의미하기 때문에 모든 데이터의 mean squared 값의 평균을 구하기 위해 나누어준 것입니다.
                         
-                        <br><br>\[MSE\,Loss = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+                        <div class="equation">
+                            <br><br>\[MSE\,Loss = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+                        </div>
 
                         <br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 원래 차원보다 작아진 잠재 변수는 어쩔 수 없이 원래 데이터 \(x\)가 가지고 있는 정보량보다 적을 수밖에 없습니다(차원이 현저히 작기 때문).
                         디코더는 이렇게 원래 데이터 \(x\) 대비 정보 손실이 일어난 잠재 변수만을 가지고 최대한 원래 데이터와 비슷하게 \(x'\)를 \(x\)로 복구해야합니다.
@@ -303,29 +305,39 @@
 
                         <br><br> 먼저 원래 데이터 \(x\)와 복구된 결과를 나타내는 \(x'\)는 \(d\)차원을 가집니다(위 그림 예시에서는 \(d\)는 784차원).
                         따라서 아래와 같이 표현할 수 있습니다.
-                        <br>\[x, x' \in \mathbb{R}^d\]
+                        <div class="equation">
+                            \[x, x' \in \mathbb{R}^d\]
+                        </div>
 
                         <br><br> 그리고 이 중에서 \(x\)는 인코더 \(f_\theta\)를 통과합니다. 이 인코더는 가중치(weight)를 포함하고 있는 모델이며, 가중치 \(W\)와 bias \(b\)를 거칩니다.
                         이렇게 인코더를 거친 \(x\)는 잠재 변수 \(z\)가 되며 이러한 과정은 아래와 같이 쓸 수 있습니다. <span class="highlight" style="color: rgb(0, 3, 206);">아래 식은 인코더의 layer가 하나라고 가정했을 때를 나타냅니다.</span>
-                        <br>\[z = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
+                        <div class="equation">
+                            \[z = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
+                        </div>
 
                         <br><br> 이렇게 구한 \(z\)는 디코더 \(g_\phi\)를 통과하여 \(x'\)가 됩니다. 이 디코더 역시 가중치와 bias를 가지고 있으므로 아래와 같이 쓸 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">또한 아래 식은 인코더와 동일하게 디코더의 layer가 하나라고 가정했을 때를 나타냅니다.</span>
-                        <br>\[x' = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
+                        <div class="equation">
+                            \[x' = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
+                        </div>
 
                         <br><br>그럼 여기서 잠시 위의 인코더/디코더와 다르게 각각의 layer가 한 개 이상이라면 어떻게 될까요?
                         위의 autoencoder 그림의 구조에서는 \(x\)에서 바로 잠재 변수로 압축되었지만 아래 그림 처럼 하나 이상의 hidden layer를 거친 후, 잠재 변수로 압축될 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그럼 아래 그림처럼 인코더 \(f_\theta\)와 디코더 \(g_\phi\)가 두 개의 hidden layer를 가지고 있다고 가정을 한다면 이는 아래와 같이 쓸 수 있을 것입니다. 그리고 이를 응용한다면 multiple layers를 가진 모델에 대해서도 수학적으로 나타낼 수 있을 것입니다.</span>
-                        <br>\[h_1 = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
-                        \[z = f_\theta(W^{\theta}_2h_1+b^{\theta}_2)\]
-                        \[h_2 = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
-                        \[x' = g_\phi(W^{\phi}_2h_2+b^{\phi}_2)\]<br>
+                        <div class="equation">
+                            \[h_1 = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
+                            \[z = f_\theta(W^{\theta}_2h_1+b^{\theta}_2)\]
+                            \[h_2 = g_\phi(W^{\phi}_1z+b^{\phi}_1)\]
+                            \[x' = g_\phi(W^{\phi}_2h_2+b^{\phi}_2)\]<br>
+                        </div>
                         <div class="contentImg">
                             <img src="https://lh3.googleusercontent.com/fife/AAWUweVLheYpStfcrP6Htg0oMq81eXZQISAw_qNR1exjaqdHJt0RE5T7k83fN-JlhrbNi_Hh3d5FxhS67CNG7kNVQ7T8F2lMgKajhQttUa6dkgFQEnHACsWZWMcfKiTcbVsnbl2N_SjZhA9bOUkJ_TFv_DmRu1mnYDSgpETPA-Hj_30Vy2r-yv_avyQWjy_DVO-_nDDkkj6rCdeXmz6VQgOXTqTVNkRUA0G_BtdnZ031SnqT102NwOXK74U1npfiYR8ctLNi17InJH2lasPoHxj26IxI8ub7P-5mno2vnQxHJvyFWFxERb--4MIosCyU1RReXCqz0lq-2QjbrQRPs4Do4ilCeV6G4MqEGmWGL-TCj5KMuk8nERgHgf1zHhYDFOUWJ4cwNUsCkqv5AJlqGfk_RPSJdDva_DZ3eiOMizOPgpukUaDjXag0DgayGif2Fc-RqLc_vIvum76chiU6CQaGdPNNAbhgXlQm2yqzG4Cu5Y_lhH_yijzmKS-07MraC3Ze7NjIDECAXVNS58SUD5PwPJyon1aaRKpSy8CRlIhj-cwwsop12q2CXMbtrDhaznKzZ3BLH1AKolEPR-hITII6lCHfjEpOn84njExGBpPN9XcZ6b1GsBX82A6BTrjXug18XOUbZrFLRBNc02UeY0mMJjTQTRxYHcGXU0wfRhW8_a2Cqd2GHFLNun14YqQNObGjuwwbj5YP6PTJ0RGFlMJKK5ffV1VqZ1GY=ft" style="width: 100%;">
                             <p class="caption">Autoencoder (오토인코더)의 구조</p>
                         </div>
                         <br>다시 본론으로 돌아와서 이제 이렇게 구한 \(x\)와 \(x'\)는 MSE loss 함수에 들어가게 됩니다. 위에서 잠깐 나온 MSE loss 식을 가져와셔 \(x\)와 \(x'\)에 대해 표현하면 아래와 같습니다.
-                        <br><br>\[MSE\,Loss: L(x, x') = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+                        <div class="equation">
+                            <br>\[MSE\,Loss: L(x, x') = \frac{1}{N}\sum_{i=1}^{N} (x_i - x'_i)^2 \]
+                        </div>
                         <br>이렇듯 autoencoder의 수식은 직관적이기 때문에 그리 어렵지 않습니다.
 
                         <br><br>지금까지 살펴보았듯이 vanilla autoencoder의 가장 기본적인 구조는 위에서 설명한 것처럼 압축과 팽창을 하는 구조로 이루어져 있습니다.
@@ -441,8 +453,10 @@
                     <p>
                         <br>DAE를 사용할 때는 loss function을 주의 깊게 봐야합니다. <span class="highlight" style="color: rgb(0, 3, 206);">분명 모델에 들어가는 것은 노이즈가 낀 손상된 이미지인데, 정작 loss는 손상되기 이전의 원래 이미지와 나온 결과를 가지고 계산합니다.</span>
                         \(x\)를 원래 이미지, \(\widetilde{x}\)를 손상된 이미지, \(x'\)가 복구된 이미지라고 했을 때 DAE의 loss function은 아래와 같습니다.
-                        <br>\[MSE\,Loss: L(x, \widetilde{x})\,(wrong)\]
-                        \[MSE\,Loss: L(x, x')\,(correct)\]
+                        <div class="equation">
+                            \[MSE\,Loss: L(x, \widetilde{x})\,(wrong)\]
+                            \[MSE\,Loss: L(x, x')\,(correct)\]
+                        </div>
                         <br>즉 vanilla autoencoder와 동일하게 \(x\)와 \(x'\)를 가지고 MSE loss를 구하게 되는 것이지요.
                         <br><br><b>그렇다면 도대체 노이즈는 어떤 노이즈를 주게 될까요?</b> 노이즈는 보통 인풋으로 들어오는 데이터 크기와 동일한 Gaussian noise를 주게 됩니다. 혹은 때때로 dropout을 추가하는 것도 이러한 효과를 낼 수 있습니다.
                         <br><br><b>데이터에 노이즈를 추가하는데 모델의 성능에는 과연 문제가 없을까요?</b> 물론 노이즈를 데이터를 분간할 수 없을 정도로 주면은 그것은 문제가 되겠지만, 작은 노이즈를 주는 것은 higher level representation에 큰 영향을 주지 않습니다(e.g. raw image).
@@ -459,18 +473,22 @@
                     </div>
                     <p>
                         <b>그렇다면 어떻게 잠재 변수에 활성화 되는 뉴런의 수를 조절할 수 있을까요?</b> 바로 loss function에 sparsity를 강제하는 term을 추가하여 학습하게 됩니다.
-                        <br>\[Loss: L(x, x')\,+\,\Omega(z)\]
-                        \[L(x, x'):\,reconstruction\,loss\]
-                        \[\Omega(z):\,sparsity\,inducing\,term\]
+                        <div class="equation">
+                            \[Loss: L(x, x')\,+\,\Omega(z)\]
+                            \[L(x, x'):\,reconstruction\,loss\]
+                            \[\Omega(z):\,sparsity\,inducing\,term\]
+                        </div>
                         <span class="highlight" style="color: rgb(0, 3, 206);">위의 식에서 \(L(x, x')\)는 이때까지 많이 봐왔던 디코더에서 나온 결과를 원래 데이터로 복구하는 MSE term인 것을 알 수 있습니다. 그런데 sparse autoencoder에서는 \(\Omega(z)\) term이 추가된 것을 볼 수 있습니다.
                         \(\Omega(z)\)가 바로 sparsity를 강제하는 부분입니다. 이 \(\Omega(z)\) 부분의 식은 보통 두 가지의 방법을 사용하여 sparsity를 강제합니다.</span>
-                        <ol>
-                            <li>
-                                \(\Omega(z)\,=\,\sum_{i}KL(\rho||\hat{\rho}_i)\)
-                                <br>(\(\rho:\,average\,of\,target\,Bernoulli\,distribution\), \(\hat{\rho}_i:\,average\,activation\,of\,z\))
-                            </li>
-                            <li>\(\Omega(z)\,=\,\lambda\sum_{i}|z_i|\)</li>
-                        </ol>
+                        <div class="equation">
+                            <ol>
+                                <li>
+                                    \(\Omega(z)\,=\,\sum_{i}KL(\rho||\hat{\rho}_i)\)
+                                    <br>\((\rho:\,average\,of\,target\,Bernoulli\,distribution\), \(\hat{\rho}_i:\,average\,activation\,of\,z)\)
+                                </li>
+                                <li>\(\Omega(z)\,=\,\lambda\sum_{i}|z_i|\)</li>
+                            </ol>
+                        </div>
                         <b>1번 식</b>이 의미하는 것은 Kullback-Leibler divergence (쿨백 라이블러 발산)식을 추가하는 것입니다.
                         이 방법은 모델이 매 학습 iteration 때마다 활성화 된 잠재 변수 비율을 구하고, 목표로 하는 활성화 비율과 그 분포차이를 줄이는 것입니다.
                         예를 들어 현재 학습 중에 활성화 되는 잠재 변수 비율이 0.5(절반)이고, 목표로하는 비율은 0.3이라면 그 둘 사이의 오차를 줄이도록 학습하는 것이지요.
