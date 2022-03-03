@@ -347,7 +347,8 @@
                         <div class="equation">
                             \[p_{ij}\,=\,\frac{p_{i|j}+p_{j|i}}{2n}\]
                         </div>
-
+                    </p>
+                    <p>
                         <br><b>그렇다면 \(p_{i|j}\)와 \(p_{j|i}\)의 정의는 무엇이길래 두 데이터 \(x_i\)와 \(x_j\)의 유사도가 저렇게 표현 될까요?</b> 
                         먼저 \(x_i\)를 기준으로 바라본 \(x_j\)의 유사도 \(p_{j|i}\)는 아래와 같이 정의됩니다.
                         <div class="equation">
@@ -357,6 +358,8 @@
                         <div class="equation">
                             \[p_{i|j}\,=\,\frac{e^{-\frac{|x_i-x_j|^2}{2{\sigma_j}^2}}}{\sum_{k\ne j}e^{-\frac{|x_j-x_k|^2}{2{\sigma_j}^2}}}\]
                         </div>
+                    </p>
+                    <p>
                         <br><span class="highlight" style="color: rgb(0, 3, 206);">그럼 우리는 여기서 의문이 듭니다. \(x_i\)를 기준으로 \(x_j\)를 바라보나, \(x_j\)의 기준으로 \(x_i\)를 바라보나 두 점간의 유사도는 항상 같아야할 것 같은데 \(p_{j|i}\)와 \(p_{i|j}\)는 수식적으로 다른 값을 가지게 됩니다.</span>
                         그 이유는 아래 그림으로 설명 가능합니다.
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 \(x_1\)과 \(x_2\)를 기준으로 \(x_4\)는 비슷한 거리에 위치합니다.
