@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Variational Autoencoder (VAE)</title>
+        <meta name="description" content="Variational Autoencoder (VAE)에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Variational Autoencoder (VAE) / 1. Variational Autoencoder (VAE)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweVmMNMwMhV29vaybrHEdJfVn9KBq4XQ5KLdiPXlTqle-fpIrxIt-MnNBHOtHQOFKtRPyPK-ZUU1nO-RZWM_OjOt57o-y3x3PN1hpqgDo1fbXd9HzElzP9b7esk0T4_ezbzHmOf7ya6oTdiik8b2Xx3DDoTYObncmxoS-PF-A_BzNolfAGS1borx8en7acpfS3El4Sqy9mBeQwsW8KZti_NzaMQBqJfck1MRwcT37BrnRzvIQuwYYTNNnDtN8WG_nlB_R1-CZfGnh3F-rHyxxI-HS4bss30onFe2ijiZhioFCcxUDvJZpjs-E6HmcbsnKfLOiagXdj7343eOOFnOxB1bd8f_TBHMAPpjxu5keN-GBDJ050kHuTjiJcEZ7AXnllkUNYzJzpYKXvEBB_xUpCznfSIqnXugfSCmD-AfyxxNaDRSGW-IfhlGdy05VYB2T1hbV9_DZktRZTlRlpgewGbBr0IlJCtlII2v3AxqiX0G6ZipvKj3wRg-H8uxbvHNX8a2u49r_ocA5qmKY4TFl0wI3bSxA85DFhamyKwIcMPCU0TQJXbRk6n12taca1aH0mRUF4UygkdQmNig_75jgWwsZXCbztPID7xob1_LuP0l4rNtoSywMTgzt7kmME0UaGrisKlYPpDtPzHPEf85rJHnN3mTaetgAsEMkaZOweg9QFmF_7nrRjCXq0ZnGoVfYyKA6JikBdG0VNMsJVpyPj9DMmNB7F0);">
+                    <div>
+                        <span class="mainTitle">Variational Autoencoder (VAE)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.03.06</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>딥러닝 이야기의 두 번째 주제는 생성 모델(gerative model)의 일종인 variational autoencoder (VAE) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">VAE는 딥러닝 이야기의 첫 번째 주제였던 manifold learning을 위한 모델인 autoencoder (AE)와 그 이름이 비슷합니다. 하지만 AE를 설명하는 이전글에서 언급했지만, AE와 VAE는 전혀 다른 모델입니다.</span>
+                        즉 아무런 수학적 연관성이 없는 모델이란 것을 염두해두고 글을 읽으시면 좋을 것 같습니다. 그리고 VAE 이야기를 시작하기 앞서 manifold learning과 autoencoder에 대한 글은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br>그리고 VAE는 수식이 매우 많이 나옵니다. 하지만 유도 되는 수식을 천천히 따라가다 보면 이해 못할 부분은 없으리라 생각이 듭니다.
+                    </p>
+                    <h1 class="subHead">Variational Autoencoder (VAE)</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>생성 모델</span><br>
+                        <span>Generative Model</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 잠깐 VAE는 생성 모델(generative model)이라고 하였습니다. <b>그럼 생성 모델은 무엇일까요?</b>
+                        생성 모델은 말 그대로 데이터를 생성할 수 있는 모델을 뜻합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 학습한 데이터를 똑같이 복사하는 것이 아니라, 학습한 데이터를 바탕으로 실제로 있을 것 같은 데이터를 스스로 생성하는 모델입니다.</span>
+                        유명한 생성 모델 중 하나가 바로 Generative Adversarial Network (GAN)이 있죠. 즉 VAE도 GAN과 같은 생성 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">생성 모델의 가장 중요한 목적 중 하나가 바로 학습 데이터를 통해 학습 데이터가 존재하는 데이터 분포를 찾는 것입니다.</span>
+                        단순히 학습 데이터를 복사 붙여넣기 하여 생성하는 모델이 아니라는 뜻입니다.
+
+                        <br><br>아래 그림을 보면 개와 고양이 데이터가 존재하는 분포는 아래처럼 구분할 수 있습니다.
+                        이러한 데이터 분포는 우리가 가지고 있는 개와 고양이 사진으로부터 학습할 수 있습니다. 하지만 생성 모델은 이러한 데이터 분포 파악을 넘어서서 데이터 분포 내에 존재하는 새로운 데이터를 생성하는 모델인 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 생성 모델은 이렇게 학습 데이터를 바탕으로 데이터가 존재할만한 분포를 파악하고, 실제론 학습 데이터에는 없지만 존재할만한 데이터를 형성하는 모델인 것이지요.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWIwXjcRkm_jDiibFd2ETMwPnKWdDtSUP6iaCdMUUP6B2xwic036IMSkASNvT9Dfbjzzlx0BKQkPVtrETns_-jsSosGbwkn3hk5lcUXdf7NK-qUrSXL-DOFlYKsorA79YJpwnFR1E0a4fMDDi8PR342iPV8i6LexGpaK6RW80YYNtet9qa3ebelSzhBGRBkkVfMj_CYt_cMWBX8xQdeyVebCajCS6g2HGALqirXykd1CGlE-42iXTwarQX6PAvTs-I3deb3ztX35Du_bjF1DGa43_Mz4oW00Kii6qSZRXfi9Ujw9W6ucARDX1_fXqgNQVeDn5TXLhPckjlkKBzPRlaLLVUMvSxSupGr75viQQ9H6CMZerRoTyvAxQxhzgdHNn8_8xmUIVi_lCNX7lNAbUgl13r4-HZepYqHX4k3lKIxCOSfqlDPR3NFAWFPozUjgCquaXEZ3iEBAZtbDzBN-wFykWnPfSXttvUdYjMfQGEQe7fP6WYR619tfFx-ynYO1V9PXziB6ah4fRaxAjfkCvFiadDtZ05hk1YK4DdY5lYcQ8rwV66p4G3jeKsV7f5FH60qQm39v_LUU5ARgJ69vx9odtj8Fuy3Kv-U9hocdAhBKnvwNOd9WbOFbURwVgoOIcw9yN9PJQ5WeD0yrFlOTYCyv4du3Jx7Cop67NiP2IFeWG3MvfvDMAnBw5SheYHh9JSOhY7VC1xTnwWime3rFEsXL5OtlY0" style="width: 100%;">
+                        <p class="caption">생성 모델 예시</p>
+                    </div>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>AE vs VAE</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <b>그럼 autoencoder (AE)와 variational autoencoder의 차이는 무엇일까요?</b>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이 둘의 가장 큰 차이점은 바로 목적에 있습니다. AE는 manifold learning을 위한 모델이고 VAE는 새로운 데이터 생성을 위한 모델입니다.
+                        그리고 두 모델은 encoder, decoder로 이루어져있다는 부분은 동일합니다만 위에서 언급하였듯이 그 목적이 다르기 때문에 encoder와 decoder의 비중이 서로 다르다는 것을 인지해야합니다.</span>
+
+                        <br><br><span style="font-size: 20px;"><b>Autoencoder (AE) 특징</b></span>
+                        <br>먼저 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 설명하였지만 AE의 목적인 manifold learning은 무엇인지 상기해본다면, 그것은 데이터의 특징을 추출하는 것입니다.
+                        즉 데이터의 의미있는 특징을 추출하여 차원을 축소하거나, 데이터를 가시화 하는 것이 목적인 것입니다.
+                        그리고 이러한 목적을 이루기 위해서는 데이터의 특징을 추출해야하는 부분이 중요해집니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 AE에서는 데이터의 특징을 추출하는 부분인 encoder가 decoder에 비해 중요한 것입니다.
+                        다른말로 decoder는 데이터의 특징을 추출하는 부분인 encoder의 학습을 위해 부가적으로 붙은 부분이고, encoder가 AE의 주체라고 해석할 수 있습니다.</span>
+
+                        <br><br><span style="font-size: 20px;"><b>Variational Autoencoder (VAE) 특징</b></span>
+                        <br>AE와 다르게 VAE는 학습 데이터에 없는 새로운 데이터를 생성하는 데 중점을 둔 모델입니다.
+                        그리고 생성을 담당하는 부분은 바로 decoder입니다. <span class="highlight" style="color: rgb(0, 3, 206);">즉 VAE에서 encoder 부분은 decoder를 학습하기 위해 부가적으로 붙은 부분이 됩니다.
+                        즉 VAE에서는 decoder가 주체가 되는 것이지요.</span> 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">추가로 VAE의 encoder에서는 학습 데이터를 바탕으로 데이터가 존재하는 분포를 찾기위해 평균, 분산을 학습하여 데이터가 존재할 만한 정규분포(혹은 정규분포 이외의 간단한 베르누이 분포 등)를 학습하게 됩니다.
+                        그리고 VAE의 decoder 부분에서 이렇게 학습된 분포에서 새로운 데이터를 형성하게끔 학습하는 것이지요.</span> 
+                        VAE에서는 decoder를 학습하기 위해, 앞 부분에 특징을 추출하는 모델인 encoder를 붙였는데 우연히 이러한 모델의 구조가 AE와 비슷하게 된 것입니다.
+                        즉 VAE라는 이름이 붙은 이유가 바로 우연히 생성의 목적으로 구현한 모델의 구조가 AE와 비슷하여 붙여진 것이지요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">또한 VAE는 데이터를 생성하는 데 목적을 두기 때문에 수학적으로 AE와 아무런 관계가 없는 모델입니다.</span>
+                        
+                        <br><br>아래는 VAE의 구조를 보여줍니다. VAE의 구조의 세세한 부분은 아래에서 차근차근 수식과 함께 알아보도록 하고 지금은 전체적인 구조를 보았을 때 AE와 비슷하다는 것을 인지하시면 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVmMNMwMhV29vaybrHEdJfVn9KBq4XQ5KLdiPXlTqle-fpIrxIt-MnNBHOtHQOFKtRPyPK-ZUU1nO-RZWM_OjOt57o-y3x3PN1hpqgDo1fbXd9HzElzP9b7esk0T4_ezbzHmOf7ya6oTdiik8b2Xx3DDoTYObncmxoS-PF-A_BzNolfAGS1borx8en7acpfS3El4Sqy9mBeQwsW8KZti_NzaMQBqJfck1MRwcT37BrnRzvIQuwYYTNNnDtN8WG_nlB_R1-CZfGnh3F-rHyxxI-HS4bss30onFe2ijiZhioFCcxUDvJZpjs-E6HmcbsnKfLOiagXdj7343eOOFnOxB1bd8f_TBHMAPpjxu5keN-GBDJ050kHuTjiJcEZ7AXnllkUNYzJzpYKXvEBB_xUpCznfSIqnXugfSCmD-AfyxxNaDRSGW-IfhlGdy05VYB2T1hbV9_DZktRZTlRlpgewGbBr0IlJCtlII2v3AxqiX0G6ZipvKj3wRg-H8uxbvHNX8a2u49r_ocA5qmKY4TFl0wI3bSxA85DFhamyKwIcMPCU0TQJXbRk6n12taca1aH0mRUF4UygkdQmNig_75jgWwsZXCbztPID7xob1_LuP0l4rNtoSywMTgzt7kmME0UaGrisKlYPpDtPzHPEf85rJHnN3mTaetgAsEMkaZOweg9QFmF_7nrRjCXq0ZnGoVfYyKA6JikBdG0VNMsJVpyPj9DMmNB7F0" style="width: 100%;">
+                        <p class="caption">VAE 구조</p>
+                    </div>
+                    <p>
+                        <br>결론적으로 AE와 VAE를 정리한다면 아래와 같습니다.
+                        <ul>
+                            <li>
+                                Autoencoder (AE)
+                                <ol>
+                                    <li><b>목적</b>: 차원 축소 혹은 자신의 데이터를 representation 하기 위해 데이터를 잘 압축한 잠재 변수(latent variable) \(z\)를 만드는 것.</li>
+                                    <li>AE는 데이터의 특징 추출을 위한 <span class="highlight" style="color: rgb(0, 3, 206);">manifold learning</span>을 위한 모델이므로, encoder가 주체인 모델.</li>
+                                    <li>AE의 decoder는 encoder를 학습하기 위해 붙은 부가적인 부분.<br><br></li>
+                                </ol>
+                            </li>
+                            <li>
+                                Variational Autoencoder (VAE)
+                                <ol>
+                                    <li><b>목적</b>: 데이터가 존재할만한 분포의 평균, 분산을 학습한 후, 그 분포에서 \(z\)를 sampling하여 새로운 데이터를 생성하는 것.</li>
+                                    <li>VAE는 학습 데이터에 존재하지 않지만 있을법한 데이터를 생성하고자 하는 <span class="highlight" style="color: rgb(0, 3, 206);">생성 모델</span>이므로, decoder가 주체인 모델.</li>
+                                    <li>VAE의 encoder는 decoder를 학습하기 위해 붙은 부가적인 부분.</li>
+                                    <li>VAE의 구조는 우연히 AE와 비슷하게 구성이 되었지만, 모델이 가지는 수학적 의미는 AE와 전혀 연관성이 없음.</li>
+                                </ol>
+                            </li>
+                        </ul>
+
+                        <br><br><b>그렇다면 VAE로 넘어가기 전에 AE에서 어떻게 새로운 데이터를 생성할 수 있는 방법은 없을까요?</b>
+                        얼핏 생각해보면 크게 두 가지 방법이 있을 것 같습니다.
+                        <ol>
+                            <li>AE를 통해 학습된 잠재 변수(latent variable)의 공간에서 두 개의 데이터를 추출하여 <span class="highlight" style="color: rgb(0, 3, 206);">interpolate</span> 한 새로운 잠재 변수를 만들어 AE의 decoder로 보내어 데이터를 생성하는 방법.</li>
+                            <li>AE를 통해 학습된 잠재 변수(latent variable)를 하나 골라 <span class="highlight" style="color: rgb(0, 3, 206);">perturb(살짝 망가뜨림)</span>하여 새로운 잠재 변수를 만들어 AE의 decoder로 보내어 데이터를 생성하는 방법.</li>
+                        </ol>
+                        그럼 각각에 대해 아래에서 자세히 살펴보도록 하겠습니다.
+
+                        <br><br><span style="font-size: 20px;"><b>잠재 변수(latent variable)를 interpolate 하는 방법</b></span>
+                        <br>아래 그림처럼 우리는 AE를 통해 데이터의 잠재 변수 분포를 그릴 수 있습니다.
+                        그렇다면 같은 데이터 종류에 속하는 잠재 변수 2개의 데이터를 interpolate 하여 새로운 잠재 변수를 만들면 어떨까요?
+                        이렇게 생성된 잠재 변수를 AE의 decoder에 통과시키면 새로운 데이터가 생성되지 않을까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 방법에는 문제점이 하나 존재합니다. 바로 잠재 변수 z를 sampling할 지역을 선택할 수 없다는 점입니다.
+                        생성을 한다는 것은 그럴싸한 새로운 데이터를 형성하는 것인데, 도대체가 어느 지역에 분포되어있는 잠재 변수 z가 우리가 보았을 때 가장 그럴싸한 데이터를 만들어줄 수 있는지 알 수 없다는 뜻입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUHdHbOB9OKFknVBaAmhn_qnYKh-X2BRSGq0Dpz06bwfdZMFR2GdrI6JMFgvafJ62rYtgrRncpPhIm9kFOJUrrVVzKVjJMr0fryp_86U5I06VIwwrt1PlT8I-CqInXTeaXAfQ0xOdUe_G8W4li8HD4uDX5Rttyb0b_nZzUpC-wp38vo_UiPeZO8PZbWJ6Tv928Tjvp1zKzHTbA0RmK1qSOZ_NKWosNabxaeHt9Vi2y5gSl7DIUb78EAoxQWP931dNA3S-u0pWn-rFZBmJDz7PfOKCBKZBsgP1VIkcxZOGhfInWZuRHEB8lYqe4eIrR4vxZvEEABh5Tdxg_MFi-451_A77OOPXammdaJTpm7GXfi0wkK4GgpEaYFERBDlS_UbIZgX6DFiLMPneZLH9Gc-OhXUD1Nufv0OLo0Py2zQRfg2YGFpoiO6HUizLRDZfB6oSvheBrgzbw0DHauyXQrUh2Ud9dX_Qmn9My810Gyr8zvRwLKjiwaNKlbDQ7xHgYcWIP24BaMGnhThfgFK_7es-hfm2iRKotUNw7UpZ5Jwv8Hpyk1TrZggd0Tqj3L6dPgTwkDfIbtXkiwMGIXQHJxq5zgYOlc0Ggh9_--2YXY-WhkSzCvl4opf4H1x94MUjpO8ZxvyKz44gWE5kPj8O8_hwPrRLQzD1aNRqmAPzU4sAhRoq6c8FdGANTL6k9zYo6SxcSzygkVEIltH18qE0QPAGe5WqqnXXg" style="width: 100%;">
+                        <p class="caption">AE의 잠재 변수를 통한 새로운 데이터 생성 아이디어 - Interpolated z</p>
+                    </div>
+                    <p>
+                        <br>아래 그림처럼 정규분포를 보면, 확률이 가장 높은 지역은 가운데 지점임을 알 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 우리는 위 그림에서 1이라는 데이터의 잠재 변수가 포진되어있는 분포에서 가장 그럴싸한 데이터를 만들어 낼 수 있는 잠재 변수가 있는 지역을 알지 못하기 때문에 이러한 방법을 적용하기에 한계가 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW1b3MicAPA6FYRtRnu2058qCeHL2Dafhh6LwDIIJ5u19kah-feOhVuIFNDgf--2p1_NVrkiEEOT1T4JBLcLmkyPYdn265p4b_V32i6kgn7VqCHvhykjm7x3ShUdDVG0lR2L9zD4dUPIzKQkC12_q_eqfqvAdA9OJofYAaHm4xyUVBDV_5ugBnCV-zh7e9qYdNV4b2mMg6GsE3UxFdTAW8NrP0bnS7AtTwFqBRuTgpqbdy3HdKN8GqilGTcrXq2S_W_j8s0F_x5IXwD1UAxuw1LJXLg8JGKKM237vDtfqFcH_jJHXfxOea11eGwIfqii2hEVa3syMhFdrRiuRJQuhD8H86uUNtm1h7O4FOpNXU7-TXiDI6oOt3V9BVMhIBksYFfMXEnFCFqm5Nxpt3gHtwkZl5j11Ix9dfDM44BlbpNgP63JqVzAFPQN9paeAOlvYVF2yW56bXAQm-CPHj6Ed-YV4PN7YwSKaRjwK-kKS-VM__aaLKKOX67pP4QNLfXLlxfui7Ockg7FMU3yZB6N8kRtpjJdqha7wSAIlGNd9kmk2U8T8GNpIaeX0YKgVlRGqLlTS7c9prICcHr-yYOxuYZE248BiO6lHcXffuwO-vrh8Am9NIS4OvDdgkvQu49Ia9FY0TGwVTU9iFcavgE3WS7Gpj4fzTu6vThc2cd23L8YjTRo2wG4rgecUMj2CtTmYsc6DZ-AgAQcwmcgn7kdHDy85W6y65j=ft" style="width: 100%;">
+                        <p class="caption">표준정규분포</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>잠재 변수(latent variable)를 perturb 하는 방법</b></span>
+                        <br>이 방법은 AE를 통해 나온 잠재 변수 z에 노이즈를 주어 약간 변화된 새로운 z'를 만드는 방법입니다.
+                        즉 새로운 z'는 z + noise가 되는 것이지요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 이전 autoencoder를 설명하는 글에서 등장했던 denoising autoencoder (DAE)를 학습할 때 데이터에 노이즈를 섞어주는 방법을 z에 적용했다고 생각하면 됩니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[z'\,=\,z\,+\,noise\]
+                    </div>
+                    <p>
+                        이러한 z'을 이용하여 AE의 decoder를 통과시키면 과연 새로운 데이터가 나올까요?
+                        아래 그림은 AE의 결과로 나온 잠재 변수 z에 noise를 주어 perturb 시킨 z'을 decoder로 넣었을 때 나오는 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">원래의 z를 decoder에 넣어 복구한 결과와 큰 차이를 보이지 않는 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweV8s-Mw_xGE4bzXGgKxjI37SVxefPLg7ahvWBhz6RXRITjbz7o5GKlNcy9gB8pa36MZ41eMKquNLlixFEmy-JwjOvSEho5ZnXF6fFIog_ioUfgYUKlH6hNfWmiHUFbxMciaF6xBlF_AggGmZI4XM3Dz0XMRYc36dXWvV-p2CTiIvye41H4NSnsGp-KFcaiC1tlr2DVe33DYcDUs8BWYdEEXQmobIxEn3bEzZB0jv1rQvgtuL93Kv7euCATxs0CNjTcc-1tfaqASBo8BDj9iwdu9YcBU5JLEXcFrYX0UHy0uBFIzGT5J_YMuZhdxtDDGAG3a9xL9PJCztgSflxgEy5MhHOo9IxHsNr-icCpcRT_zitthwOZKOiXn_rABC_ibeEUZFMCG8EShP_Ca7sWBga5rdY4Bmnx4V8j4lscFxxQojy5CFkJzA78F0KRxmXXR0aYEgrPa_88-4l3GNBHNg3lYecKx3zqFsJ1HpKyQeVcO85-U3xg09HrHkrw-Vtd7jKdccQoo7j0iztYJZW3lEJlb6N91lRveNY-sSM2fZRh-PNQ_Ckw61MjjXmqn_KreMkQKsyL6cOzbBphgEAL9dF6r98-AmVpwN7OZ0dNNRQcnI29963YmLBFcea3q9UIWtvCRe6xGix2S3RejiDwpE_hj955MuJBYjH77SrZp6GF9tEyVJPakLeOHSndbu4BW1vLjQzWX4TI26OsCG2ZVAi3WwShMZRw" style="width: 100%;">
+                        <p class="caption">AE의 잠재 변수를 통한 새로운 데이터 생성 아이디어 - Perturbed z</p>
+                    </div>
+                    <p>
+                        <br>하지만 세상에는 위의 9 이외에도 아래처럼 다양한 9가 존재합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 perturbed z를 이용하는 방법으로도 새로운 데이터를 생성하기에 한계가 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXPZxO3zAPDEs9UWQbpxEhzuUFXUWzcDuDkyFDFzVT_DW0Yywe4pF97M0d1NbWqSly4L4GNw8bmzLn1UYktUqsptz6rFmWrgPrwkb1LBRi_96_Tlj4ep5KaUeHY86EUMKPiUg1zhTpcS6bDpuXoPHAhRP6LEcbUCmut8v1Ei2wpOuXk7zbR70WuNAZ5gmT5c8WFSE_5Qo2qMD_74JVzq97fwAsQMmz1RgNYHz6TR8Cff7ZNElwE5uAZf3J_yuw5FbkEBq6BpgAOWWrwlFtMfGSsG_D3jr-GsWohYcbB4UewItz76BkABEho5LSDMnww17OGqpVcklrK7C6N21ZEXcjFyAuHAnIGz4d-8RRlgl9CRZ-NH-55bdqxh6GQWIOmWxONw2Uu6JCyrahwliaOiwlBIBSR5EBoOZ3EayZx4FX2xCJ7YHzfOjv0aB7DoyuHOxAcRSiqlZl6Vas-CpDd5Ej2AJUWunDzW37l8ipkAgo65YZxj4KUwkl5pSPmv3gbV-yf05oxMJQAgdpOPGTdzFzi3gK-pqx1LIcHNNAZ7AUKE3m5zNXV23rB9vTg9CVnm8i7KeD2Hfa7sd7L29Cz6m0YV8KKzVU1hJz_K1eTOTwje8JiVw-EmExy46IzN_8Zbl4nQ-NcOMGr40yvgE26vmAMh2udWfv9Awetf33PfSd4yfBOkkyCnxaHTzKF5W8gF19gKctaNSIbuDbLuX0xMYlSssGs52E" style="width: 60%;">
+                        <p class="caption">다양한 9 데이터</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 AE를 활용하여 새로운 데이터를 생성하는 방법에 대한 아이디어 두 가지에 대해서 알아보았고 그 한계도 확인하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">결론적으로 AE를 이용하여 새로운 데이터를 형성하는 것은 불가능에 가깝고, AE는 단순히 자기 자신을 복제하면서 manifold를 학습하는 데 그칩니다.
+                        즉 새로운 데이터를 생성하기 위해서는 완전히 다른 모델과 수학적 접근이 필요하며, 그 모델이 바로 VAE입니다.</span>
+                        아래에서는 VAE의 수학적인 부분을 살펴보도록 하겠습니다.
+                    </p>
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Variational Autoencoder (VAE)가 직면한 문제점</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 기존의 autoencoder (AE)를 활용하여 새로운 데이터를 형성해볼 수 있는 두 가지 아이디어를 살펴보았습니다.
+                        하지만 각각의 방법은 데이터를 성생하기에 한계가 존재하여 새로운 접근 방법이 필요합니다.
+                        따라서 새로운 모델인 VAE가 제시 되었지만 VAE의 이론은 문제점을 직면하게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">우리가 데이터를 생성하기 위해서는 데이터 \(x\)가 나오는 \(z\)의 분포를 구하고, 거기서 sampling을 한다면 새로운 데이터 \(x\)를 생성할 수 있습니다.
+                        우리는 생성하고자 하는 데이터와 우리가 학습하기 위해 가지고 있는 데이터를 \(x\), \(x\)를 생성하기 위해 필요한 잠재 변수를 \(z\)라고 합시다.</span>
+                        
+                        <br><br>우리는 \(x\)와  \(z\)의 관계를 아래와 같이 결합확률(joint probability)로 나타낼 수 있습니다.
+                        아래는 \(x\)와 \(z\)의 joint probability를 z에 대해서만 적분하여 x의 주변확률(marginal probability)을 구한 것입니다.
+                        즉 데이터를 생성하기 위해서 \(P(z)\) 분포에서 \(P(x)\)와의 연관성을 찾는 것이지요.
+                    </p>
+                    <div class="equation">
+                        \[P(x)\,=\,\int{P(x,z)}\,dz\]
+                    </div>
+                    <p>
+                        <br>우리는 여기서 Bayes' theorem을 이용할 수 있습니다. Bayes' theorem은 조건부확률 공식에서 유도되며 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[Bayes'\,theorem:\,P(x|z)=\frac{P(x,z)}{P(z)}\]
+                    </div>
+                    <p>
+                        <br>위 Bayes' theorem을 이용하면 우리는 \(P(x)\)를 아래와 같이 다시 쓸 수 있습니다.
+                        즉 \(P(x,z)\)를 prior인 \(P(z)\)와 likelihood (우도)인 \(P(x|z)\)로 바꿀 수 있는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">우리는 위에서 VAE는 생성 모델이기 때문에 decoder가 주체가 되는 모델이라고 언급하였습니다.
+                        따라서 우리는 아래처럼 decoder의 관점에서 prior과 likelihood를 나타내어 적은 것입니다.</span>
+                        아래 식에서 \(P(x|z)\)에 해당하는 부분이 바로 \(z\)를 통해 \(x\)를 생성하는 decoder를 의미하기 때문이죠.
+                    </p>
+                    <div class="equation">
+                        \[P(x)\,=\,\int{P(x,z)}\,dz\,=\,\int{P(z)P(x|z)}\,dz\]
+                    </div>
+                    <p>
+                        <br>그리고 위 식을 풀 수 있다면 우리는 새로운 데이터 \(x\)를 생성할 수 있습니다.
+                        \(P(z)\)는 우리가 간단한 분포인 정규분포(Gaussian distribution)으로 가정할 수 있으며, \(P(x|z)\)는 \(z\)를 기반으로 \(x\)를 생성하는 neural network (NN)의 decoder로 계산이 가능합니다.
+                        하지만 위의 식에서 우리가 풀 수 없는 문제점이 두 가지 존재합니다.
+                        
+                        <br><br><span style="font-size: 20px;"><b>첫 번째 문제점</b></span>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">첫 번째로 우리는 모든 \(z\)에 대해 적분을 할 수 없다는 문제점이 존재합니다.
+                        즉 \(z\)가 무수히 많고 모든 \(z\)에 대해 적분이 당연히 불가능하기 때문에 우리는 이를 intractable 하다고 합니다.</span>
+                        그래서 우리는 다시 Bayes' theorem을 이용하여 위 식을 아래 식으로도 바꿀 수 있지만 바꾼 식에 대해서도 \(P(x)\)(애초에 구하려고 하는 대상)를 모르기 때문에 역시 풀 수 없습니다.
+                    </p>
+                    <div class="equation">
+                        \[P(x)\,=\,\int{P(x,z)}\,dz\,=\,\int{P(z)P(x|z)}\,dz\,=\,\int{P(x)P(z|x)}\,dz\]
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>두 번째 문제점</b></span>
+                        <br>다시 아래의 식으로 돌아와 우리가 prior인 \(P(z)\)를 우리가 정규분포로 가정하고, \(P(z)\)에서 sampling한 데이터를 \(P(x|z)\)를 통해 새로운 데이터 \(x'\)를 만들 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이를 이제 원래의 데이터 \(x\)와 비슷하게 만들어야 하므로 mean squared error (MSE) \(\|x-x'\|^2\)를 할 수 있습니다(Gaussian이라 가정하였기 때문에 MSE loss 이용).
+                        하지만 이렇게 MSE loss를 통해 학습을 하게 된다면 의미론적으로 먼 데이터임에도 불구하고 수학적 결과가 더 좋게 나올 수 있습니다(MSE loss error가 더 작게 나올 수 있음).
+                        따라서 학습이 잘못된 방향으로 진행 될 수 있다는 문제점이 존재 합니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[P(x)\,=\,\int{P(x,z)}\,dz\,=\,\int{P(z)P(x|z)}\,dz\]
+                    </div>
+                    <p>
+                        <br>따라서 우리는 아래와 같은 결론을 내릴 수 있습니다.
+                        <br><br><b>결론</b>
+                        <ul>
+                            <li>Prior \(P(z)\)를 통해 sampling을 하게 되면 학습 자체가 불가능하며, sampling을 잘 할 수 있는 \(P(z)\)를 대체할 새로운 함수를 정의 하고 그 함수의 결과를 통해 sampling을 하자.</li>
+                        </ul>
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>변분 추론</span><br>
+                        <span>Variational Inference</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 우리는 VAE가 직면한 문제점에 대해 살펴보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위의 문제점에 대해 간단히 정리하자면, 우리는 \(z\)의 분포에 대해 알고싶지만 \(z\)가 무수히 많을 뿐더러 이상적인 \(z\)가 존재하는 분포를 알 수 없기때문에 문제가 발생한 것입니다.
+                        대신에 우리는 \(z\) 말고 학습 데이터인 \(x\)를 가지고 있습니다. 따라서 우리는 "가지고 있는 \(x\) 데이터를 통해 \(z\)의 분포를 구하면 어떨까?"라는 생각을 하게 됩니다.</span>
+                        즉 직접적으로 \(P(z)\)를 구할 생각을 하지말고, \(x\)를 통해 \(z\)를 유추하는 \(P(z|x)\) 구하자고 방향성을 바꾸게 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXrK-_bcD7UTcIpi_AsedRPVvcWkiaGuabFDDE8FwZD73W7p-g4JjCmSSuraHoBSTwQj7yyGtSIyVdrxhgEIl9sQTgLWPHVoy0aA93IF6K32HBdCZdpmGRjRskfoEQrq_CWKsY7hKWZeJqu5r7yXhI2-Ah_F2IhSU7jS3rdVKHGiCFZYUYjfXUOofW6CoftwDUOlBS7X8oX0fpj-rTfSr0ht56dWydqet-Z9TEBQ-yF81PWgxqqQKaNHK24m9gLL9FLxWaYmDn9X9rk8urWaN-u69gE3sfE9bH8mxCTU37xvbYBl6Wzo6e7U_0_KnysktcpdIP5rgJ7eqp6nezUbMJ4uL2TtYVmbYt43dZSXFh7xWBKoSc0tuGFkcMO4soMJMJILw43fwWOlm-22i0PMPBEkph2_eUtf3h5hYAlgJ8Lwj00H2-cnaiDNbulz7fRs58ndX8gvcso8Fu2cGUPjRC_XK-K9DskG17K129lvLp1VRyUJoVKuVrm-MhpjrK3CE3Po90Z1UeylqeNkF199-QD0UhfFXsNzu2I1Qgj-xzW1JITL4qQNR4EsicVjekBtgDSTDNUeJaOw4-pYaaoYPeLjo8N8thUWqYO_x3u__XdVnaO1iHQxoVHlmIMxzLZiD6KTQxcqxjbY0cxzRhTqG05a8g803lknhkAeXWdbq9eu3ecsgQ11ppaTbSYDNtnhYojX5AdN7X0QMjcaaLw-5DePhCb2RY" style="width: 100%;">
+                        <p class="caption">가지고 있는 데이터 x를 통해 P(z) 대신 P(z|x)를 유추</p>
+                    </div>
+                    <p>
+                        <br>물론 우리는 이상적인 posterior인 \(P(z|x)\)를 알 수 없습니다. 이상적인 \(P(z|x)\)는 정규분포와 같이 간단한 분포가 아닌 수학적으로 표현할 수 없는 복잡한 형태를 가질 수도 있습니다.
+                        하지만 우리는 간단한 정규분포 등의 형태를 띄는 \(Q(z)\)를 가정하고, \(Q(z)\)를 \(P(z|x)\)에 잘 근사하고 \(P(z|x)\) 대신에 \(Q(z)\)를 사용하기로 합니다.
+                    </p>
+                    <div class="equation">
+                        \[P(z|x)\,\approx\,Q(z)\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">따라서 우리는 복잡한 분포를 간단한 분포로 근사하는 것을 변분 추론(variational inference)이라고 부르고, 이는 VAE가 직면한 문제점을 해결하기 위한 핵심이 됩니다.</span>
+                        즉 변분 추론을 통해 우리가 가지고 있는 데이터 \(x\)를 바탕으로 실제로 알 수 없는 \(P(z|x)\) 분포를 근사하기 위해 간단한 분포 \(Q(z)\)를 사용하는 것이죠.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">결론적으로 우리는 두 분포 \(P(z|x)\)에 \(Q(z)\)를 잘 근사하기 위해, 두 분포의 차이를 계산하는 지표인 쿨백-라이블러 발산(Kullback-Leibler divergence, KLD)을 사용합니다.</span>
+                        KLD의 정의는 아래와 같습니다.
+                        우리는 가지고 있는 데이터가 무한이 아니기 때문에 \(\int\) 대신에, 이산적인 데이터를 나타낼 때 사용하는 \(\sum\) 기호를 사용합니다.
+                        <br><br>그리고 참고로 KLD는 두 분포가 같으면 0의 값을 가지게 됩니다(\(D_{KL}(P||P)=\sum_{z}P\log{\frac{P}{P}}=0\)). 즉 KLD는 두 분포가 비슷할수록 작은 값을, 두 분포가 다를수록 큰 값을 가집니다.
+                    </p>
+                    <div class="equation">
+                        \[Kullback-Leibler\,divergence:\,D_{KL}(Q(z)||P(z|x))\,\triangleq\,\sum_{z}Q(z)\log{\frac{Q(z)}{P(z|x)}}\]
+                    </div>
+                    <p>
+                        <br>우리는 위의 KLD 정의에서 Bayes' theorem을 이용하면 아래와 같이 식을 바꿀 수 있습니다(Bayes' theorem 식은 위에 나와있습니다).
+                        아래 식에 나오는 joint probability \(P(z,x)\)는 \(P(x,z)\)와 동일한 식입니다. 
+                    </p>
+                    <div class="equation">
+                        \[D_{KL}(Q(z)||P(z|x))\,\triangleq\,\sum_{z}Q(z)\log{\frac{Q(z)}{P(z|x)}}\,=\,\sum_{z}Q(z)\log{\frac{Q(z)P(x)}{P(z,x)}}\]
+                    </div>
+                    <p>
+                        <br>위의 KLD를 다시 아래와 같이 쓸 수 있습니다. 
+                    </p>
+                    <div class="equation">
+                        \[D_{KL}(Q(z)||P(z|x))\,=\,\sum_{z}Q(z)\log{\frac{Q(z)P(x)}{P(z,x)}}\,=\,\sum_{z}Q(z)\log{\frac{Q(z)}{P(z,x)}}+\log{P(x)}\sum_{z}Q(z)\]
+                    </div>
+                    <p>
+                        <br>위의 KLD의 마지막 term인 \(\sum_{z}Q(z)\)는 확률을 모두 더하는 것이기 때문에 1이 됩니다.
+                        그리고 \(P(z,x)\)는 Bayse' theorem을 이용하여 바꿀 수 있습니다.
+                        따라서 우리는 위 식을 다시 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[D_{KL}(Q(z)||P(z|x))\,=\,\sum_{z}Q(z)\log{\frac{Q(z)}{P(x|z)P(z)}}+\log{P(x)}\]
+                    </div>
+                    <p>
+                        <br>위 식을 log 분해를 하면 아래와 같이 다시 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[D_{KL}(Q(z)||P(z|x))\,=\,\sum_{z}Q(z)\log{\frac{Q(z)}{P(z)}}-\sum_{z}Q(z)\log{P(x|z)}+\log{P(x)}\]
+                    </div>
+                    <p>
+                        <br>위 식을 또다시 KLD 정의와 기대값(expectation value)의 정의를 이용하면 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[D_{KL}(Q(z)||P(z|x))\,=\,D_{KL}(Q(z)||P(z))-\mathbb{E}_{z \sim Q(z)}[\log{P(x|z)}]+\log{P(x)}\]
+                    </div>
+                    <p>
+                        <br>위 식을 \(\log{P(x)}\)에 대해 다시 적어볼 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\log{P(x)}\,=\,D_{KL}(Q(z)||P(z|x))-D_{KL}(Q(z)||P(z))+\mathbb{E}_{z \sim Q(z)}[\log{P(x|z)}]\]
+                    </div>
+                    <p>
+                        <br>여기서 중요한 부분은 바로 좌변의 \(\log{P(x)}\)는 상수로 고정되어있다는 부분입니다.
+                        그리고 우변에는 우리가 최종적으로 줄이고싶은 \(D_{KL}(Q(z)||P(z|x))\) term이 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 \(\log{P(x)}\)는 고정이므로, \(D_{KL}(Q(z)||P(z|x))\)를 줄이기 위해서는 \(-D_{KL}(Q(z)||P(z))+\mathbb{E}_{z \sim Q(z)}[\log{P(x|z)}]\) term을 최대화 하면 됩니다.</span>
+                        <br><br>여기서 바로 최대화 시키는 term이 바로 evidence lower bound (ELBO)라고 불리는 식입니다.
+                        즉 ELBO의 정의는 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[ELBO\,=\,-D_{KL}(Q(z)||P(z))+\mathbb{E}_{z \sim Q(z)}[\log{P(x|z)}]\]
+                    </div>
+                    <p>
+                        <br>최종적으로 우리가 VAE의 문제점을 해결하기 위해서 변분 추론을 도입하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 변분 추론을 바탕으로 \(P(z|x)\)를 근사하기 위해서는 ELBO를 이용해야 한다는 결론을 도출하게 된 것입니다.</span>
+                        <br><br>지금까지는 posterior \(P(z|x)\)에 근사하고 싶은 \(Q(z)\)(e.g. 정규분포 등 간단한 분포)를 최대한 근사하기 위한 방법으로 ELBO를 최대화 해야한다는 것을 보였습니다.
+                        아래에서는 이 ELBO를 바탕으로 \(Q(z)\)를 근사하기 위한 방법과 loss function과 함께 연관하여 살펴보겠습니다.
+
+                        <br><br><b>결론</b>
+                        <ul>
+                            <li>\(P(z)\)를 바로 구할 수 없으니 우리가 가지고 있는 데이터인 \(x\)를 이용하여 \(P(z|x)\)를 구해보자.</li>
+                            <li>그리고 \(P(z|x)\)를 구하기 위해 변분 추론을 도입하였고, 식을 전개하다보니 \(P(z|x)\)를 구하기 위해서는 최종적으로 ELBO 식을 활용해야 한다.</li>
+                        </ul>
+                    </p>
+                  
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ELBO와 Loss Function</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 유도한 ELBO 식은 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[ELBO\,=\,-D_{KL}(Q(z)||P(z))+\mathbb{E}_{z \sim Q(z)}[\log{P(x|z)}]\]
+                    </div>
+                    <p>
+                        <br>그리고 여기서 \(Q(z)\)는 \(P(z|x)\)를 근사하기 위함이며, 이는 결국 우리가 가지고 있는 데이터 \(x\)를 통해 구할 수밖에 없습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 우리는 데이터 \(x\)를 바탕으로 복잡한 \(P(z|x)\)를 근사하기 위한 분포인 \(Q(z)\)를 구하는 것입니다.
+                        따라서 우리는 \(Q(z)\)가 결국 \(x\)를 통해 유도되므로 \(Q(z|x)\)로 바꿔 쓸 수 있습니다.
+                        그리고 \(Q(z|x)\)는 조건부확률의 의미를 생각해본다면 \(x\)에서 \(z\)를 생성하기 때문에 encoder를 의미한다고 볼 수 있습니다.</span>
+                        즉 VAE는 decoder만으로 해결할 수 없는 문제가 있기 때문에 불가피하게 \(Q(z|x)\)를 도입하였는데, 이것이 결국 AE의 구조와 비슷하게 하는 역할을 하게 된 것이죠.
+                        또한 우리는 \(Q(z|x)\)가 간단한 정규분포를 따른다고 가정하기 때문에 그러한 의미를 포함하기 위해 \(Q_{\lambda}(z|x)\)로 표현하겠습니다.
+                        이를 다시 ELBO에 적용하면 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[ELBO\,=\,-D_{KL}(Q_{\lambda}(z|x)||P(z))+\mathbb{E}_{z \sim Q_{\lambda}(z|x)}[\log{P(x|z)}]\]
+                    </div>
+                    <p>
+                        <br>그리고 위의 일반화 된 식을 우리가 가지고 있는 유한한 \(x\)에 대해 각각의 ELBO는 아래와 같이 표현할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[ELBO_{i}\,=\,-D_{KL}(Q_{\lambda}(z|x_{i})||P(z))+\mathbb{E}_{z \sim Q_{\lambda}(z|x_{i})}[\log{P(x_{i}|z)}]\]
+                    </div>
+                    <p>
+                        <br>그리고 우리는 ELBO를 최대화 하려 하였습니다. 하지만 학습을 하기 위해서는 loss를 최소화 해야하죠.
+                        그렇다면 ELBO를 최대화 하는 대신 -ELBO를 최소화 하는 것은 바로 loss를 최소화 하는 것과 동치입니다.
+                        즉 우리는 loss function을 아래와 같이 정의할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[loss_{i}\,=\,-ELBO_{i}\,=\,D_{KL}(Q_{\lambda}(z|x_{i})||P(z))-\mathbb{E}_{z \sim Q_{\lambda}(z|x_{i})}[\log{P(x_{i}|z)}]\]
+                    </div>
+                    <p>
+                        <br>그리고 위의 loss function을 자세히 들여다보면 각각의 term이 encoder, decoder와 연관 되어있다는 것을 알 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 보면 loss function은 크게 encoder와 관련있는 regularization term, decoder와 관련있는 reconstruction term이 존재합니다.</span>
+
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweV9MmskRClZpSbcnHZ-XZuhLkGgAquIpmRludypsYrcEpv1UZSkxfyN6hJ6ef78hDqP1nQUlnGLYq_wfShisEWWdGviFDdPV7cw7fos6B5RG6f95qDt7nUZbTlfyIwhpJJfbtvJSTtJywVO2B9EGHv4cQkVL_96HroxTOa2Ha1nACR18kVu96edlkg5nMgzABgqgDbn4-InGdDTJrvWdfdJjlJpClq3nzETBXXTheSasnqQ_YAQsFpr4-DIrZehja4tOSRjEDOJV87YYvEmC-XTBkt-dbEQkvh9CrnqUrYljCV4wD76Z6pcXk3AraE72J6a4ZJNfWHjXrthkIyx0MrxVKvkuAxH_rIGzYpZPOTqJUen4kPTICk4__xOZadteDxYR1tr1p8lBqz3jYnvxwsaAq8dXXDc3dEGRiBnH6OU9WN31ruK7oj0uhC241nVJ9RbU_17VjC-KjcXBDT6xqkTX7Pd0CpEZAU9RKbXP4uvAsE_pSrzNTPuaVpswBwNlgFT4sFIcjSA6vT0nKxO6DcspG_41_BgwAP1DQ5sjdHHZ7iD9qh93vDUa-GJAsR_o3_64N5QnUc7atpNCDvr0yBAGdNJvE_FXrzg4UhYADZeL0HBT3QM1Y3SPZPgB0tZIkiTqLf8JkgBA-a4xjzWjOnKJQsQcFkpNrUJJG-u1XJG7qg98BVuq3dZp_qtXUyv2jL-qtxNTf693JMAzmcF86AI06bxi9A" style="width: 100%;">
+                        <p class="caption">Loss function의 구성</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Regularization Term</b></span>
+                        <br>먼저 조건부확률의 의미를 생각해보면 \(Q_{\lambda}(z|x_{i})\)는 \(x\)를 통해 \(z\)를 생성하는 encoder의 역할을 담당합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 \(D_{KL}(Q_{\lambda}(z|x_{i})||P(z))\)의 term은 \(x\)를 통해 생성한 \(Q_{\lambda}(z|x_{i})\)의 분포가 \(P(z)\)와 유사해야 값이 작아지고, 이 값이 작아져야 loss가 줄어들죠(KLD는 두 분포가 유사할수록 작은 값을, 다를수록 큰 값을 가짐).
+                        따라서 적어도 \(Q_{\lambda}(z|x_{i})\)는 \(P(z)\)를 잘 근사해야한다는 제한 조건이 loss function에 들어있는 것입니다.</span>
+                        그래서 이 term을 regularization term이라고 부릅니다.
+
+                        <br><br><span style="font-size: 20px;"><b>Reconstruction Term</b></span>
+                        <br>조건부확률의 의미를 생각해보면 \(P(x_{i}|z)\)는 \(z\)를 통해 \(x\)를 생성하는 decoder의 역할을 담당합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 기대값 term 앞에 마이너스 부호가 붙어있으므로, \(P(x_{i}|z)\)의 확률이 최대가 되어야 loss가 줄어드는 것이죠.
+                        따라서 \(z\)를 통해 \(x\)를 잘 생성해야한다는 조건이 붙어있는 것입니다.</span>
+                        그래서 이 term을 reconstruction term이라고 부릅니다.
+
+                        <br><br>그리고 우리는 encoder의 NN parameter를 \(\theta\), decoder의 NN parameter를 \(\phi\)라고 하였을 때, 우리가 사용하게 될 최종 loss function을 아래와 같이 정의할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[loss_{i}(\theta,\phi)\,=\,D_{KL}(Q_{\theta}(z|x_{i})||P(z))-\mathbb{E}_{z \sim Q_{\theta}(z|x_{i})}[\log{P_{\phi}(x_{i}|z)}]\]
+                    </div>
+                    <p>
+                        <br><br><b>결론</b>
+                        <ul>
+                            <li>ELBO를 이용하여 최종 loss function을 유도할 수 있고, loss function은 encoder (regularization term), decoder (reconstruction term)와 연관된 term으로 구성되어있다.</li>
+                        </ul>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>Reparameterization Trick</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 위에서 설명한 loss function에 대해 조금 더 자세히 설명해보도록 하겠습니다.
+                        우리는 위에서 loss function의 의미를 알게 되었지만, 실제로 학습에 적용하기 위해서는 어떠한 가정이 들어가고 어떻게 코드로 풀어쓰는지 알아보겠습니다.
+                        아래에서 regularization, reconstruction term에 대해 하나씩 살펴보도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 마지막에 reconstruction term의 미분 불가능 문제를 해결하기 위해 도입한 reparameterization trick에 관해 설명 해보도록 하겠습니다.</span>
+
+                        <br><br><br><br><span style="font-size: 20px;"><b>다변량 정규분포(Multivaraiate Normal Distribution)</b></span>
+                        <br>먼저 loss function에 대해 자세히 알아보기 전에, 다변량 정규분포(multivariate normal distribution)에 대해 알아야 합니다.
+                        다변량 정규분포는 우리가 생각하는 1차원의 정규분포를 고차원으로 늘린 경우입니다.
+                        아래 그림은 2차원의 다변량 정규분포의 예시입니다. 
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVTk_YcspGcsJAupqudvogHgMy2wcogF-R8Sbil-mX0_z6P7_-AxJNdw74AWFLSohm9czMWQo0dkv60q-9Pvwz4vCIajvXPNl1f5VxFSPciQjXmfmRiWbO9k4pZZsrnVtn1q6OBEy1A7NCDL-TMoDZimE1crlga_L1emJEqJyhr30NPJg_F6aKa5vInSWYYNiEWljLnekMgP2WN_KV3ihgjV4yhShSqyUudhXYH8TSiCuN2sblwzX9XDFdy6uARnwdkJw7IEXwNRq7U95DzffC1107ZiT5KBpGifvla1rlulZvd_x6uKcJHHupXKsOng4qapqledGpiT6sMeMMFHvloiV5wl3zvHC9JMvYmQcpF4erYvi3p9As6-JwKLy62UHslYK1e-UHLT5np2VzdcAhP5IekZM-OCe0NqS1RniDYvOB_yS7BQFGbrfGjqgMKbQXkhAX3x4jgUFuWvvsVZ_qpQ64ebu7UYBdz7YSrxd9K_FQDlKypNEix13L-rzIJUP-Po_vVIsa-FXgNhSIKn3CM5SL_3CPFj_-58zEdpt2EL-GkeD1xRoBygiCWlkWOY4v_2laeFPsnH2fXrn7r02A6GVzjlEMROCaeG2sDM5eO6NgXZuek_TZ3KIh6n-0mkLayV3AMYquAs36pSwP5ay_LtM9KXNTQVOEw-CLcuOYe7FbzB2GwQ-AJ7LM9mNna-VtSadMFfaTVE7jL0fLXW31w6pFwTRM" style="width: 100%;">
+                        <p class="caption">다변량 정규분포(2차원 다변량 정규분포) 예시, 출처: Wikipedia</p>
+                    </div>
+                    <p>
+                        <br><b>그럼 다변량 정규분포는 수식으로 어떻게 표현할까요?</b>
+                        다변량 정규분포를 수식으로 나타낸다면 일반적인 정규분포와 나타내는 방식이 비슷합니다.
+                    </p>
+                    <div class="equation">
+                        \[Normal\,Distribution:\,N(\mu, \sigma^2)\]
+                        \[Multivariate\,Normal\,Distribution:\,N(\mu, \Sigma)\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">다만 여기서 좀 다른 것이 1차원의 normal distribution같은 경우에는 \(\mu\)와 \(\sigma^2\)이 모두 상수라는 것입니다.
+                        하지만 다변량 정규분포에서는 \(\mu\)와 \(\Sigma\)가 행렬을 나타냅니다.</span>
+                        예를들어 2차원 다변량 정규분포라면 \(\mu\)는 \(2\times1\) 행렬, \(\Sigma\)는 \(2\times2\) 행렬이 됩니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 n차원 다변량 정규분포에서 \(\mu\)는 \(n\times1\) 행렬, \(\Sigma\)는 \(n\times n\) 행렬이 되는 것이지요.</span>
+                        그리고 \(\Sigma\)를 공분산 행렬(covariance matrix)라 부릅니다.
+                    </p>
+                    <div class="equation">
+                        \[n-dimensional\,Multivariate\,Normal\,Distribution:\,N(\mu, \Sigma)\]
+
+                        \[\mu = \pmatrix{
+                            \mu_{1} \cr
+                            \mu_{2} \cr
+                            \vdots  \cr
+                            \mu_{n} \cr}\,\,\,
+                        
+                        \Sigma = \pmatrix{
+                            \sigma_{11} & \sigma_{12} & \ldots & \sigma_{1n} \cr
+                            \sigma_{21} & \sigma_{22} & \ldots & \sigma_{2n} \cr
+                            \vdots & \vdots & \ddots & \vdots \cr
+                            \sigma_{n1} & \sigma_{n2} & \ldots & \sigma_{nn} \cr
+                            } =
+                            \pmatrix{
+                                \sigma_{1}^2 & \sigma_{12} & \ldots & \sigma_{1n} \cr
+                                \sigma_{21} & \sigma_{2}^2 & \ldots & \sigma_{2n} \cr
+                                \vdots & \vdots & \ddots & \vdots \cr
+                                \sigma_{n1} & \sigma_{n2} & \ldots & \sigma_{n}^2 \cr
+                                }\]
+                    </div>
+                    <p>
+                        <br><br><br><br><span style="font-size: 20px;"><b>Regularization Term</b></span>
+                        <br>위에서 다변량 정규분포를 알아보았으니 본격적으로 loss function을 파헤쳐보도록 하겠습니다.
+                        먼저 regularization term은 아래와 같습니다. 그리고 regularization term은 위에서 encoder와 연관 되어있다고 언급하였습니다.
+                    </p>
+                    <div class="equation">
+                        \[regularization\,term\,=\,D_{KL}(Q_{\theta}(z|x_{i})||P(z))\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">아래 VAE 코드 구조에서 보면 encoder를 거치면 \(x\) 데이터를 통해 평균과 분산을 만들어내는 것을 확인할 수 있습니다.
+                        이렇게 평균과 분산을 추출하는 것은 우리가 \(P(z|x)\)로 근사하는 것을 목표로 하는 \(Q_{\theta}(z|x_{i})\)의 분포를 정의하기 위함입니다.
+                        그리고 \(Q_{\theta}(z|x_{i})\)는 encoder로 구현이 되죠.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVmMNMwMhV29vaybrHEdJfVn9KBq4XQ5KLdiPXlTqle-fpIrxIt-MnNBHOtHQOFKtRPyPK-ZUU1nO-RZWM_OjOt57o-y3x3PN1hpqgDo1fbXd9HzElzP9b7esk0T4_ezbzHmOf7ya6oTdiik8b2Xx3DDoTYObncmxoS-PF-A_BzNolfAGS1borx8en7acpfS3El4Sqy9mBeQwsW8KZti_NzaMQBqJfck1MRwcT37BrnRzvIQuwYYTNNnDtN8WG_nlB_R1-CZfGnh3F-rHyxxI-HS4bss30onFe2ijiZhioFCcxUDvJZpjs-E6HmcbsnKfLOiagXdj7343eOOFnOxB1bd8f_TBHMAPpjxu5keN-GBDJ050kHuTjiJcEZ7AXnllkUNYzJzpYKXvEBB_xUpCznfSIqnXugfSCmD-AfyxxNaDRSGW-IfhlGdy05VYB2T1hbV9_DZktRZTlRlpgewGbBr0IlJCtlII2v3AxqiX0G6ZipvKj3wRg-H8uxbvHNX8a2u49r_ocA5qmKY4TFl0wI3bSxA85DFhamyKwIcMPCU0TQJXbRk6n12taca1aH0mRUF4UygkdQmNig_75jgWwsZXCbztPID7xob1_LuP0l4rNtoSywMTgzt7kmME0UaGrisKlYPpDtPzHPEf85rJHnN3mTaetgAsEMkaZOweg9QFmF_7nrRjCXq0ZnGoVfYyKA6JikBdG0VNMsJVpyPj9DMmNB7F0" style="width: 100%;">
+                        <p class="caption">VAE 구조</p>
+                    </div>
+                    <p>
+                        <br>여기서 두 가지 가정이 들어갑니다.
+                        <ol>
+                            <li>Encoder로써 구현되는 \(Q_{\theta}(z|x_{i})\)는 다변량 정규분포이며, 공분산 행렬은 diagonal covariance 행렬이다.</li>
+                            <li>우리가 찾고자 하는 prior \(P(z)\)는 다변량 정규분포이며, 평균이 0, 분산이 1인 diagonal covariance의 공분산 행렬을 가지는 분포이다.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 쉽게 설명하자면 \(Q_{\theta}(z|x_{i})\)와 \(P(z)\) 모두 다변량 정규 분포라는 것입니다.
+                        그리고 diagonal 공분산 행렬이라 가정하기 때문에 \(\sigma_{11}, \sigma_{22},\ldots,\sigma_{nn}\)을 제외한 모든 값이 0이라는 뜻입니다.</span>
+                        즉 위의 VAE 구조 그림에서 예시를 들자면, 평균과 분산의 결과가 4차원으로 나오기 때문에 4차원 다변량 정규분포라고 보는 것입니다.
+                        그리고 분산에 해당하는 4개의 값이 각각 공분산 행렬의 diagonal 값이 되는 것이고요.
+
+                        <br><br>즉 아래의 regularization term이 의미하는 바를 정리하자면 이렇습니다.
+                        "<span class="highlight" style="color: rgb(0, 3, 206);">Encoder를 통해 나온 평균과 분산 값을 가지는 다변량 정규분포 \(Q_{\theta}(z|x_{i})\)를 평균이 0, 분산이 1의 값을 가지는 다변량 정규분포 \(P(z)\)로 근사하자! 즉 이 두 개의 분포의 KLD를 줄여보자!</span>"
+                    </p>
+                    <div class="equation">
+                        \[regularization\,term\,=\,D_{KL}(Q_{\theta}(z|x_{i})||P(z))\]
+                    </div>
+                    <p>
+                        <br>그럼 우리는 두 개의 다변량 정규분포의 KLD를 구하는 식을 알아야 코드로 loss function의 일부인 regularization term을 작성할 수 있습니다.
+                        실제로 두 개의 다변량 정규분포의 KLD를 나타내는 수식은 복잡하지만 우리는 \(P(z)\)의 평균이 0, 분산이 1로 가정했기 때문에 아래와 같이 매우 간단해집니다.
+                        따라서 우리는 최종적으로 regularization loss를 아래 식으로 계산하면 되는 것입니다.
+                    </p>
+                    <div class="equation">
+                        \[regularization\,term\,=\,D_{KL}(Q_{\theta}(z|x_{i})||P(z))\,=\,\frac{1}{2}\sum_{i}(\mu_{i}^2+\sigma_{i}^2-\log{\sigma_{i}^2}-1)\]
+                    </div>
+
+                    <p>
+                        <br><br><br><br><span style="font-size: 20px;"><b>Reconstruction Term</b></span>
+                        <br>이제 마지막으로 reconstruction term에 대해 알아보겠습니다.
+                        먼저 reconstruction term은 아래와 같습니다. 그리고 reconstruction term은 위에서 decoder와 연관 되어있다고 언급하였습니다.
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,-\mathbb{E}_{z \sim Q_{\theta}(z|x_{i})}[\log{P_{\phi}(x_{i}|z)}]\]
+                    </div>
+                    <p>
+                        <br>우리는 위의 식을 expectation과 적분 사이의 관계 정의에 따라 아래와 같이 다시 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,-\mathbb{E}_{z \sim Q_{\theta}(z|x_{i})}[\log{P_{\phi}(x_{i}|z)}]\,=\,\int{Q_{\theta}(z|x_{i})\log{P_{\phi}(x_{i}|z)}}\,dz\]
+                    </div>
+                    <p>
+                        <br>위의 VAE가 직면한 문제점에 대해서 설명을 할 때도 언급한 부분이지만, 모든 \(z\)에 대해서 적분을 하는 것은 불가능하고 intractable 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 이러한 문제를 해결하기 위해 도입한 것이 바로 Monte Carlo Estimation 기법입니다.
+                        Monte Carlo Estimation은 무작위로 대량의 데이터를 추출하여 함수의 값을 수리적으로 근사하는 방법입니다. 가장 유명한 예시로는 \(\pi\) 값을 구하는 것이 있죠.</span>
+                        다시 본론으로 돌아와 \(x_{i}\)의 생성에 관여하는 모든 \(z\)에 대해 영향을 loss function에 반영해야하지만 불가능 하다고 말하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 모든 \(z\)를 고려하는 대신에 충분히 많은 \(z_{1},z_{2},\ldots,z_{n}\)를 뽑아서 \(\log{P_{\phi}(x_{i}|z_{1})},\log{P_{\phi}(x_{i}|z_{2})},\ldots,\log{P_{\phi}(x_{i}|z_{n})}\)의 값을 n개 구하고 이 값들의 평균값을 최종 \(\log{P_{\phi}(x_{i}|z)}\)로 사용하면 전체 \(z\)를 고려한 효과를 낼 수 있다는 것이죠.</span>
+                        즉 전체 \(z\) 대신 충분히 많은 \(z\)를 sampling 하여 전체 \(z\)의 효과를 도모하는 것이 바로 Monte Carlo Estimation이고 이를 반영한 식은 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,-\mathbb{E}_{z \sim Q_{\theta}(z|x_{i})}[\log{P_{\phi}(x_{i}|z)}]\,\approx\,\frac{1}{n}\sum_{j=1}^{n}\log{P_{\phi}(x_{i}|z_{j})}\]
+                    </div>
+                    <p>
+                        <br>하지만 학습 시간을 고려한다면, Monte Carlo Estimation도 결코 빠른 작업이 아닙니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 여기서 하나의 더 가정이 들어가는데, 그것이 바로 n개의 z를 sampling 하지 말고 하나의 z만 sampling하여 사용하기로 합니다.
+                        그리고 이렇게 추출한 1개의 z를 이제 전체 z를 사용했을 때 얻는 효과와 동일하다고 가정하는 것이지요.</span>
+                        즉 Monte Carlo Estimation의 sampling을 충분히 많은 수인 n이 아니라 1로 한 것과 같은 말입니다.
+                        즉 reconstruction term을 아래와 같이 다시 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,-\mathbb{E}_{z \sim Q_{\theta}(z|x_{i})}[\log{P_{\phi}(x_{i}|z)}]\,\approx\,\frac{1}{n}\sum_{j=1}^{n}\log{P_{\phi}(x_{i}|z_{j})}\,=\,\log{P_{\phi}(x_{i}|z)}\]
+                    </div>
+                    <p>
+                        <br>이때까지 중간 정리를 해보자면 reconstruction loss를 구하기 위해 발생하는 첫 번째 문제인 전체 z를 고려하는 것이 불가능 하기 때문에, 이에 대한 해결책을 Monte Carlo Estimation을 이용하여 해결하려 하였습니다.
+                        하지만 Monte Carlo Estimation도 오래 걸린다는 두 번째 문제를 해결하기 위해 n개의 z를 sampling (Monte Carlo Estimation) 하는 대신, 1개의 z를 sampling 하고 이것이 전체를 반영한다고 가정하여 해결하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 여기서 마지막 문제점이 발생합니다. 바로 이렇게 z를 sampling 하는 것이 미분 불가능하여 backpropagation이 불가능하다는 것입니다.</span>
+                        이 문제점은 딥러닝에 있어서 학습이 불가능하다는 문제점이 있으며(gradient descent가 불가능하기 때문) 가장 치명적인 문제점입니다.
+                        이 문제점을 해결하기 위해 사용한 기법이 본 문단에서 가장 중요하게 다루는 부분인 reparameterization trick입니다.
+                    </p>
+                    <p>
+                        <br><b>&#8251; Reparameterization Trick</b>
+                        <br>우리는 encoder를 통해서 \(z\)의 분포를 학습하였습니다.
+                        따라서 우리는 아래와 같이 \(z\)를 encoder를 통해 학습한 다변량 정규분포에서 sampling하여 decoder로 넣어주기만 하면 됩니다.
+                    </p>
+                    <div class="equation">
+                        \[z \sim N(\mu, \Sigma)\]
+                    </div>
+                    <p>
+                        <br>하지만 우리가 \(z\)를 sampling 하는 과정에서 미분 불가능하다는 문제점이 발생합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">왜냐하면 우리가 모델을 학습할 때 매번 변하는 것은 바로 학습 데이터입니다.
+                        즉 모델에 넣을 데이터는 바뀔 수 있지만, 모델은 한 번 학습이 되면 parameter가 고정되어 같은 데이터에 한에서는 항상 같은 결과만 내주어야한다는 것이죠.
+                        하지만 이렇게 모델 내부에 random sampling과 같은 과정이 들어가버리면, 같은 데이터지만 모델에 넣어 나온 결과를 보면 매번 바뀌게 될 것입니다(매번 z가 random sampling 되기 때문).
+                        즉 모델 자체가 계속 변하게 되고 이는 모델이 stochasticity를 가진다고 표현합니다.</span>
+                        즉 인풋으로 넣을 데이터는 계속 바뀌어도 되고(stochasticity 해도 되고), 모델은 그러면 안된다는 것이죠.
+
+                        <br><br>즉 decoder 부분은 \(z\)가 sampling 된 이후의 모델이기 때문에 backpropagation이 가능하지만, encoder parameter를 loss를 바탕으로 업데이트하는 과정에서 sampling이라는 행위에 대해 좌지우지되는 stochastic한 부분이 추가되는 게 문제인 것입니다.
+                        이 부분을 아주 현명하게 reparameterization trick을 이용하여 해결하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">바로 평균이 0, 분산이 1인(다변량 정규분포라서 identity matrix I로 표현) 다변량 정규분포에서 noise를 sampling 한 후, 이를 encoder에서 구한 평균과 분산을 이용하여 더하고 곱해서 사용하는 것입니다.</span>
+                        이 부분은 수학적으로 \(N(\mu, \Sigma)\)에서 sampling하는 것과 동일하고, backpropagation이 가능해지게 만들어줍니다.
+                    </p>
+                    <div class="equation">
+                        \[z \sim N(\mu, \Sigma)\]
+                        \[z\,=\,\mu+\varepsilon\times\sigma\,(\varepsilon \sim N(0, I))\]
+                    </div>
+                    <p>
+                        <br>다시 reconstruction term으로 돌아와서 보겠습니다.
+                        우리는 reparameterization trick을 통해 \(z\)를 sampling 할 수 있게 되었고 decoder로 보낼 수 있게 되었습니다.
+                        그리고 최종 reconstruction term은 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,\log{P_{\phi}(x_{i}|z)}\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 우리는 여기서 decoder의 확률분포를 가정해주어야합니다.</span> 
+                        먼저 decoder가 베르누이 분포(Bernoulli distribution)를 따른다고 가정해보겠습니다.
+                        그럼 reconstruction term은 아래와 같이 쓸 수 있습니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 식은 cross entropy를 의미하는 식으로 바뀌고, decoder가 베르누이 분포를 따른다고 가정하면 binary cross entropy loss function을 사용하면 됩니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,\log{P_{\phi}(x_{i}|z)}\,=\,\log{(x'_{i})^{x_{i}}(1-x_{i}')^{1-x_{i}}}\,=\,x_{i}\log{x'_{i}}+(1-x_{i})\log{(1-x'_{i})}\]
+                        \[(x'_{i}:\,decoder\,output)\]
+                    </div>
+                    <p>
+                        <br>이제 decoder가 Gaussian 분포(정규분포)를 따른다고 가정해보겠습니다.
+                        그럼 reconstruction term은 아래와 같이 쓸 수 있습니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 식은 mean squared error (MSE)를 의미하는 식으로 바뀌고, decoder가 정규분포를 따른다고 가정하면 MSE loss function을 사용할 수 있습니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[reconstruction\,term\,=\,\log{P_{\phi}(x_{i}|z)}\,=\,\log{N(\mu_{i},\sigma_{i}^{2})}\,=\,-(\frac{1}{2}\log{\sigma_{i}^{2}}+\frac{(x_i-\mu_i)^2}{2\sigma_i^2})\]
+                        \[\therefore reconstruction\,term\,=\,\log{P_{\phi}(x_{i}|z)}\propto (x_i-\mu_i)^2\]
+                    </div>
+                    <p>
+                        <br>따라서 우리는 아래와 같은 결론을 내릴 수 있습니다.
+                        <br><br><b>결론</b>
+                        <ul>
+                            <li>Loss는 regularization, reconstruction term으로 이루어져있다.</li>
+                            <li>Regularization term은 두 개의 다변량 정규분포의 KLD 식을 이용하여 loss function 코드를 구현할 수 있다.</li>
+                            <li>Reconstruction term에서는 Monte Carlo Estimation과 reparameterization trick을 이용하여 backpropagation이 가능하며, decoder를 베르누이 분포라고 가정하면 cross entropy, 정규분포라고 가정하면 MSE 식을 사용하여 코드로 구현할 수 있다.</li>
+                        </ul> 
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>VAE 장단점</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <b>장점</b>
+                        <ul>
+                            <li>GAN (generative adversarial network)에 비해 학습이 안정적(수학적으로 접근했기 때문).</li>
+                            <li>데이터 생성 뿐만이 아니라 잠재 변수(latent variable)도 함께 학습이 가능함.</li>
+                        </ul>
+                        <br><b>단점</b>
+                        <ul>
+                            <li>생성된 데이터가 흐릿한(blur) 경향이 있음(평균값 형태로 데이터가 생성됨).</li>
+                            <li>실제 잠재 변수(latent variable)가 존재하는 분포를 다변량 정규분포로 가정하였지만, 실제로 그렇지 않은 경우도 존재할 수 있음.</li>
+                            <li>Reparameterization trick이 모든 경우에 적용 가능하지 않음.</li>
+                        </ul>
+                        <br>아래는 VAE 논문입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1312.6114.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">VAE 논문</a>
+                    </div>
+                    <p>
+                        <br><br>VAE는 GAN이 등장하기 이전에 생성모델로 각광을 받았었습니다.
+                        현재는 GAN이 여러 분야에 적용되고 있지만, VAE는 이러한 GAN과 같은 생성 모델이 등장하기 이전 생성 모델이라는 초석을 마련했다는 것에 의의가 있는 모델입니다.
+                        따라서 딥러닝 역사에 있어서 중요한 모델이기도 합니다.
+                        다음글에서는 VAE의 구현 코드에 관해 살펴보도록 하겠습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#VAE&emsp;#ReparametrizationTrick&emsp;#생성모델&emsp;#ELBO
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('첫 게시물 입니다.\n\nThis is the first post.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('VAE2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Variational Autoencoder (VAE) 구현</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
