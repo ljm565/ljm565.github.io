@@ -188,7 +188,7 @@ lineMaking("code1", 52);
                             <li>37번째 줄: 잠재 변수가 존재하는 분포의 평균</li>
                             <li>38번째 줄: 잠재 변수가 존재하는 분포의 log 분산</li>
                             <li>39번째 줄: log 분산을 표준편차로 변환</li>
-                            <li>40번째 줄: 평균이 0, 분산이 1인 표준 정규분포에서 noise 하나 sampling</li>
+                            <li>40번째 줄: 평균이 0, 분산이 1인 표준정규분포에서 noise 하나 sampling</li>
                             <li>42번째 줄: reparameterization trick을 통해 sampling된 잠재 변수, 평균, log 분산 반환</li>
                         </ul>
                         
@@ -254,9 +254,61 @@ lineMaking("code2", 10);
 
                     </p>
 
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>VAE 결과 및 t-SNE를 통한 잠재 변수 가시화</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>VAE 결과</b></span>
+                        <br>위에서 구현한 VAE 모델이 잘 학습이 되었다면, 모델은 sampling한 잠재 변수 z에 대해서 데이터를 원래 가지고 있는 데이터 처럼 비슷하게 생성을 해낼 것입니다.
+                        그렇다면 VAE를 통해 생성된 이미지의 결과와 실제 인풋으로 들어간 이미지를 비교해보겠습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 결과는 학습에 전혀 사용되지 않은 test 데이터의 결과입니다.
+                        아래 결과에서 왼쪽은 VAE에 들어간 인풋 데이터, 오른쪽은 sampling 된 잠재 변수 z로 부터 생성된 데이터입니다.
+                        Autoencoder 구현 글에서 나온 결과와 비교했을 때 VAE의 결과가 더 blur한 것을 확인할 수 있습니다.</span>
+                        이는 어쩔 수 없이 평균값의 형태로 나오는 vanilla VAE의 한계라고 볼 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW4Ir-BBzvcCG3FMZMj6bwvrYWSs_jChT7kHBJiHhqYboWjwbeiRtpit_X7Q-ElHNF6FBQuResgFub1BjrOdfaeyra1Y36WqeuOZ8EBGxWDjuenMCakqDXs-ffGJPdSHoa4EcTXuHkuK5lrUorZEPaeplpdoZlo4vEfMnQxhPMYi5CVaWoBWeK09T5hUW_jEwZtjxkuWY1s3MOFNdl_XrMrmYSGSOLBW8wIGWTYc1U5N1LhvR2_BncHwAj2p7GFrbwmSivXGr74UYPJKGgs-xKTgy4JcWcNFlAX0jBB6ggqrfNRnChfhIwT-NU6AWfYy5TYUCfN53HK9v8ctsKDzdtViUg9Eb0CyCqoW9rKyCEcoG4ZPxC9VlDEMpE5VMFC4z0FpQeLvn3ivPMYQtkoV5HaFQ-Qa4OsyKvsQMLK2NDnFYzVxStowQztVQZsIAurlz6ACFyMgY5tdn3PdyGIWNOnDK-iKWCppLkFgEznIzxIOxKslLD2vDNL8FfnQ82tdeb9DD9HvB3oG178lZ0peTtD2SCHLQCNbIkKJv-XMuNTQJ7kDkxS51lUiZhPLdyZhx8fT7V2VwGAHjZuf5pyRNL_1-JUlisuh5iMjJTj70dpZNoRsi2scCUNcAHpTJpx61pmS96V_0G_jMwuTP2UicssbifVBkmC7hOnlAgPdbD2M7M0lS0ZmnBN9YA-IEXjKwjNLFmqGlSk2NNONA10lvDxG8ZOgwA" style="width: 40%;">
+                        <p class="caption">VAE 결과</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>잠재 변수 z의 분포 가시화</b></span>
+                        <br>실제 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 구현되어있는 코드에서 잠재 변수(latent variable)의 차원이 10차원으로 구현되어있습니다.
+                        우리는 10차원의 잠재 변수를 가시화할 수 없기에 t-SNE를 이용하여 2차원으로 축소하여 가시화 한 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">VAE는 autoencoder와 다르게 데이터 생성을 하기 위해 잠재 변수 z의 분포를 가정하고 학습하는 것이기에, 잠재 변수들의 분포가 좀 더 명확히 구분되어있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUCsN6RmOsVY73yCvDoD2OIHlPDE93q4PUqcr8sg73MbLe3QmGqYj4eMIU96aSb7wZ2fB8_b7FQFheFZ5bTSerOjIu70VS_KvAMnGVNE1Zim9PSjaviGe_UfAIZRwsAMBViHbNRYSY2mE8Osmhdvny_XjVAN7eruPhOiLPuCNfBk4qyHFtT4UIeC8UdQiHj2ZqehF1whusJsKOdJBmrqke0vDwPPX_2CfIOYcx2AgAqgL8J2Jb5lMjCd8Wxk649A7tVPxoKPOCOEL3Mgjir6niPhWlP37zsS1q0u6HNAJ1IJCPQoEoCQc6yhRvYI2R9QVSiPSXSyJFblxE5TsAFBqYmqYCsruXdGjU0yHEcpap_YjEQd6Qh_UN9vDrOFvoGPAwkCyTxXJJ7G-KkfU9uBYmb_IojHUUPzt-zeXs1pu6b5TeAdpC3E-XhLamgyifAz9T0AftsaFl5YhMOe0_wP_rQyzEsHq9bSzb1zLgAXxOysKkot5G3K9UxHvT2AhSkS8fGIEkKNHGU2jbIfjMHAaXmaSpkPvWOQ6-lK8h_XeVcdfrqeN7XX5rLE--Cz7ETeIeX42OOWud15W7L8KdHcbSZsKcnQvl6EZmBMKKLCEKA0DlbGBzxO_jtOqr0gXzxdNh-6rML4gjnc7wiXwwgl69jsd3VYiev60RjXlOXsj8r3UPV_KsJ3op0xk5tjdEMRT7n9OnyZquM4nMXah5jTu5D8GG378U" style="width: 70%;">
+                        <p class="caption">잠재 변수 가시화</p>
+                    </div>
+                    <p>
+                        <br>위에서 가시화한 잠재 변수는 test 데이터를 모델의 encoder에 통과시켜 나온 평균과 표준편차를 이용하여 z를 sampling한 결과입니다.
+                        이때 sampling 하기 위해 추출해야하는 표준정규분포를 따르는 노이즈는 각 데이터마다 다르게 random 추출을 통해 나온 값을 사용하였습니다.
+                        자세한 코드는 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>의 train.py의 test 함수를 살펴보시기 바랍니다.
+                    </p>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Walking in the latent space</b></span>
+                        <br>이제 잠재 변수가 변화함에 따라 어떻게 생성되는 데이터가 바뀌는지 살펴보겠습니다.
+                        이 부분은 논문에서 walking in the latent space라고 표현된 부분입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 test data를 통해 나오는 잠재 변수 z를 숫자별로 다 평균을 내어줍니다.
+                        따라서 최종적으로 0의 잠재 변수 평균값, 1의 잠재 변수 평균값 이렇게 하여 숫자 9까지 총 10개의 잠재 변수 값을 가지고 두 개의 잠재 변수를 선택하여 interpolate 해보겠습니다.</span>
+                        아래는 3의 잠재 변수 평균값과 7의 잠재 변수 평균값을 interpolate 한 값들에 대해 생성되는 데이터의 변화를 살펴본 결과입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweURXZIwe3EIsX7EgGWzaU0kPXNnYFcdZsm9L9mYhTo10wc31QJ-nvQG8KBLirrJ7D1PYQi3cua7f3R8T-XNP_-HdDpisgHMcht_Wxn8iFsucUsTcPdmLTJDhylY-ERQv-O9iui8ph0yfU6vZCATBVVg13yXdxiFvJICY887FSHBrkBgJFPQusrlWYqEolJI5vls8YhJotyEeRd0PuNVfMLaBK7b0A3DjmrxjJwRzGqmVpJMTySnm2Kyb2YdEQ12qDcf0fFk8JW4ojoTMn2-QJ-vfe6D9c3aAEpIqxRWVKaCHe-FN6Mh_FZtZBLbkS7o8AkWxYMnSdE63lKBpcMuKz8iRcRr3CLAxRbzay5X-5XpHBGYWdOm8tpLkfRwk_oWqumnTa_ZLklYTri3fcA8ihk4LMhT2CJc6PDocR6crKWCxaTbrERfHhH0nl6dMOF8bTj2PTzeQH3iZTCPW0PqVZVsozCtdEY1swfU8sxkPZ-4fUniuqoHE4Y-TigkU4ZXEgcD5f7XE2TSdmbGKyXV6378IDmbRiTSZJZjrYm6yBRvzORK0Tbg3AcPs3HqJxilg1-uUFPZThbaQ_J6pJyZZkjQWKIz0vya68ZbC4ANDrdW9b_FBn43G0THJTmxqxGWyFa5qib4Pdwdc4XtYfgOdKBqkv8_CG_3wCZ1Iq93w3p330n8DzyJnZLN6CsP8dYpSbUOibs-D8HhUNrke2A79HBgHFmlawo" style="width: 100%;">
+                        <p class="caption">Walking in the latent space</p>
+                    </div>
+                    <p>
+                        <br>3과 7의 잠재 변수들 사이를 interpolate 하여 새롭게 만든 잠재 변수를 이용하여 데이터를 생성한 결과, 데이터의 모습이 3에서 7로 서서히 바뀌는 것을 볼 수 있습니다.
+                        자세한 코드는 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>의 train.py의 test 함수를 살펴보시기 바랍니다.
+                    </p>
                                        
                     <p>
-                        <br><br>지금까지 vanilla VAE 구현 코드와 잠재 변수(latent variable) 가시화를 해보았습니다.
+                        <br><br><br>지금까지 vanilla VAE 구현 코드와 잠재 변수(latent variable) 가시화를 해보았습니다.
                         학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
                         다음에는 VAE와 동일한 생성모델이자, 가장 많이 응용되고 있는 모델 중 하나인 generative adversarial network (GAN)에 관하 이야기 해보도록 하겠습니다.
                     </p>
