@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Variational Autoencoder (VAE) 구현</title>
+        <meta name="description" content="Vanilla variational autoencoder (VAE) 구현 모델을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Variational Autoencoder (VAE) / 2. Variational Autoencoder (VAE) 구현</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweWUi3lCQqPs4NSRWSSmz9ArerhTv5F2GhAOXCao91VJL4VlLRI6bS9CYujGyqNo-eQiJVyzyAX9SEdkPaVASWmcLY46LR5pdStb7f8i4UMyp_E6XWg7y_-3wiS5wreQQ7L6zPNLo_BqLAUjRuQkVUzBoRHc6DyLYYHIGVDFjJCUf3Pvij4xRXGrePqxovvtr6eViBW9hqRjnXCQVk7Gg7YGsUuIkMtgF0Q2jkibc8k9xV36U5nLStkE-OgPDbPKxde248I8evhZiMpjBxjH3PStLOz89Zz_XRqVdPfS6wiyoLSwqiKQwftrMgZT_3VBlWGit6U1-GuzHNCLgh4P5Sn3sPIwb1Wf4zypMbhCJJQYJdZcFADKjF93P6vyWg2eXx-q8TqaV0WlZqfvxhadiGeNf9qRzpWUjEcXJuebRb62HqG0qvlGv-5f9JehiuNotUB4MwwTc-6GsvlNpI7CEggoceXkaGkyufvOQgm_SXnbbasmx8Kdr_LfRVKEcTJTHT5iXbgJqntmyV4fBjiwRNGuAzM599_6lO2zSQJ-00_s0I31hbsJU6XTmsfA1whUEvoIHIn46e6wsAw_PaiiyHwXm5Oe5-9XN4C2jsKDTLfNq5BzxUXSepuCqWnvSqEDEotqzKKKnTN5r3bZkcQfFm-ywBE17TbRW_2Cupq8wRggM_clp-Pbi4PssB6aNzNUVnbYR3DwDlko8fCNCjTa9pICnwlaRug);">
+                    <div>
+                        <span class="mainTitle">Variational Autoencoder (VAE) 구현</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.03.09</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 variational autoencoder (VAE)에 대해 설명하였습니다. 이번글에서는 linear layer로 이루어진 vanilla VAE의 구현에 대해 설명하도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">구현은 python의 pytorch를 이용하였습니다. 그리고 VAE 구현 뿐 아니라, t-SNE를 통한 잠재 변수(latent variable) 가시화 및 잠재 변수들이 변함에 따라 생성되는 데이터가 어떠한지 살펴보도록 하겠습니다.</span>
+
+                        <br><br>그리고 VAE에 대한 글은 <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>,
+                        t-SNE, UMAP에 관한 글은 <a onclick="pjaxPage('ManifoldLearning2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>를 참고하시기 바랍니다.
+                        이렇게 구현한 VAE의 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현과 잠재 변수 가시화에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/VAE" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">VAE GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">VAE 구현 및 잠재 변수(latent variable) 가시화</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Vanilla VAE 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 기본적인 vanilla VAE의 구현 코드를 살펴보겠습니다.
+                        코드는 pytorch로 작성 되었으며, vanilla VAE의 전체적인 구조는 단순히 linear layer을 여러개 쌓은 모습입니다.
+                        그리고 loss function과 reparameterization trick 함수를 추가적으로 구현을 해주어야합니다.
+                        한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">VAE</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">VAE</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.<span class="var">height</span>
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.<span class="var">width</span>
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.<span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">latent_dim</span> = <span class="var">config</span>.<span class="var">latent_dim</span>
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.<span class="var">dropout</span>
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+        
+        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>//<span class="num">2</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+        )
+        <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">latent_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>//<span class="num">2</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>//<span class="num">2</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">color_channel</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )
+        <span class="var">self</span>.<span class="var">fc_mu</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>//<span class="num">2</span>, <span class="var">self</span>.<span class="var">latent_dim</span>)
+        <span class="var">self</span>.<span class="var">fc_log_var</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>//<span class="num">2</span>, <span class="var">self</span>.<span class="var">latent_dim</span>)
+
+    
+    <span class="reserved">def</span> <span class="method">reparameterization_trick</span>(<span class="var">self</span>, <span class="var">encoded</span>):
+        <span class="var">mu</span> = <span class="var">self</span>.<span class="var">fc_mu</span>(<span class="var">encoded</span>)
+        <span class="var">log_var</span> = <span class="var">self</span>.<span class="var">fc_log_var</span>(<span class="var">encoded</span>)
+        <span class="var">std</span> = <span class="clazz">torch</span>.<span class="method"></span>(<span class="num">0.5</span>*<span class="var">log_var</span>)
+        <span class="var">eps</span> = <span class="clazz">torch</span>.<span class="method">randn_like</span>(<span class="var">std</span>)
+
+        <span class="return">return</span> <span class="var">mu</span> + <span class="var">std</span>*<span class="var">eps</span>, <span class="var">mu</span>, <span class="var">log_var</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">x</span>)
+        <span class="var">z</span>, <span class="var">mu</span>, <span class="var">log_var</span> = <span class="var">self</span>.<span class="method">reparameterization_trick</span>(<span class="var">output</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">z</span>)
+
+        <span class="return">return</span> <span class="var">output</span>, <span class="var">mu</span>, <span class="var">log_var</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 52);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>모델 초기화</b></span>
+                        <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
+                        <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
+                            <li>6, 7번째 줄: hidden layer의 차원 및 sampling 할 잠재 변수(latent variable)의 차원</li>
+                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율</li>
+                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
+                            <li>11 ~ 19번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * hidden dim//2)의 크기를 가짐</li>
+                            <li>20 ~ 31번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim//2), 두 번째 hidden layer는 (hidden dim//2 * hidden dim)의 크기, 세 번째 hidden layer는 (hidden dim z * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">sampling 한 잠재 변수를 가지고 실제 데이터 생성하는 부분</span>)</li>
+                            <li>32 ~ 33번째 줄: encoder를 통해 나온 결과를 넣는 부분, 각각의 레이어를 통해 나온 최종 결과는 평균, log 분산을 의미하며 레이어는 (hidden//2 * latent dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수가 존재하는 분포를 가정하고 학습하는 부분</span>)</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Reparameterization Trick</b></span>
+                        <br>다음은 reparameterization trick 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분에서는 encoder를 거쳐서 나온 결과가 잠재 변수가 존재하는 분포를 가정하기 위해 평균과 log 분산을 구하는 레이어를 통과합니다.</span>
+                        그리고 reparameterization trick을 통해 잠재 변수 z를 sampling 합니다.
+                        <ul>
+                            <li>37번째 줄: 잠재 변수가 존재하는 분포의 평균</li>
+                            <li>38번째 줄: 잠재 변수가 존재하는 분포의 log 분산</li>
+                            <li>39번째 줄: log 분산을 표준편차로 변환</li>
+                            <li>40번째 줄: 평균이 0, 분산이 1인 표준 정규분포에서 noise 하나 sampling</li>
+                            <li>42번째 줄: reparameterization trick을 통해 sampling된 잠재 변수, 평균, log 분산 반환</li>
+                        </ul>
+                        
+                        <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
+                        <br>다음은 forward 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분은 모델을 정의 하고나서 실제로 데이터가 학습할 때 직접적으로 거치게 되는 부분입니다.</span>
+                        Pytorch의 모델을 정의할 때 nn.Module을 상속 받기 때문에 자동으로 데이터가 forward라는 method를 거치게 됩니다.
+                        그리고 pytorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
+                        <ul>
+                            <li>46번째 줄: 데이터가 들어왔을 때 batch size를 저장</li>
+                            <li>47번째 줄: 데이터의 크기를 변화<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환)</li>
+                            <li>48번째 줄: encoder를 거쳐 latent variable 추출<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출)</li>
+                            <li>49번째 줄: encoder를 거쳐 나온 결과를 reparameterization_trick 함수로 넣어서 잠재 변수가 존재하는 분포의 평균, log 분산을 구하여 잠재 변수 샘플링</li>
+                            <li>50번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원레의 데이터와 유사하게 복구<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구)</li>
+                            <li>52번째 줄: decoder의 복구 결과와 잠재 변수를 t-SNE로 가시화하기 위해 학습된 잠재 변수 분포의 평균, 표준편차와 생성된 데이터를 반환</li>
+                        </ul>
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>VAE Loss</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        VAE의 모델을 구현하였으니 학습을 하기 위한 loss function을 구현해보겠습니다.
+                        <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서도 설명했듯이, <span class="highlight" style="color: rgb(0, 3, 206);">VAE의 loss function은 크게 encoder와 관련된 regularization term, decoder와 관련된 reconstruction term으로 이루어져있습니다.</span>
+                        자세한 코드는 아래에서 확인해보겠습니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">decoder_loss</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>(<span class="var">reduction</span>=<span class="str">'sum'</span>)
+
+<span class="reserved">def</span> <span class="method">VAE_loss</span>(<span class="var">x</span>, <span class="var">output</span>, <span class="var">mu</span>, <span class="var">log_var</span>, <span class="var">decoder_loss</span>):
+    <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+    <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
+
+    <span class="var">BCE_loss</span> = <span class="var">decoder_loss</span>(<span class="var">output</span>, <span class="var">x</span>)
+    <span class="var">KLD_loss</span> = <span class="num">0.5</span> * <span class="clazz">torch</span>.<span class="method">sum</span>((<span class="clazz">torch</span>.<span class="method">square</span>(<span class="var">mu</span>) + <span class="clazz">torch</span>.<span class="method">exp</span>(<span class="var">log_var</span>) - <span class="var">log_var</span> - <span class="num">1</span>))
+
+    <span class="return">return</span> <span class="var">BCE_loss</span> + <span class="var">KLD_loss</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 10);
+</script>
+                    <p>
+                        <ul>
+                            <li>1번째 줄: deocoder를 Bernoulli distribution (베르누이 분포)으로 가정하였기 때문에 binary cross entropy (BCE) loss를 사용(<span class="highlight" style="color: rgb(0, 3, 206);">redunction sum을 하여 평균값을 내지 않고 loss를 더하도록 설정</span>)</li>
+                            <li>4, 5번째 줄: 데이터가 들어왔을 때 batch size를 저장하고, 데이터 크기를 변환</li>
+                            <li>7번째 줄: decoder와 관련된 reconstruction loss 부분</li>
+                            <li>8번째 줄: encoder와 관련된 regularization loss 부분(Kullback-Leibler divergence 계산 식), loss를 mini batch에 따라 평균내지 않고 합하여 loss 계산</li>
+                            <li>10번째 줄: 최종 전체 loss 반환</li>
+                        </ul>
+
+                    </p>
+
+                                       
+                    <p>
+                        <br><br>지금까지 vanilla VAE 구현 코드와 잠재 변수(latent variable) 가시화를 해보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        다음에는 VAE와 동일한 생성모델이자, 가장 많이 응용되고 있는 모델 중 하나인 generative adversarial network (GAN)에 관하 이야기 해보도록 하겠습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#VanillaVAE&emsp;#t-SNE
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('VAE1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Variational Autoencoder (VAE)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('마지막 게시물 입니다.\n\nThis is the last post.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
