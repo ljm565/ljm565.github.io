@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Generative Adversarial Network (GAN)</title>
+        <meta name="description" content="Generative Adversarial Network (GAN)에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Generative Adversarial Network (GAN) / 1. Generative Adversarial Network (GAN)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweXu9NjTVhcIi33u888vmHBDgSfhvaPpA6Tw1fjpyMHIJ4izkG2KJieQqOATfCclxJf8hQI_yR6-N74lZs9KLP7TCkdc4o__430eqdtJKUAZY4MOzV4ygg_HPPC0SPN7lDSMLFaMEKJxb0pDmAkbfasFkFPV7Vr-hZpJDTfodHNViOV5WVDq7KdcjTMsMHcC-9c922JUhW23OMBeDa9vgAofPNrdsfHw_iuCys1T7zkO80r5GbRdw0IycLtpumAb1C5ysiCmp25JfVhd2DZ2ifhyoPGdnEhqScJekw4rV0tPLO4B4ohS1y2NaIstT9FjehiM1t5QCaBTceKS2FA9BkyEi6WLm_iwN39SNvnFRK5YBRH2hqnr4auoNt9AEUnDsHOzKOyLhecf7HVJmU4BQqFYe_V9zXFbpZDaajxsknOkVKbSZ2q8Oj1VjKTeTsGZaFXbTKWgeriz2jzJfhPYFsBmYC3BBkuLN2CT1pLeOq0AREc3lYIPSQQbYUwH5jBXYODDPabqQBSAQMlOHYmeXUYuQKPXsyb0pZoVAJraIgP7CXXPi4dYAPXweNZ2d35mhoYc7lwE2hWILfS6-Vm4JIqCE3MV9F9ESUnCEf7l3tnCw_WQGTq1M_uztha2grB6BH6gK8W1Ujfaxv_aRL_NHO9y7OVERvVJlfGjm425rlAHHF9dFySH1U7_cNm4Ffgyn2fPAmtZU9OSKGlqf2nTgjcVWCfMaVQ);">
+                    <div>
+                        <span class="mainTitle">Generative Adversarial Network (GAN)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.03.22</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>딥러닝 이야기의 세 번째 주제는 생성 모델(gerative model) 중 가장 유명한 Generative Adversarial Network (GAN) 입니다.
+                        <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 설명한 variational autoencoder (VAE) 또한 초창기 생성 모델로써 딥러닝이 발전하는 데 중요한 기여를 했습니다.
+                        하지만 오늘 소개할 GAN이 등장하면서 생성 모델의 패러다임을 바꿔놓았고, 가장 활발히 연구되고 실생활에 사용되는 모델로 자리잡았습니다.
+
+                        <br><br>그리고 GAN VAE만큼은 아니지만 수식이 조금 등장하는 것을 염두해두고 읽으시면 좋을 것 같습니다(VAE의 설명은  <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고 바랍니다).
+                    </p>
+
+
+
+                    <h1 class="subHead">Generative Adversarial Network (GAN)</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>생성 모델</span><br>
+                        <span>Generative Model</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        VAE를 설명한 <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서도 설명한 내용이지만, 내용을 다시 가져와 한 번 더 설명해보겠습니다.
+                        <br><br>위에서 잠깐 GAN은 생성 모델(generative model)이라고 하였습니다. <b>그럼 생성 모델은 무엇일까요?</b>
+                        생성 모델은 말 그대로 데이터를 생성할 수 있는 모델을 뜻합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 학습한 데이터를 똑같이 복사하는 것이 아니라, 학습한 데이터를 바탕으로 실제로 있을 것 같은 데이터를 스스로 생성하는 모델입니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">생성 모델의 가장 중요한 목적 중 하나가 바로 학습 데이터를 통해 학습 데이터가 존재하는 데이터 분포를 찾는 것입니다.</span>
+                        단순히 학습 데이터를 복사 붙여넣기 하여 생성하는 모델이 아니라는 뜻입니다.
+
+                        <br><br>아래 그림을 보면 개와 고양이 데이터가 존재하는 분포는 아래처럼 구분할 수 있습니다.
+                        이러한 데이터 분포는 우리가 가지고 있는 개와 고양이 사진으로부터 학습할 수 있습니다. 하지만 생성 모델은 이러한 데이터 분포 파악을 넘어서서 데이터 분포 내에 존재하는 새로운 데이터를 생성하는 모델인 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 생성 모델은 이렇게 학습 데이터를 바탕으로 데이터가 존재할만한 분포를 파악하고, 실제론 학습 데이터에는 없지만 존재할만한 데이터를 형성하는 모델인 것이지요.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWIwXjcRkm_jDiibFd2ETMwPnKWdDtSUP6iaCdMUUP6B2xwic036IMSkASNvT9Dfbjzzlx0BKQkPVtrETns_-jsSosGbwkn3hk5lcUXdf7NK-qUrSXL-DOFlYKsorA79YJpwnFR1E0a4fMDDi8PR342iPV8i6LexGpaK6RW80YYNtet9qa3ebelSzhBGRBkkVfMj_CYt_cMWBX8xQdeyVebCajCS6g2HGALqirXykd1CGlE-42iXTwarQX6PAvTs-I3deb3ztX35Du_bjF1DGa43_Mz4oW00Kii6qSZRXfi9Ujw9W6ucARDX1_fXqgNQVeDn5TXLhPckjlkKBzPRlaLLVUMvSxSupGr75viQQ9H6CMZerRoTyvAxQxhzgdHNn8_8xmUIVi_lCNX7lNAbUgl13r4-HZepYqHX4k3lKIxCOSfqlDPR3NFAWFPozUjgCquaXEZ3iEBAZtbDzBN-wFykWnPfSXttvUdYjMfQGEQe7fP6WYR619tfFx-ynYO1V9PXziB6ah4fRaxAjfkCvFiadDtZ05hk1YK4DdY5lYcQ8rwV66p4G3jeKsV7f5FH60qQm39v_LUU5ARgJ69vx9odtj8Fuy3Kv-U9hocdAhBKnvwNOd9WbOFbURwVgoOIcw9yN9PJQ5WeD0yrFlOTYCyv4du3Jx7Cop67NiP2IFeWG3MvfvDMAnBw5SheYHh9JSOhY7VC1xTnwWime3rFEsXL5OtlY0" style="width: 100%;">
+                        <p class="caption">생성 모델 예시</p>
+                    </div>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>생성 모델 종류</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Variational Autoencoder (VAE)</b></span>
+                        <br>VAE는 바로 잠재 변수(latent variable)의 분포를 찾는 것을 목표로 하는 모델입니다.
+                        왜냐하면 분포를 찾게 된다면 학습 데이터에 존재하지 않는 새로운 데이터를 생성하는 것이 가능하기 때문입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 이러한 잠재 변수(latent variable)가 존재하는 분포는 매우 복잡하기 때문에, 실제로는 간단한 분포라고 가정하고 학습을 통해 찾게 됩니다.</span>
+                        자세한 VAE의 설명은 <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><br><br><span style="font-size: 20px;"><b>Autoregressive (AR) Models</b></span>
+                        <br>Autoregressive (AR) 모델은 자기회귀 모델이라고도 합니다.
+                        조금 더 자세히 설명하자면, 이전 모델의 결과가 현재 모델이 내어주는 결과에 영향을 미치는 것이 바로 AR 모델입니다.
+                        이 AR 모델이 가장 많이 쓰이는 곳 중 하나가 바로 자연어 생성 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어, RNN, transformer, GPT 등 자연어 생성 모델은 이전까지 생성된 문장이 다음 단어를 예측하는 데 영향을 줍니다.</span>
+                        <br><br>아래 그림에서 보면 같은 질문 "오늘 일 할 수 있겠어?"에 대해서 모델의 답변이 "나 컨디션"까지는 같은 것을 볼 수 있습니다.
+                        하지만 여기서 이후의 단어가 "좋아서"가 될 수도 있고, "나빠서"가 될 수도 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 어떤 단어를 선택하느냐에 따라 최종 모델이 생성한 문장의 의미는 전혀 달라지게 됩니다.
+                        즉 "좋아서"가 나온 경우 그 다음 생성된 단어는 "가능해"가 되고, "나빠서"가 나온 경우 그 다음 생성된 단어는 "힘들어"가 되었듯이, 이전 결과에 의해 현재 결과가 달라지게 되는 것이죠.</span>
+                        이것이 바로 이전 모델의 결과가 현재 모델이 내어주는 결과에 영향을 미치는 대표적인 AR 모델의 예시입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUQlM7K_IoVgjjtg9cUoO9WrP3hTpevVf0yLrfLPZ35wwvM2MWbcv8PX9b8fQ3d1Ne6blOXyvFima8d-DGQ5xUC4f3hI9wMhtVoqNsxVK91664Ac3lzTLjRPtL6oqruQLo9DZaGhJPICLVdhix67RkoJIephDwZI77_Vkyi7enr0_M6UPVZmDQ8uCeVuzuBSWTzOkiEAZUxcWw5QyBLioKwvpKDw5D-q2tXQ1T9SStAMwKZi1m8ZD8ubJBI0Y8V0_G75Bok40j2UFPtlQGXXrKdSVsxenqsIOwfsVRDqDDg1Zp8guIH360Gf9eXoNFTFShrr-R0XvFRpgrJ1h3mXmkRfiCEH4q6lxqgmLonJUlNr0F5LUihh051Y1oVkXGR5R0Hu9yBfyZotopW1xrw7ZgZMR-2o1GbfJ955CQLYRro9WKqlPbhTPNSfttyemTbFGOaChOHvZsbUga8tCAVZ493deWM7KQ5uB8Cu_7VJJ9rGCgRu4NUjjOWve6d0YNDtZjwSVv4P6fK6Yo8JDshV2ELqsBQaB1AS7perSJx8hD6pYcnqjv1A7b7M4K6NX3OLPRbHYCF5fNAzO_cb_2A1_B81tK4IZW8gN5C-jYRDIXpHGCXbQaCR67OQ9fUlXiCWnee0rhiAQQFBHduHZnnguGy2-VyF0U18yP2eYr0jmBtgNLgoSvKKG8Q-y1rqF1mRqQIqctIe7OCEphzNXFGKp1EMyVtpL0" style="width: 100%;">
+                        <p class="caption">Autoregressive Model in NLP</p>
+                    </div>
+                    <p>
+                        <br>하지만 이러한 AR 모델은 자연어 처리뿐만 아니라 이미지 생성에서도 사용이 되는데, 바로 이미지의 이전 픽셀이 다음 픽셀을 생성하는 데 영향을 주는 방식으로 응용될 수 있는 것이죠.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">대표적인 AR 모델은 Pixel-CNN, WaveNet, GPT 등이 있습니다.</span>
+                        참고 사항으로 Pixel-CNN은 이미지를 생성하는 모델, WaveNet은 오디오를 생성하는 모델, GPT는 자연어를 생성하는 모델입니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>Generative Adversarial Network (GAN)</b></span>
+                        <br>그리고 마지막으로 GAN 모델이 있습니다.
+                        자세한 내용은 아래에서 살펴보겠지만 GAN이 등장하게 된 계기는 아래와 같습니다.
+                        <ul>
+                            <li>데이터의 분포를 고려하지 않는 모델을 만들고자 함.</li>
+                            <li>데이터를 생성하는 데 그럴싸한 품질 좋은 데이터를 생성하고자 함.</li>
+                        </ul>
+                        아래에서 어떻게 GAN이 위의 조건을 만족하면서 품질 좋은 데이터를 만들 수 있는지 알아보겠습니다.
+                    </p>
+
+                    
+                    
+                    
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GAN</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 generative adversarial network (GAN)에 대해서 알아보도록 하겠습니다.
+                        먼저 GAN을 한글로 해석해보면 말 그대로 적대적 생성 신경망입니다.
+                        <b>그렇다면 여기서 적대적이란 말이 왜 사용 되었을까요?</b>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">바로 GAN은 두 모델이 마치 경쟁을 하듯이 학습을 하기 때문입니다.
+                        다시 말하자면, GAN은 "Generator"와 "Discriminator"라는 두 모델이 경쟁을 하면서 학습을 합니다.</span>
+                        이 두 모델을 이용하여 학습하는 원리는 마치 게임 이론(game theory)와 비슷합니다.
+                        두 모델은 항상 합리적인 선택을 하며, 두 모델은 경쟁을 하면서 자신들이 최고의 보상을 얻으려고(게임에서 이기려고) 하는 모습이 게임 이론과 비슷한 것이지요.
+                        그렇다면 generator와 discriminator 두 모델에 대해 좀 더 세부적으로 살펴보고, 두 모델은 어떠한 경쟁을 하는 것인지 알아보겠습니다.
+
+                        <br><br><br><br><span style="font-size: 20px;"><b>Generator and Discriminator</b></span>
+                        <br>먼저 generator는 새로운 데이터를 생성하는 모델입니다.
+                        즉 generator가 생성한 데이터는 실제 데이터가 아니라 fake sample이라고 불리는 가짜 데이터입니다.
+                        이렇게 생성된 가짜 데이터는 discriminator 모델로 전달이 됩니다.
+                        그럼 discriminator는 진짜 우리가 가지고 있는 학습 데이터와 generator가 생성한 가짜 데이터를 구분해야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 generator는 진짜 같은 가짜 데이터를 만들어서 discriminator를 속여야하고, discriminator는 진짜 데이터를 바탕으로 가짜 데이터에 속지 않으려고 하는 것입니다.</span>
+                        즉 속이려는 모델과 속지 않으려는 모델 사이에서 경쟁을 하면서 생성 모델이 학습 되는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">좀 더 쉬운 예를 들자면, generator는 위조 지폐를 잘 찍어내는 위조 지폐범이고, discriminator는 위조 지폐와 진짜 지폐를 잘 골라내는 경찰의 역할로 비유할 수 있습니다.</span>
+                        <ul>
+                            <li>Generator의 목적: 진짜 같은 데이터를 생성하여 discriminator를 속이자</li>
+                            <li>Discriminator의 목적: Generator가 생성한 가짜 데이터와 진짜 학습 데이터를 잘 구분하자</li>
+                        </ul>
+                        아래 그림은 GAN의 전체적인 구조를 나타낸 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXu9NjTVhcIi33u888vmHBDgSfhvaPpA6Tw1fjpyMHIJ4izkG2KJieQqOATfCclxJf8hQI_yR6-N74lZs9KLP7TCkdc4o__430eqdtJKUAZY4MOzV4ygg_HPPC0SPN7lDSMLFaMEKJxb0pDmAkbfasFkFPV7Vr-hZpJDTfodHNViOV5WVDq7KdcjTMsMHcC-9c922JUhW23OMBeDa9vgAofPNrdsfHw_iuCys1T7zkO80r5GbRdw0IycLtpumAb1C5ysiCmp25JfVhd2DZ2ifhyoPGdnEhqScJekw4rV0tPLO4B4ohS1y2NaIstT9FjehiM1t5QCaBTceKS2FA9BkyEi6WLm_iwN39SNvnFRK5YBRH2hqnr4auoNt9AEUnDsHOzKOyLhecf7HVJmU4BQqFYe_V9zXFbpZDaajxsknOkVKbSZ2q8Oj1VjKTeTsGZaFXbTKWgeriz2jzJfhPYFsBmYC3BBkuLN2CT1pLeOq0AREc3lYIPSQQbYUwH5jBXYODDPabqQBSAQMlOHYmeXUYuQKPXsyb0pZoVAJraIgP7CXXPi4dYAPXweNZ2d35mhoYc7lwE2hWILfS6-Vm4JIqCE3MV9F9ESUnCEf7l3tnCw_WQGTq1M_uztha2grB6BH6gK8W1Ujfaxv_aRL_NHO9y7OVERvVJlfGjm425rlAHHF9dFySH1U7_cNm4Ffgyn2fPAmtZU9OSKGlqf2nTgjcVWCfMaVQ" style="width: 100%;">
+                        <p class="caption">GAN의 구조</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>GAN의 Loss Fucntion & Minimax Game</b></span>
+                        <br>위에서 볼 수 있듯이, 두 모델이 경쟁하면서 학습하는 GAN의 학습방식은 minimax game이라고 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이 부분을 loss function 측면에서 설명하자면, generator는 discriminator을 잘 속여 discriminator의 정확도를 최소화하는 것이고, discriminator는 가짜와 진짜 데이터를 잘 구분하여 정확도를 최대화 하는 것이기 때문입니다.</span>
+                        그럼 이제 loss function의 수식적인 측면을 좀 더 파고들어가보겠습니다. Binary cross entropy (BCE) loss의 식은 아래와 같이 쓸 수 있습니다(loss는 예측값과 label이 다르면 커져야하므로 -가 앞에 붙음).
+                    </p>
+                    <div class="equation">
+                        \[최소화 해야하는 식\]
+                        \[BCE\,Loss:\,-\frac{1}{N}\sum_{n=1}^{N}\big[y_n\log{y'_n}+(1-y_n)\log{(1-y'_n)}\big]\]
+                    </div>
+                    <p>
+                        <br>우리는 원래라면 BCE loss를 최소화할 수록 정확한 모델이라는 것을 알 것입니다.
+                        이제 우리는 편의상 위의 loss function에서 -를 제거한 식을 사용하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 -를 제거한 식은 아래와 같으며, 이 식을 우리는 최대화 해야할 것입니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[최대화 해야하는 식\]
+                        \[-BCE\,Loss:\,\frac{1}{N}\sum_{n=1}^{N}\big[y_n\log{y'_n}+(1-y_n)\log{(1-y'_n)}\big]\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 우리는 먼저 discriminator 입장에서 식을 한 번 써보겠습니다.
+                        Discriminator는 이것이 진짜 데이터인지 가짜 데이터인지 잘 구분을 해야합니다.
+                        즉 실제로 BCE loss 값이 작아져야 discriminator는 잘 학습이 되었다고 말할 수 있으며, -를 뺀 식같은 경우는 최대화를 해야되는 것이겠죠.</span>
+                        아래 식은 discriminator의 입장에서 진짜 데이터와 가짜 데이터에 대한 loss function이 되겠습니다.
+                        그리고 수학적으로 expectation을 나타내는 식으로 바꿔서 적어보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[Discriminator\,입장\]
+                        \[\mathbb{E}_{x \sim p_{real}}\log{D(x)}+\mathbb{E}_{x' \sim p_{fake}}\log{\big(1-D(x')\big)}\]
+                    </div>
+                    <p>
+                        <br>그리고 우리는 가짜 데이터 x'는 generator가 생성하게 되므로 아래와 같이 다시 바꿔 적을 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[Discriminator\,\&\,Generator\,입장\]
+                        \[\mathbb{E}_{x \sim p_{real}}\log{D(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D\big(G(z)\big)\Big)}\]
+                    </div>
+                    <p>
+                        <br>그리고 우리는 discriminator는 \(\theta\), generator는 \(\phi\)로 parameterized 되었다고 가정하면 아래와 같이 최종적으로 최대화 해야하는 식(-loss 함수로부터 유도했기 때문)을 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\]
+                    </div>
+                    <p>
+                        <br>그럼 위의 식을 다시 한 번 discriminator와 generator에 대해 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위에서 말했듯이 discriminator의 모델을 잘 학습 시키기 위해서는 들어오는 데이터가 진짜인지 가짜인지 잘 구별해야하므로 BCE loss function을 최소화, 즉 -loss로부터 유도된 위의 식은 최대화를 해야되겠죠.</span>
+                    </p>
+                    <div class="equation">
+                        \[Discriminator\,입장\]
+                        \[\max_{\theta}\bigg[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                    </div>
+                    <p>
+                        <br>하지만 generator의 입장은 조금 다릅니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">가짜 데이터를 아주 잘 만들어서 discriminator의 정확도를 떨어뜨려야겠죠. 따라서 loss function을 최대화, 즉 -loss로부터 유도된 위의 식은 최소화를 해야되겠죠.</span>
+                        따라서 아래와 같이 쓸 수 있습니다. 그리고 discriminator와 연관된 term도 사라질 것입니다.
+                    </p>
+                    <div class="equation">
+                        \[Generator\,입장\]
+                        \[\min_{\phi}\bigg[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                        \[=\min_{\phi}\bigg[\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                    </div>
+                    <p>
+                        <br>따라서 위에서 살펴본 두 모델에 대해서 최종적인 loss function을 다 고려해서 적어보면 아래와 같이 적을 수 있습니다.
+                        그리고 위에서 말한 minimax game의 형태가 수식적으로 전개한 loss function에서도 직접 보여집니다.
+                        그리고 아래 식을 의미론적으로 해석하면 다음과 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[\min_{\phi}\max_{\theta}\bigg[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                    </div>
+                    <p>
+                        <ul>
+                            <li>Discriminator: \(D_{\theta}(x)\)를 실제 데이터이므로 1, \(D_{\theta}\big(G_{\phi}(z)\big)\)을 가짜 데이터이므로 0에 가깝게 만드려고 함(위 식을 최대화 하는 것과 동치)</li>
+                            <li>Generator: \(D_{\theta}\big(G_{\phi}(z)\big)\), 즉 가짜 데이터를 진짜처럼 속여야하므로 1에 가깝게 만드려고 함(위 식을 최소화 하는 것과 동치)</li>
+                        </ul>
+                    </p>
+                    
+
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Nash Equilibrium</b></span>
+                        <br>위 처럼 discriminator와 generator가 이상적으로 minimax game을 따르면서 잘 학습이 된다고 한다면 이론적으로 두 모델은 Nash equilibrium 상태에 이르게 됩니다.
+                        Nash equilibrium을 설명하는 그림은 아래와 같습니다.
+                        아래 그림에서 검정 점선을 실제 데이터가 존재하는 분포, 초록 실선이 generator가 가짜 데이터를 생성하고 있는 분포, 파란 점선이 discriminator의 분포(정확도라고 생각하면 편함)를 의미합니다.
+                        그리고 (a)에서 (d)로 갈수록 학습이 진행되는 time stamp라고 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 discriminotor와 generator가 학습이 잘 된다면 이론적으로는 generator의 초록 실선의 분포는 실제 데이터 분포인 검정 점선의 분포와 가까워집니다.
+                        그리고 discriminator는 더이상 들어오는 데이터를 구분할 수 없게 되어, 데이터가 들어왔을 때 진짜인지 가짜인지 판별하는 것이 아니라 찍는 수준인 50 % 확률로 random guessing을 하게 되는 것이죠.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVCEV8_7WbuJR_GIwPjtyOG01dcb05HfylALRENSshVYMZWwj75XKDLxV2g5bMcZpsEcgMONISUeTXJJYWChNwh0DfajLz32nlpvWamzqoKz6_frAS6Kdt47KTZ_4sE9-Pz3sgv-hLXxUBNJW8BHIcVpTd1JasIOidFy2XD4Ih1sztTdSamyV26GKhE_35JjCN9bdOIQxWLRKzPP3r0bb18_fy22XzEjByg5hFWWTumTx7-5tEMWAhncwG3aBWW1tXIatDsrpfW4pu0SArY4fiBIpc9krLCuNqBoes67pLOLlSVQJEqr0My_fO2pY75eXdEaq8MwscHgRiC7JWXRTZPqCVSBAkP2gO_t6lbKMkRqL7DJt1jntdRjTfvTIRt7HsJytnnyRbXY2OBFaD2c1Pv3C1dHWQALmEhouhlIou-uwi7D20wyUaXpzQ6VrU3VzVg5wvdvHLrJYNJOZg370Y7HDdlioBQmpMnyAB01T-JWallXlNzV3Y8lMJMwWWCje2JaK3eCQZ1PXzNzSKnZYtJ5QwRfIQwAVb4J4iduMDRfKpqxoMjAUfs-NTkykqiuMsMYbLj4sTJw8M_tpJrTJtt8jk2E1JwR1oOBSOQvJZmxNTa3B47YyY641YZLhSqkBWPPO3CVrQPo53_vLoYs2MR33g7WDmsRoHCTXecFj6f5HFaX3lIW9t17aH-NNZXrCUWxdDyrJAl_ARZa6MIPR3BqxZCNiY" style="width: 100%;">
+                        <p class="caption">Nash Equilibrium, 출처: Generative Adversarial Nets paper (GAN 논문)</p>
+                    </div>
+
+
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>변형된 Minimax Game</b></span>
+                        <br>하지만 늘상 이론이 좋다한들 이것이 실생활에 아주 잘 작동하는 경우는 흔치 않습니다.
+                        위에서 말한 discriminator와 generator의 minimax game의 형태를 보여주는 식 또한 실제로 학습을 진행할 때 문제점이 발생합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">좀 더 정확하게는 generator와 관련된 아래의 식에서 gradient 관련 문제점이 발생합니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[\min_{\phi}\bigg[\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                    </div>
+                    <p>
+                        <br>위 식 \(log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\)을 그려보면 아래와 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUc6VP6hatrGi1uDKC10rJ_MHHmdtZ9UXW-EMYHUu2O3ZDx5bvbl7YCsKnuigKZB_sJbI_hOTAh0NHhHl6ppww3-sLDek6PVOmK4mi4c2ovmY9qNq4N-UaswABp4oq208ZnGE9eEj8lb81z9BNjtH-UZT2Wm-5tUKU7BO9jUsddwO0ZpjmoBn8SFS7mseAIndbVpgCINgNkoPVtUvn35y02xPDoUQUtxXfw4KoGAF_373jyt4qEDQ54zF7RwSBRyVf1JyTPNVhEU-ZjuQdLlE5tSAgh5I67jlAb40hu3dVVx1CcbS_PYgsXj1EP09y--_dsGwKJBxl4FMNqBRuvxLz7DSkLJNT5x19GgdlYIeSfzDBEcboxDRZeZ79ljLYtJWgHMMheZkQSfsrC24TZXwZu106P_oEtAAI76zzEymYgHhSKRQMk2_MpHAmwhJzc9PVIpDonsxcdsmnEt3DrFW_72fMPlDURVGiyi5lg0-ofebi5bQrz8C0VR8weKERo8UukCPDFC7PYC5TFwAJTdQTm3oqJF9kPZHbDR7RWhP0dWojhR3-RwaGJwHbSoin6TkZEiWuyywfi_IsC5z9RgBEEc2izHGm0Pg2QMSv2Wn3XxC2mIn0ojBMUSdc_5FcZdOAkOzknMxGYe7YoaSB_KOjWjauddb7-XuU26IRpgFgFWvNukookS854RvhxcuPSoi2rgxNGFFWpQJX8fnS2vonurhQ3Y2M" style="width: 100%;">
+                        <p class="caption">Generator 관련 loss 부분 식</p>
+                    </div>
+                    <p>
+                        <br>위 식의 그래프를 토대로 발생하는 generator의 문제점을 설명하자면 아래와 같습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 우리는 가짜 데이터를 잘 생성하는 것이 학습의 목적이기 때문에 우리는 generator의 학습을 더 응원해야한다는 사실을 염두하시기 바랍니다.</span>
+                        <ol>
+                            <li>학습 초기에는 생성을 담당하는 generator의 성능은 나쁠 것이고, discriminator의 성능이 상대적으로 우세함(생성보다 구분이 더 쉽기 때문).</li>
+                            <li>Discriminator는 generator가 생성한 가짜 데이터를 잘 분류할 수 있기 때문에 \(D_{\theta}\big(G_{\phi}(z)\big)\)를 0으로 예측할 것이다.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">우리는 진짜같은 가짜 데이터를 생성하는 것이 학습의 목적이므로 초기에 나쁜 성능의 generator를 빠르게 학습시켜 성능을 끌어올려야 함.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">하지만 초반에 우세한 discriminator 때문에 항상 generator에 의해 생성된 데이터는 0으로 예측할 것이고, 그 부분의 gradient가 매우 작음.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">초반에 generator의 성능을 향상시키기 빠르게 학습해야하지만, 작은 gradient 때문에 학습이 더딤.</span></li>
+                            <li>Discriminator와 generator의 학습 불균형이 초래되고, generator는 항상 작은 gradient를 바라보기 때문에 가짜 데이터를 잘 생성하지 못하게 됨.</li>
+                        </ol>
+
+                        즉 초반의 generator는 \(D_{\theta}\big(G_{\phi}(z)\big)\) 값이 1인 부분 보다 0인 부분이 훨씬 많을테지만, 정작 gradient는 1인 부분이 크기 때문에 generator가 학습을 빠르게 못한다는 문제점이 발생합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 문제점을 해결하기 위해 generator와 관련된 loss function의 식을 아래와 같이 바꾸게 됩니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[\max_{\phi}\Big[\mathbb{E}_{z \sim p_z}\log{D_{\theta}\big(G_{\phi}(z)\big)}\Big]\]
+                    </div>
+                    <p>
+                        <br>그리고 위 식 \(\log{D_{\theta}\big(G_{\phi}(z)\big)}\)을 그려보면 아래와 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWHYaoakkWJ4My4anAT0gqozSYCY8MkjQKOCwwxDVGFI5ClQZCvabRKEmL3LNmHVr-bnKUiN2EK61H37N97PWS_aAxNfeln19mww-N0sQ5OO9RD5VizM56xYYDM8o7ndAK8ww9myTBX1DCh0uT9kBft7lMw8bvk90yG9s-Kcyo1J0X2zRODl9Ke-2s5gGdBltGlEZV8Vj9k7wsV2n9BBK38xXuwCyP1Lyr5JalQFePZ87-uMq7EcTv8rYajIesa8M48q0fCbdPLskCb7lEc1yfDeg7mpFo4pIo0PixTjWV-Gtbx0By4EpOAEaFZswEn5clbHR97jBS4QXCTFFjSichhR-MTM3sk1JvdUpMvOjVpWCK4X7VvfGDSxFzANOgMTh-oR51KDrvKDaH5w5iGUW2SLL9pNbaxD9FYbYkMS-gkj0YMmvn3niXWqkz-lT-N5B9SWAAMx1r8-BXFh54ARBbIM1HVN090PWfffFpurbRXalirGhe3hZg1itEtwyGqDCAYz8bqIZU9gktc4CGPRauFmBA2gg-aGairpnbxgtXYRoXy3a8jt3JUAixNiczogCarOnu-8_LfsGWPH9f7cyTCtrZxOB7fj5IwB20BrWiIPV07GSE8H3q2PZRIj_jW1pmGDx191dLDDNwpSafBQN1cBrAWwbNXaupqbHJeTYAeAIG1N8E_5Se2bug_CLxdeA-YRdQ0Fek8PxAvImCZsz9s-LaZ68k" style="width: 100%;">
+                        <p class="caption">Generator 관련 변형된 loss 부분 식</p>
+                    </div>
+                    <p>
+                        변형된 식을 가지고 설명하자면 이렇습니다.
+                        <ol>
+                            <li>학습 초기에는 생성을 담당하는 generator의 성능은 나쁠 것이고, discriminator의 성능이 상대적으로 우세함(생성보다 구분이 더 쉽기 때문).</li>
+                            <li>Discriminator는 generator가 생성한 가짜 데이터를 잘 분류할 수 있기 때문에 \(D_{\theta}\big(G_{\phi}(z)\big)\)를 0으로 예측할 것이다.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">우리는 진짜같은 가짜 데이터를 생성하는 것이 학습의 목적이므로 초기에 나쁜 성능의 generator를 빠르게 학습시켜 성능을 끌어올려야 함.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">초반에 우세한 discriminator 때문에 항상 generator에 의해 생성된 데이터는 0으로 예측할 것이고, 그 부분의 gradient가 매우 큼.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">초반에 generator가 큰 gradient를 바탕으로 학습이 빠르게 됨.</span></li>
+                            <li>상대적으로 학습이 쉬운 discriminator와 generator의 학습의 균형이 맞게 되고, generator는 초기에 항상 큰 gradient를 바라보기 때문에 가짜 데이터를 잘 생성할 수 있음.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br>정리해보자면 discriminator와 generator의 학습 난이도로 보면은 생성보다 구분이 상대적으로 쉽기 때문에 discriminator의 성능이 generator를 압도하게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이런 상황에서 기존의 loss function을 사용한다면 가뜩이나 성능이 안좋은 generator에 영향을 주는 gradient가(0인 부분) 더 작기 때문에 generator는 학습이 제대로 일어나지 못하고 discriminator만 학습이 잘 되버리고 학습이 끝나는 경우가 발생하게 됩니다.
+                        하지만 우리의 목적은 데이터를 생성하는 것이기 때문에 generator의 성능이 더 잘나와야합니다.
+                        따라서 loss function을 generator에 영향을 주는 gradient가(0인 부분) 크게 바꾸는 것입니다.</span>
+                        그리고 최종적으로 변형된 식은 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[기존:\,\min_{\phi}\max_{\theta}\bigg[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{\Big(1-D_{\theta}\big(G_{\phi}(z)\big)\Big)}\bigg]\]
+                        \[이후:\,\max_{\phi}\max_{\theta}\bigg[\mathbb{E}_{x \sim p_{real}}\log{D_{\theta}(x)}+\mathbb{E}_{z \sim p_z}\log{D_{\theta}\big(G_{\phi}(z)\big)}\bigg]\]
+                    </div>
+
+                    <p> 
+                        <br>그러면 기존 식(-loss에서 유도된 식)을 최소화하는 목적을 가지고 있던 generator도 바뀐 식을 사용하게 되면서 식을 최대화 하도록 바뀌었습니다.
+                        더이상 minimax game이 아니게 되어서 Nash equilibrium에 도달할 수 없게 되었습니다.
+                        하지만 GAN을 잘 학습하기 위해 Nash equilibrium에 도달하지 않아도 사실상 상관 없기 때문에 바뀐 식을 사용해도 되는 것입니다.
+                        마지막으로 바뀌기 전후의 식을 의미론적으로 살펴본다면, <span class="highlight" style="color: rgb(0, 3, 206);">기존의 식은 generator가 discriminator의 정확도를 최소화 하는 것이 목적이었지만, 바뀐 이후의 식은 generator가 discriminator의 틀릴 확률을 최대화 하는 것</span>으로 볼 수 있습니다.
+                    </p>
+                    
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>GAN의 문제점(Mode Collapse)</b></span>
+                        <br>엄청난 성능을 가진 생성 모델 GAN도 문제점이 존재합니다. 바로 mode collapse라는 문제점입니다.
+                        GAN은 discriminator와 generator가 경쟁을 하면서 학습을 합니다.
+                        하지만 이러한 두 모델의 경쟁은 generator가 다양한 데이터를 생성하도록 직접적으로 영향을 주지 못합니다.
+                        단순히 잘 만들었냐 못만들었냐에 따른 예측값인 0과 1로써만 generator가 학습을 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">극단적으로 생각했을 때, generator가 정말 진짜 같은 가짜 데이터 한 개만을 계속 만들어도 discriminator 입장에서 그 문제점을 해결할 수 없다는 것입니다.</span>
+                        실제로 MNIST 데이터 같은 경우 특정 숫자를 잘 만들어내지 못하는 문제점이 발견 되었으며, 이에 대한 원인을 둘러싸고 많은 의견이 있습니다.
+                        보통 이는 discriminator가 local minimum에 빠졌다고 이야기 하기도 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Mode collapse를 해결하기 위해서는 hyperparameter 튜닝하는 방법도 있으며, 이를 해결하기 위한 Unrolled GAN, Wasserstein GAN 등 다양한 모델이 등장하였습니다.</span>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>GAN 모델의 평가</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        GAN이 학습을 하기 시작하면 도대체 학습을 언제 종료해야할지 막막합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">학습된 GAN 모델의 성능이 좋은지 안좋은지 평가하기가 애매합니다. 왜냐하면 분류를 위한 모델같은 경우 accuracy, precision, F1 score 등 다양한 평가 지표가 있지만, GAN은 사람이 감각적으로 판단할 수밖에 없는 생성 모델이기 때문입니다.</span>
+                        그리고 위에서 gradient 문제 때문에 minimax game의 식을 바꿔버려서 discriminator와 generator가 이론적이긴 하지만 Nash equilibrium에 도달할 수 없이, 계속 서로 경쟁하면서 oscillate 하게 됩니다.
+                        즉 이론적이긴 하지만 학습을 끝낼 수 있는 지표가 사라진 것이죠.
+                        이렇게 학습 종료 시점이 애매하다는 것도 GAN의 단점이 될 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 이를 해결하기 위해 많은 score가 등장하였는데, GAN과 같이 이미지 생성 모델 학습 종료 시점을 정량적으로 판단할 수 있는 지표 두 가지를 알아보도록 하겠습니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>Inception Score (IS)</b></span>
+                        <br>먼저 Inception Score (IS)의 지표를 구하기 위해서, 1,000개의 class로 이루어진 ImageNet 데이터를 구분하기 위해 학습된 사전 학습 모델이 필요합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다시 말해 1,000개의 카테고리로 이루어진 대규모의 이미지 데이터를 구분하기 위해 사전 학습된 모델이 필요하다는 것이죠.</span>
+                        여기서 사용할 모델은 Google에서 사전 학습한 Inception v3 모델이 사용됩니다.
+                        아래에서 사전 학습된 모델을 어떻게 사용하는지 차차 알아보기로 하고, 먼저 IS의 평가 기준을 살펴보겠습니다.
+                        <ul>
+                            <li>이미지의 질(Image Quality)</li>
+                            <li>이미지의 다양성(Image Diversity)</li>
+                        </ul>
+                    </p>
+                    <p>
+                        <b>먼저 이미지의 질 관점</b>에서 살펴보겠습니다.
+                        GAN에 의해 생성된 데이터를 x, 이 데이터에 해당하는 label을 y라고 가정 해보겠습니다. 만약 질 좋은 데이터가 형성 되었다면, x를 통해 그 label y를 예측하기 쉬울 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 생성된 데이터의 질이 좋을수록 \(P(y|x)\)가 높아야하고, 이는 정보 이론의 관점에서 entropy가 낮은 것을 알 수 있습니다.
+                        그리고 여기서 y label을 예측할 때 쓰이는 모델이 바로 위에서 언급한 사전학습된 Inception v3 모델인 것입니다.</span>
+                        
+                        <br><br><b>이제 이미지의 다양성 관점</b>에서 살펴보겠습니다.
+                        먼저 예를 들어 y label이 10가지 종류가 있다고 가정해봅시다.
+                        만약 정말 잘 학습된 모델이라면 \(P(y)\)의 분포는 균등해야할 것입니다.
+                        즉 y가 나올 확률이 각각의 10가지의 label에 대해서 모두 0.1이 나와야 이상적일 것입니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이는 정보 이론 관점에서 엔트로피가 높다고 표현합니다(모든 발생할 확률이 균등하면 다양성이 높아지는 것이고 정보 엔트로피가 크다는 뜻).</span>
+                        즉 이미지의 질, 이미지의 다양성의 관점에서 등장하는 각각의 확률 분포 \(P(y|x)\)와 \(P(y)\)는 정보 엔트로피 측면에서 한쪽은 작아야하고, 한쪽은 커야합니다.
+                        따라서 두 분포가 정반대의 형태를 지니고 있어야하죠. 반대의 분포를 가져야한다는 지표로는 바로 Kullback-Leibler divergence (KLD)를 사용합니다.
+                        최종적인 IS의 식은 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[IS\,=\,exp\Big(\frac{1}{N}\sum_{i=1}^ND_{KL}\big(P(y|x_i)||P(y)\big)\Big) \]
+                    </div>
+                    <p>
+                        <br>IS는 점수가 높을수록 좋은 데이터를 생성 했다는 것이며, 가장 안좋은 score는 1점입니다.
+                    </p>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Fréchet Inception Distance (FID) Score</b></span>
+                        <br>Fréchet Inception Distance (FID) score 또한 ImageNet으로 사전 훈련된 모델인 Inception v3 모델이 사용됩니다.
+                        아래 그림은 Inception v3 모델의 도식도이고, <span class="highlight" style="color: rgb(0, 3, 206);">이 모델의 마지막 pooling layer가 FID score를 구하는 데 사용됩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUYjK8bLkUBPBRp2qD7YiUM9BlOLCBgPa8ZFaVnSPu9OXfsNYXfCq5fFbb1D9z4pQd7RQh3y_SjNkR_FNmKxQ7YZjpkQSGLVQOR8C79ioCjPC9AzEfQmNzH9xVJR6oS7vINptqemfnkd1MjifgGl66MJkXVohvI171pgk-jAHXHn4U74t38YDpuWgE6w8T7-J9pE-MMQ5xIpdzbIt13tTENZrpnpwkPWKPOV8Hly3ejTwKXxmck_tpJpZaON-q4Jic2lXZRduDp7i2N5IUWokwfQrf5Evtz1MvZKST4jlWhVnQEmVVptQDz3APUA3vV-QC-SbQWKvL1EYxk3Q5MlC3ccwcipYKtQzTIsqJvg8-kTs5jfCYKRiER0jcy7TLCZqVWW1x4X8sSPGom0e1yfaM-xLWjN_VYb1kv_5atyVWebJCfC5TtYmVt36sy318bistNlo3180OoRE1BwkxUZuq9fACdHbO22gl-gOUvQ9pIy1Uy5Scpmw0oUa62y1CsUxamsjOCfjp3xt6r2dDZZOl52ysSlz0RFDY_5zBn8MHbHWy6LWm9I-hpSfsOOWUZtRBRgbAT7qu1Dt_KIiLEvctVVaYDZx_RGDCCIDMTueT0tgd-MfZD_PLJCn4U2Mo4iRjwNCUZ_z_VnHuNqe3rKhp4ozwWt-o2yShutwbSqldqgdu7G_Bq_g4jPMvLtng76eMzLg2vlpfJDmcWMzs-AKG6scpKB_M" style="width: 100%;">
+                        <p class="caption">Inception v3 모델의 마지막 pooling layer</p>
+                    </div>
+                    <p>
+                        <br><b>그럼 FID score는 어떻게 계산 될까요?</b>
+                        바로 진짜 데이터 셋과 생성된 가짜 데이터 셋을 위의 모델에 넣고 마지막 pooling layer의 결과로 나온 feature를 사용합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">만약 생성된 가짜 데이터가 진짜 데이터와 비슷하다면 모델의 결과로 나온 feature가 실제 데이터에서 나온 feature와 그 거리가 가까울 것이며 그것을 지표로 사용합니다.</span>
+                        즉 진짜 데이터 셋과 가짜 데이터 셋에서 나온 feature들을 각각 Gaussian distribution이라고 가정하고 이 두 분포의 Fréchet inception distance를 구하는 것이죠. 그리고 이 거리를 Wasserstein-2 distance라고도 합니다.
+                        그리고 최종적으로 두 Gaussian distribution의 FID score 구하는 식은 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[FID\,score\,=\,|\mu_{real}-\mu_{fake}|^2+tr\big(\Sigma_{real}+\Sigma_{fake}-2(\Sigma_{real}\Sigma_{fake})^{0.5}\big)\]
+                    </div>
+                    <p>
+                        <br>위에서 사용되는 \(\Sigma\)는 <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전 VAE 글</span></a>에서 설명했다시피 공분산을 의미합니다.
+                        그리고 FID score는 얼마나 유사한지 거리를 의미하기 때문에, 그 값이 작을수록 더 진짜같은 가짜 데이터를 생성했다고 볼 수 있습니다.
+                        아래 그림에서 실제로 데이터가 망가진 정도에 따라 FID score가 달라지는 모습을 확인할 수 있습니다.
+                        실제로 데이터의 망가진 정도가 커질수록 FID score도 커지는 것을 볼 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweU4nElm7n5ac02ul3pF6TvOCKFjHquUuL9Ad5cLMLh2xRnpMOO-JbDo7rMQOAQfejr_ar36AZwvzbFanbilnckZ6L60I6RzYuMQhu3VTGCKf-6WlQLZSwLHpAIl5bcH1QKl2uy_zYuofAakodmp7Ck1DnAevzQfKLb-twfb84lfXIfBzxAu6YsSQxVSPn92YlEaYsbpPdNmrTjBebYt5z7CAXOEGclZmMfa6zs05UCRnG4NMZgQT52w3q_t2ZP1ABHyGG7N4bn3Tz225r83lHRJ0zrEm5AZ7NYEW1yQfKi3hs40YpxcNM_vWl26dKeaWCIGUE8pHku9qo36CiO2BVwizCF022x9yz1XiCh_9bmikIFQzAL992r028QNgT0D1Ap5fxC2LkOSIdnG6f2Dmfua16KyAzA1Sr8_vzS-PqucmpG2bpvrQtl904u6WZeY2MUX3kHZw-MYSzYVTUpSBIQd-CkpbAObj-1o-LIQx08WaVKG9p91K0b9KgjtOmFWNBYT54ikNM_IAf2XtM3ohR0z5ux6jw0MwSwJvHLprXisXIqmXy3kcwahg15BysYxBRtypVibCkhwIY_0yGImhevcQNBvYjnXpaTCz9wehJfAiF1VWyX8nfDrD6NxlL61vftFGbmG0LZ3G6KRdw2isMDg7DMWGxmnr0G4w9ruOHbas8ohqbz48Q0zlX_fwq6B2KEIkgwvhF8EAqSiA_248iYvNgzNwfglLdoiq1Qx3k7e9XeOdx6Z2v1uamdD7_cfwa2c" style="width: 100%;">
+                        <p class="caption">데이터의 망가진 정도에 따른 FID score, 출처: https://arxiv.org/pdf/1706.08500.pdf</p>
+                    </div>
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>GAN의 종류</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 잠깐 언급했다시피 특정 분포의 데이터가 생성되지 않는 GAN의 mode collapse 문제를 해결하기 위해 등장한 모델들이 아주 많습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 mode collapse 이외의 다른 문제점이 존재하는데, 이러한 GAN의 문제점을 해결하기 위해 등장한 유명한 모델들이 몇몇 있는데 종류는 이렇습니다.</span>
+                        <ul>
+                            <li>Wasserstein GAN (WGAN)</li>
+                            <li>Unrolled GAN</li>
+                            <li>Deep Convolutional GAN (DCGAN)</li>
+                        </ul>
+                        
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 다양한 역할을 하는 여러 종류의 GAN이 있습니다. 다양한 역할을 하는 GAN은 이런 것들이 있습니다.</span>
+                        <ul>
+                            <li>Text-to-Image GAN: 짧은 문장에 해당하는 그림을 생성하는 모델</li>
+                            <li>Cycle GAN: 이미지의 스타일을 바꾸는 모델</li>
+                            <li>Style GAN: 아주 높은 해상도의 이미지를 생성하는 모델</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVvGJrNe2c0a4pIlq_5-uEmij8yaFo9sZpsmlaxQkJ_zIfQ2ILeo24WH76rHqednOh1bxDjcko6ol9Ldygvf1Fk8WgOGpdPIZ0mUUrHpfYKz8uW-4nrciNR8jdMlzSJY9UuFZ_x0AoMeoutcSsMZg3-KFvUnhJ3u35da_O7Uvu07d1rOfFIyHVesZOZ7aTByYx_Uy_pEjiL6Y5adVxYkLWoNWVGfKfOaQlCbFq4PX9Mtpc2kYMHgf6vXKfYGKN6Kz8lUcHqBC05VgLaXKTMQd9Urkjh7s4XUB7GG7qp-c7sx-E-mq38PvuG_hYzBTu-5arYqa0QKLz2G2e78uZFJMIipPCOBeK8coDZ6w4BIdOFucccYMczOdYlxZ3fp1SsA3iUJvI-onrH7LRGCg-3SxVDG9E507NhHhbrgy7ibdGXpgzOLdTR3Sdljn-UJj5HFBth8k0dM-C29mqZRcXgLojdyrYmA9yAxI1XpzcWewGWb-p4DVz4dT3R2PqDMKbkrzT75lsoJ9uDVqpDvWzRzpIXp1TNV7-5A_eCBJkGlMO3f5-sS5sdJIBG3hshVKzdaem5JEpH0ZW1pOxKcH93LZeoqTQ5Oox2OSngyOxG6Y82HbrjgFJB2zfl88gAObrGFEYzWV_NPkPLHF2-4yq2RthROWvfS_G3TYSGurWhY4BRGSOyhNYNBZ_b3vU-8eQSfa9-6q16inFJbYK44VLfL_2dsl8KEOsKOsTueN883jBAAbc572smtEkmNywKBYdetGnU" style="width: 100%;">
+                        <p class="caption">여러 종류의 GAN<br>Text-to-Image GAN: https://github.com/gmuffiness/text2image_project<br>Cycle GAN: https://arxiv.org/pdf/1703.10593.pdf<br>Style GAN: https://arxiv.org/pdf/1812.04948.pdf</p>
+                    </div>
+                    
+                
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>생성 모델의 비교</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        마지막으로 간단하게 이미지 생성에 있어서 유명한 모델 세 가지의 결과를 비교해보겠습니다.
+                        아래 그림은 각각 VAE, PixelCNN, GAN의 이미지 생성의 결과입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVajL7t2hHF5vqCzwHTKY7U0fGaDy-h68TSTXpfXBHN8ynT2Br6oKVWuANlVgDD5RIHVIzdNiSxaI2Yb1FCopy4W-6gBcWhU-SrQ4tW_0aTa7X_SHXgIe6VIdX3GQ0xfU_6sy_A0s3uyRro0NSEjhMMEhjD0Zx95Al4PVRUjTLKP2doc59bm8VGSxWAtmycHO9OkWsQpb4WOlkitN1MthbuUERg3l_7XjYi43UjU5vzFZbyLdXpsYEyB49AvrhyLLHlKvUnHyr06e9A6TQ2XUTFKs3Z4O5ojVlKXpm3NG164n16GoYTG1DpD1eyL8y2aLfXKm_LDb8Z0PhhO_7Jh6X3hqIRnz13nceqgNr75eWm7JcfrGrVbYIHM646c--zCa1tGBddV4UKBHzKQd4F33HsZbAUBVX2w0XTtlaHJiKATk6NGzHrjUHRrdnIjGZ_nqPbN18bsYz7-0OtQF6OA_2_bl2gvryJS4WiYsnI0orDybP3fwL_AX5fR3q_Nh87bagV5VrLTtE-mP3N_l0GclrUotEfsy9zNZqM50i-NW3SaAy8SKwcp5MJftk9jCGfXqbkm-Wdx1uRuEYRUOeHSSVJCvoNrM_zv1wGwjlXswKb6teQfynMnh2OLAlNzpc7T-CwWE_ubodW54X6378ViZes6BBbbu6VJMTEqk02Z6P5KU2xd18P6KM9se-gDZwou74U9fh0JcJCB7-B6biIpyzOTet6w75SBRRUWg-15hSMm_Vy_0BgbYuEys7KclUd61EE" style="width: 100%;">
+                        <p class="caption">여러 생성 모델의 결과</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>VAE</b></span>
+                        <br>VAE의 결과는 상대적으로 다른 두 모델의 결과에 비해 blur 하다는 것을 확인할 수 있습니다.
+                        이는 VAE의 고질적인 문제점이며, 데이터가 평균값 형태로 생성되기 때문입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다른 말로, 만약 모델의 분포가 실제 데이터의 분포와 많이 겹치지 않으면 모델의 분포에 데이터의 분포를 포함시키기 위해 노이즈로써 상당한 variance (분산)를 가지게 되어 blur해지는 것입니다.</span>
+                        하지만 최근에 이러한 문제점을 많이 개선한 여러 VAE 모델들이 나왔습니다.
+                        VAE에 대한 더 자세한 설명은 <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전 VAE 글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>PixelCNN</b></span>
+                        <br>PixelCNN은 자연어 생성 모델이 많이 채택하고 있는 autoregressive (AR) 모형을 사용한 모델입니다.
+                        즉 초기에 다른 pixel을 생성하기 위한 initial pixel이 필요하며, AR 모델이다보니 느리다는 단점이 있습니다.
+                        하지만 최근 AR 모델은 속도를 개선한 모델들이 많이 등장하여 이러한 문제점도 해결 되었습니다.
+                        그리고 PixelCNN은 vanilla VAE 보다는 이미지 생성에 있어서 좋은 결과를 보여줍니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>GAN</b></span>
+                        <br>위에서 GAN에 대한 설명을 했으니 자세한 설명은 생략하겠습니다.
+                        대신에 GAN은 다른 모델들에 비해 아주 sharp한 이미지를 생성하는 것을 확인할 수 있습니다.
+                        하지만 vanilla GAN은 mode collapse라는 가장 큰 문제가 존재하며, 이를 해결하기 위해 파생된 많은 모델들이 등장하였다고 하였습니다.
+                        그리고 GAN은 위에서 설명한 style GAN 처럼 1024 * 1024의 아주 해상도가 높은 이미지 생성에 성공한 사례가 있습니다.
+                    </p>
+                    <p>
+                        <br>아래는 vanilla GAN 논문입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1406.2661.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GAN 논문</a>
+                    </div>
+                    <p>
+                        <br><br>GAN은 등장부터 지금까지 가장 각광받는 이미지 생성 모델 중 하나입니다.
+                        GAN 논문은 현재까지 아주 많은 인용이 되었으며, 지금도 활발히 연구가 진행되는 분야입니다.
+                        다음글은 MNIST 데이터를 바탕으로 vanilla GAN을 구현해보도록 하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GAN&emsp;#MinimaxGame&emsp;#생성모델&emsp;#NashEquilibrium&emsp;#IS&emsp;#FIDScore
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('GAN 첫 게시물 입니다.\n\nThis is the first post of GAN.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('GAN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Generative Adversarial Network (GAN) 구현</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
