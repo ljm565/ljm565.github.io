@@ -171,7 +171,10 @@ pre .return{
     color: rgb(197, 134, 192);
 }
 pre .str{
-    color: rgb(200, 141,117);
+    color: rgb(200, 141, 117);
+}
+pre .annot{
+    color: rgb(104, 149, 84);
 }
 
 .equation{

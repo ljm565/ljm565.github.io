@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Generative Adversarial Network (GAN)</title>
+        <meta name="description" content="Generative Adversarial Network (GAN) 구현 모델을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+    </head>
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Generative Adversarial Network (GAN) / 2. Generative Adversarial Network (GAN) 구현</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">Generative Adversarial Network (GAN) 구현</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.03.30</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 generative adversarial network (GAN)에 대해 설명하였습니다. 이번글에서는 linear layer로 이루어진 vanilla GAN의 구현에 대해 설명하도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">구현은 python의 pytorch를 이용하였습니다. 그리고 GAN을 학습하면서 GAN이 학습 epoch별로 생성한 이미지를 살펴보겠습니다.</span>
+
+                        <br><br>그리고 GAN에 대한 설명은 <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        이렇게 구현한 GAN의 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/GAN" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GAN GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">GAN 구현</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Vanilla GAN 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 기본적인 vanilla GAN의 구현 코드를 살펴보겠습니다.
+                        코드는 pytorch로 작성 되었으며, vanilla GAN을 학습하기 위해서는 linear layer로 이루어진 discriminator와 generator 두 모델이 필요합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">GAN의 모델 자체는 단순하지만 GAN의 학습 방법이 다른 모델들과 다르기 때문에 주의깊게 살펴봐야합니다. 즉 학습 방법이 GAN의 핵심이라고 볼 수 있습니다.</span>
+                        한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Generator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">Generator</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
+        <span class="var">self</span>.<span class="var">noise_init_size</span> = <span class="var">config</span>.noise_init_size
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+
+        <span class="var">self</span>.<span class="var">generator</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">noise_init_size</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">color_channel</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">generator</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">output</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>, <span class="var">self</span>.<span class="var">height</span>, <span class="var">self</span>.<span class="var">width</span>)
+        <span class="return">return</span> <span class="var">output</span>
+
+
+
+<span class="reserved">class</span> <span class="clazz">Discriminator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">Discriminator</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+
+        <span class="var">self</span>.<span class="var">discriminator</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">LeakyReLU</span>(<span class="num">0.2</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>/<span class="num">4</span>)),
+            <span class="clazz">nn</span>.<span class="clazz">LeakyReLU</span>(<span class="num">0.2</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>/<span class="num">4</span>), <span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">discriminator</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 50);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>Generator</b></span>
+                        <br>먼저 generator 부분입니다.
+                        여기서 나오는 config 부분은 <a href="https://github.com/ljm565/GAN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
+                            <li>6번째 줄: hidden layer의 차원</li>
+                            <li>7번째 줄: Generator의 생성 시작에 사용하는 noise 초기 차원</li>
+                            <li>8번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
+                            <li>10 ~ 17번째 줄: 여러 linear layer를 가지는 generator를 정의</li>
+                            <li>20 ~ 24번째 줄: Generator를 거치는 부분, 마지막에서는 데이터의 크기를 (batch size * channel size * height * width)로 변경</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Discriminator</b></span>
+                        <br>다음은 discriminator 부분입니다.
+                        여기서도 config 부분은 <a href="https://github.com/ljm565/GAN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>31, 32번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
+                            <li>33번째 줄: hidden layer의 차원</li>
+                            <li>34번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
+                            <li>36 ~ 43번째 줄: 여러 linear layer를 가지는 discriminator를 정의, 마지막에 데이터가 진짜인지 가짜인지 1, 0으로 판별해야하므로 sigmoid activation function 사용</li>
+                            <li>46 ~ 50번째 줄: Discriminator를 거치는 부분, sigmoid 함수를 거쳐서 0 ~ 1 사이의 값으로 반환</li>
+                        </ul>
+                    </p>
+                
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GAN 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                       이제 GAN의 핵심이라고 할 수 있는 학습 방법의 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                       아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       여기서는 무시해도 좋습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">G_model</span> = <span class="clazz">Generator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">D_model</span> = <span class="clazz">Discriminator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>()
+<span class="var">self</span>.<span class="var">G_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">G_model</span>..<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+<span class="var">self</span>.<span class="var">D_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">D_model</span>..<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="method">print</span>(<span class="var">epoch</span>+<span class="num">1</span>, <span class="str">'/'</span>, <span class="var">self</span>.<span class="var">epochs</span>)
+    <span class="method">print</span>(<span class="str">'-'</span>*<span class="num">10</span>)
+    
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">G_model</span>.<span class="method">train</span>()
+            <span class="var">self</span>.<span class="var">D_model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">G_model</span>.<span class="method">eval</span>()
+            <span class="var">self</span>.<span class="var">D_model</span>.<span class="method">eval</span>()
+
+        <span class="var">G_total_loss</span>, <span class="var">D_total_loss</span>, <span class="var">Dx</span>, <span class="var">D_G1</span>, <span class="var">D_G2</span> = <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">real_data</span>, <span class="var">_</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">batch_size</span> = <span class="var">real_data</span>.size(<span class="num">0</span>)
+            <span class="var">self</span>.<span class="var">G_optimizer</span>.<span class="method">zero_grad</span>()
+            <span class="var">self</span>.<span class="var">D_optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="annot">###################################### Discriminator #########################################</span>
+                <span class="annot"># training discriminator for real data</span>
+                <span class="var">real_data</span> = <span class="var">real_data</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">output_real</span> = <span class="var">self</span>.<span class="var">D_model</span>(<span class="var">real_data</span>)
+                <span class="var">target</span> = <span class="clazz">torch</span>.<span class="method">ones</span>(<span class="var">batch_size</span>, <span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">D_loss_real</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output_real</span>, <span class="var">target</span>)
+                <span class="var">Dx</span> += <span class="var">output_real</span>.sum().item()
+
+                <span class="annot"># training discriminator for fake data</span>
+                <span class="var">fake_data</span> = <span class="var">self</span>.<span class="var">G_model</span>(<span class="clazz">torch</span>.<span class="method">randn</span>(<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">noise_init_size</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">output_fake</span> = <span class="var">self</span>.<span class="var">D_model</span>(<span class="var">fake_data</span>.detach())  <span class="annot"># for ignoring backprop of the generator</span>
+                <span class="var">target</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>(<span class="var">batch_size</span>, <span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">D_loss_fake</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output_fake</span>, <span class="var">target</span>)
+                <span class="var">D_loss</span> = <span class="var">D_loss_real</span> + <span class="var">D_loss_fake</span>
+                <span class="var">D_G1</span> += <span class="var">output_fake</span>.sum().item()
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">D_loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">D_optimizer</span>.<span class="method">step</span>()
+                <span class="annot">##############################################################################################</span>
+
+
+                <span class="annot">########################################## Generator #########################################</span>
+                <span class="annot"># training generator by interrupting discriminator</span>
+                <span class="var">output_fake</span> = <span class="var">self</span>.<span class="var">D_model</span>(<span class="var">fake_data</span>)
+                <span class="var">target</span> = <span class="clazz">torch</span>.<span class="method">ones</span>(<span class="var">batch_size</span>, <span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">G_loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output_fake</span>, <span class="var">target</span>)
+                <span class="var">D_G2</span> += <span class="var">output_fake</span>.sum().item()
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    G_loss.backward()
+                    <span class="var">self</span>.<span class="var">G_optimizer</span>.<span class="method">step</span>()
+                <span class="annot">##############################################################################################</span>
+
+            <span class="var">D_total_loss</span> += <span class="var">D_loss</span>.item() * <span class="var">batch_size</span>
+            <span class="var">G_total_loss</span> += <span class="var">G_loss</span>.item() * <span class="var">batch_size</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 61);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 5번째 줄: Loss function, generator, discriminator 모델 선언 및 각각의 optimizer 선언</li>
+                            <li>19번째 줄: 학습에 필요한 변수 선언</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Discriminator 학습</b></span>
+                        <br>다음은 discriminator 학습 부분입니다.
+                        코드상에서는 26 ~ 45번째 줄에 해당하는 부분입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그중에서도 27 ~ 32번째 줄은 실제 우리가 가지고 있는 데이터를 학습하는 부분이고, 34 ~ 40번째 줄은 generator가 생성한 데이터를 학습하는 부분입니다.</span>
+                        <ul>
+                            <li>28 ~ 31번째 줄: 실제 우리가 가지고있는 학습 데이터를 discriminator에게 1로 예측하게 해주는 부분</li>
+                            <li>32번째 줄: Dx는 실제 학습 데이터를 discriminator가 어떻게 예측했는지 판단하는 척도가 됨. <span class="highlight" style="color: rgb(0, 3, 206);">Dx가 1에 가까울수록 discriminator는 실제 데이터를 1로 잘 판단했다는 뜻이며, 이론적으로 학습이 진행되면 될수록 discriminator는 가짜 데이터와 진짜 데이터를 구분하지 못해야하므로 Dx의 값은 0.5에 가까워져야함.</span></li>
+                            <li>35번째 줄: Discriminator에게 판단을 맡길 generator가 가짜 데이터를 생성하는 부분.</li>
+                            <li>36번째 줄: Discriminator에게 generator가 생성한 가짜 데이터를 넘겨주는 부분. <span class="highlight" style="color: rgb(0, 3, 206);">Generator와 이어지는 gradient를 끊기 위해 detach를 한 후 넣어줌.</span></li>
+                            <li>37 ~ 39번째 줄: Discriminator의 최종 loss를 계산하는 부분.</li>
+                            <li>40번째 줄: D_G1은 discriminator가 업데이트 되기 전, generator가 생성한 가짜 데이터를 어떻게 판단하는지 확인하는 척도. <span class="highlight" style="color: rgb(0, 3, 206);">학습 초기에는 discriminator가 가짜 데이터를 잘 구분하기 때문에 0에 가까움. 우리는 생성을 잘하는 generator를 만드는게 목적이므로 학습을 할수록 진짜같은 데이터를 만들어서 1에 가까워지는 것이 좋음.</span></li>
+                            <li>42 ~ 45번째 줄: Discriminator의 loss를 바탕으로 discriminator를 업데이트하는 부분.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Generator 학습</b></span>
+                        <br>다음은 generator 학습 부분입니다.
+                        코드상에서는 48 ~ 58번째 줄에 해당하는 부분입니다.
+                        <ul>
+                            <li>50 ~ 52번째 줄: Generator가 생성한 가짜 데이터를 discriminator가 진짜로 구분하게끔 1로 학습시키는 부분.</li>
+                            <li>53번째 줄: D_G2는 위에서 업데이트가 된 discriminator가 현재 generator가 생성한 가짜 데이터를 어떻게 판단하는지 확인하는 척도가 됨. <span class="highlight" style="color: rgb(0, 3, 206);">Discriminator가 위에서 가짜 데이터에 대해 학습 했기 때문에 D_G2는 D_G1에 비해 작은 값이 나옴.</span></li>
+                            <li>55 ~ 57번째 줄: Generator의 loss를 바탕으로 generator를 업데이트하는 부분.</li>
+                            <li>60 ~ 61번째 줄: Discriminator와 generator의 전체 loss를 구하는 부분.</li>
+                        </ul>
+                    </p>
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GAN 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래는 generator가 초기에 생성한 데이터와 학습 중간, 마지막 학습에서 생성한 모습입니다.
+                        1 epoch의 학습 결과 generator는 노이즈만 생성하는 것을 알 수 있지만 갈수록 깔끔한 숫자 형태의 이미지를 생성하는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweU9c2Ttv3dcxxEAwaQ4SRAxKky803GBlX7IcRr-ztfF4wyky23Xs-brCcta1VKs3eiNcn7CsxUANiwfpw_8VCqc8MczO_gDolPhydDNMHq-czZgwFMO-hRmmTMlB8Hk0ydHmPAfio4ytKsGQL7al6qDMIryNbSwn36qpSFRu20m8dkB5megPYtqwwjhNfXHj42rlJDepDbTyMYfjwGjkllTCN6F8JADI5l8s4hbfz-qsy4gMheIa22fgqBe3o-2gPjgUQAL9Rbye2sjD_0xtmGC8kPSZrSGPeGKmvxYZmQtpxJlDsaJ3QAXv8CtpuHOVdXO_Zq4SqPV32rR5klS4zuIt_Pte_NIM9UdhOjU5TU0PfJVfnmxUClAZ5FYbSwq6aWT9wz1SG0z2y6BraKB-n7zvqExHbE3skGQR-Y7NHo3bMp-_bZX13a6FSwCRopdxZ7r89NTbxXRBY6gozX93bglCrcavbFqZbD-TpFRASkf9k6UEn0pyAa6y6LPwGqXffXh1J39Zet4y7dvCoZNTq3sNBHjmsCra4Ff1opnllnG2jxONl42WERIgYUPvSTZ0zKi7O3aeCmueFxa7OJXUKcqoWwUQhJEpdCmFMxl7pujv9JUUDnYx279sSVKDHquiY9t1lGlzRuqWrVn92C2tAHTXgCQqAelCWVRKtTfQMv-GNp-Gto51vwshRe1BmXf-T8mmxllH7FjsWfyldw7UAsUphoO83Hro_WQNZ4V1ZHDcv7oNHoCxU9hBf3pv3h56BtLlsoGV_Pp6Sh9" style="width: 100%;">
+                        <p class="caption">Generator가 생성한 이미지</p>
+                    </div>
+                    <p>
+                        <br>아래는 generator가 생성하는 데이터 변화를 모든 epoch 별로 만든 이미지입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW99tM_cTXxQB3joPsFyi0TWvGY2z_bJ-mvjdnAY-gPis79cUKxkb5yd87iMCE40nKw-zkGoL4q0shHULcpXMPvFvg1NgajVrsWYwpXFW5UFkGrntSBEE_ZJ3maYGvz51FmqCZaj08EvMS34CtCzKpxKrsWt2Q37nelH7D9LPCelLpVV_NSV_eK3h6mnjqdPC6DgDkONCZcyx7e4kiUpbDMDjfJnfHDfk7QT63ooAZhckH0uBp_SfRAmxlCoL7R6KlU3-5Lzw4GA7ahtfQ4OB6HIATlIKYkeNUq2IvqKWLEf6OvL38y54Wn-_-pQQeWaS6jZCOAt09HVxmVjR1E6BFxaWLeWUyHg_gOcm-5jOOBUvvNnnBUkVt50mUNBeOphbZNuPoGo5-MIr5PqTJ2kIdURstHBLf11knCd1kbiS6SdqPAH8zgEa3Fr3vN6aVYtqcOnTy59pfOeGd0gr_EjPjp_qE0aNqgZ2FzHqO5EnU7-iDZjoXdFD-7fRfs-fHgIkJyo-XDhD3KGfLEozZyCy3yFZEoXnsXOVq8KHNwgak2uvpFJMiezsJNe2cuVjx28PVW34AVlpLrWLMlAB1-GX2gbekwfu-GhIxx5S1S89IfrlAdCE7Kr90SC2P79W-6QWe1A_jVCLDdApJ_yhjZogs1gRqL9ejEGgDhvB0b_eNk3eej0bU6VaA3lfhSY3KaAZjqtVGKE3yGjGVPU3XBttDnr8JU8CUmexZhrsOteQKU4g2vgQK5HZMB03UdDe4LX96XbHxcntgVG8p7" style="width: 60%;">
+                        <p class="caption">Generator가 생성한 이미지 변화</p>
+                    </div>
+
+                    <p>
+                        <br><br><br>지금까지 vanilla GAN 구현 코드와 GAN의 핵심인 학습 방법에 대해 살펴보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/GAN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        다음에는 GAN의 문제점을 해결하고, 이미지의 특징을 잘 파악하여 데이터를 생성하는 모델인 deep convolutional GAN (DCGAN)에 대해 알아보도록 하겠습니다.
+                    </p>
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#VanillaGAN
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('GAN1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Generative Adversarial Network (GAN)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('GAN 마지막 게시물 입니다.\n\nThis is the last post of GAN.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
