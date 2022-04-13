@@ -291,9 +291,10 @@ lineMaking("code2", 10);
                         자세한 코드는 <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>의 train.py의 test 함수를 살펴보시기 바랍니다.
                     </p>
                     <p>
-                        <br><br><span style="font-size: 20px;"><b>Walking in the latent space</b></span>
+                        <br><br><span style="font-size: 20px;"><b>Walking in the latent space (from DCGAN)</b></span>
                         <br>이제 잠재 변수가 변화함에 따라 어떻게 생성되는 데이터가 바뀌는지 살펴보겠습니다.
-                        이 부분은 논문에서 walking in the latent space라고 표현된 부분입니다.
+                        이 부분은 DCGAN 논문에서 walking in the latent space라고 표현된 부분입니다.
+                        즉 latent space (z space)가 부드럽게 변한다는 것을 의미합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">먼저 test data를 통해 나오는 잠재 변수 z를 숫자별로 다 평균을 내어줍니다.
                         따라서 최종적으로 0의 잠재 변수 평균값, 1의 잠재 변수 평균값 이렇게 하여 숫자 9까지 총 10개의 잠재 변수 값을 가지고 두 개의 잠재 변수를 선택하여 interpolate 해보겠습니다.</span>
                         아래는 3의 잠재 변수 평균값과 7의 잠재 변수 평균값을 interpolate 한 값들에 대해 생성되는 데이터의 변화를 살펴본 결과입니다.
