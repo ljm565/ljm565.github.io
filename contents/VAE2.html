@@ -172,24 +172,24 @@ lineMaking("code1", 52);
                         <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
                         <a href="https://github.com/ljm565/VAE" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <ul>
-                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
-                            <li>6, 7번째 줄: hidden layer의 차원 및 sampling 할 잠재 변수(latent variable)의 차원</li>
-                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율</li>
-                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
-                            <li>11 ~ 19번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * hidden dim//2)의 크기를 가짐</li>
-                            <li>20 ~ 31번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim//2), 두 번째 hidden layer는 (hidden dim//2 * hidden dim)의 크기, 세 번째 hidden layer는 (hidden dim z * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">sampling 한 잠재 변수를 가지고 실제 데이터 생성하는 부분</span>)</li>
-                            <li>32 ~ 33번째 줄: encoder를 통해 나온 결과를 넣는 부분, 각각의 레이어를 통해 나온 최종 결과는 평균, log 분산을 의미하며 레이어는 (hidden//2 * latent dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수가 존재하는 분포를 가정하고 학습하는 부분</span>)</li>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기.</li>
+                            <li>6, 7번째 줄: hidden layer의 차원 및 sampling 할 잠재 변수(latent variable)의 차원.</li>
+                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율.</li>
+                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>11 ~ 19번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * hidden dim//2)의 크기를 가짐.</li>
+                            <li>20 ~ 31번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim//2), 두 번째 hidden layer는 (hidden dim//2 * hidden dim)의 크기, 세 번째 hidden layer는 (hidden dim z * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">sampling 한 잠재 변수를 가지고 실제 데이터 생성하는 부분.</span>)</li>
+                            <li>32 ~ 33번째 줄: encoder를 통해 나온 결과를 넣는 부분, 각각의 레이어를 통해 나온 최종 결과는 평균, log 분산을 의미하며 레이어는 (hidden//2 * latent dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수가 존재하는 분포를 가정하고 학습하는 부분</span>).</li>
                         </ul>
 
                         <br><span style="font-size: 20px;"><b>Reparameterization Trick</b></span>
                         <br>다음은 reparameterization trick 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분에서는 encoder를 거쳐서 나온 결과가 잠재 변수가 존재하는 분포를 가정하기 위해 평균과 log 분산을 구하는 레이어를 통과합니다.</span>
                         그리고 reparameterization trick을 통해 잠재 변수 z를 sampling 합니다.
                         <ul>
-                            <li>37번째 줄: 잠재 변수가 존재하는 분포의 평균</li>
-                            <li>38번째 줄: 잠재 변수가 존재하는 분포의 log 분산</li>
-                            <li>39번째 줄: log 분산을 표준편차로 변환</li>
-                            <li>40번째 줄: 평균이 0, 분산이 1인 표준정규분포에서 noise 하나 sampling</li>
-                            <li>42번째 줄: reparameterization trick을 통해 sampling된 잠재 변수, 평균, log 분산 반환</li>
+                            <li>37번째 줄: 잠재 변수가 존재하는 분포의 평균.</li>
+                            <li>38번째 줄: 잠재 변수가 존재하는 분포의 log 분산.</li>
+                            <li>39번째 줄: log 분산을 표준편차로 변환.</li>
+                            <li>40번째 줄: 평균이 0, 분산이 1인 표준정규분포에서 noise 하나 sampling.</li>
+                            <li>42번째 줄: reparameterization trick을 통해 sampling된 잠재 변수, 평균, log 분산 반환.</li>
                         </ul>
                         
                         <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
@@ -197,12 +197,12 @@ lineMaking("code1", 52);
                         Pytorch의 모델을 정의할 때 nn.Module을 상속 받기 때문에 자동으로 데이터가 forward라는 method를 거치게 됩니다.
                         그리고 pytorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
                         <ul>
-                            <li>46번째 줄: 데이터가 들어왔을 때 batch size를 저장</li>
-                            <li>47번째 줄: 데이터의 크기를 변화<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환)</li>
-                            <li>48번째 줄: encoder를 거쳐 latent variable 추출<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출)</li>
-                            <li>49번째 줄: encoder를 거쳐 나온 결과를 reparameterization_trick 함수로 넣어서 잠재 변수가 존재하는 분포의 평균, log 분산을 구하여 잠재 변수 샘플링</li>
-                            <li>50번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원레의 데이터와 유사하게 복구<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구)</li>
-                            <li>52번째 줄: decoder의 복구 결과와 잠재 변수를 t-SNE로 가시화하기 위해 학습된 잠재 변수 분포의 평균, 표준편차와 생성된 데이터를 반환</li>
+                            <li>46번째 줄: 데이터가 들어왔을 때 batch size를 저장.</li>
+                            <li>47번째 줄: 데이터의 크기를 변화.<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환).</li>
+                            <li>48번째 줄: encoder를 거쳐 latent variable 추출.<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출).</li>
+                            <li>49번째 줄: encoder를 거쳐 나온 결과를 reparameterization_trick 함수로 넣어서 잠재 변수가 존재하는 분포의 평균, log 분산을 구하여 잠재 변수 샘플링.</li>
+                            <li>50번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원레의 데이터와 유사하게 복구.<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구).</li>
+                            <li>52번째 줄: decoder의 복구 결과와 잠재 변수를 t-SNE로 가시화하기 위해 학습된 잠재 변수 분포의 평균, 표준편차와 생성된 데이터를 반환.</li>
                         </ul>
                     </p>
 
@@ -245,11 +245,11 @@ lineMaking("code2", 10);
 </script>
                     <p>
                         <ul>
-                            <li>1번째 줄: deocoder를 Bernoulli distribution (베르누이 분포)으로 가정하였기 때문에 binary cross entropy (BCE) loss를 사용(<span class="highlight" style="color: rgb(0, 3, 206);">redunction sum을 하여 평균값을 내지 않고 loss를 더하도록 설정</span>)</li>
-                            <li>4, 5번째 줄: 데이터가 들어왔을 때 batch size를 저장하고, 데이터 크기를 변환</li>
-                            <li>7번째 줄: decoder와 관련된 reconstruction loss 부분</li>
-                            <li>8번째 줄: encoder와 관련된 regularization loss 부분(Kullback-Leibler divergence 계산 식), loss를 mini batch에 따라 평균내지 않고 합하여 loss 계산</li>
-                            <li>10번째 줄: 최종 전체 loss 반환</li>
+                            <li>1번째 줄: deocoder를 Bernoulli distribution (베르누이 분포)으로 가정하였기 때문에 binary cross entropy (BCE) loss를 사용(<span class="highlight" style="color: rgb(0, 3, 206);">redunction sum을 하여 평균값을 내지 않고 loss를 더하도록 설정</span>).</li>
+                            <li>4, 5번째 줄: 데이터가 들어왔을 때 batch size를 저장하고, 데이터 크기를 변환.</li>
+                            <li>7번째 줄: decoder와 관련된 reconstruction loss 부분.</li>
+                            <li>8번째 줄: encoder와 관련된 regularization loss 부분(Kullback-Leibler divergence 계산 식), loss를 mini batch에 따라 평균내지 않고 합하여 loss 계산.</li>
+                            <li>10번째 줄: 최종 전체 loss 반환.</li>
                         </ul>
 
                     </p>
