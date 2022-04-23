@@ -153,12 +153,12 @@ lineMaking("code1", 33);
                         <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
                         <a href="https://github.com/ljm565/Autoencoders" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <ul>
-                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
-                            <li>6, 7번째 줄: hidden layer의 차원 및 데이터를 represenation할 잠재 변수(latent variable) 차원</li>
-                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율</li>
-                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
-                            <li>11 ~ 17번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * latent variable dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 더 작게 압축</span>)</li>
-                            <li>18 ~ 24번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim), 두 번째 hidden layer는 (hidden dim * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 다시 원래 크기로 복구</span>)</li>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기.</li>
+                            <li>6, 7번째 줄: hidden layer의 차원 및 데이터를 represenation할 잠재 변수(latent variable) 차원.</li>
+                            <li>8번째 줄: overfitting (과적합)을 방지하기 위한 dropout 비율.</li>
+                            <li>9번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>11 ~ 17번째 줄: encoder를 정의, 첫 번째 hidden layer는 (data size * hidden dim), 두 번째 hidden layer는 (hidden dim * latent variable dim)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 더 작게 압축</span>).</li>
+                            <li>18 ~ 24번째 줄: decoder를 정의, 첫 번째 hidden layer는 (latent variable dim * hidden dim), 두 번째 hidden layer는 (hidden dim * data size)의 크기를 가짐(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 다시 원래 크기로 복구</span>).</li>
                         </ul>
                         
                         <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
@@ -166,12 +166,12 @@ lineMaking("code1", 33);
                         Pytorch의 모델을 정의할 때 nn.Module을 상속 받기 때문에 자동으로 데이터가 forward라는 method를 거치게 됩니다.
                         그리고 pytorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
                         <ul>
-                            <li>27번째 줄: 데이터가 들어왔을 때 batch size를 저장</li>
-                            <li>28번째 줄: 데이터의 크기를 변화<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환)</li>
-                            <li>29번째 줄: encoder를 거쳐 latent variable 추출<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출)</li>
-                            <li>30번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원래의 크기로 복구<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구)</li>
-                            <li>31번째 줄: 복구된 데이터를 원래 raw data의 크기로 변환<br>(e.g. 128 * 300 크기로 복구된 데이터를 128 * 3 * 10 * 10의 원래 데이터 크기로 변환)</li>
-                            <li>33번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄</li>
+                            <li>27번째 줄: 데이터가 들어왔을 때 batch size를 저장.</li>
+                            <li>28번째 줄: 데이터의 크기를 변화.<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환).</li>
+                            <li>29번째 줄: encoder를 거쳐 latent variable 추출.<br>(e.g. 위 예시의 128 * 300 데이터가 인코더를 거쳐 128 * 32 크기를 갖는 잠재 변수 추출).</li>
+                            <li>30번째 줄: 잠재 변수(latent variable)를 decoder를 거쳐 원래의 크기로 복구.<br>(e.g. 128 * 32 크기의 잠재 변수를 원래 크기인 128 * 300으로 복구).</li>
+                            <li>31번째 줄: 복구된 데이터를 원래 raw data의 크기로 변환.<br>(e.g. 128 * 300 크기로 복구된 데이터를 128 * 3 * 10 * 10의 원래 데이터 크기로 변환).</li>
+                            <li>33번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄.</li>
                         </ul>
                     </p>
 
@@ -259,18 +259,18 @@ lineMaking("code2", 50);
                         <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
                         이 부분은 위의 vanilla autoencoder와 유사합니다.
                         <ul>
-                            <li>4 ~ 6번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기 및 color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
-                            <li>8 ~ 26번째 줄: convolutional layer로 구성된 encoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 잠재 변수(latent variable)로 압축하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용</span>)</li>
-                            <li>28 ~ 43번째 줄: convolutional transposed layer로 구성된 decoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수(latent variable)를 복구하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용, 이 부분은 transposed layer 대신 데이터 자체를 interpolate 하여 convolutional layer를 사용해도 됨</span>)</li>
+                            <li>4 ~ 6번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기 및 color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>8 ~ 26번째 줄: convolutional layer로 구성된 encoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">데이터를 잠재 변수(latent variable)로 압축하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용</span>).</li>
+                            <li>28 ~ 43번째 줄: convolutional transposed layer로 구성된 decoder를 정의(<span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수(latent variable)를 복구하는 과정이며 overfitting (과적합) 방지를 위해 dropout 대신 batch normalization을 사용, 이 부분은 transposed layer 대신 데이터 자체를 interpolate 하여 convolutional layer를 사용해도 됨</span>).</li>
                         </ul>
                         
                         <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
                         <br>다음은 forward 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분은 모델을 정의 하고나서 실제로 데이터가 학습할 때 직접적으로 거치게 되는 부분입니다.</span>
                         이 부분 역시 위의 vanilla autoencoder와 유사합니다.
                         <ul>
-                            <li>47번째 줄: vanilla autoencoder와 다르게 데이터의 크기를 변화하지 않고 데이터를 encoder에 넣어서 잠재 변수를 구함(convolutional layer는 4차원의 데이터를 인자로 받기 때문 e.g. batch * color channel * height * width)</li>
-                            <li>48번째 줄: 이렇게 압축된 잠재 변수(latent variable)를 decoder를 통해 다시 복구</li>
-                            <li>50번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄</li>
+                            <li>47번째 줄: vanilla autoencoder와 다르게 데이터의 크기를 변화하지 않고 데이터를 encoder에 넣어서 잠재 변수를 구함(convolutional layer는 4차원의 데이터를 인자로 받기 때문 e.g. batch * color channel * height * width).</li>
+                            <li>48번째 줄: 이렇게 압축된 잠재 변수(latent variable)를 decoder를 통해 다시 복구.</li>
+                            <li>50번째 줄: 디코더의 복구 결과와 t-SNE로 가시화하기 위한 인코더의 결과인 잠재 변수(latent variable)를 내보냄.</li>
                         </ul>
                     </p>
 
@@ -350,16 +350,16 @@ lineMaking("code3", 36);
 
                         <br><br><span style="font-size: 20px;"><b>모델 정의</b></span>
                         <ul>
-                            <li>1 ~ 4번째 줄: 먼저 학습에 사용할 모델을 vanilla autoencoder (AE), convolutional autoencoder (CAE) 중 선택하여 정의</li>
+                            <li>1 ~ 4번째 줄: 먼저 학습에 사용할 모델을 vanilla autoencoder (AE), convolutional autoencoder (CAE) 중 선택하여 정의.</li>
                         </ul>
 
                         <br><span style="font-size: 20px;"><b>Denoising Autoencoder 제작</b></span>
                         <ul>
-                            <li>18번째 줄: dataloader를 이용하여 이미지를 batch size만큼 내어주어 변수 x에 저장</li>
-                            <li>19 ~ 24번째 줄: denoising autoencoder를 학습하다면, 이미지 데이터 x에 가우시안 노이즈 noise를 더하여 최종적으로 noise_x 제작</li>
-                            <li>25 ~ 26번째 줄: denoising autoencoder를 학습하지 않는다면 그냥 이미지 데이터 x를 사용</li>
-                            <li>31번째 줄: denoising autoencoder라면 위에서 정의한 모델에 noise_x를 넣고, 그냥 autoencoder라면 x를 위에서 정의한 모델에 넣음</li>
-                            <li>32번째 줄: denoising autoencoder 여부와 상관없이 loss는 x와 복구된 output을 통해서 구함<br>(<span class="highlight" style="color: rgb(0, 3, 206);">denoising autoencoder 모델이여도 noise_x와 loss를 계산 하지 않는다는 것에 주의</span>)</li>
+                            <li>18번째 줄: dataloader를 이용하여 이미지를 batch size만큼 내어주어 변수 x에 저장.</li>
+                            <li>19 ~ 24번째 줄: denoising autoencoder를 학습하다면, 이미지 데이터 x에 가우시안 노이즈 noise를 더하여 최종적으로 noise_x 제작.</li>
+                            <li>25 ~ 26번째 줄: denoising autoencoder를 학습하지 않는다면 그냥 이미지 데이터 x를 사용.</li>
+                            <li>31번째 줄: denoising autoencoder라면 위에서 정의한 모델에 noise_x를 넣고, 그냥 autoencoder라면 x를 위에서 정의한 모델에 넣음.</li>
+                            <li>32번째 줄: denoising autoencoder 여부와 상관없이 loss는 x와 복구된 output을 통해서 구함<br>(<span class="highlight" style="color: rgb(0, 3, 206);">denoising autoencoder 모델이여도 noise_x와 loss를 계산 하지 않는다는 것에 주의</span>).</li>
                         </ul>
                     </p>
 
@@ -432,12 +432,12 @@ lineMaking("code4", 10);
 </script>
                     <p>
                         <ul>
-                            <li>1번째 줄: t-SNE를 사용하기 위해서 sklearn의 라이브러리를 로드</li>
-                            <li>3번째 줄: t-SNE는 돌릴 때 마다 그 모양이 조금씩 변하게 되는데 그것을 방지하기 위해 random seed를 설정</li>
-                            <li>5번째 줄: total_latent_variable의 크기를 변환<br>(e.g. total data 수 * latent dim 크기로 변환, 여기서는 10,000 * 32)</li>
-                            <li>6번째 줄: t-SNE가 적용되여 축소된 최종적인 가시화 데이터 추출<br>(e.g. total data 수 * 2(3차원 가시화를 한다면 3) 크기로 변환, 여기서는 10,000 * 2)</li>
-                            <li>7번째 줄: t-SNE의 결과를 0 ~ 1 범위로 정규화</li>
-                            <li>9 ~ 10번째 줄: t-SNE를 통한 잠재 변수(latent variable)결과 가시화</li>
+                            <li>1번째 줄: t-SNE를 사용하기 위해서 sklearn의 라이브러리를 로드.</li>
+                            <li>3번째 줄: t-SNE는 돌릴 때 마다 그 모양이 조금씩 변하게 되는데 그것을 방지하기 위해 random seed를 설정.</li>
+                            <li>5번째 줄: total_latent_variable의 크기를 변환.<br>(e.g. total data 수 * latent dim 크기로 변환, 여기서는 10,000 * 32).</li>
+                            <li>6번째 줄: t-SNE가 적용되여 축소된 최종적인 가시화 데이터 추출.<br>(e.g. total data 수 * 2(3차원 가시화를 한다면 3) 크기로 변환, 여기서는 10,000 * 2).</li>
+                            <li>7번째 줄: t-SNE의 결과를 0 ~ 1 범위로 정규화.</li>
+                            <li>9 ~ 10번째 줄: t-SNE를 통한 잠재 변수(latent variable)결과 가시화.</li>
                         </ul>
                     </p>
                     
