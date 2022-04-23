@@ -169,23 +169,23 @@ lineMaking("code1", 50);
                         <br>먼저 generator 부분입니다.
                         여기서 나오는 config 부분은 <a href="https://github.com/ljm565/GAN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <ul>
-                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
-                            <li>6번째 줄: hidden layer의 차원</li>
-                            <li>7번째 줄: Generator의 생성 시작에 사용하는 noise 초기 차원</li>
-                            <li>8번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
-                            <li>10 ~ 17번째 줄: 여러 linear layer를 가지는 generator를 정의</li>
-                            <li>20 ~ 24번째 줄: Generator를 거치는 부분, 마지막에서는 데이터의 크기를 (batch size * channel size * height * width)로 변경</li>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기.</li>
+                            <li>6번째 줄: hidden layer의 차원.</li>
+                            <li>7번째 줄: Generator의 생성 시작에 사용하는 noise 초기 차원.</li>
+                            <li>8번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>10 ~ 17번째 줄: 여러 linear layer를 가지는 generator를 정의.</li>
+                            <li>20 ~ 24번째 줄: Generator를 거치는 부분, 마지막에서는 데이터의 크기를 (batch size * channel size * height * width)로 변경.</li>
                         </ul>
 
                         <br><span style="font-size: 20px;"><b>Discriminator</b></span>
                         <br>다음은 discriminator 부분입니다.
                         여기서도 config 부분은 <a href="https://github.com/ljm565/GAN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <ul>
-                            <li>31, 32번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기</li>
-                            <li>33번째 줄: hidden layer의 차원</li>
-                            <li>34번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3)</li>
-                            <li>36 ~ 43번째 줄: 여러 linear layer를 가지는 discriminator를 정의, 마지막에 데이터가 진짜인지 가짜인지 1, 0으로 판별해야하므로 sigmoid activation function 사용</li>
-                            <li>46 ~ 50번째 줄: Discriminator를 거치는 부분, sigmoid 함수를 거쳐서 0 ~ 1 사이의 값으로 반환</li>
+                            <li>31, 32번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기.</li>
+                            <li>33번째 줄: hidden layer의 차원.</li>
+                            <li>34번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>36 ~ 43번째 줄: 여러 linear layer를 가지는 discriminator를 정의, 마지막에 데이터가 진짜인지 가짜인지 1, 0으로 판별해야하므로 sigmoid activation function 사용.</li>
+                            <li>46 ~ 50번째 줄: Discriminator를 거치는 부분, sigmoid 함수를 거쳐서 0 ~ 1 사이의 값으로 반환.</li>
                         </ul>
                     </p>
                 
@@ -281,8 +281,8 @@ lineMaking("code2", 61);
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
                         <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
                         <ul>
-                            <li>1 ~ 5번째 줄: Loss function, generator, discriminator 모델 선언 및 각각의 optimizer 선언</li>
-                            <li>19번째 줄: 학습에 필요한 변수 선언</li>
+                            <li>1 ~ 5번째 줄: Loss function, generator, discriminator 모델 선언 및 각각의 optimizer 선언.</li>
+                            <li>19번째 줄: 학습에 필요한 변수 선언.</li>
                         </ul>
 
                         <br><span style="font-size: 20px;"><b>Discriminator 학습</b></span>
@@ -290,7 +290,7 @@ lineMaking("code2", 61);
                         코드상에서는 26 ~ 45번째 줄에 해당하는 부분입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그중에서도 27 ~ 32번째 줄은 실제 우리가 가지고 있는 데이터를 학습하는 부분이고, 34 ~ 40번째 줄은 generator가 생성한 데이터를 학습하는 부분입니다.</span>
                         <ul>
-                            <li>28 ~ 31번째 줄: 실제 우리가 가지고있는 학습 데이터를 discriminator에게 1로 예측하게 해주는 부분</li>
+                            <li>28 ~ 31번째 줄: 실제 우리가 가지고있는 학습 데이터를 discriminator에게 1로 예측하게 해주는 부분.</li>
                             <li>32번째 줄: Dx는 실제 학습 데이터를 discriminator가 어떻게 예측했는지 판단하는 척도가 됨. <span class="highlight" style="color: rgb(0, 3, 206);">Dx가 1에 가까울수록 discriminator는 실제 데이터를 1로 잘 판단했다는 뜻이며, 이론적으로 학습이 진행되면 될수록 discriminator는 가짜 데이터와 진짜 데이터를 구분하지 못해야하므로 Dx의 값은 0.5에 가까워져야함.</span></li>
                             <li>35번째 줄: Discriminator에게 판단을 맡길 generator가 가짜 데이터를 생성하는 부분.</li>
                             <li>36번째 줄: Discriminator에게 generator가 생성한 가짜 데이터를 넘겨주는 부분. <span class="highlight" style="color: rgb(0, 3, 206);">Generator와 이어지는 gradient를 끊기 위해 detach를 한 후 넣어줌.</span></li>
