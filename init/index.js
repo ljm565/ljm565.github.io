@@ -99,6 +99,8 @@ function reload(){
         left: '-19rem'
     }, 300);
     $('#container').css('opacity', 1);
+    $('#mainHead h1').fadeIn(0); 
+
 }
 
 function colorOn(self){
