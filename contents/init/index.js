@@ -100,6 +100,7 @@ function reload(){
     }, 300);
     $('#container').css('opacity', 1);
     $('#mainHead h1').fadeIn(0); 
+    $('#menuRelated .menuButton img').fadeIn(0); 
 }
 
 function colorOn(self){
