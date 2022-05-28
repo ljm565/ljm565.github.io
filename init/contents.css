@@ -106,12 +106,16 @@
 }
 .pageTurnerLeft{
     text-align: left;
+    width: 90%;
     display: inline-block;
+    justify-self: left;
     word-break: keep-all;
 }
 .pageTurnerRight{
     text-align: right; 
+    width: 90%;
     display: inline-block;
+    justify-self: right;
     word-break: keep-all;
 }
 
