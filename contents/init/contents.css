@@ -198,8 +198,12 @@ pre .annot{
     } 
 }
 
+/* for mobile */
 @media(max-width: 400px){ 
     #mainHead .contentHead{
         padding: 20px 30%;
-    } 
+    }
+    .mainTitle{
+        font-size: 30px;
+    }
 }
