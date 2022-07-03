@@ -203,6 +203,9 @@ pre .annot{
     #mainHead .contentHead{
         padding: 20px 30%;
     }
+}
+
+@media(max-width: 500px){ 
     .mainTitle{
         font-size: 30px;
     }
