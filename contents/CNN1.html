@@ -70,7 +70,7 @@
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.04.16</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.07.23</span>
                     </div>
                 </div>
 
@@ -364,7 +364,7 @@
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAWUweV4yFp4_GJx7-JDkFJIDaZcin5s40e7Wb_Nst7QCqZKkpUmWlps9zMm-sauk5mxHGTfh_B--1cAvSzoNrBYHR9T3B9ax0rSKQz2QjAfreAvEYCOoncqnN7huuM4CUrP6EyUhQfzDLc4WBMCBM4NHe7FLewshaBWLI7YUBf8OFMm2fDiVVUBNJSjC9nB7Si3C5YTpMMeVnfAmZdQwMYrFWda4vXLuoaAePUyVI5NG3rYf8qifIJ2WhcykEr5R6Tn7o-y-bMZgImfkxulwtokWJj-TOpJ23nFaiwS6Htygc5ekZBnhHjJoNmbzC1GEmKSHoSlMk4jN4iT4pXU7td52ARt51lNQYW4P_PQAkXS4--C18m7ix6tqYMIfSXUc_GZirn7t3ZiJNVGQP9VCf1z1r5yAfMoR-2kPFx3SzjsGXi5EqKMUgyEkaxjFv3b5VnilhG2AkWpVjOiStGw3PRJVV8Vnclvzmpu4PCj35JPGW361pA3W2T-FkkURmZUWX12hmC49kl2DI82FLmtfq90f1B8YFgss_Nx9ND6__hXxQYmMANDtTfgLjeZk3Yz3a2X5QuwfWtmtPzLGMRMRBkIRgoYsrPEGTJs0Dtu4mr5lnzyGnHRWvCuaO6iEeiI4A2wdTkxs4-ecOEonXiKywoqJy6e0W6_DfBTWTXV0UkprtjuEJpBnlj27SAyck0W5v8789tRtgvSYNARd-bcUk_JWfS-Ae3XIwzYvraHhGYnEwfsiD5c78pxL8FrEcwjRHc3ung9Y8tu7vEJ2V3uoZ0IeTk9e_698Aic-SyWq6-wWoKEiC0kZio6q9-fkHjqEvEioSVQcJqtBsY3hgX1tZlkTkR5OzoCgf_KU0qo6JkqfO68sohUJR8nOY2p30ev0oDw6XHe92yWpJlWhUxvWdirqEQhKNl2pT-AZAO4OEwY6Z40e8UX5gnIUiVeQFKt0u-pDk4wG5Y8OBhhz1C30P6XjOiR1iLwI574fCqaZ08jmG-74psHXSI9_MCd_NubmxFnKsXoALyv-MwxcLPTId8IHDj43G7zrR5zszsOlMpoUe_7dm8GeEPMH4Yfbo-a1KADCUU0deuoq5kBBZcQj31CvMhpefZ2aRgXtal75PD9kdRs-iYPnSLuwoWWU-UTvGSfu3d-CxkoZDoAAe2KoK3U3BWQeRlH15CR4A3ND09_Uzo-HIVSsqV5-rr1UNgGM1VsT-Xebbd3z5JKbX4amEqJRqDDLdAWyxpmdBwmqTzY4sPGZCZbcz6n2pm2eth2_gggqtxw" style="width: 40%;">
-                        <p class="caption">2D transposed CNN 연산 방법</p>
+                        <p class="caption">2D CNN과 2D transposed CNN의 비교</p>
                     </div>
                     <p>
                         그리고 CNN처럼 transposed CNN도 input에 대한 output의 예측 결과를 계산하는 공식이 있습니다.
@@ -391,22 +391,29 @@
                             <li>Input 데이터 크기: 4차원 (batch * channel * height * width)</li>
                             <li>예시: Upsampling이 필요한 이미지 데이터, <a onclick="pjaxPage('DCGAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">DCGAN</span></a> 등</li>
                         </ul>
+
+                        <br><br><br><span style="font-size: 20px;"><b>1D Transposed CNN</b></span>
+                        <br>1D transposed CNN은 1D CNN처럼 자연어에 사용될 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">1D에서의 연산 또한 2D에서의 연산과 마찬가지로 겹치는 부분은 더해주는 연산이 추가됩니다.</span>
+                        <ul>
+                            <li>Input 데이터 크기: 3차원 (batch * hidden * length)</li>
+                            <li>예시: 자연어 데이터 등</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUHHdUeItnbrzhu87Z9VQtUSYxRlP_4l27oTYiMrkxgIHsbWvjBcYTaCV5F_lPGi2dY_m5oLAFN6RzBXU0pYgGTGPtBXffA7AhOUQoseoaAbvNXllbZsLAf7tyHImOFgQlYsswMFSxDtxi8QZCQ63JyEXVUIF_9H_yhKkmWVpsPU9iqskXCLmmW-LIMuKBlxNXP71q8Dxb3_SVaTurZ5xVAr1YHxDM_INtE6YB2UZJ_P_wu9mkTE4gP_2KsPp1z9-boFYt4njTbXT8rJNDXGeXbsq13EIykMkMlOUuPB4V4cxaXvQGAEie5AAXlKB8U0EFkxhPLUnoBzxtyIhLbh3aFCY4XNs7qEv7eNHanpr99qhbAM3HrXKVk4SWSWKuw9zUfJmOnplIYNETjOl_UFp0OrgpJxMnUbq_ODf77C9epz2A6ei1T_1zUuYjFaiJl6C2QKcghqaKE8PEgrW95qjDX0NmBmL5-XpFVM5vtSXBxZ5uIch0y7WM0saddFfAEZ7blgJx9Q5a4xo3_1W9CCeP-aG0Jy0Azy1-PI6VKexQRSPQa0z0nk9OPf5YSqhmyutqvi8Bt50X9fhNElWuUi7VKpWMhF9nN-JuVNAWF7l57SxE_bjBpvsBt1yY__AVGlLnu65tfFKUCsGWZtiuJnHCfWv3Dsh6XpSHzBtFQXXs2BORUadQqVgguxvRTtKycaCJjgkEcW6DcQWR-RDorWyysBh1_w4YVY_hYkUohJEomJoyFxhTDo81_AzqRpwFdIVlAWrVI1V_lLUHmJWZUogwy-HfuxKWI3zoeL5B6PhO89ClDZlCYsXzpfkXDfLVY9-UX2RAdGroKSKOBHyiEq2vWzIi7NRJH1m95iGQEr7MBrKb4m1PmtOnU9xcON5nvSOQmd5pCSYPSSLLfoiUUEEwSnxwdxMwSPrPlz8asp0_RrlXmJdvTF-MzwhD9ejk1yeTfYP3k8GsYU9-LJZspNy16rIGnqbKMj1BzXxwxz5xEk1tp5Og4204YvTB-QYIxu9HIThqtoQBt4Xvf1SwRd_5u3aOz6-nAw-KLQPyLbR8IdqYIZ7yG9eDifMlunFMiGEPSlsmTdN2YlxBED4qtqU-X2WjTPad_U2Sqhzj3x_ABKvEpQg3oR_1xsGHjEFkvxdEn9W4zQvhevX34CNPdADB2p3uyGwW9qY3n4AFJy2e_dkSBTRMF15b3MV06qqyDzFtVzSbr3hF9FuhfSi03VRFGE8dOtoeejw7hH_7U6OlS0PypX5SmzUfhLIsQbbSqQysu" style="width: 60%;">
+                        <p class="caption">1D transposed CNN</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>3D Transposed CNN</b></span>
+                        <br>3D transposed CNN은 3D CNN처럼 sequence의 정보가 추가된 데이터에 적용할 수 있습니다.
+                        <ul>
+                            <li>Input 데이터 크기: 5차원 (batch * channel * height * width * sequence)</li>
+                            <li>예시: Upsampling이 필요한 비디오 데이터 등</li>
+                        </ul>
                     </p>
 
                     
-
-
-
-
-
-
-
-
-
-                    
-                    
-            
-
 
                     <div class="doubleSubHead">
                         <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
@@ -414,152 +421,42 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        이제 DCGAN이 공한한 점에 대해서 알아보기 전에, DCGAN이 GAN과 어떻게 다른지 혹은 어떤 모델인지 간단하게 살펴보겠습니다.
-                        GAN이 어떤 모델인지 잘 모른다면 <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전 GAN 글</span></a>을 먼저 본 후, DCGAN을 보는 것을 추천합니다.
-                        <b>그럼 DCGAN은 어떤 모델일까요?</b> 단순하게 말하자면 GAN 모델을 직접적으로 확장한 모델이라고 볼 수 있습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 GAN에서 linear layer로 구성된 discriminator와 generator를 각각 convolutional layer와 convolutional transpose layer를 사용했다는 점이 vanilla GAN과 다른점입니다.
-                        그리고 모델에 batch normalization을 적용한 것도 이유가 있지만, 이는 조금 이후에 설명하도록 하겠습니다.</span>
-                        좀 더 자세히 살펴보겠습니다.
+                        <span style="font-size: 20px;"><b>ImageNet</b></span>
+                        <br>ImageNet은 1,000만개 이상의 이미지 데이터가 있는 대용량 benchmark 데이터셋 입니다.
+                        한창 CNN 모델을 바탕으로 이미지 정확도를 높이기 위한 vision 대회가 유행일 때 이 데이터를 바탕으로 많은 모델들이 등장했습니다.
+                        그중 몇 가지를 소개하려 합니다.
+
                         <ul>
-                            <li>Discriminator: Convolutional layer를 사용하였으며, batch norm layer, leaky relu 활성화 함수로 이루어집니다. 그리고 마지막 sigmoid 함수를 통과하여 이미지가 진짜인지 가짜인지 score를 내어줍니다.</li>
-                            <li>Generator: Convolutional transpose layer, batch norm layer, relu 활성화 함수로 이루어집니다. 그리고 잠재 변수(latent vector) z의 가우시안 노이즈가 인풋으로 들어갑니다.</li>
+                            <li><b>AlexNet (2012)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, CNN 연구가 활발히 이루어진 계기가 된 연구. 두 개의 CNN 파이프라인이 병렬로 이루어짐.</li>
+                            <li><b>GoogLeNet (2014)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, 1 * 1 convolutional 연산이 등장하고, 22층 깊이의 레이어로 구성.</li>
+                            <li><b>VGGNet (2014)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 준우승을 차지한 CNN 구조이며, 그 깊이에 따라 여러 종류의 모델이 있음. 준우승 모델임에도 불구하고 사용하기 쉽다는 장점 덕분에 GoogLeNet보다 많이 사용되는 모델.</li>
+                            <li><b>ResNet (2015)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, <span class="highlight" style="color: rgb(0, 3, 206);">residual connection이라는 개념을 이용하여 혁신적으로 gradient vanishing 현상을 해결하여 성능 개선을 이루어낸 모델.</span> 사람보다 더 좋은 결과를 낸 모델.
+                            <a onclick="pjaxPage('CNN3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">ResNet 글</span></a> 참고.</li>
+                            <li><b>Inception V3 (2015)</b>: GoogLeNet을 응용한 CNN 구조이며, Inception 모델 중 가장 유명한 버전. <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GAN</span></a> 모델 평가를 위해 사용되는 Inception score (IS) 지표에 사용되는 모델.</li>
                         </ul>
-                    </p>
-                    <p>
-                        <br>아래 그림은 DCGAN의 전체적인 구조를 나타낸 그림입니다.
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUfG2nq5WT7vEZFqxQUymbJDZ-XQLnVgXEx9j2TckBh66Fu4dEgK4HRBdaaPkGM6XOVa1CHEFFBdpwu1_7h2t9mEm4HAQVk0scaphLBfsTpH9O9THB8Ux97NaXu3BgSfJDUzE7hMmEaleyRrlhWZ1XOVBN_vh0qzrjpPS9EqMs8ERFiXFwNp8kzHNOJ3irC2Uh3PiQDbd-fmEHOogCxjimTZOt7ygbACbnsTt_kEBaK7p1IlLNIBs15dPKjiwqVjW-SM49EHge1HkXLGN7nMEsc5dXzNnn-beN3zmoiQ5zqChZnyB7mVeIMS2wzaUBGDWAKTtxneHfve4F-sbC6ENnh8MaZWC1cAHX9p-sbT9Lr-zgbX7Q3SsYcd-ZyB3qS2gGhx5YTDmigPcgfGBYDn45EAEySDNZZI2qINx6I7koq3Gzr9nAWvnvLdiH1MhBVjWemQB4luBdLHAKRGfrmTZDYRMuBaitafRmtFI4AjfZCnPbInotApolj58E8NZRl6FArr3J9XWWv9UNjj0be0p4xmm4Vamm_r780tF5qLU5puGnwPgyFzx7dIoJSt5l_6JfLsJkF-2X93V2hMpqpfI4WEnhPuDAjUjvZl2I79zuGpaw-dOqnjYhi6tLgCEhK68K7d1qNR0_U7vawFtyKsdH6j5KunO2bcPhF_avlQ9JmTS9W3uKFEwjmdpGthuBX-FqGuRS7AByMSK4-TnmfBDU4Ejx5ZR7t0Lm0LvD5BcqfJjj3nzGJ5TU0r8pXU4IfSDPSj8TGd2DWZyZc" style="width: 100%;">
-                        <p class="caption">DCGAN의 전체적인 구조</p>
-                    </div>
-                    <p>
-                        <br>DCGAN이 어떠한 레이어와 함수를 썼는지 간단하게 살펴보았으니, 본격적으로 DCGAN이 어떠한 의의를 가지고 기여를 했는지 DCGAN의 결과와 함께 자세하게 살펴보겠습니다. 
+
+                        <br><br><br><span style="font-size: 20px;"><b>Deep Convolutional GAN (DCGAN)</b></span>
+                        <br>DCGAN에서는 작은 차원의 노이즈로부터 높은 차원의 이미지를 생성하는 데 2D transposed CNN이 사용됩니다.
+                        즉 upsampling을 하는 데 CNN이 사용 되는 것이지요.
+                        DCGAN에 관한 설명은 <a onclick="pjaxPage('DCGAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">DCGAN 글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>Convolutional Autoencoder (CAE)</b></span>
+                        <br>Autoencoder는 데이터의 특징을 추출하는 manifold learning의 일종입니다.
+                        Vanilla autoencoder 같은 경우는 linear layer로 구성되어 있지만, 좀 더 복잡한 데이터에 대한 특징을 추출하기 위해서 linear layer 대신 convolutional layer을 이용하기도 합니다.
+                        즉 encoder 부분에서는 CNN, decoder 부분에서는 transposed CNN을 사용하는 것이지요.
+                        Autoencoder에 관한 설명은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">manifold learning 글</span></a>을 참고하시기 바랍니다.
                     </p>
 
                     
                     <p>
-                        <br><br><span style="font-size: 20px;"><b>GAN의 불안정성 해소</b></span>
-                        <br><a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 vanilla GAN은 mode collapse, oscillate 등과 같은 문제점이 나타난다고 이야기를 했었습니다.
-                        DCGAN은 이러한 GAN의 불안정성을 해소하기 위해 아래와 같은 방법을 써서 해결하려 하였습니다.
-                        <ul>
-                            <li>
-                                <b>Batch normalization 및 convolutional layer 사용, pooling layer 배제</b>: Pooling layer는 CNN의 결과의 크기를 줄여주는 역할을 합니다.
-                                즉 모델의 결과가 너무 크기 때문에 그 크기를 줄이기 위해서 필요없는 parameter들은 지우고 정말 필요한 특징들만 남겨두기 위한 레이어입니다.
-                                하지만 사람 얼굴 이미지 생성을 예를 든다면, 데이터를 생성하는 데 있어서 사람 얼굴의 주요 부위인 눈, 코 입 등도 중요하지만 각각의 위치도 이미지를 생성하는 데 있어서 아주 중요하게 작용합니다.
-                                <span class="highlight" style="color: rgb(0, 3, 206);">따라서 이러한 정보 손실을 최소화하기 위해 batch normalization을 사용했으며, linear layer 대신 convolutional layer를 사용한 것입니다.
-                                그리고 같은 이유로 pooling layer를 최소화 한 것입니다.</span>
-                            </li>
-                            <li>
-                                <b>Hyperparameter 제안</b>: 추가로 DCGAN 논문에서는 안정적인 GAN 학습을 위해 새로운 hyperparameter 조건을 제안합니다.
-                            </li>
-                        </ul>
-                    </p>
-                    <p>
-                        <br><br><span style="font-size: 20px;"><b>Black-box 모델 반박</b></span>
-                        <br>CNN은 비전 분야에서 이미지를 처리하는 데 효과적인 알고리즘이지만, 어떻게 작동하는지 그 원리를 알 수 없는 black-box 모델이라고 지적을 받아왔습니다.
-                        하지만 본 논문에서는 DCGAN이 학습할 때 활성화된 filter를 보여줌으로써, 특정 filter가 이미지의 특정 특징을 스스로 잘 캐치하여 학습하는 것을 증명하였습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림에서 보면 오른쪽은 학습하기 전에 랜덤으로 활성화된 필터의 모습입니다.
-                        랜덤으로 활성화된 필터는 이미지의 특징을 잡는 것이 아니라 모든 이미지를 잡는 것을 확이할 수 있습니다.
-                        하지만 학습하고난 후 필터는 침대의 모서리, 창문의 모서리, 침대의 대략적인 틀 등 스스로 중요한 특징들을 이해하고 역할을 잘 나누어서 학습하는 것을 볼 수 있습니다.</span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXaA4lhNpO_Io4cB2PUlBWotue-eI1ywhdK_rtTZZ8pyMxwODAG1iTJeyjfis_OY7VumvbC5jn-Mq7fQsuGcBb5lTInap8LjdrEqWjkdOnvQc-SBelizj3AEr_AlEPNhKjulvtdezOLr0XKq8SpL1RRdJqn_aN16jwOh70FSJNtMOVXYsV_szKTO7-Bsk0TaUy8CG8QcPVDKasPJGqw9jezM6bMTEy77ndnYfUtCO7JYj_Iu0RcpFa7hXXjv4CJGmZFvgYb5PWEW54MwECp5B28kVIh6n6J0zpTBnrwV66ASEsM6LWpmqOdmECzz_qxd_cUkDp_3Mh9NsWq8LpgqDpHkZA1Szs1dMIwzQDvAKtkH3SB_4k0Ye7QtLHN27lDxJZ-y34ac-fzitCjK3_v53hCbOxBnEg3rnfhuqZ5quATJmm5tPxgghGs_Kj0h-SDmfcCRbjwcjnibGf8CtSH4dShod_TzF-2n5-KdlhOwwPzWEysR2UfZ3x5CNTicesAlxeTafdd2hHZoqnEc7-sl6G4ZERfqLeJr6VaSWaWHFb32gqov4g1KX68D2vv58IDeqbAb028sQ4tDEsGSEBZUvmhovbFNGvC1fToq2UTpujA2AW3doeT2vP2zoHdZ_ly9GjHW7LPtD87o-k8vY8L-MGOa7qQShIHeM77b9JMaaFVnA8WekkS_hTcVXdF_iG8GFqfDdsKotnQvz9EAMfJ1U7By5J4aJGTdynkaM2OboPmmW73rIrsySCq3ayO9Rx8OuURK8rG_Ucdv_-x" style="width: 100%;">
-                        <p class="caption">DCGAN의 활성화 된 필터</p>
-                    </div>
-                    <p>
-                        <br>그리고 논문에서는 정말로 이 필터들이 캐치한 데이터의 특징을 바탕으로 generator가 새로운 데이터를 생성하는 건지 증명하기 위해 재미있는 실험을 하나 진행합니다.
-                        아래 그림의 위의 줄은 LSUN 데이터를 바탕으로 학습한 generator가 생성한 방의 모습입니다.
-                        그리고 아래 줄의 그림은 CNN의 필터 중, 창문의 특징을 학습한 필터를 비활성화 한 후 generator가 생성한 방의 모습입니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 놀라운 사실은 아래 그림에서 원래 창문이 들어가야할 자리에 모델이 문, 벽 등 다른 특징으로 채워 넣기 위해 노력한 모습이 보입니다.
-                        즉 여기서 알 수 있는 사실은 DCGAN 모델은 "learning" 뿐 아니라 "forgotten"도 가능하다는 사실입니다.</span>
-                        이로써 DCGAN, 더 나아가 CNN의 모델이 black-box가 아니라는 것을 반박한 셈입니다.
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUmZ3t79jf1SXLd7NINiGbcZs4WPMk1eKS27Qhu_9_mmexSJSAJ36HLCUvXlhcaE1rMgYgFAnOOdNBrNj0xSXl2lhWq1nIxfQQ2HKLcxR0A4iiN2otBFai5qPmCqlWQ0K1srx3khIwWXsVq2XlVRjVFjtKKZdAQMuP-QgHxqoGFDRVrCEeQHEAft7x1n4Fbd0LlDeJ0bfE6DBRvV29XOrW-47eWMVjyVFQWyPvLPu1V3OqjOmU-OVfsdNEwZpnn9EucU6vsFZyOXRnD6fBPt653nZr-XfxN_wm4nida1LEC-WuN8uD4_sEgnAtn7IFmt1JJxNo6beysYNgE8MzKw3eplS1XF1nX5kXdd20CfwNgsEF09zlyW4yjMRSGFhsjqHBPvLefltFUOooWPGhQA5o_lmSYaqJvx1v3aDy0fniW9-aEVkkBwe9XOVNtlWe2_B4QQHTTH1ocK6jwX57pHZcfG8TOcZdieXgdY9MZUnf_QTYkxzuiZ4da7727ESNjCEBrl73ONCpu7sd_tkyLNS3f4wcLEvhTq8fcXtbdb_ORfnfonldYXCFdYsZLuQFjWMvUjvDcvnHSJTFI7KKIerPzXrg21JMpouoSo5CaqnX8UQl14NraGw5ZQ62_VJmQmjHAAFFuKzXMGvM5_a8Dog7bY9N0ar3v1FwSmZVZtLSmHgj29RkuGhL7c7Ovj2rUSmH147gKNAi5PPVbgqFCJPcb4HKX4OZQ8Xhm2lJ0RZGbX1FbZ4PWi93Qx9uNP3tJ1c4DkKgIaFXp8DGG" style="width: 100%;">
-                        <p class="caption">위: 창문 필터 유지한 후 생성한 데이터, 아래: 창문 필터 제외 후 생성한 데이터</p>
-                    </div>
-                    <p>
-                        <br><br><span style="font-size: 20px;"><b>Walking in the latent space (잠재 공간)</b></span>
-                        <br>DCGAN 논문에서는 generator가 생성한 데이터가 연속적으로 생성 되어야한다고 얘기합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 이 말은 잘 학습된 모델이라면, generator 맨 처음에 넣어주는 잠재 변수가 존재하는 공간이 특정 의미를 지닌 semantic level의 연산도 잘 할 것이라는 이야기가 됩니다.</span>
-                        예를 들어 우리는 "woman-queen", "man-king"의 쌍을 본다면 의미론적으로, 감각적으로 어떠한 규칙이 있는지 알 수 있습니다.
-                        하지만 이런 의미론적인 것을 모델도 할 수 있다는 것인데요. 가장 유명한 예시는 자연어 처리 NLP 공부를 하신 분들이라면 word2vec을 아실 것입니다.
-                        Word2vec은 아래 그림처럼 모델도 단어의 의미를 잘 파악하여 벡터와같이 연산을 할 수 있는 모델입니다.
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW-InO4Wj-DejYjuBHkhvfFu7rQ-iMXxLJYRwOKrwCoBMotw-RWOKtqPZ4EUD-aFvAZJ1gWp1Llwfmj-aEsKh2VFxWXg8CRgxuUyk5-nSE__GRH5MANJrBJVW09HhpwNyTPxlVcLQFLex21aUWyCcVlwR_ch3s_KC0HarqAY9L1wqB6vRivBTonyh9K8rghIHpv2QhfsEt20hsTTbbAvcV8_CIsVbRaV1kKgWLixEd2wRQbS_Qmo3Whpm3bM5ZLzxxn9KBGWcJFPNRTJ-ognORQVnk1g7GwrkpMrt247cIfM4GrF3xv-OWn8vv69Xi2c_XXHIUGVh93wJ-UMmpcvZUZwYsFcwrypfVcW4J-N3097dHjV5iIcEcym1ZvINBeRhN3tDV6bhNdyzF1o1XT-hSXKdeRvYYowbsibqieApfEBx5n6zRPs0SS66GpgNbCnhzLm0a7U2Qvo-ZJO2cZBqFZziIUFg3oGQCZdLkbnHXLbd8wCuMiyYoEiODNFzQ1yLWOaYeuETrRu26wLUn76xrvLKfyr4q9f73hcehq3bzy4l4u4lNfDHX1Xcor9ZBEkGdbQZaGKGtFsy5rkmfC-zM2UFHaTO-S3QKrNBNVGWdLhmbCnIB2wkGadMUOKT2HWk7WwUvjrUwWzCpXL-RMwWduOrzZhdHvupGOm8nYnYxq3tajw7SXquj86nIBxTYfVZKZJwjy6J3vVOi3VtJPCqxiuzk-qdI4y5IOkjIxzcT9M8vRy6dA-WmBH8RoUDmhCsctesowjTRNfrwn" style="width: 100%;">
-                        <p class="caption">Word2vec 예시, 출처: Mikolov et al., NAACL HLT, 2013</p>
-                    </div>
-                    <p>
-                        <br>즉 DCGAN으로도 저런 의미론적인 연산이 가능하다는 것인데, 아래 그림을 보면 그 예시를 확인할 수 있습니다.
-                        "<b>안경 쓴 남자</b>"를 생성하는 잠재 변수에 "<b>안경을 쓰지 않는 남자</b>"를 생성하는 잠재 변수를 빼줘서 나온 최종 잠재 변수를 generator에 넣으면, generator는 "<b>안경을 쓴 여자</b>"의 모습을 생성하는 것입니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 계속 잠재 변수라고 하였지만, 사실은 잠재 변수는 Gaussian noise에 불과합니다.
-                        대신 generator 모델이 잠재 변수의 어떤 특징을 잘 파악하여 특정 이미지로 mapping을 하는데, 이러한 함수가 의미론 적인 것을 잘 파악하고 mapping 하고 있다는 사실이 중요한 것입니다.</span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW8SLHHGmvu3lgz9mWg10Lco8UTQ0oomVI9gygfJomcLKAswOZOXgQ0ixnWadwJ_8rl89fq2MpPKKYL3oV0r3JKMP1YLKCX8Pra9v7TyzvRI2KX3gJMbrYnt4rtjUKRLhTeaT70P54GG5YDEg0s16Yndb6AU2UbSXPNwhuV-TEHkxxE4PZUPVHJ8DzSi0PWIjauM2TSQjfJEa7s42ziSj8AH3i-5MSDqR9IvDipTik8-GGMWrDNe58iJ_a2so7HxgIh7eWrBHAzFH1tV8YYnJoTIyUzDqekMIg2s33ji2k1LAOEgSMqHjvF460YCzZhURupyhSpYnwE8f4piN9Fkaov_Dyzf2b5oCCoxu451QsElTU5lQt8B7xYLPCIJnWEC-X7J97CGTN9JHQ0XsE4aUbWW3E8OdxNKEXEtf7qCMX1_EPSlxG7aJqSIDm89TR-vCwXVKJu12aaE9kcCWF7wAlX_64Ms_zyJF6k3sz2Z1rJPzdTTLKu5bEvWNaUqE3NShqiShwqOTJ8hE-23-OCRAx5y8x6xHGNAnLTFZR9ten0QIAtRfQIuD80-HMlQi6uK66P64V9U4w4FTTQBm0hCJC7sElYINUdrlcsVwYJtvnU94SnyJSXaWAIYkVIKBLKdjroW5rPJ9EnClfqUf83yo-uV8y0LQzyqbTnp_CxvqLH44ByKotbQJbAvtxb_rdrg3KiBn2Vsn8kgKdGHQeEi9co-ugJYaOvRXj46awNtkw2-OWbUpN9e0eLrUbpv3xqbuiN8gz4O1MA_Fzr" style="width: 100%;">
-                        <p class="caption">DCGAN의 semantic 연산</p>
-                    </div>
-                    <p>
-                        <br>추가로 DCGAN은 저러한 연산 뿐만이 아니라 구체적인 의미도 이해를 한 것을 보여줍니다.
-                        아래 그림은 DCGAN은 "<b>turing</b>"의 의미도 안다는 것을 보여줍니다.
-                        "<b>오른쪽을 보는 사람 얼굴</b>"을 생성하는 잠재 변수와 "<b>왼쪽을 보는 사람 얼굴</b>"을 생성하는 잠재 변수를 interpolate 하여 나온 잠재 변수 결과를 바탕으로 generator에 넣었을 때, 회전하는 모습의 데이터를 순차적으로 생성하는 것을 보여줍니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 DCGAN 모델이 의미론 적인 부분을 잘 이해한다는 것을 뒷받침 해주고 있습니다.</span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUmK5NBw50GyQgj4ytO4n_aDjc1jQl1YKqOygFQ1vWf3wDPk22XEz9z8J7TRa9rz7zJ1BJOTYb-JhbDUWddS0GDL4lIPax3cnOYluqvOzGsYY8ejhVgnAvW1JB1tWiQj82VEQ1kf8SLdSUJKI7PDB9mhClYrUzhU46l1xDRxcY1uP3WSN62peK9lXG6BlA_ipLA2QaeVRjwEsih7NCJXpZoJkCzDRix4BmVrPSsnSLXuJDPgokAxWcXSwH19sp0LTpg3XXX0bp_qSh6J1Fr1QSvIrJfo2W83U8niRiI0bf00xZWjDurQqP23yFHY3thzHDRuvU2F84IULjjEfAhpXhxWyvHrzhIYzwpUj7YnSNqTSnI9rTapEYujFECWpOrJFv0O2AdamZQTmthZgZnew5FaGffdZKrrZHOGH31vJZVtNu23fz40ud249soPn0aLKbZYK089PPiuEj1x1sHI1KpxB3Zcnj8CG2xJcHbU9rkFuphVoL5_Ma5xUun3b1-q0dMhS2qvuvOKJA-CqTliiVCrxp7Yi0R3zQmGGjdpXD1grqEWsH6ZwBEGQOnIRcL19LfKDAMhqNZW2dYJnwTi4qnmm-LeBABNaPFq-xuhHW5ism58zRMFavbgJd5r5LytLODrxsHkCZiDCr-cFO5qntxS2xeid54YLMBcjV2fQNEH-3qSSz_YgyJn1peAzabwkigKVBVLTAdmkloseVcSxzmAQg-PWqvHWUYX-dqtzyiPYwFI2-Ua3B2P_c4IvS8JHj6cZCPg2frgVlh" style="width: 100%;">
-                        <p class="caption">"<b>Turning</b>"을 이해한 DCGAN</p>
-                    </div>
-                    <p>
-                        <br>그리고 위의 그림의 예시와 비슷하지만, 특정 잠재 변수 두 개를 선택하여 interpolate 하여 생성한 그 사이의 잠재 변수를 generator에 넣어준다면, 생성되는 이미지는 순차적으로 변해야 한다고 주장합니다.
-                        위의 그림도 오른쪽에서 왼쪽으로 서서히 변하는 모습을 보여주고, 아래 그림에서도 특정 방을 내어주는 두 개의 잠재 변수를 그 사이에서 서서히 변화시켰을 때, 서로 다른 두 방의 모습이 서서히 변하는 것을 볼 수 있습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">논문에서는 이러한 현상을 walking in the latent space라고 표하고, 이는 모델이 데이터를 기억하고 있지 않다는 것을 방증합니다.</span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweV507wttXdJqqjbWB4d-CZsAIlLIgzFAmNtIU97CP0OLBgTICYXPcX2sf7VmYgk_-qRs2KSk8tqDv6qXHmFMKOjXg4egPvf-yhnnar1eCZSvQQsNZHuQBtnMqV_164wbGrP6vye934DUKoelbOdJbTu3C062Fn2YJUpXjhK-tpRDH8ZYxVL_5IhwGlE7RB4ZFdZrLXVhvQpdTgJnWTbIIiFU2WjsCiUm2Bd2hxe0PqP-fNhzVKedO8NruKZo3eCNK8WZ_5bkBW2ku3lyO4bzA0NqGSieDqIIawTX2oE18nhMOwB3tcNsFIeAfWtCr-YYXfXQ_Q2u49E-UCiLtjfT-VsF2V5ncBa9PBaHKu5gdUG4WVLhA9DOEnxpdDysJ1kqI3-IClqa_o5btzmSul6RCf7gNJwvTsOvzvRSYZAfNnVhVruc8dGMRZNXJs5s-K1kD_rd7maEtaHbN-muMKhk5GdiCDdtEIPOnBto558b23fjTZAhx9se8wYf1nQjitPGVagsRgaaYgCauFa7x4dfc0d9ga-eLK-3YeI3GpmmhWgtxx3CYdS8xMEQrJsHsd9BmclPUkXciqksXOu51NvPHHy6b8LsQfc7lAfNPxvaRLAM771IPIMlpyLrOQGhvr__j8_c60lX-R1R7nkjWYqIazr9pC4IB4l76YOS1EuROByKCbMeCyVcBYWqWUkbhliGCPblbXPf5AmGAoU6gBMrScrnIwhEqkpBaU6J29H9gHKGhtWVVKPM9M6GyFWGgj-k_KZmcyr26BUU_Oa" style="width: 100%;">
-                        <p class="caption">Walking in the latent space</p>
-                    </div>
-
-                    <p>
-                        <br><br><span style="font-size: 20px;"><b>Unsupervised Learning 적용 및 성능 비교</b></span>
-                        <br>그리고 DCGAN은 unsupervised learning에 있어서도 상당한 성능을 보여주었습니다.
-                        아래 그림은 10가지의 카테고리의 데이터를 가지는 CIFAR10 dataset에 대한 결과입니다.
-                        DCGAN을 CIFAR10의 특징 추출기로 사용하여 그 결과를 pretrained 분류기에 적용을 하였는데, 83 %에 가까운 성능이라는 놀라운 결과를 보여줍니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 더 중요한 점은, DCGAN은 CIFAR10을 훈련하지 않았으며, ImageNet dataset으로만 학습하였다는 점입니다.
-                        즉 보지도 않은 데이터의 특징을 추출하여 사전 훈련된 분류 모델에 넣었을 때 상당한 결과가 나온 것에 의의를 두면서, CNN이 unsupervised learning에도 상당한 경쟁력이 있다는 것을 증명합니다.</span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUrkO9x6gUzDb3sP8Do9QeTvJ31kqm_yrXTr67SbmRYE_Z7xhYRUZGfw4pyWhKIyybYVId4w5YlPfW-Tk2_an0_yYomLfYnDGa5ZVjtlgDzABhcirOu7a5zzMoO7FghPqAViSr8vGdSCRGM4uZ94yK9kfMjXlhx1Le915nBxBGHxrNVccXWUCo2t_pt2t1_FuMUDydTYc9vSCg7R0YI1-g1snx6tST-EvRRv7pfhcZi2F3CpTWU-rmfChVO825sO5uOjC4wMPEFrsD4yFC-lDpa-M6aGpwp6RSoneS9jK2UZmysrAOV3PuWWqMpAvvZ7iT2kkeHzK_8QZewvKJDbqRNthAbpYjjtvvAS7TfghmgOTtcFIB_u3jAcd1ZiCYZ5_8m3izaYohJY2VdJkQgmyFtG4zWJGS_M67Bdq5hTXzwNhDw1ivIY8ZgyATux5fFe-vU7iqObjaq3S43xc-qfjGbkpvtCsWUt96tBA0mmiLUciHtGHWcOhYKOJNvUZN5Ome9h2-6yqMAns_sczx9TkyxMHXPswzST_euXAAGvn924rmmvjmiCr8Z9gf5lNZ2mt33lHbC0zL2OeH5R81bWnBjgWKVC5Lvl4fRdcmA7sKycshCQrtzIzqIAqbxcc7Wnw-01oTs0Z1RGc2XdMiRi5vO1V_rbX9sLt9-QAdVWCbMyNTxo-yrwEmLbmKaJPTJvdn-8ibNfeBlF5sijtMa716OgLkDvXmtGME5Uf3Q2MMiXTrtruqd0uqXwCuHxPnfqsJBdsAaCne8lVp6" style="width: 100%;">
-                        <p class="caption">Unsupervised 분류 결과</p>
-                    </div>
-                    <p>
-                        <br><br><span style="font-size: 20px;"><b>생성 모델이 데이터를 기억하지 않는다는 것을 증명</b></span>
-                        <br>아래에서 DCGAN의 1 epoch 때 생성한 결과를 보면 방의 모습과 흡사한 것을 볼 수 있습니다.
-                        1 epoch 임에도 불구하고 방과 흡사한 모습을 생성한 것을 증거로 모델이 overfitting (과적합) 되지 않았으며, 데이터를 기억하지 않는다는 것을 증명합니다.
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW-lPxdnnJhWfJAz524g-5ExKFfcqHK6mafqE0mMFDJs86dh05-1l6oRRuV-EahDPazAJ_AZ26l1rWGUoGwkyKmyV4GvHCL-d6KMyi18v2qTc_kHmYjqKmTDPFuRTLBTJMMjMszNxSYA28-6IKI99U2CzoOn2rZ7rgcDqd2cweC_91M4JvKN85HDjkmDiT7_-f3dHfsiY2wcP9s-w-bFE6tafuhnITPBESinhNvtA4exmcLbN12tmusUuToRRUCCgeLaWr9c_4rMlsRk48oFyctPmmgikAn8RzpmrI9sT623s3WSHq0KvCmVsT3I4pBA1YOdhOLSllAoMR4UvB0WiDZnvS06tMwtcFUFFqh0Pao4t9zFxJ-A7KhvDc1JaZegWLpfa6XeTM7MNAAr8RtKl5icmWA0bdUqIFrDECLYtuu-BCtq2Wv-7T17MM39MDxzt6Y0iAAzFSKK0s-vsmOuOpeCnSo2DX90y_zL3iT53VpAbH3A--03GDmYHhjOJZmVCkxdjpFYmd5FU0GTQQJqwuB0LLpNMwrB--KhrdUnwFc6G4JfgIXTaCJsgNEwI4RiBZtNqL_kEOQXE13ojcJDA2cKeRFgePYyPDawAux767L28gszQNvKyduDcS-HrP9oWQXlE6oSaBWIPWOARfL4Li1r7z-LhQc8ivtNX8tqJO4mG6BP3VGJ4WEergIyzyx2d_01dnBY80U3ln_aSnhufhNLVN_yZxZ37tEoE83-eoP9bWdH0CpC5GjKhHv6D2Ka1GQaVEugQWo_jvO" style="width: 100%;">
-                        <p class="caption">DCGAN의 LSUN 데이터 생성 결과</p>
-                    </div>
-
-
-
-                    <p>
-                        <br><br><br>아래는 DCGAN 논문입니다.
-                    </p>
-                    <div class="link">
-                        <a href="https://arxiv.org/pdf/1511.06434.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DCGAN 논문</a>
-                    </div>
-                    <p>
-                        <br><br>DCGAN은 GAN의 불안정성을 어느정도 해소하였고, 모델이 semantic한 부분을 이해하고 생성한다는 것을 증명한 데 있어 매우 큰 의의를 가지는 연구입니다.
-                        다음에는 이러한 DCGAN 구현을 해보겠습니다.
+                        <br><br><br>다음에는 기본 CNN의 구조를 이용하여 MNIST 데이터를 분류하는 실험을 해보도록 하겠습니다.
                     </p>
 
 
                     
                 </div> 
                 <div class="tag">
-                    <b>태그</b>&emsp;#DCGAN&emsp;#Semantic&emsp;#생성모델
+                    <b>태그</b>&emsp;#CNN&emsp;#TransposedCNN
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
