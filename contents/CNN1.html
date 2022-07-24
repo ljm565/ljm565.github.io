@@ -84,6 +84,15 @@
 
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이 글에서는 CNN의 원리와 종류, 그리고 CNN이 작동하기 위해 필요한 stride, pooling 등에 대해 알아보도록 하겠습니다.</span>
                         그리고 CNN이 어디에 사용되는지, 유명한 모델이 무엇이 있는지도 간단하게 살펴보겠습니다.
+                        마지막으로 CNN의 한계에 대해서도 언급하도록 하겠습니다.
+
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>CNN의 원리</li>
+                            <li>CNN의 종류</li>
+                            <li>컴퓨터 비전에 있어서 CNN의 사용</li>
+                            <li>CNN의 한계</li>
+                        </ol>
                     </p>
 
 
@@ -315,7 +324,7 @@
 
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAWUweUlkv17-ydIDzsRhomC-D3aC0RiX7KrBugyw18Iz4tT8gE0yL5p0oxnnmH3GfDKQBGcxIGpJsdo8jPqzHzgtl5ULDhBW54dgy5tZviPyGSUT4ZPANUHIbuxmjXHqbbrksBLtpD9VhYn_R3bTjNjIgmJe-1A-aUDm9MByoO_T7mATMP1spxsFh1cBs-dMRAimgX2Gknhdw17js1GaRj_71Qk9VSsNMTim3upu_rIkk5KWLF0fTJvhswspDwHh--VxFFKGFMSw0Q75BqOG70IaLUVB-l5g6D0Tu0R9T3HVlUaIeStVgEi4csZAHQRYaBv1QSCGp2-xeFdfVhhR3VYBHUDtqjh5NNjFiqCnmxriNr59wFb0YzWkv1oPjrrhmC-qGBNYiMtXVXRGr-f8xHvA3HYlU9IAaIeyE5Gjjnrst1x1O2lld6jZgwCOtlcvbaa2pqDDbid29-6PMqbknp5_IywdzDWKrc0cil-XaE3o-XVgD-Q_qE63AvS9j0W0zZ-E549gHNoxDR4QNwsqLHnJrlxCpT-SAEvE2h3iEwVsDVZu4A4jiaH_zj40XHGW3KtZ-1WxExf8rOc84bmj7kzbJRnQelJyBUoopkJe2LsUiearBJVZ_NLgSu_rxhZHz2UXax6Tb3LwD4xz2d-Lx0uSFeZuv--BZqxunp8gc19fUHW2wzFy-QtSwoUBadYAZNLXSLJeKrdFVWjCPXLqGcGzo4WQ0jdSSjrjQ8go1L-NGkVC5L-vhLDHVPTkY8lw7TTfZoDmXHm2yqVkZqVk0BNY4_juUF12qQpaObRKLrcR9SLCeCCLqe1V6SotMapra0VHuTEc2JdkRq5J_mkbGfWSxjJgZnmx1fXvrMo-MKiAlyahB-Oh0vjMJjk3eDdP0wKQWnAdOFwfNmevE4SzsvS_GaoVuQHxT7af9eCh6F59VTYPIXD8h9-L6NMRBMrPy1y2ai7Dk_M8lALshzw_8-_SQX1vfPdZpeDKZsxuW4CeH7jcbGce7nPGiC75USIXCayl5D4q3g99yBot0mH53rwviSS1YFrL1qSi8arOSHm_Ph9Dou2SHtJrb1yQZSiksTdlj28ZkHgsenReKONioOyyOatyF-yPioM6pvZBmRs5YW_cL816unA1eDarrWX3nD-VyPFVaMKiSMYczWPsE9g5e8qIFNKMplIIqPYSnH1sFNi6fhviKO9zkOldIhNp3QhhyJxV8wWpvdioW3BUi5YNVLxO9gsknK944Mw1h61S1VyF2kTr4mSljc9hCSw3DmUfWO4" style="width: 100%;">
-                        <p class="caption">1D CNN 예시, 출처: Kim (2014), Convolutional Neural Networks for Sentence Classification</p>
+                        <p class="caption">1D CNN 예시, 출처: Convolutional Neural Networks for Sentence Classification paper</p>
                     </div>
 
 
@@ -417,25 +426,25 @@
 
                     <div class="doubleSubHead">
                         <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
-                        <span>CNN의 사용</span>
+                        <span>컴퓨터 비전에 있어서 CNN의 사용</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
                         <span style="font-size: 20px;"><b>ImageNet</b></span>
-                        <br>ImageNet은 1,000만개 이상의 이미지 데이터가 있는 대용량 benchmark 데이터셋 입니다.
+                        <br>ImageNet은 1,000만개 이상의 이미지 데이터가 있는 대용량 benchmark 데이터셋 입니다(ImageNet 데이터를 사람이 직접 라벨링 하는 데 22년이 소요되었으며, 이러한 소모성 노동을 막기 위해 self-supervised learning (SSL), semi-supervised learning 등 다양한 학습 기법 개발의 초석이 되었습니다).
                         한창 CNN 모델을 바탕으로 이미지 정확도를 높이기 위한 vision 대회가 유행일 때 이 데이터를 바탕으로 많은 모델들이 등장했습니다.
                         그중 몇 가지를 소개하려 합니다.
-
+                        
                         <ul>
-                            <li><b>AlexNet (2012)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, CNN 연구가 활발히 이루어진 계기가 된 연구. 두 개의 CNN 파이프라인이 병렬로 이루어짐.</li>
-                            <li><b>GoogLeNet (2014)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, 1 * 1 convolutional 연산이 등장하고, 22층 깊이의 레이어로 구성.</li>
-                            <li><b>VGGNet (2014)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 준우승을 차지한 CNN 구조이며, 그 깊이에 따라 여러 종류의 모델이 있음. 준우승 모델임에도 불구하고 사용하기 쉽다는 장점 덕분에 GoogLeNet보다 많이 사용되는 모델.</li>
-                            <li><b>ResNet (2015)</b>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, <span class="highlight" style="color: rgb(0, 3, 206);">residual connection이라는 개념을 이용하여 혁신적으로 gradient vanishing 현상을 해결하여 성능 개선을 이루어낸 모델.</span> 사람보다 더 좋은 결과를 낸 모델.
+                            <li><a href="https://proceedings.neurips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>AlexNet (2012)</b></a>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, CNN 연구가 활발히 이루어진 계기가 된 연구. 두 개의 CNN 파이프라인이 병렬로 이루어짐.</li>
+                            <li><a href="https://arxiv.org/pdf/1409.4842.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>GoogLeNet (2014)</b></a>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, 1 * 1 convolutional 연산이 등장하고, 22층 깊이의 레이어로 구성.</li>
+                            <li><a href="https://arxiv.org/pdf/1409.1556.pdf%20http://arxiv.org/abs/1409.1556.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>VGGNet (2014)</b></a>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 준우승을 차지한 CNN 구조이며, 그 깊이에 따라 여러 종류의 모델이 있음. 준우승 모델임에도 불구하고 사용하기 쉽다는 장점 덕분에 GoogLeNet보다 많이 사용되는 모델.</li>
+                            <li><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>ResNet (2015)</b></a>: ImageNet Large Scale Visual Recognition Challenge (ILSVRC) 대회의 우승을 차지한 CNN 구조이며, <span class="highlight" style="color: rgb(0, 3, 206);">residual connection이라는 개념을 이용하여 혁신적으로 gradient vanishing 현상을 해결하여 성능 개선을 이루어낸 모델.</span> 사람보다 더 좋은 결과를 낸 모델.
                             <a onclick="pjaxPage('CNN3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">ResNet 글</span></a> 참고.</li>
-                            <li><b>Inception V3 (2015)</b>: GoogLeNet을 응용한 CNN 구조이며, Inception 모델 중 가장 유명한 버전. <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GAN</span></a> 모델 평가를 위해 사용되는 Inception score (IS) 지표에 사용되는 모델.</li>
+                            <li><a href="https://arxiv.org/pdf/1512.00567.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Inception V3 (2015)</b></a>: GoogLeNet을 응용한 CNN 구조이며, Inception 모델 중 가장 유명한 버전. <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GAN</span></a> 모델 평가를 위해 사용되는 Inception score (IS) 지표에 사용되는 모델.</li>
                         </ul>
 
-                        <br><br><br><span style="font-size: 20px;"><b>Deep Convolutional GAN (DCGAN)</b></span>
+                        <br><br><br><span style="font-size: 20px;"><a href="https://arxiv.org/pdf/1511.06434.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Deep Convolutional GAN (DCGAN)</b></a></span>
                         <br>DCGAN에서는 작은 차원의 노이즈로부터 높은 차원의 이미지를 생성하는 데 2D transposed CNN이 사용됩니다.
                         즉 upsampling을 하는 데 CNN이 사용 되는 것이지요.
                         DCGAN에 관한 설명은 <a onclick="pjaxPage('DCGAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">DCGAN 글</span></a>을 참고하시기 바랍니다.
@@ -445,9 +454,126 @@
                         Vanilla autoencoder 같은 경우는 linear layer로 구성되어 있지만, 좀 더 복잡한 데이터에 대한 특징을 추출하기 위해서 linear layer 대신 convolutional layer을 이용하기도 합니다.
                         즉 encoder 부분에서는 CNN, decoder 부분에서는 transposed CNN을 사용하는 것이지요.
                         Autoencoder에 관한 설명은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">manifold learning 글</span></a>을 참고하시기 바랍니다.
-                    </p>
 
+                        <br><br><br><span style="font-size: 20px;"><b>Semantic Segmentation</b></span>
+                        <br>Semantic segmentation은 각 이미지 별로 미리 지정된 클래스 개수에 맞춰 이미지를 픽셀 단위로 쪼개어 각 픽셀의 클래스를 예측하는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Semantic segmentation은 컴퓨터 비전 분야에서 가장 핵심적인 기술이며, 이미지의 모습을 완벽하게 이해하고 있어야하기 때문에 최근 자율주행에서도 자주 쓰는 기술이기도 합니다.</span>
+                        또한 이를 위해서 만들어진 MS COCO, PASCAL VOC 등의 많은 데이터가 존재합니다. 
+                        Sematic segmentation 분야도 CNN의 딥러닝 기법을 활용하여 빠르게 발전하였습니다. 
+                        <ul>
+                            <li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Fully Convolutional Network (FCN) (2015)</b></a>: 기존 이미지 분류 모델은 pooling과 같이 이미지 차원을 줄이는 레이어가 존재하여 segmentation을 위한 모델로써 적합하지 않음. 하지만 이미지의 차원을 줄이지 않으면 메모리 초과 문제가 발생. 이러한 문제점의 합의점으로써 인코더, 디코더 기반으로 제작된 모델임.</li>
+                            <li><a href="https://arxiv.org/pdf/1505.04597.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>U-Net (2015)</b></a>: FCN을 확장한 개념으로, down-sampling 부분과 up-sampling 부분이 대칭으로 U의 형태를 띄고 있음. 그리고 down-sampling 할 때 결과를 up-sampling 할 때 그대로 concatenate 한다는 특징이 있음.</li>
+                            <li><a href="https://arxiv.org/pdf/1511.07053v1.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>ReSeg (2015)</b></a>: CNN과 pooling을 RNN을 통해 구현한 ReNet에서 파생되어 나온 segmentation 모델. CNN과 RNN을 결합하여 사용하였으며, up-sampling 과정에서 transposed CNN을 사용.</li>
+                            <li><a href="https://arxiv.org/pdf/1802.02611.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>DeepLab V3+ (2018)</b></a>: FCN도 down-sampling 등을 진행하면서 데이터 정보의 손실이 발생함. 이를 해결하기 위해서 ResNet을 적용하고, 확장 비율이라는 새로운 변수를 도입하여 정보 손실의 문제를 해결.</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUdY3kSjlvKip9Q_tGA3IpkPKkQTN4dzsJ8zLNIFAhqCDwWHkAUGaWh0ROq7e2qgzfDIPrIAQheg5zxZtahTm6Oq7tIrAxzYJs2_89DACZIdHf-0Dckq1HHNHrMMWb_DqbUShatNOHYN1SG2wJixEZw2mk8GiHu-MmdwsOfbnhiRj95Go6n1jrRMdLDROfUH-svhRNNODLfDOXagPigWbBKG3WeyebZumaTYjKwQaun95X9h8UC0MESGWAYSjTpjnvMpTUn0VyG80RwEPbXNfkqEqSKA97yz-DdQ1ctiWwPasS0hDnkjZjXHtsJXuxdbxJSRM-BxliOX5TZcP13yoDs4-HY2bCfImKWsNQstcGjMYWDBsm9swwLeDNm4U8UhpDbk8KeYYqFvw0M1IjbvXPGKE2w14EppPf9Ysbwp3bbDe1gJXMFvKlakj7QXtBm6_9SU24JxLzN4y1ztoTcamKtKkgm6IIaIgWEqgSUnaPRcHGkPO5VDgv_Ig64mxEGHXYmuTUauN-_5cQzHVoAaY7jURVc4wJQ5OQ96R4yKX2mQTazbgYGCmQ5GHjpxLNdn0IjajgmMcCq-XvnMORoOBun_lVU-8DMG0a08JHh54YkIhtVSXCsr7P0780XeHVQGQH5Flj8qR2_7OS8H1z1aC5hDnvqGxvmlfeUgJfIgTe8C9WSU9XEoVQqk65WceR3z7byCwY3AlO5jxqtXpUrX-Z26eqNSQ1rl-MHQQlikm5ek4qx0hlB6XJhcTzy611smN8Lsv_77pOFbM2KX80c9oV_TcuK0KHDhaJ8EL17aWSYpojv_opGMsKXhgFNyH3Q3plhbzAbzMsNIX5jqXzOE1-xbMZyba0r92D-Xgo2gATZUaLpJdjPhYvpg27qzR11cuQoeKtSd--FN5I6LQInTpnkDS3UbdC0CiU-scluyaAjEFEfuXw7pJHuzCrjis1kH0GslVjzudM_JToRBDrasRtNdnb4d1pJ9MOo8m83i3a2piQCE6QutsIA5rVictznzZQBB81hnCcYuq_fXPz2N_Uj5a-St9aRqmENImyIjdTbikO-cHU_B1K_Vh5PD1eU9G-sYk-6c6pgQIgs40WzjJnYuEY-0iGPG6HkFUMtujcXI_sLgYQqnME-ncTP1NPoNDNpV6SElOgNcqIbDjgx4svx2W-yV84H4eB_vA_xuexrSOQLWzLK9xQSvURh9Ug-uaJ99IwUJZHgoc8ubpao49WsQ3_fXpmvoklVSQBQPq7oOpidcvHcCh8JRl8iDtVq2jfY" style="width: 100%;">
+                        <p class="caption">Semantic segmentation 예시, 출처: DeepLab V3+ paper</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Image Colorization</b></span>
+                        <br>이미지에 있어서 색은 매우 중요한 요소입니다.
+                        CNN은 색의 특징을 통해 그 물체가 무엇인지 파악하거나, 알맞는 특징을 추출합니다. 
+                        그만큼 색은 이미지의 정보를 많이 내포하고 있습니다.
+                        특히 colorization 분야는 흑백 이미지를 칼라 이미지로 바꾸는 데 많이 활용되며, 영상에도 적용이 가능해서 흑백 영화의 색 복원에 사용됩니다.
+                        <ul>
+                            <li><a href="https://arxiv.org/pdf/1603.08511.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Colorful Image Colorization (2016)</b></a>: 이 모델은 ground truth와 동일한 이미지를 만드는 것이 아니라 그럴듯한 칼라로 흑백 이미지를 복원하는 것이 목적임.</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWx2RPs9kyrYzxkKEFtUVxZIHHEJVbdWStRoFfCVq6uU72k5d0IlXAWXViFuz9KT0AtK1j3kOsgezDJbtzGTvADZ7agQMLCg_FvDQXPIde9iBEWjC66mjnu_L1MHiz8hrRJGii53d9-Fa0CEutKojn4DAsRf6-aS_Mrg6AUp79WCtEz_PHcWByqJ6xi3zcieNPt9ER927WT_ki3nBRv1NjsfDUIcRGyxdNaI2RuuwZXGp_aL2R_D8VFv2y0taj0YWiDslcwRx-rbFF74qS-fuxIGBMf6egRlVPGltQNeEKWz7LvKbPDUSXNF4I-apuZMXEqPA_Yz5lRn_NoiKu2vSWyxsebmvlWrBzV4-jINTdmmzdx9Lm3kdaTXwirfZTzvyrwbyX2W2rW-t7aqtaiYWOek3aQaHLBtWNgt_c1Q3pMTwj1Bzl_aanIOp6L7CIgsXIckYJYOtzAFHu-gMetnasvqEWQonqTmiGAsWran4XQcMkxdVbxvqPz8Q4sXJM78HZLyqW-YH6In1PP0U3Y8GGcbQUu115v6305b_PT9i59d12IjbbPND4gVKEmcefg8pXUU63KYws8IrLRDSCntumjj1ZNVev4JuigDMGx4r3dtJpvU-0tXW-mj95lQ2XwtCrJ7f0alu__eCYY-khFEH4agP86sGurVeWxcnmCXXm6RG2BT79ZRzgjzoEyZYWZC_wN3oRBX2l4XEKw6zDU6QRs6jIKFQouH_di6-mZ_3FYwVXNXflbPwOsdn6_I6H61v_j6PdjTh0rhKCp5UUxy2N838-TlxOtGHj5o-YJ-vIBgHK5hfcM8qVZlfF-2eMVNPKFT07m8E_ukhWR_8n0gvVp4nPicKxMWVOvzgPDtARGTkQlFc80qCeQFN3hZ8hI7ZhYemKI64iVNZLgNROBMFHbBViCXNnXQHT8NBhD-SlmlWrMiqmnJU10nGlEzMZ582GGrHDl3o9IxdfU15YYiVTfg2a25KbNjAQAE-cDTBJTGHHudGPkFjPV8Dohxw-VXQo9A5TxG64pdnvsJoJZmQi4BhMS_QrXOU3S4Vwwnl4x7gpD4lxxKl5_JHowSYeSdzTAerdopaUL2n5sW1HKH13ZAfJEJgURHQfcuTb3Mt1D_bR8Dc5CYHk4Bdr8_2CshnpWS769oXO33iIllQ6mAozfj8CwjCB3rHT3_u70mj1Q7pDYx7MtrKS7A78NQvNPwR5RNu3ZwU-oQd93tjykHfgh6tMwRTssykVT57j6HxgvY-XKek2wZLocn8zjoqzy8jU2" style="width: 100%;">
+                        <p class="caption">Colorization 예시, 출처: Colorful Image Colorization paper</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><a href="https://arxiv.org/pdf/1411.4555.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Image to Text</b></a></span>
+                        <br>Image to text (image2txt)는 이미지에 캡션을 다는 알고리즘입니다.
+                        이 기법은 이미지를 해석하는 CNN, 캡션 문장을 생성하는 RNN, 성능을 높이기 위한 attention mechanism으로 구성되어 있습니다.
+                        이를 위해 사용되는 데이터는 Flickr 8k, Flickr 30k, MS COCO 등이 사용됩니다.
+                        자세한 내용은 <a onclick="pjaxPage('img2txt1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Image to Text 글</span></a>을 참고하시기 바랍니다.
                     
+                        <br><br><br><span style="font-size: 20px;"><b>Object Detection</b></span>
+                        <br>Object detection은 현재 컴퓨터 비전 분야에 있어서 가장 중요한 기술이며, 지금까지도 계속 발전하고 있는 분야입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">또한 물체 탐지에 걸리는 시간과 정확성의 trade-off 성격을 지닌 특성 때문에 빠르고 정확하게 물체 탐지가 필요한 object detection 기법의 특성상 아직 발전할 부분이 많은 분야이기도 합니다.</span>
+                        <ul>
+                            <li><a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Region based CNN (R-CNN) (2014)</b></a>: 이 모델은 인풋 이미지에 대해 물체가 있을 법한 영역에 region proposal를 하고, 각각 제안된 영역 모두를 CNN을 거쳐야하므로 연산량이 많아져서 병목현상이 생김. 따라서 한 이미지당 물체 탐지 시간이 50초가 걸린다는 문제가 있음.</li>
+                            <li><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Fast R-CNN (2015)</b></a>: R-CNN을 보완하고자 나온 모델. Fast R-CNN은 한 이미지를 CNN에 한 번만 거치고 나온 feature map에서 region of interest (RoI)을 바로 projection하기 때문에 병목현상의 문제를 해결. 하지만 region proposal 하는 것이 neural net으로 이루어 지지 않고 외부 알고리즘에 의해 수행되므로 시간 한 이미지당 2초 물체 탐지하는 데 2초 정도 소요되며, 여전히 실생활에 적용하기에는 어려움.</li>
+                            <li><a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Faster R-CNN (2016)</b></a>: Fast R-CNN의 속력을 향상 시키고자 등장. 이 기법은 region proposal network (RPN)이라는 물체가 있을 법한 영역 제안을 NN을 통해 하기 때문에 기존에 불가능했던 end-to-end 모델의 구현이 가능. 또한 RPN에 GPU 연산이 가능해짐 따라 그 한 이미지당 물체 탐지 시간이 0.2초로 속도가 Fast R-CNN에 비해 대폭 증가했다는 의의가 있음.</li>
+                            <li><a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Redmon_You_Only_Look_CVPR_2016_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>You Only Look Once (YOLO) (2016)</b></a>: YOLO는 Faster R-CNN 보다 10배나 빠르게 작동하는 알고리즘. 이는 이미지를 그리드로 나누고 확률을 통해 물체를 탐지. YOLO는 빠른 속도를 지녔지만 작은 물체에 대해 Faster RCNN에 비해 정확성이 떨어진다는 단점이 존재.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위 기법들을 전이 학습 (transfer learning) 등을 통해 downstream task 로 활용할 수 있습니다.</span>
+                        예를 들어 물체 인식 뿐 아니라, 번호판 인식(Optical Character Recognition, OCR)같은 경우, YOLO 기법 등을 사용하여 사진을 인식하고 번호를 해석할 수 있습니다.
+                        또는 facebook의 사람 얼굴 인식, 사람 행동 캡처, 사람 행동 모니터링, 마스크 착용 유무 판단 같은 task도 앞서 말한 번호판 인식과 비슷한 방식을 통해 학습할 수 있습니다.
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>3D Perception</b></span>
+                        <br>3D 인지 기술은 2D 이미지 속의 3D 정보를 찾아내는 기술입니다.
+                        멀리 있는 물체와 가까이 있는 물체를 구분하고 그 거리를 기반으로 segmentation 하거나 disparity map을 그리는 기법입니다.
+                        이러한 딥러닝 모델을 학습하기 위해서는 이미지의 모습의 위치가 살짝 다른 두 가지의 인풋 이미지가 필요합니다.
+                        또한 이 기법을 통해 이미지의 일부의 모습만 주어졌을 때 그 전체의 모습을 재현할 수 있으며, 다른 각도에서 본 모습을 예측할 수 있습니다.
+                        추가로 자율주행에 있어서 특정 물체와의 거리를 파악하는 것은 중요하기 때문에 자율주행에 사용되는 기법이기도 합니다.
+                        <ul>
+                            <li><a href="https://arxiv.org/pdf/1406.2283.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Depth Map Prediction from a Single Image using a Multi-Scale Deep Network (2014)</b></a></li>
+                        </ul>
+
+                        <br><br><br><span style="font-size: 20px;"><b>Motion</b></span>
+                        <br>3D Perception에서 설명한 이미지의 깊이 파악에서 더 나아가 영상의 속도(차량 블랙 박스 영상 등)까지 파악하여 움직인 거리와 속도를 계산하는 인공지능도 존재합니다.
+                        이는 영상의 물체 이동 속력과 그 방향을 탐지하고 움직인 거리, 방향 및 경로를 계산하는 알고리즘입니다.
+                        <ul>
+                            <li><a href="https://www-robotics.jpl.nasa.gov/media/documents/howard_iros08_visodom.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Stereo Visual Odometry (SVO) (2008)</b></a></li>
+                            <li><a href="https://people.eecs.berkeley.edu/~pabbeel/cs287-fa09/readings/Durrant-Whyte_Bailey_SLAM-tutorial-I.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Simultaneous Localization and Mapping (SLAM) (2006)</b></a></li>
+                        </ul>
+
+                        <br><br><br><span style="font-size: 20px;"><b>Others</b></span>
+                        <ul>
+                            <li><b>Dehazing</b>: 흐린 이미지를 선명하게 복구하는 기법. 자율주행 차량의 연구가 활발히 이루어지면서 각광받는 분야. 흐린날 이미지는 object detection의 성능이 급락하므로 dehazing 기술이 필수.</li>
+                            <li><b>Visual Question Answering (VQA)</b>: 주어진 사진에 대해 자연어로 주어진 문장을 해석하여 알맞는 답을 내어주는 기법. Multimodal learning의 일종.</li>
+                            <li><b>Deep Fake</b>: 다른 사람의 얼굴을 합성하는 기법.</li>
+                            <li><a href="https://openaccess.thecvf.com/content_ICCV_2017/papers/Zhu_Unpaired_Image-To-Image_Translation_ICCV_2017_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Cycle GAN (2020)</b></a>: 이미지의 스타일을 바꾸는 기법.</li>
+                            <li><a href="https://arxiv.org/pdf/1812.04948.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>StyleGAN (2019)</b></a>: PGGAN의 구조를 사용하였으며, 점진적으로 합성하는 이미지의 크기를 키워가는 기법. 두 가지 이상의 이미지를 섞어 새로운 높은 해상도의 이미지를 생성하는 기법. 성능 향상에 따라 StyleGAN2, 3이 존재.</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXBIzojQ7iE1VYgREU_ClgHx28HJFI2YuaBqG5LMW2fFKdgkMCIbQSSjee2UozwCqhjMyD8mMN536TO2ke5YEysIU596hGwUV6BufwkP4mKhxz3O8nk5Oy9zbQu4pKN_gqM-oep4prh8iFubcnEsr5__fPInjs2Lu2f5qzhKLflRHXkHnSskskzoB7c3fJav0S7PvHlVlGWx-LVphoShGarSwqc61HHAS1SWovjnPNSsoXnrm0jhkydNalBQNNIqexM2o3KqUCqogUc7CIEgD6KWXy7htqDyU1V8vRw4t7jtB4RMGS5OL0wYXyIFnJ6dtVPs6FqkQdBc6blldC0o_JbUsUw7DnR34tacHv3fWu5t-X2Amw1aNW9dooFqsi5vJgpNw659LDi2vNf-SfabRbXKjC9Jkt9q-6Q76v3gqSs42MRKCGJVZcbb0CRepSi_QdhVqqTFIU6DMOm4Jzn8YcFj5Woy5_OxMuFYkvaxHfaA0UjxYuIf85553sHCH5VdEZNOEMFn8ZK-o_cYDpPiZZBhFG1JjjmHIFZ1mcNwG9lfcaR0SgdyvZFXoygeoDxnrf9ngBTfAV6AFxJhAQzOU5IzQKALWvayQ08k7izQ5qCqoIlhkVAbtwN9sTBtGrrNZYUXu5iujR-4sCsQOrnym1M8Pd0IBv30wwGKsKty7DTgOrUlRTolVjendPAtUNX3-Ndx0clPpmJdY_cXUBglTU8KCKnxG6Lc1mwacgGFSGeCFd45L6QZ7UI8eugwIbSfLHKYENKdnZxSpft6ebzxtR6rHR8vsR5EiJfO2yc2GQYpw7cL4DSVzwK6Lo6GDVtyDvBM_h76v23sAkaZnOG-z2HC6XQAJtmvFoVB9w5xrh4irhmZN9KYYRja-4mtm-VqVQUAjjcyhh-uGkwpw49XjO5gWfdDEJ0aZXp_IU6hfP8aVDGVnNkHJI9B7EgPLhFww3C1Szjp87lvrvgPInfgnQ1exQiljwcdLAn44dLq2CxMvj0YqN5X3qJbJyyYARKOE84HLbN7259aFYxz0wHjh7rJQ0G_WXzFPPLZbS1erZGxMuggWM6LDSyan8OZ0os63mGi1dkN6KlEcd-B2A2sbTfgZHW-9rkWSv_tPgz3bVzvIyWSE6BP2M-We4ym7FV1mIkFB9xZRU879iMufGSWmdhwOUOhps27vUzCH_Pml8wFKj-3EhIBVlDdfLluM1LTCz0uFKJYb2cs3_2PB12xo9NVWnNCUKhuvVT-I1L2Pzc74XZx0lYlsMdgovYbMOKgQNv" style="width: 100%;">
+                        <p class="caption">Cycle GAN 예시, 출처: Cycle GAN paper</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVEevudyKT4KF3zdBFGEhU6NUf63t1LbcbFADBPDEgDSTR2WWe0EzkW8gO8pkRmDo_a2K4pyDPJiLS_VroUUFnCFtebJVXvfdLCTP_W_ikP3pQIhb6ULlFkIwat24bpc0ixA-XTg9oHvXomsDBCFEcD1dt1rnguWDfoKbTWf4EmZV6yZtNLtqYeYcNHrG1mcxbKw5s_Ewaxn5HbZYGDJm51UhRavRbTf0smgtZTv0HAV0AcLGSpyKWL5IMAUkXLHDh2jGqtfqn-bL_J6EcMvlpHrK2XNC4TEQ9-PBQx0Kq_oDYZdhj_u9-VI46Q3RheNZzPLCkNffKZfhCSRoEWBWIt9fUair3KhueWFdnECuV4I6gFR85gjT7lKV9zIqiXCeIOB-AE7cF0IZMxLBlEp_JDqD9PPRGRCQKHstpyUvuiVkL8jhp4Rg5HSmSctg-MRILTg3uXApCWICpte_wGRwEasrI_UVwwXPpb_oaHKgLnFUubeJkFOZo64iwxw7c8fab5ylIYmAc1_R1odYb5h7xVm4RVFnoLdaG8te9IXrJyUa6hnQ6V6ICa2km4Aq7oeG-PWC69sCt0etx878LdOdHOar7yItgAoCzX3EUNM_1IiGtYmuM20Z0_H7r608n9QAOvjy5rvRCAKUWRohearpmeFF-gBAo_osh7SLUOHxnlSpB-SeOJYu8BFaltSAtDQHqqfb0eurA8EyxUX3ctr_5OtFNtNO1GbIZ7zOG1wtcscGZBV11aV5u7OABPcMp8VKHBPhXwzQLur2NRXr7DiN1B9SGsWLae__Nu0318KUgjfQN60bQdusnd_shyzdVsa2ZHZV7097FevJqZaWaC4bGxtjR4RK9KajQ8Ox3aRjUZimY7pIa3p5igXQjYYTSLZ3bu5jDh_abCNzbcMKMwtrk2OOG2EF4RLCzv8HW2HdNFGU27V9M_CTzYQWVREdOqjxBLYAI0eytMnB62tIk1reCgE8jY3YIGtO99p7Z55LnQQZINeNqhKnb33bPc8WKunwY6K2bHd4Q98R0QByeHBTw2ne99GX2uIfifpATXiEh7XAmmy5mgmtbSy8-4QVpa9EP7BSudLd3XtO_1_93p57MCZYuC61trW58M-gaRfYqZSlCUO2g2fgzIOiL_KGAQzVAd3I9pm5pJ-4QoZ7qmCd9ze43-yBSO4K7AYXn5unrTTuu24l6-mIqMUbGQbhPJe2XYoLBZxTc-3e9J1IKl9Eq2nXvS0-B9Tg2-x5JHUkX5-ssiDkmAXo6MLXo3kqZB__Qd" style="width: 70%;">
+                        <p class="caption">StyleGAN 예시, 출처: StyleGAN paper</p>
+                    </div>
+                    
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CNN의 한계</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        CNN 모델과 딥러닝을 바탕으로 컴퓨터 비전은 비약적인 발전이 일어났으며, 지금도 계속 연구되는 분야입니다.
+                        하지만 CNN 모델 역시 여전히 해결하기 어려운 문제가 존재합니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>이미지는 3D를 2D로 projection 한 결과물</b></span>
+                        <br>이미지는 3D 세상을 2D로 projection 한 데이터입니다. 따라서 딥러닝 모델이 깊이, 3D의 맥락을 완벽히 이해하는 데 한계가 존재합니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>착시 효과</b></span>
+                        <br>인간은 뇌를 통해 이미지를 해석하지만, 딥러닝 모델은 이미지를 있는 그대로의 모습으로 해석하기 때문에 발생하는 문제점입니다. 아래 예시를 보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">왼쪽 그림의 A 영역과 B의 영역의 색은 우리가 보기에 다른 색으로 보입니다. 하지만 실제로 픽셀 값으로 따져보았을 때는 이 둘은 완전히 같은 색입니다.
+                        즉 컴퓨터는 픽셀 데이터로써 그림을 바라보기에 이 둘의 차이를 파악할 수 없게 됩니다.
+                        오른쪽 그림의 두 괴물의 크기는 우리가 보기에 다른 다르게 보이지만 실제로는 같은 크기의 그림입니다. 이 또한 컴퓨터는 정학히 그림의 문맥을 파악할 수 없고, 같은 크기의 괴물로만 보게 되는 것이죠.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweV57y64JM8ER8bsOzL_-E0HGJh53xF181kw_o7NRjzo_BpJq2zA2E2CctvZ8dQHqG_Kbn93WVetHNEIeZW9BKowJSNCIM6DmaQGOidGmgrpHDdUVtjGD7vZukFsTj5NduGjX6Zgxx9m7xnf-YVGPVP3qdjri_5Hf2OA0P9s7S4oD6UygITU3kFho_pMD9nucW-rODX8lHMrGoEYkEaCI0F6gZ_jdTvZMWIMjWYWBTnngHFjhFs9QGkBb-MGFOBIR3Suu7m4AAKNYsaUIgAnyNPlDrjU6bAoO0PpPcu-NCEGD66TvzfWZ43U_nMUUD0bLJxLXx0wjK2MNgLkd_m0jma63a58DOLwgXCNSD1bXZBy_hbL7DWQNwfhzA7jXa9CBvErUdhiWGKuRdskdFrcLX2u5RUETx1T3yLaNRIyG1lBsywzoouqjMaUZGEqOJFInh6Ud_gPleckQgATKGqKoFLeHldmtGfWxHHtRb0zDTninCeV1Na0mOlafZA6GshkVqHT1pvVWw6LviShcvBRjChjbVte2P88Snoeug4RRq59GTJ_XNU6djyY2GZyr1iWRq01IDlJL58AK6OdOIgWrRjCVR_NiNE8_Ad8n5wOM-RbH783UImfWfkfZoSKOYL6O9bysPy_JTyfw7F-U_bF9jiH1_7pvVc1syZzb8Z2O-OK_LQ4rUpjPrXgc7fgU94cJgi0ansFUqu4wkSIva_NLoV7hwK5J269-Tcz3I-2ZoXHt8FKosWj4eY5upgmtCRgjih9J0RuWuWTOIc31ohAJNxao44bybxxQSDGNBR8xLjqLb0dA_QL05cXkiTqb-28qn9k4IT_AZDfuSgR5A4r4yKapM3CTMrUEmeHVlz6XMGpBSJA473K8TaQiGNKUpKdjUDDQGhev_BiFLg1mJSFw9o5x4eV4t8xVUFiiC_QkXka8eSN_c0bYqvvpEyZYhG0z8FUR2NgePjQjz7VeQ-AbAbhCYWm4nvZRcHqHkDpTEJszjUmLLXp0BFdrcTr-GtCyeyjg3zXY4BNEjQoZK4kCWfMwWXfh0QmWhooxiu6BZQUC33ajoAUTs8YEuyVyMU3FQlY6G0NlPtth2naA7W1pXGn2gvfBZ5olg0wingFjulYjgx9LQU8JNtPIirxG17LTOTsn-EvnJJtaQMzixaO3nO9P_Uxst3DRcyNfcmCVzocd6229pJ0pZZghJPMu-zvQQj12DhbjLTeWnWmrGIIUh7Z8SBJ6RFJfcIpD70YIRwitIQwzGnIBBKHu1tUiZooC86O" style="width: 100%;">
+                        <p class="caption">착시 예시</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>이미지 데이터의 문제</b></span>
+                        마지막으로 이미지 데이터 자체의 문제가 있습니다.
+                        이미지는 데이터 양도 많지만 그 형태가 매우 다양합니다.
+                        하지만 대부분의 딥러닝 모델은 일정한 크기의 벡터를 input으로 받기때문에 이미지의 형태 변형이 불가피합니다.
+                        하지만 이미지의 형태를 변형하게 되면 이미지 내의 물체 위치 정보, 형태 정보 등이 손실되기 때문에 딥러닝 모델이 부정확한 정보를 습득하게 되고 모델의 강건성이 떨어지게 된다는 문제점이 있습니다.
+                    </p>
                     <p>
                         <br><br><br>다음에는 기본 CNN의 구조를 이용하여 MNIST 데이터를 분류하는 실험을 해보도록 하겠습니다.
                     </p>
