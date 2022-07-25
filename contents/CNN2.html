@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CNN을 이용한 MNIST 분류</title>
+        <meta name="description" content="CNN 모델을 가지고 MNIST 데이터 분류 모델을 학습합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) / 2. CNN을 이용한 MNIST 분류</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweU-E1nybN0ECyzNf2q63o6ZSVRz_hjvIyjOQUSC6bKrXh_9l8ch883SvXl6mFkh7O3bTu4sB4tw7UxH64A03jZflwVfoinqY_pzkUs_tdyFILKfsUobTvE0HFqgd_cX5KQ7yZh-yS-satU8pDZKQLLSMo-RE0T42qLwQBxUqCtj71jGSfNVn08esqOMIn0_rF1EwStlFTQbtoWx7TtapPybFNTXrRhnnEX9yIAyJLkNQU9a22Poj7d5JZ8CXHqWPDg7Y6Z_rTFpHcfUlxG11TE80GQZrGHWxNQVaBiZYnTs--DDdNEEjwkBiGQSK2ejEq8WtvcB3si-GGuNxwINL9BHCOEFlgSoCoWD_f1aLIlnrK9PNxYgEFy4ra2yzeR9AhWxF7NHTnoIliqUsAtARX5LyuPukFthHkERcW_pv6lwV8BdZcSAfAkcJxHPDR_3Cjc6xhpdGgfSyQ-XbYJsFEtpwfVRTgawRu5Fpf6StWN5CT6MDY7AWzUJk98WOwbi0X6vvqsXRzYQHjfip2u2ByESxHSAYVFAsDkeshCKyQ2Z17dqLsgAcavITz7LJSt2dA1CY20Xjzss_cw2F8zbX57ylcINLAtwGI7IBNHU1TuB5nrelXcu7WvcJb1gu78984XNbR_szGLvVqOGBULq8yFA8LJMLyRKT3hSQ9odhm8560C8B5GpTP-oU2OE9ihlUPZq8hWOBjHCDvVEWIc2knhL0UqsJ7-sX1LU1R7ty-ArvxZWDGotaQ9La8PKYNp_cchZ3zBFG9k2yMRb6K1Y5vTyNc8AY33kOBg_8BpQkpoaL6AWKhK8cFUqp-tDreoMNZ4_bQtBDTJKY0BhZBbSH2Zp9YKyG0pxKTnMWpOln7EEuNHIVdwaMKGIK8izFRMiW8dvK_HwHysRiv-k55Pp9M0akwiW0cujofJSJSNnO0VUE6tNDR7FjK97bEClz8yxgWdxI7Er3b6DHFB2d277DXtxRSi11vWecoDiH_1MAUa8mtVeYM7OQvcPtkAsu4nc2elhLl9Gq7zIlsL7UGfT6zGKxxFiT3OMiaIatMgxfUsXW15UwJ6sau9AJb2PfHUvR8UeoCqmTxhejnWOQsvzqkquucEhK5NUqO3yuHRdFtGO35Jpojg30Ay7BDMnpHWsal3Gi-95aNVF6lJ5a3cjJB96-vURS93qxxnehQkCPFNnM83anAg1LoXZlFHmHC8l8bzZA4yhv5mg_ZOE36ntyAXzuZlEhZqBND7f_hvhnFIuqaR7kMuqWgnSaBgUlDUjtqHd);">
+                    <div>
+                        <span class="mainTitle">CNN을 이용한 MNIST 분류</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.07.25</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 convolutional neural network (CNN)에 대해 설명하였습니다.
+                        이번글에서는 CNN 모델을 구성하여 데이터 분류기를 학습해보도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">학습에 사용한 데이터는 MNIST 데이터를 사용하였으며, 구현은 python의 pytorch를 이용하였습니다. 그리고 CNN을 학습하면서 training set과 validation set의 loss의 변화도 함께 살펴보겠습니다.</span>
+
+                        <br><br>그리고 CNN에 대한 설명은 <a onclick="pjaxPage('CNN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        이렇게 구현한 CNN의 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>CNN 구현</li>
+                            <li>CNN 분류기 학습</li>
+                            <li>CNN 분류기 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/CNN" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">CNN 분류기 GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">CNN 데이터 분류기 모델</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>CNN 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 기본적인 CNN의 구현 코드를 살펴보겠습니다.
+                        코드는 pytorch로 작성 되었으며, 데이터 분류기 모델을 구성해야하기 때문에 2개의 convolutional layer와 label 예측을 위한 fully-connected layer를 제작해야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">CNN 분류기 모델 자체는 매우 단순한 구조를 가지고 있지만, input 데이터에 대해 convolutional layer를 거친 후 나오는 결과의 크기를 계산할 수 있어야 이후 layer를 구성할 수 있다는 점 참고하시기 바랍니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">CNN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
+        <span class="clazz">super</span>(<span class="clazz">CNN</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.<span class="var">height</span>
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.<span class="var">width</span>
+        <span class="var">self</span>.<span class="var">label</span> = <span class="var">config</span>.<span class="var">label</span>
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+
+        <span class="var">self</span>.<span class="var">conv1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">out_channels</span>=<span class="num">32</span>, <span class="var">kernel_size</span>=<span class="num">7</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">0</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">32</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+        <span class="var">self</span>.<span class="var">conv2</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="num">32</span>, <span class="var">out_channels</span>=<span class="num">64</span>, <span class="var">kernel_size</span>=<span class="num">7</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">0</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">64</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="num">64</span> * (<span class="var">self</span>.<span class="var">height</span>-<span class="num">12</span>) * (<span class="var">self</span>.<span class="var">width</span>-<span class="num">12</span>), <span class="var">self</span>.<span class="var">label</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">conv1</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">conv2</span>(<span class="var">output</span>)
+        <span class="var">output</span> = <span class="clazz">torch</span>.<span class="method">flatten</span>(<span class="var">output</span>, 1)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">output</span>)
+        <span class="return">return</span> <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 27);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>CNN</b></span>
+                        <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/CNN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4, 5번째 줄: 학습 이미지를 모두 같은 크기로 전처리 하였을 때의 세로 가로 크기.</li>
+                            <li>6번째 줄: 분류해야하는 label 종류 개수. 여기서는 MNIST 데이터를 사용하므로 10.</li>
+                            <li>7번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>9 ~ 18번째 줄: 두 개의 convolutional layer 정의. <span class="highlight" style="color: rgb(0, 3, 206);">각 레이어에는 overfitting을 방지하기 위해 batch normalization이 사용됨. 또한 첫 번째 convolutional layer의 결과 크기를 알아야 두 번째 레이어를 구성할 수 있음.</span></li>
+                            <li>19번째 줄: Convolutional layer를 나온 결과를 바탕으로 데이터를 분류해야하므로, label 수만큼 결과가 나오도록 fully-connected layer 구성.</li>
+                            <li>22 ~ 27번째 줄: 실제 학습할 때 거치는 부분. <span class="highlight" style="color: rgb(0, 3, 206);">25번째 줄에서 (batch * channel * height * width)의 4차원 데이터를 (batch * (channel * height * widt))의 2차원 데이터로 변환.</span></li>
+                        </ul>
+                    </p>
+                
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CNN 분류기 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                       이제 분류기 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                       아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       여기서는 무시해도 좋습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">CNN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="method">print</span>(<span class="var">epoch</span>+<span class="num">1</span>, <span class="str">'/'</span>, <span class="var">self</span>.<span class="var">epochs</span>)
+    <span class="method">print</span>(<span class="str">'-'</span>*<span class="num">10</span>)
+
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">x</span>, <span class="var">y</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">batch</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+            <span class="var">x</span>, <span class="var">y</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">y</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">optimizer</span>.<span class="var">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
+                <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>, <span class="var">y</span>)
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 26);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, <span class="var">optimizer</span> 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, generator, discriminator 모델 선언 및 각각의 <span class="var">optimizer</span> 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>분류기 학습</b></span>
+                        <br>다음은 분류기 학습 부분입니다.
+                        코드상에서는 5 ~ 26번째 줄에 해당하는 부분입니다.
+                        <ul>
+                            <li>17번째 줄: x는 MNIST 이미지, y는 각 이미지에 해당하는 label을 의미.</li>
+                            <li>20 ~ 26번째 줄: loss를 계산하고, loss를 바탕으로 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CNN 분류기 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래는 20 epoch을 학습하는 동안의 training set과 validation set의 loss 곡선입니다.
+                        Validation set에 대해 loss가 최저일 때 epoch이 12 epoch임을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweUGGJEvTohYo08Xs09ll18H3uLPfSCvVktvIH8cjZcwdJorM8ycztmDpCq74r4WoJLzT0CDf5F5Muy310viQpnXeh8lSMj2shCpjnrWEvtivDtDbFT1SV5SRrjhT8CezBMnWdiHv6sUMK33qii0Ec5-w_UQBZOp_VVTw78I9kfJ9P4KX8ko1QWN51Kg5FUrD8v9qK378xpJCnym0Bn5WOiFJX00FYB4wCqRkjOA6NgbqMkbLRQJ6vgyejZ4VxZZoQWvpm4yzORvWcMJNyVYA1nkfbWYOp48MLt2nnrcXuv5NMpvxV4Tk2vIxaj_I8vhqe9VLGE6Qs9CqqkzcDuW6PecLj1v-APO6hnyGNF6Xh3aNkbqPiP3rxuERJ3miX1ZKAOKUoAwjpvk2sCjdo2NyFwdSsjKCQokp9d-B6m_21vpq3pBDNqbo9rHnvZLLpp3eTrqi7ve7OzpZboSELr-IVlHgbpY_XAzL3Z3Bgq0EFUXyCHjNmq49bnh0XSCUZlWY42y0qJtTa8lWr-CoG_GCfysiwUcy3cZpTibgAqZl1tN54eYmPcUuWyrk__MW5-Qct6hVVSM6e242k-ylA-798bZ3FdaAKkP9rLQw4PHm1IlZ3Poz5OBSQk4-IrSJ2sRqjh4XGuMVRQ2TY8d0vDcxc9-zmlxE51USLmHLq0Btv0Qx2m1whJTVNBuHrbaQ3fiBkmIqybfBMByKDIpC6vrFDSG4UVo9n5V8XAVFshGp-_eh-p1YlyFo6uS6Uk1VNxa8Bcttpu9Sf04CYVyMLtrtMwIgA5odQklfKVui8A3GIAih_tRSfZg_I6mDLn14eNcyqkLEds1akmLwS8YFdvJ2TUGLanztI5EPC3hohtwMTfUzvaNgrYqsP6gBuiNCSByM8V-3fmBabqTmn3j7ui-FrctFJEXFlzhoOQmzcFU2VEUe-h4DU2_O7xEKJE13x_pFGM4CKCFCGJ2MW-wXhq0LJrZedeQzREWkYo06-Fw1SID6cmBmRovA242SqBeSizmXrI8C5t0HiBM2IC-GT6CgU2-UO6scxf3f5Wog52c6gX4G5WBt5XAAxW5jtf7ein2sYQpBDw7i5M3fxqgXxZz_EREkoglEcEMzE14ULj7O1xkRSDtGgXxBP_WRsiL4jp3NDuxMCTqYRQfQtTaRh-u65eB10FM9-HJZmOEmeAi1-dr55JPWf--_2YvxgA2Z5qwUkLMcTCWEelJ-6aEaP0bWpTDfs12hpxZuQTEqkGzhuJmmG02TP9I5bqrFuCXbKOnaEJp" style="width: 80%;">
+                        <p class="caption">데이터 분류기 학습 loss</p>
+                    </div>
+                    <p>
+                        <br>아래는 12 epoch 모델을 가지고 실제 MNIST를 예측해본 결과입니다.
+                        아래 맨 오른쪽 그림의 데이터는 틀리게 예측하는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweU-E1nybN0ECyzNf2q63o6ZSVRz_hjvIyjOQUSC6bKrXh_9l8ch883SvXl6mFkh7O3bTu4sB4tw7UxH64A03jZflwVfoinqY_pzkUs_tdyFILKfsUobTvE0HFqgd_cX5KQ7yZh-yS-satU8pDZKQLLSMo-RE0T42qLwQBxUqCtj71jGSfNVn08esqOMIn0_rF1EwStlFTQbtoWx7TtapPybFNTXrRhnnEX9yIAyJLkNQU9a22Poj7d5JZ8CXHqWPDg7Y6Z_rTFpHcfUlxG11TE80GQZrGHWxNQVaBiZYnTs--DDdNEEjwkBiGQSK2ejEq8WtvcB3si-GGuNxwINL9BHCOEFlgSoCoWD_f1aLIlnrK9PNxYgEFy4ra2yzeR9AhWxF7NHTnoIliqUsAtARX5LyuPukFthHkERcW_pv6lwV8BdZcSAfAkcJxHPDR_3Cjc6xhpdGgfSyQ-XbYJsFEtpwfVRTgawRu5Fpf6StWN5CT6MDY7AWzUJk98WOwbi0X6vvqsXRzYQHjfip2u2ByESxHSAYVFAsDkeshCKyQ2Z17dqLsgAcavITz7LJSt2dA1CY20Xjzss_cw2F8zbX57ylcINLAtwGI7IBNHU1TuB5nrelXcu7WvcJb1gu78984XNbR_szGLvVqOGBULq8yFA8LJMLyRKT3hSQ9odhm8560C8B5GpTP-oU2OE9ihlUPZq8hWOBjHCDvVEWIc2knhL0UqsJ7-sX1LU1R7ty-ArvxZWDGotaQ9La8PKYNp_cchZ3zBFG9k2yMRb6K1Y5vTyNc8AY33kOBg_8BpQkpoaL6AWKhK8cFUqp-tDreoMNZ4_bQtBDTJKY0BhZBbSH2Zp9YKyG0pxKTnMWpOln7EEuNHIVdwaMKGIK8izFRMiW8dvK_HwHysRiv-k55Pp9M0akwiW0cujofJSJSNnO0VUE6tNDR7FjK97bEClz8yxgWdxI7Er3b6DHFB2d277DXtxRSi11vWecoDiH_1MAUa8mtVeYM7OQvcPtkAsu4nc2elhLl9Gq7zIlsL7UGfT6zGKxxFiT3OMiaIatMgxfUsXW15UwJ6sau9AJb2PfHUvR8UeoCqmTxhejnWOQsvzqkquucEhK5NUqO3yuHRdFtGO35Jpojg30Ay7BDMnpHWsal3Gi-95aNVF6lJ5a3cjJB96-vURS93qxxnehQkCPFNnM83anAg1LoXZlFHmHC8l8bzZA4yhv5mg_ZOE36ntyAXzuZlEhZqBND7f_hvhnFIuqaR7kMuqWgnSaBgUlDUjtqHd" style="width: 100%;">
+                        <p class="caption">MNIST 예측 결과</p>
+                    </div>
+
+                    <p>
+                        <br><br><br>지금까지 CNN을 통한 데이터 분류기 구현 코드를 살펴보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/CNN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        다음에는 깊은 CNN 모델이 가지고 있었던 graident vanishing 문제를 residual connection으로 해결하여, CNN의 혁명적인 모델이었던 Residual Network (ResNet)에 대해 이야기 해보겠습니다.
+                    </p>
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CNN&emsp;#Classifier&emsp;#MNIST
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('CNN1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Convolutional Neural Network (CNN)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('CNN3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Residual Network (ResNet)</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
