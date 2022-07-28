@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Residual Network (ResNet)</title>
+        <meta name="description" content="잔차(residual)를 학습하는 CNN 기반 모델 ResNet을 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/CNN3.html" />
+        <meta property="og:title" content="Residual Network (ResNet)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="잔차(residual)를 학습하는 CNN 기반 모델 ResNet을 소개합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAWUweWntQg-UTCSQcqJpM01QdS4bO_yxpzM4ftOl_csRpyFpq1Z4ylZCMrqVBpHMQJKdh0u5iYcxFsk5jgcMd4uyJmkiEOGGLMrpPKcgvsZASA37K2i3kbJxCKbyEW8_EXJuXwAzEbLn97TM-aWEAisH36Bb5jcyBCQL4EKDybj7bHa2TdRNZTy89CpexO5GZ8BWrDNHe4RGyDMeiKK76fUKyQsABqQtg5UhCwLXJpCtMEQTidYpS0tyWOWHU33skj0W6T3laHBjyzC68e1SXoO1zzWHxJ_h9Zy5MOFqV0KauTUJ-88My_LggT4cDEC_lQb4We-4x1z07rpvUsZo5PhfE273Zq2qvE2M8fDU46bFISiKZWt2IMsOGvd9uGOHi-1ITKWVn4ASTbuTF378BztXE4mKvfdi7RmpQ98vHNIYQoooXvZgnpJGiNoCPN0HGpVhvay_KRgY3XERHePjWBxrSP3i3toTfLVrd13wBJtyXdzDBlpURSofoFu2e6IsKKqycjHcpbyrfAOugdTdGrxA526BluK_A9HutBQv4aw71mYimp7ReKh0-xupU4nmfMi6oySpAUcuJ5GhM9cKe2sGGyQpphruPp6-ukmrOugcEK7ufeUooJn3ARfqTy8bgFrNb0GbAJW-gPetJG8hCqCurklCfvGUwhGPVrqLBK27pyHiL7fQNby4wtnKc5oeydPNifSOJf7i_B8eDV15h0T2B7xwyhPvZzJKrDpwTbXvm4hXrBempF3BxtfekysuF6Gg1WTg1TKPq_DfCNuQn6yR7PjlESCgigx0DkNuLDR4ZlqudkLztlHERorlpIo6lFBhrArsOqdJr_UxkpyGbzgKV-1_GjCWpxlm-KzW-Mh3fY1hvnAfWj_E8viXA0DhGsC4uYLGDdqD_Tn2wqjgLeT4zsojMr4u4hClAzJUyZJF50ntf6rSyVKXHgxvOS2q2u3rWXYBfAI33VAX_CZ6QVCGZ4zHDXgoOxoXbtNtC_K-itWFJyVbnH59dkA-HivRpgn1gbI76YVXcOgTAlxgYMHVK8sdmlp3OiztmmZQlNI66Og82gyxEKQsc9p7QDyFSDUf5dahAVKGNnO_7wE6BXNqlsNJ2PhXtPQCQtOYIqk1Jn29Pm4iKjMC3OWpP7Cxx4s-sLkfmfXtnrzGcpF77CxqSKq_dnDbvJgVp7Tma_pX4K6OwBBoJn4TD1DrYO5QjjVo37-JKvutft6mzQAgr1qy96B9rcSK3V0mCm2a3u7raP0EpXx58Zvfwikn2pDaQ4jECf-" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) / 3. Residual Network (ResNet)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAWUweWntQg-UTCSQcqJpM01QdS4bO_yxpzM4ftOl_csRpyFpq1Z4ylZCMrqVBpHMQJKdh0u5iYcxFsk5jgcMd4uyJmkiEOGGLMrpPKcgvsZASA37K2i3kbJxCKbyEW8_EXJuXwAzEbLn97TM-aWEAisH36Bb5jcyBCQL4EKDybj7bHa2TdRNZTy89CpexO5GZ8BWrDNHe4RGyDMeiKK76fUKyQsABqQtg5UhCwLXJpCtMEQTidYpS0tyWOWHU33skj0W6T3laHBjyzC68e1SXoO1zzWHxJ_h9Zy5MOFqV0KauTUJ-88My_LggT4cDEC_lQb4We-4x1z07rpvUsZo5PhfE273Zq2qvE2M8fDU46bFISiKZWt2IMsOGvd9uGOHi-1ITKWVn4ASTbuTF378BztXE4mKvfdi7RmpQ98vHNIYQoooXvZgnpJGiNoCPN0HGpVhvay_KRgY3XERHePjWBxrSP3i3toTfLVrd13wBJtyXdzDBlpURSofoFu2e6IsKKqycjHcpbyrfAOugdTdGrxA526BluK_A9HutBQv4aw71mYimp7ReKh0-xupU4nmfMi6oySpAUcuJ5GhM9cKe2sGGyQpphruPp6-ukmrOugcEK7ufeUooJn3ARfqTy8bgFrNb0GbAJW-gPetJG8hCqCurklCfvGUwhGPVrqLBK27pyHiL7fQNby4wtnKc5oeydPNifSOJf7i_B8eDV15h0T2B7xwyhPvZzJKrDpwTbXvm4hXrBempF3BxtfekysuF6Gg1WTg1TKPq_DfCNuQn6yR7PjlESCgigx0DkNuLDR4ZlqudkLztlHERorlpIo6lFBhrArsOqdJr_UxkpyGbzgKV-1_GjCWpxlm-KzW-Mh3fY1hvnAfWj_E8viXA0DhGsC4uYLGDdqD_Tn2wqjgLeT4zsojMr4u4hClAzJUyZJF50ntf6rSyVKXHgxvOS2q2u3rWXYBfAI33VAX_CZ6QVCGZ4zHDXgoOxoXbtNtC_K-itWFJyVbnH59dkA-HivRpgn1gbI76YVXcOgTAlxgYMHVK8sdmlp3OiztmmZQlNI66Og82gyxEKQsc9p7QDyFSDUf5dahAVKGNnO_7wE6BXNqlsNJ2PhXtPQCQtOYIqk1Jn29Pm4iKjMC3OWpP7Cxx4s-sLkfmfXtnrzGcpF77CxqSKq_dnDbvJgVp7Tma_pX4K6OwBBoJn4TD1DrYO5QjjVo37-JKvutft6mzQAgr1qy96B9rcSK3V0mCm2a3u7raP0EpXx58Zvfwikn2pDaQ4jECf-);">
+                    <div>
+                        <span class="mainTitle">Residual Network (ResNet)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.07.25</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 convolutional neural network (CNN)에 대해 설명하였습니다.
+                        이번글에서는 CNN 모델을 기반으로 하는 residual network (ResNet)에 대해 알아보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">ResNet은 당시 CNN 기반 학습에 있어서 큰 혁명을 가져온 모델입니다.
+                        그 당시 최초로 사람보다 더 좋은 결과를 낳은 모델이기도 했습니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이 글에서는 ResNet의 원리, 목표 등 ResNet의 전반에 대해 살펴보겠습니다.</span>
+                        그리고 CNN에 대한 설명은 <a onclick="pjaxPage('CNN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>ResNet의 등장 배경</li>
+                            <li>ResNet의 원리</li>
+                            <li>ResNet의 구조</li>
+                            <li>ResNet 결과</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Residual Network (ResNet)</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>ResNet의 등장 배경</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        컴퓨터 비전과 이미지 처리에 있어서 convolutional neural network (CNN)는 필수적인 모델입니다.
+                        꽤 예전에 transformer가 등장하고 나서 요즘 이미지도 transformer로 처리하는 vision transformer (ViT)가 많이 사용되긴 하지만 여전히 CNN의 입지는 강건합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그중 residual network (ResNet)는 한창 CNN으로 ImageNet 대회를 할 때 신선한 충격을 안겨준 그런 모델이었습니다.</span>
+                        현재 글 작성 시점에서 ResNet 논문의 인용수는 무려 10만회가 넘어가며, 계속해서 증가하고 있는 추세입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 ResNet의 영향 때문에 transformer등 다양한 모델에서 residual connection을 기본으로 사용하고 있기도 합니다.</span>
+                        
+                        <br><br>먼저 ResNet의 등장배경부터 살펴보겠습니다.
+                        당시 한창 ImageNet 대회를 통해 top-5 error가 어떻니 부터 SOTA (State of the Art) 모델이 어쩌구할 때 등장한 모델이 바로 ResNet입니다.
+                        ResNet 등장 이전에 다양한 ImageNet 모델이 있었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그 대표적인 예가 VGGNet이 었습니다. 이때부터 이미지 분류를 위해 아주 깊은 모델이 만들어지고 있었죠.
+                        그리고 대부분의 경향이 깊은 모델일수록 그 성능은 얕은 모델보다 뛰어났습니다. 어찌 생각해보면 깊은 모델일수록 feature representation을 잘 할 것이니 당연한 결과이기도 했습니다.
+                        하지만 모델이 너무 깊어져서 10개 이상의 layer, 즉 수십개의 레이어를 가진 모델의 성능이 오히려 낮아지는 현상이 발생하였습니다. 이 현상이 바로 degradation 현상입니다.</span>
+                        
+                        <br><br>여러 연구자들은 위에 대한 문제의 원인을 처음에 아래와 같이 생각했습니다.
+                        <ul>
+                            <li><b>레이어가 너무 깊어져서 training set에 overfitting이 되어 성능이 안좋아진 것일까?</b></li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">모델이 깊어져서 overfitting이 일어났다면, 깊은 모델의 training loss가 얕은 모델에서 더 낮아야할 것입니다.
+                        하지만 아래 그림을 보면 알겠지만 test loss에서도 물론이고, training loss에서까지 얕은 모델보다 깊은 모델이 성능이 안좋은 것을 볼 수 있습니다.</span>
+                        <br><br>따라서 연구자들은 아래와같은 결론을 내립니다.
+                        <ul>
+                            <li><b>모델이 깊어질수록 성능이 안좋아지는 이유가 overfitting 때문이 아니라, 모델 최적화(optimization)가 어려웠기 때문이다.</b></li>
+                            <li><b>모델이 깊어질수록 gradient vanishing, gradient exploding 현상이 발생하기 때문이다.</b></li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweVYyZWeFJomMOyI2bR2xovMuRfIoI5kESLMdi0g4FM8wIJZNx93lzq7e8TZybuuCjh9GZdgg_NXocgCgn-yzGSSo3h5Sje9TonJ6L_OkTUqwzwI0V3EJvG0odWF361N3A-rAiCKxibG5x8JHmoAzGNm6WRZA_QAUcKnXH4-0B94ZTLcIwbnBnl2NswIMa8roEKx5UsNWIRLD66T-KgNL1QuB3o8EJwtRDbmMMUPM6M6vu2ss48_98-W12w9whjMRtQIo4-IwFgtoEiJ-s1xlyvYlEslXjd-BMdT3D5JJVuQJIhVI4iwRdRv1Hj1xU5wbK6O-zQJu3S-Jgv1nX8r3ibYOhSvV72RvbeQ7-6P8JSeHkh6Yphgb5-HwZxFAWt2_2h2KNNbrvFqsF1N4iX4XvWOz-ysSvKrR6iX9_9YKTMbxfLK28XtFwP8dz-oqWMgH0hqZIG-CD_oYySnx_TQ9DBsg5KOVvEtPZ7bft0JOe_6q3PJJ-Sr0Wi4NhxTzwEiyrI-jVpWdeXmonoGoFVM18gu0PdoGb8dbyGMEQFmNLIpiF1v5Sounz48xlblAPSWtzOgebsopmMvf928k7MRbX2Xsu-Iek23053yxv1bzS9btR_TxDQKWgStPaSC_BY-JNt6Kp83fAMewHZ1Tgdg6wqpNqdKrDbUfpsSW5-zvG2K1FYZF-Ln5ZvHF4vaV-qw0MCSeyZ3ZmoH5QOP1yDbZKwjGUSNd8yHzWBz-_VJ5d7xTv7edzhAZvuUkx2XVuHkhOTOqJ2qCxaBQz1F2PRePwfCgnutlUhdh4niY7zWblRS0E4NbYSrsjg22nVhYQ0na02uYkOt9hFn-Uu_-4Vgbl2SoaEI2JY8xbdCQpdFb9w_uBNUho5ryebE6lFe769yjhw3cxtRCLz6G2YjyAm9fLAXb7TqGjpawzN9rdjy1D7K3I7N9SwWo3JLvwbFW7x9NKCXxIdn8yKuJJsebbsDddAQ3_wR6Tmfv_QmQxyxCYaVVmgLMdss756EU-uVJG2IWh7lXb71IEBASa7YSnmBH9HFxifJlPy7pFEkii-GwvMSHNKy6kZ8o3krxLzIzUeS6Cj474y6CtZNaRWT89yFSXs6Vp1oxdrd_Noz9xRmBz6mytniGlsUQQ2GQGvvZ7ZWsV2nu2X-WHfcrT3Cfc8F-taKCoKIhsHLj9DJNn-cDR8Bs670t3PVUQPv8aWpWk3JvEU5HLw3BYapOgAiK2lQ9iqpCnTmaDi4Ref-_iHH_tU3Ud5FVQL-sAdHkW13V-FvgyKJ" style="width: 100%;">
+                        <p class="caption">깊은 모델과 얕은 모델의 성능, 출처: ResNet paper</p>
+                    </div>
+                    <p>
+                        <br>그럼 위에서 언급한 두 가지의 <span class="highlight" style="color: rgb(0, 3, 206);">문제점을 해결</span>할 수 있는 방법은 무엇이 있을까요?
+                        바로 아래와 같은 간단한 방법이 있을 수 있습니다.
+                        <ul>
+                            <li><b>성능이 가장 좋을 때 까지의 얕은 레이어는 이미지에서 특징을 추출하고, 그 이후에 더 깊은 레이어는 얕은 레이어에서 추출된 특징을 그대로 유지하면서 output을 내는 방법.</b></li>
+                            <li><b>얕은 레벨에 있는 레이어는 이미지에서 좋은 특징 추출이 가능해야함.</b></li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">좀 더 간단하게 20개의 레이어의 성능이 가장 좋고 20개보다 깊은 모델의 성능이 안좋아지기 시작한다고 가정을 해봅시다. 
+                        그렇다면 20개 이상의 레이어를 가진 깊은 모델에서 상위 20개의 레이어는 특징 추출을, 그 이후의 레이어는 20개의 레이어에서 나온 특징을 그대로 유지하면서 output을 낸다면 성능이 좋아질 것이라 생각한 것입니다.</span>
+                        사실 상위 20개의 레이어에서 이보다 더 좋을 수 없는 특징을 추출했다고 가정하고, 그 이후의 레이어서 성능을 더 끌어올리기 위해 20개의 레이어의 결과를 크게 바꾸지 않는 선에서 학습을 한다면 저자들은 무조건 얕은 모델보다 성능이 더 좋아야할 것이라고 생각했습니다.
+
+                        <br><br>위의 해결 방법 아이디어에서부터 ResNet이 시작됩니다.
+                    </p>
+                                       
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ResNet의 원리</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        ResNet의 등장 배경을 살펴보았으니, ResNet의 저자들이 어떻게 해결했는지 살펴보겠습니다.
+                        ResNet의 원리는 정말 간단합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 봐서 알겠지만, 레이어를 거치기 전 \(x\)를 거친 후의 결과에 더해주는 것이 다입니다.</span>
+                        그리고 이렇게 레이어를 거치기 전 \(x\)를 더해주는 과정을 shortcut 혹은 skip connection이라고 부릅니다. 
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXKMTxacXG9_nJUHPWwcLEC8rf7QTq4yfMgwQ6jWKkuqPPp9x5MzacvmnD7K0ogWrKORClCTpuHPx5MbooIMLp7tZD6jtt5cDirOtFTBiCzISg6-scQayi5zEfr7aLd4h_xoaT3Vpk9xh5E1yk8j2d_U1FgIbMHXKqra9fRwc_PaJ3G4FQBJWK0cWaNYwyUtp0TRcV9fu868kxtrWHpX9vrppMmO2aJMMXC6Y0W1Wn5f8tLAYkNAl0c2jtyq1-dWZNgNIluEQ3dHYlMFwKWrI1ycvNVLHrkTf0Q3CtRbkXCl7CgyI09pHRZCQFOmbWcaGuffDfXFxXp5ikLIUTPfHxcaL0np2pcletKEJfCCtjGgx3W4a-CVgrpb4vvKx4ATcouDlkD4zQPhb-SaYLQVQxKzRuDlsBPySCzTTuJEZHY9xqgWNu1hmZ8SJy9pH4NFXmyqAlvp6CL17AZncXs5EiWDcbKEIuj9_9xbyWJlMc8xrc8iMuoDFyxuXtEGWNkxpysNzF6QOn4E1qrx-Hd6xWkW3cQPnpQr7bdWd3Rl2NdEYR2WDrAGTEX4U3rMaVuU4qgwjcVVcWlnRe2rM2EuUgjbDeNjkLW_7CxYIWaQoogDMryRnDT40eR4YwW0dWBORf5bVEmwm1ovpjmjZCWjJsaJaXbUa5nmWe5vNggYQ5NoLOCe0vu5ZhTTg0fdJJkpYzS_GkoUxP9Vi0LthmxE9iUOpWEqeIgLiYTWvie-SnNArp2YpyxSnj-TEZsnw6gV16IhihzpTamU870dXD_NqRdZPaI5tNqkBuJnSSGrcEClPdcMj-orRuCfFDji4Yj3CNN7p0Ame67ddOMzCXB2aB_6OUBt6JEM2yMIbN9KNHpAL70n-nFoxtNEzbQcqAClB59Gvjx5Zm2fGq-ISusFH__CNujufP8y7s-e828_5aUb2DROU-CZTVXsO67eFuvJMgdR1QhX1sSKvt8HjUxhuwkbx2bm7FUTAiYKKvbedBfExp9_e1tiuRBGz51q4O6m33HAAP_1eXu6WpMxO5pi1t_MZW8eYIzrtJajMGdS2OjhoLlnEt_GdxgeRG6Rw1vETN3msquJJSVAnoiKzAE_W1rhkU9hVZDJN026NSAUn9X7DWkFEKhG19CCUPWYnYibQCvaVTerpsp50rXUACOxkjCJoval70WOV4pAnjdsSMrc4YN4jLE4rY3E0z63Dn9zBvd5-vwYm6iljhzxloaXBFBMqWVl8A-GuXH64dDT4v0aUcxoyrzShIRTc-rTlIimHO1" style="width: 70%;">
+                        <p class="caption">CNN과 ResNet</p>
+                    </div>
+                    <p>
+                        <br>그럼 좀 더 수식적인 측면에서 접근 해보겠습니다.
+                        레이어가 있는 모델을 \(f(\cdot)\)이라고 가정하고, 우리가 이미지를 통해 최종적으로 예측해야하는 label을 잘 나타낼 수 있는 mapping의 결과를 \(H(x)\)라고 가정해보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[model\,=\,f(\cdot)\]
+                        \[mapping\,=\,H(x)\]
+                    </div>
+                    <p>
+                        <br>그렇다면 CNN과 ResNet을 나타내는 mapping의 결과는 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[CNN:\,H(x)\,=\,f(x)\]
+                        \[ResNet:\,H(x)\,=\,f(x)+x\]
+                    </div>
+                    <p>
+                        <br>그리고 위의 ResNet 식을 다시 모델 \(f(\cdot)\)에 대해 다시 쓰면 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[ResNet:\,f(x)\,=\,H(x)-x\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위의 식에서 결국 모델 \(f(\cdot)\)이 의미하는 것은 \(H(x)-x\)인 잔차(Residual)를 의미합니다.
+                        즉 모델은 잔차를 학습하는 것이며, 따라서 이름이 ResNet이라고 붙게 된 것입니다.</span>
+                        <br><br>여기서 우리는 등장 배경에서 언급했던 기존 깊은 모델들이 가지는 문제점에 대한 해결 방법을 상기해야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">분명 위에서 얕은 레이어 레벨에서 나온 특징을 깊은 레이어를 통과했을 때도 결과가 크게 변하지 않고 그대로 유지해야한다고 했습니다.
+                        이것을 저자들은 identity mapping이라고 부릅니다.</span>
+                        즉 identity mapping을 위해서 ResNet의 식은 아래와 같이 해석할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[ResNet:\,H(x)\,=\,f(x)+x\,=x\]
+                        \[\therefore f(x)=0\]
+                    </div>
+                    <p>
+                        <br>여기서 아주 중요한 결론이 나옵니다.
+                        결국 깊은 모델이 가지던 문제점을 해결하기 위해서는 identity mapping이 필요합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이를 위해서 ResNet \(f(x)\)는 0이 되도록 학습이 진행되고, \(H(x)=x\)가 되도록 학습이 되어야합니다.</span>
+
+                        그리고 이렇게 잔차를 학습함으로써 얻는 장점은 이렇습니다.
+                        <ul>
+                            <li>기존 모델들은 처음부터 \(y\)에 잘 mapping 가능한 \(H(x)\)를 다이렉트로 찾아야했지만, <span class="highlight" style="color: rgb(0, 3, 206);">ResNet 같은 경우 \(H(x)\)의 목표인 \(x\)가 더해주는 과정으로써 제공되어 모델이 참조가 가능하기 때문에 학습이 더 수월함. 왜냐하면 x를 기반으로 아주 적은 정보만 학습하면 되기 때문. 이를 pre-conditioning이라고 부름.</span></li>
+                            <li>기존 모델에 비해 더해주는 과정만 추가되어 모델의 파라미터 수는 동일하며, 연산량도 증가되지 않음.</li>
+                            <li>\(H(x)=f(x)+x\)이므로 이를 미분한 값인 \(H'(x)=f'(x)+1\)이 되며, <span class="highlight" style="color: rgb(0, 3, 206);">최소 gradient가 1이 보장되기 때문에 모델이 깊어졌을 때 문제점의 원이이 되었던 gradient vanishing 현상이 해소됨.</span></li>
+                            <li>Gradient가 최소 1이 보장되므로 0으로 수렴할 일이 없어 항상 모든 정보가 통과하며, 지속적인 residual learning이 가능하여 깊게 레이어를 쌓을 수 있음.</li>
+                        </ul>
+                        <br>그리고 첫 번째 장점에 사족을 더 붙이자면, 실제로 \(H(x)\)의 최적 mapping이 identity mapping이 될 확률은 매우 낮습니다. 
+                        하지만 실제 mapping이 identity mapping과 비슷하다면 pre-conditioning을 통해 \(x\)를 보여줌으로써 모델이 이를 통해 작은 변화를 학습하기가 더 쉽습니다.
+                        이는 ResNet 등장 배경에서 설명했던 깊은 모델의 문제점 해결 방법 중 하나인, 얕은 레벨에서 나온 특징을 그대로 유지하면서 아주 조금의 변화만 캐치해야한다는 방법과 일맥상 통합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 identity mapping이 최적일 확률은 실제로 낮지만, identity mapping이라고 가정하고 ResNet을 학습한 결과를 보여줌으로써 identity mapping이 합리적이다는 것을 저자들은 증명합니다.</span>
+                        이후에 나오겠지만 실제로 identity mapping이라고 가정한 ResNet의 성능이 기존 CNN보다 상당히 뛰어난 것을 확인할 수 있습니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>ResNet과 다이렉트로 \(x\)가 나오도록 학습하는 방법의 차이는?</b></span>
+                        <br>그럼 이쯤에서 의문이 하나 듭니다. 
+                        "<span class="highlight" style="color: rgb(0, 3, 206);">어짜피 ResNet은 잔차를 학습함으로써 \(H(x)=x\)가 되도록 하는 것이 목표인데, 기존 모델을 통해 바로 \(x\)가 나오도록 학습하는 것과 다른점이 무엇일까?</span>"라는 의문이 듭니다.
+                        실제로 \(H(x)=x\)가 되도록 학습하는 모델은 autoencoder라는 비슷한 모델이 있죠(Autoencoder에 대한 글은 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a> 참고).
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXoPULF6BVMNnKMNbB3eFVDlIw6eKoLIkf8F-vbnZtUkHsD0_o6-3FwNyzBCP0uxXKR_HOUIxtl7ZNJcClififG3H3J1OSlMq8-LHz9mA4NjzRVHe4IwGmbrcT8img_IZ6Iygp5DwkWeWDanZIuT9cteDS-oIR_EkqlaJCWLmqiQxC2w7l9I5Mio1cFkAt-NesEqPrBTbKXWJl0ENshILf_AK4Q8krHq9JxyjqPJfi2OPwg8O-A1e-OY_tBf-D3m2eFSy26FpoMO7EaKbbQmJmRNetdDOB0V1HbcA-7byjP-2EJiIV_XZsn6qtVUcUBGU7UXceeEI2KokqfNg5hfzlRAnERQJMUZXm30haN3vqLDCt1rVFwtK24e-npq-CeXXkZ4ekB5sm4hl2ZR6bqxiUtNa3JAz3TQ_npY2I0Yzf6YLm95bRztBYkPoBabceGJewPf9F_7uSBceq5rEe8uqbMQ7f-PVRtgZC5wNZpQPqlcDuYnD0ddQ8EfVZy2UseKhtQi_1aGTTnoptA-sZbHbM0vOhAyVmZz3IAIU4PyAiVSFwUdzl0Rs5tlGkdJBj3ms7448OmLF6VIhwFFTMeRFjepQlk0qbEZbCpU6WATDszE12lNS2AdylIzIoftBP4xV1gkwMjunHYBJJrWFeNOpM803Pj8W3e53ETQUql-5Eh4o_DzifaxkxyzblVhQGurRMXGYpvEIHMwiafbZ3LzEJTEHLSg9ZT7uMIhzwvuHwHchk5zAQUM3cT_iCiAo-yiuKTSJX02kSgRq62NCPnMjoHQbTNguT39reKD6XVDj6lt9UGD5K_HykYdTkSZw5beEp05P5oAqMqoXM_-fGZ9vZCtkJ1mGyWdZWQhxEKM2bdTje-7wciIKE7vOoK5wapKUjXsecPI4qk4DKMq_vGeuSHSsI2wYSK3i4usLR66jBRAHrhVhV0rzg-vsBJ3u76yyLX1wsv0SZR02d1svj2dcH2UruecjUM95MllWl0x_QjFSqFJ_FlKAOrDkcriZZkA6OvwniS-2cvFipukiROJEsWNVgc7FuYJeL4XDMq2LcLAPqTEr1uUcYkOucxzIlH2IV31qSSvP0OEv1UnfzeB0gGyAJ_AmdFtYu0I9RCcgdNHW5D-RSAGu_xFMKJpn2QL93wLsi42u1kvrIH_eHd8i7YID5KgjnS0KEBji98jRAvE4DZqGF-DsfCZ3aTKqRrUJB7p6_ayNKg-3tC7tZ8CgB8aKmcN--5YsqG14x30JEx99eDBs6RmKqxJmxKt-7KRw08" style="width: 70%;">
+                        <p class="caption">바로 x를 학습하는 것과 ResNet의 차이</p>
+                    </div>
+                    <p>
+                        <br>차이는 간단합니다. 
+                        바로 \(x\)를 학습하는 모델은 말 그대로 \(x\)라는 똑같은 값이 나오도록 모델을 학습해야하는 것이고, ResNet은 \(x\)를 더해줌으로써 0이 되도록 학습하는 것에 차이가 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 ResNet은 \(x\)를 다이렉트로 학습하는 것이 아니라, x는 그대로 둔채 미세한 정보만 학습하면 되기 때문에 바로 \(x\)를 학습하는 모델보다 더 간단한 것이죠.</span>
+                    </p>
+
+                    
+
+                    
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ResNet의 구조</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서는 깊은 모델이 가지는 문제점과 원인, 이를 해결하기 위한 ResNet의 가설을 살펴보았습니다.
+                        그리고 이러한 해결 방법을 구현하기 위한 ResNet의 원리 및 이러한 방법을 채택함으로써 얻게 되는 ResNet의 장점을 살펴보았습니다.
+                        그럼 이제 ResNet의 좀 더 세세한 구조를 살펴보도록 하겠습니다.
+                        
+                        <br><br>아래 구조를 살펴보겠습니다.
+                        왼쪽은 shortcut이 없는 일반적인 CNN의 구조이고, 오른쪽은 shortcut이 있는 ResNet의 구조입니다.
+                        그리고 그림에는 각 레이어의 kernel 크기와 개수(out channel size)가 나타나있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">ResNet의 구조는 특정 규칙이 있는데 아래 그림과 함께 보면 이해가 잘 될 것입니다.</span>
+                        그리고 구조를 이해하기 위해서는 CNN의 input, output 크기의 계산 방법과 CNN 연산에 대한 이해가 필요하므로 잘 모르시는 분들은 <a onclick="pjaxPage('CNN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        <ul>
+                            <li>기본적으로 kernel: 3*3, stride: 1, padding: 1을 사용하여 <span class="highlight" style="color: rgb(0, 3, 206);">input과 ouptut의 크기 변화가 없음.</span></li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">레이어에 '/2'라고 적혀있는 부분은 down-sampling이 일어난 것이며</span>, 이는 kernel: 3*3, stride: 2, padding: 1를 사용하여 <span class="highlight" style="color: rgb(0, 3, 206);">output 크기를 input에 비해 절반으로 줄임.</span></li>
+                            <li>위에서 down-sampling을 할 때 stride가 2이므로 1인 레이어에 비해 time complexity가 절반이 되므로, 이를 같게 맞춰주기 위해서 kernel 개수를 2배로 늘려 ouptut channel이 2배가 되게 함.</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWOE0NChtPpy2jWsRbvi8wahQ8JDHKjmV5qLp6DLCZhuAB9_PfIkl2ZtWIKzXXQYNpqZH-Rc-XQHYo_CmlQLb2MPcGYCZxfgQmFOxdNiefotOMdhJ2MEp24nBWfcEzoQBcnW88X8NVcOhB24GE1G2aCXaWjdiam77Og94RYbZ-udC3WjLJR-Zp9nQjGRBgqQsmoTyBJ6DbDqaGN0RUAXwCz1QM6KRwVZoSTOR2UWHDgZ2pkYNWCECU4G9QGb3QaeXYmCOJCANkVanBHc0iix-LGElJykkRl6NICm892S8zXcGdcYZtVyWVvNlFzw7lmG7DBOIL9XM1jiaAZF5eiQZWsbNn4yN74i6f56dIZX8t6Pa4tvgRw2ROPKBNgLa5zgm2-vtXR4hMk77lltbodS0QImhuWvt8Ob-I3fIEsYZWOjHIMcHf1Gat7u90nIm_d1mTRtu20gXeFaUFbWC_2218fnei6bxL0KcBS-126t1-lDS8dI44E-ipE7L5GplIVi-UbXpteif33m2V9IxDaoV-2yv2jcKRJCuCZYIAtRQI_gUpj89jRZ8fKTSBn_SQu7RvOwPxUYdvrhxAMUxSXm1ta9vX7yOjdBRJLv-SlqT2Yifb7X8YROX7EDTy8LrvqDuMgVoi3rYCWAn-Os_JQ3W1-okLJ1UdUh0pa5eUIvdXt-k5upHZACCELGoZ5-HIGvHbpnMhxzbigS-FlzG508Z26pQ9rCYYvx3cC8ukhsQvd-6I0LW6NC4x47kJN7oo9oEunS4YVe5LC6QzhjZ8kEGYxm0qJaWHysJ3R44meTO_p2lfLWhuhctF3T4WS9KbpcdfNCEIQTVCN9F8L5zgwLpsXRodW2j8W0UbqPXfc658Gxn7ZLTgS19aM8RxgB2xS8nNmrnUPyXQztq4qsnvteqXn_FeQ8oI2JemKIFGm-XPaXbrp5DGB4o2ijnYfPH3MEMD1b03SoAopNGl5JpCEC6EkrXrSZXlSaJxYcWwHEjmcnANNQdOo8RkxVJ9Oq3pzFZPESLd8FdT52XpNXB1aOFtDaw9_WnNiXvirxLnI_iDNHbTzShaM_6aAPPbIAbtiJoiwPy2M243VKxB_21ogeY4zDqp9u9xa8zAagUbxEVayumvf1a2rUosQaPN5B_eOUId8UTC5lSQPLlTOcosofSK7USUCAL219O-BmJkh5TTJ2u0Rklap69wjm4pfPsWnOcSB4MXTzY-Or-6fq2nnW4dS0UqoFyCoZ5SgaS6TPHf4yvnfutF9uGxHy0pBVbi3deu1" style="width: 40%;">
+                        <p class="caption">CNN과 ResNet 구조, 출처: ResNet paper</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>차원과 크기가 다른 데이터는 서로 어떻게 더하나?</b></span>
+                        <br>그럼 여기서 하나 의문이 듭니다.
+                        아래 그림에서 보라색 레이어의 실선으로 더해주는 부분은 레이어를 거치기 전 더해주는 값과 레이어를 거친 후 더해주는 크기와 차원(channel)이 서로 같습니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 실선은 두 값의 크기와 차원이 같은 identity shortcut입니다.</span>
+                        <br><br>하지만 점선을 보면 보라색에서 나온 결과를 초록색에서 나온 결과와 더하는데 둘 사이의 크기와 차원이 서로 다릅니다.
+                        예를 들어 보라색의 레이어를 거쳐서 나온 데이터의 크기를 (batch * 64 * 28 * 28)이라고 하면, 초록색을 거쳐서 나온 데이터의 크기는 (batch * 128 * 14 * 14)가 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 위에서 ResNet 구조를 설명할 때 두 번째에서 언급했던 down-sampling이 일어난 것이지요.</span>
+                        ResNet의 전체적인 구조를 보면 점선으로 그려진 shortcut이 많은데 이 부분이 모두 down-sampling 때문에 야기된 두 데이터간의 크기가 다른 부분입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 문제를 해결하기 위해 저자들은 세 가지 방법을 소개합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweW3UuJvIpHhLC4ZKrfoU8Ov6tKp6cBq1iyIi80nh9iPqShxuiEYh5XNp4kfwCH_G2cZI4TZGz17GgOZdQfmSgL0ZUQryojMEzoIo8dmAA5wqBnUeQAj2ZvXY485rqsCS2jhxjL18P1xiftJ-sOQ3AES-2JwjDQDIdVO5Eq4gpLNRD1CSIFMQxsLUY1E-WPfuE3pxjxTo0PQ5g8M-s7HVU6cYvGu-lZooTEnAMZo2xYiQhNfksJyfBAk3xA1u_PhJiHoK3kV4qRvH_deISaQ6NxTKgs2TscjviXbaOoZbeoEZ6JP5tw9HFi0Lpbi7AMKRvQ3MvLhNd-QQrmdHq4vU27IFIvPkG_cQOso4GsqRC1vJWKDGlAQoU13MRYOmCS_t4XrdS44Qfgc-idDFz2oKwt8d69ZpyFs8tS4rwxEOYQLJl8vQqlpc__Ujcanqfr7_EH_3Sc3WbshLndkaGLUhsLw1oloRF7nStEu0xuregUyWa1o3_VOa1cayUTnWt2b-nbEC80j64ZzaITPg--9tcaL4UuIdCAaAy33iyEqliEm5h8a6q91DHlno34QbiYoGa_UPTrM6lyU1FHSkGC4GqnELZbL7qAwBdrXLrA9of9OBxX43VFux-rTr5T45tIA34a6B1NRZoe8DnuQNV09xes7ulHUTC0flNK696pzMLNZq52Oa4mNZhAi89loY7laVqUNDpp73dLO1l9XBluig2Oxg-6rOY_LlrMd1vuumwmQUcuVw6stQCQq2_K--gTEgTG5znPPoTN59uk4R2F1BrxBOyybiCYYaX7zVzYituXJ_Lrm5KaIgyPs0HuGb9qs9XIehPEuIue2EieOQmQoZtPwg4VB6SHfQiukZm8Spe0kMxBgawGHpJ-fMwazpBsrMXEbY7R_46WUCmhZLtgDLnryZNCtMkCnGB6vTH89TgFbZcgoPM-UcqlsFjAVQXmTKiQqir2XGPe2AfXIg6TcofdX0GJR69a9b6Ka1li1U9cTfk99_cnbt9UCd4sDpPe8jOxuGA-B1f5HetMUk6HywIwMClcTsz4HsPayU91Xlg94U7c9w7BLSZbKCt-vKHaU9oexO_Nh04lahjWnBPxw9t3Bubpq2yWslaMPIvuMVpw6cf6LPiDCRREfxC8g0bf0GClBuNxyqJ3I4dF0c4Y0NN8Fw8J8jj-tXyeklZq2RHfFcEvN7ULN8l6xGrz6aIvJUHUxcNMcZypT8B_29Sz789mNa9Ex6ijwbNhNP2QA--UlSCvpJhg5LWFzNsdAWoPXwa29" style="width: 50%;">
+                        <p class="caption">크기가 서로 다른 데이터의 덧셈, 출처: ResNet paper</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li><b>Zero padding을 이용.</b></li>
+                            위 방법은 2배로 늘어난 channel에 대해서는 zero padding을, 절반으로 줄어든 가로, 세로의 크기에 대해서는 stride 2의 pooling을 이용해서 크기를 맞춰준 후 더해주는 방법입니다.<br><br> 
+                            <li><b>크기가 달라지는 점선 shortcut에만 1*1 convolutional layer 사용.</b></li>
+                            크기가 같은 실선의 identity shortcut 같은 경우는 그냥 더하면 되고, 크기가 달라지는 점선 shortcut에 대해 stride가 2인 (1*1) convolutional layer를 거쳐 크기를 맞춰주는 방법입니다.<br><br>
+                            <li><b>점선, 실선 상관 없이 모든 shortcut에 1*1 convolutional layer 사용.</b></li>
+                            모든 shortcut에 대해 크기가 같은 실선 부분은 stride가 1, 크기가 달라지는 점선 부분은 stride 2인 (1*1) convolutional layer를 거쳐 크기를 맞춰주는 방법입니다.
+                        </ol>
+                        성능은 3 &gt; 2 &gt; 1 순서로 좋게 나왔지만 그 차이가 미비하다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 2, 3번 방법의 경우 convolution 연산이 추가되었기 때문에 1번에 비해 parameter 수가 커진다는 단점이 존재합니다.</span>
+                        따라서 현재 ResNet이 구현된 PyTorch 등에서의 코드에서는 2번의 방법을 통해 shortcut을 계산합니다.
+
+                        <br><br>지금까지 ResNet의 기본 구조와 shortcut을 계산하는 방법을 알아보았습니다.
+                        이러한 방법을 기반으로 레이어를 쌓게 되며, 그 레이어의 깊이에 따라 여러 종류의 ResNet이 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweXKmkpzW-vw7_U3ZxKjFhIbZyjef-shJQVQQbMfn1xeGAhPa15bTjWxqloICDJEI4dFF0oXqKsz8LIoonCLlbesEzS9LID1pSa4LLGvn-Do_dWjt9mInmhuT0RU8U2wb46S11MtuVXUWxGUSDJb2vdtIYMhU94VsI4_NPfyr7s8wyCBPdnyF9Sx2Lm68uobK5JHqkG5UWzvBQoCEVU9AjtKkkC-fk8oaRwuop0v44JPHgnR3EONP-PjrzNAzdkcuritAml0aT5AxmBRlRmZ8LSfCXd_CUU466GQhBT4i4VQoCb32rya1Lpel0h4SOXc0jdlf9yvN1yF91BWJJ6HCL4ie7R1EAAhzrO7E_qgqrXMGzuC-FK2XyaAsxFm8R3fyJDeB5BGc6WOyYCZPsPMXAVELYJ8LqmrU2nZ46_R7o2xVOIq8CIByQvMCSrWdIy_-Rpa_K9CXeRcnbmC6wvI1i5e_luqdiCWjc8ieBPWACMoECoKWz1fYTCBp8pE29_Tx0YOTPhESO2_p_AArPTk3YKE18cK1P0wEA3ZWvDhhy_5_MYHhie_X7CG_zjV7WsBv5-NHJzFhv168sUy77trQmL-TPA2MOtg-a6diNNzqexheZFKOA3yq90M6g3we7gi06H15qqJ8_Uq_UQYbR92rEFTvkNzbSITA4EG5shjnnfjyQPaZopju-kBVqbD-ilXsc_FQutclyEp1fizGxFKbps4uTWXZT7tqpWDg7QgAzAjBAVKpnyVz9ad8YPJBU38khljAfoEDZtMl9NqVJq5LARyz5uLcFkw4lChB-AMWQwKyZKX-bg0jTWam3UzuurQf0QfPpLug4kf58YvA3TkhWbHVfVRjOZxBWxUD5kA9i6MK1VCN3_JXpzdzEH_OeLhbssHaC3pYz4brSuDaLjYbVKUasGRfzdwau8WvT2ay580pEDoKlt31xCA9qYPhKFaDuYiWK_w6B0TcHs8VkJXu2U62vWExazhfDSnzO_-lrXKawWW13oaTXyRkTfysJue2MfM7tuK_ypYguPtEV6kvDcgDrDJydOJqr59GS4c2ASPRlbgAKpEu3kFa1ZrjRwvI6AxD2rA223LNbHjtf9Uzj8C2wAmufIK66Fk3bvMsGhyEy6YiXg6GPsRBCaADSDSyK5r-LNAgKUz-8NbV__eZL3mjorac825cxexM599EPOd87c1lgao3zrmQlmYpSsF4zzJGNSffNkudWmzfj1JUF-TUeYCluMVp0vNW-EKrZcYriREci-luQi7ECA-jmBPpnWK" style="width: 100%;">
+                        <p class="caption">ResNet의 종류</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Bottleneck 구조</b></span>
+                        <br>여기서 주목해야하는 점이 하나 더 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위 표에서 18, 34 레이어 깊이의 모델까지는 하나의 residual block에 2개의 레이어가 존재합니다.
+                        하지만 50 레이어 깊이의 모델부터는 하나의 residual block에 3개의 레이어가 존재하는 것을 볼 수 있습니다.</span>
+                        깊은 모델에 대해서 residual block에 3개의 레이어를 쌓은 이유는 학습할 때 시간과 자원을 줄이기 위함입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">깊은 모델일수록 당연히 학습 시간이 오래걸리기 망정인데, ImageNet 학습 시간을 단축 시키기 위해서 깊은 모델에 대해 이러한 해결 방법을 둔 것입니다.</span>
+
+                        <br><br>아래 그림은 bottleneck 구조와 아닌 구조의 비교 그림입니다.
+                        Bottleneck 구조는 residual block을 이루는 모델의 형태가 bottleneck 처럼 보여 이름을 이렇게 지은 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그런데 레이어가 3개가 되었는데 왜 더 빨라지는 것일까요?
+                        그 이유는 레이어가 3개더라도 파라미터 수가 현저히 적기 때문입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWB6kBncO7IlBlIeQPUsDkaLNGtpn17Mmc5qx7I_DW8iInvlZk_T_XFcObzgtrpgy1qUOIzTvq3FVUp0vY8YWxLqdv9k6LSjnmq6ojG5vjg8Gyf3hkZLZXbd9feR300Ao_J2cKYSe2uxKXtLZ7Bbs__v1ii0lhZh10oKyfUz7XvBl_ZxVDMelUSCr4mwqqMJVsdPjHJIx-WtdPnH7WRbyeBjesi-eTSLUvQCgCAQydDJMp-9X6CunrNMmKPZlak8QnKTGvbWmTJWtKQaMfGJ9IR5V1HiQfo6WbzSFQWgvlFBTyZUUjTUiGZ_KTOaO_Rk_2jbcAr9SuRon1sJFT_AlpGWoWSpjiDRkmGBdAIAe-vLYhrRgA1yJWvmSBL0NAihx_-_ph2aycyYgsnHWiuLVIvMzOw1aqIcWlYR73pei4rMklJe_EJsNjBZA6Yi2uqo__A2K2rHGPYt86P1P6J54j31Q-Rw3IqgocD5b7vk0u0hb4NaX8TMvaRpvQWcMOVkImkMaV-q9SjnzEWe0k98vj7N2gzSOYvEO0iWWHI0CQjbl5pyGaSL-OB7Xfov2cT1wLSe8s5f8LTJkgpGKSs6EddQTlbv1ZKvR64C6iDhKgGPPv1QalARMPCsClkOOBqVb3RDVgBdld8KIDpEotMbrYZlD9b0JfVn_9ujg7wtXlg1N7CGcpJW5VX724qxfdNVi18xZRb7FCW_UCQ7nYL8UrIizEo6l8VIGl6mQn7QK03ND1mH98bMaJcCSwpsmMGhVSLs8kC_LjqvDSkXvIOJ3KTtr9AypOhUuOuYWkDVK3NsnmmcnJd_3UXtcP_bU_tK-4p7sRcodCSdsOUMF7z7SGCkk-b_vtE9kVkHIAapFar2uvE-aQGHM3tiuYBJmx5cIhkbbz9PryDJ5A_JlO6K2YxNMsLoBqBkEI3RJ3EHGTIBiaNHQ4GGQuHVtlg7zRR9xFPDzXafhEmph6MTpeQtYLPvqhOt_Br7B2Qs0Pgdrx_kKFQlX-vIpH5sJ3SOOYtghxoSqBhhm6IJARn7qF8lAljEvnDIp_cloL4z8ai5bY2EdyilX8wEVFTIrq0jzcdMkDmfgo_AMCRuJBwr8PxJfMdm-XyeXMFwiXGPCXdmeC7GCLUjYnYp-LR06q57YbEsq7Pld2DxL7R8gK1qWIE36Dc8ux9kJ-Dju5kv_BVLxp8TYt0eKym4KMA7OkaUjKPDa0Lb9sEIY04_5UEL8CZLoxPfI-zD-BuEAGL5fIHqVisIYhZipJm4ORj4tCmncr3tUdD" style="width: 70%;">
+                        <p class="caption">좌: 일반적인 구조의 ResNet, 우: Bottleneck 구조의 ResNet, 출처: ResNet paper</p>
+                    </div>
+                    <p>
+                        <br>아래는 각각의 경우에 대해 파라미터 수를 계산한 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Bottleneck 구조의 파라미터 수가 레이어는 더 많아도 약 22 % 정도 감소된 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[기존\,ResNet: (3*3*64)*2=1152\]
+                        \[Bottleneck\,ResNet: (3*3*64) + (1*1*64) + (1*1*256)=896\]
+                    </div>
+                    <p>
+                        <br>추가로 위의 bottleneck 구조의 그림에 input이 256-d로 적혀있습니다.
+                        이 부분은 원래 ResNet 종류 표대로라면 64-d가 맞지만 실제로는 shortcut을 더해줄 때 64-d의 데이터를 (1*1) convolutional layer를 거치는 과정에서 kernel 수를 늘려 차원을 늘린 후 더해주기 때문에 저렇게 적혀있는 것입니다.
+                        많은 리뷰 글에서 이 부분이 zero-padding을 한 후 더해주었다고 하는데 그 말은 틀린 말이며, convolutional layer를 거치면서 변한 부분입니다.
+                    </p>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ResNet 결과</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        그럼 실제로 ResNet의 성능이 어떤지 확인해봐야겠죠.
+                        아래 결과는 일반 CNN과 ResNet의 ImageNet 분류 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">일반 CNN 구조는 그 깊이가 더 깊어질수록 성능이 저하되는 degradation이 발생하였지만, ResNet같은 경우는 degradation이 발생하지 않고 깊은 모델의 성능이 더 좋은 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAWUweWntQg-UTCSQcqJpM01QdS4bO_yxpzM4ftOl_csRpyFpq1Z4ylZCMrqVBpHMQJKdh0u5iYcxFsk5jgcMd4uyJmkiEOGGLMrpPKcgvsZASA37K2i3kbJxCKbyEW8_EXJuXwAzEbLn97TM-aWEAisH36Bb5jcyBCQL4EKDybj7bHa2TdRNZTy89CpexO5GZ8BWrDNHe4RGyDMeiKK76fUKyQsABqQtg5UhCwLXJpCtMEQTidYpS0tyWOWHU33skj0W6T3laHBjyzC68e1SXoO1zzWHxJ_h9Zy5MOFqV0KauTUJ-88My_LggT4cDEC_lQb4We-4x1z07rpvUsZo5PhfE273Zq2qvE2M8fDU46bFISiKZWt2IMsOGvd9uGOHi-1ITKWVn4ASTbuTF378BztXE4mKvfdi7RmpQ98vHNIYQoooXvZgnpJGiNoCPN0HGpVhvay_KRgY3XERHePjWBxrSP3i3toTfLVrd13wBJtyXdzDBlpURSofoFu2e6IsKKqycjHcpbyrfAOugdTdGrxA526BluK_A9HutBQv4aw71mYimp7ReKh0-xupU4nmfMi6oySpAUcuJ5GhM9cKe2sGGyQpphruPp6-ukmrOugcEK7ufeUooJn3ARfqTy8bgFrNb0GbAJW-gPetJG8hCqCurklCfvGUwhGPVrqLBK27pyHiL7fQNby4wtnKc5oeydPNifSOJf7i_B8eDV15h0T2B7xwyhPvZzJKrDpwTbXvm4hXrBempF3BxtfekysuF6Gg1WTg1TKPq_DfCNuQn6yR7PjlESCgigx0DkNuLDR4ZlqudkLztlHERorlpIo6lFBhrArsOqdJr_UxkpyGbzgKV-1_GjCWpxlm-KzW-Mh3fY1hvnAfWj_E8viXA0DhGsC4uYLGDdqD_Tn2wqjgLeT4zsojMr4u4hClAzJUyZJF50ntf6rSyVKXHgxvOS2q2u3rWXYBfAI33VAX_CZ6QVCGZ4zHDXgoOxoXbtNtC_K-itWFJyVbnH59dkA-HivRpgn1gbI76YVXcOgTAlxgYMHVK8sdmlp3OiztmmZQlNI66Og82gyxEKQsc9p7QDyFSDUf5dahAVKGNnO_7wE6BXNqlsNJ2PhXtPQCQtOYIqk1Jn29Pm4iKjMC3OWpP7Cxx4s-sLkfmfXtnrzGcpF77CxqSKq_dnDbvJgVp7Tma_pX4K6OwBBoJn4TD1DrYO5QjjVo37-JKvutft6mzQAgr1qy96B9rcSK3V0mCm2a3u7raP0EpXx58Zvfwikn2pDaQ4jECf-" style="width: 100%;">
+                        <p class="caption">일반 CNN과 ResNet의 ImageNet 분류 결과, 출처: ResNet paper</p>
+                    </div>
+                    <p>
+                        <br>ResNet은 당시 최초로 사람보다 좋은 성능을 낸 모델이었으며, 지금에 들어서 shortcut 기반으로 모델을 구성하는 것이 기본이 된 만큼 AI 필드에 있어서 많은 영향을 끼친 연구입니다.
+                        아래는 ResNet의 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">ResNet 논문</a>
+                    </div>
+                    <p>
+                        <br><br><br>다음에는 원래의 ResNet이 너무 깊기 때문에 직접 custom ResNet을 구현해보고 CIFAR-10 데이터를 분류해보도록 하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CNN&emsp;#ResNet
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('CNN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>CNN을 이용한 MNIST 분류</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('CNN4.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>ResNet 구현 및 CIFAR-10 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
