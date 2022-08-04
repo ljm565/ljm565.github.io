@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ResNet 구현 및 CIFAR-10 분류</title>
+        <meta name="description" content="Residual Network (ResNet) 모델을 구현하고 CIFAR-10 데이터를 분류합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/CNN4.html" />
+        <meta property="og:title" content="ResNet 구현 및 CIFAR-10 분류" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Residual Network (ResNet) 모델을 구현하고 CIFAR-10 데이터를 분류합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypAhnnM_SCmYiMIZAV30ntV85ahGQn8lONMUuj_qMsprRM3RSxY--_Pl0DpxrHbPsVX_AYNmiPLMqYyWxDed9j_B5hZyWOJ-oi0KuW_CvQJcaqGjT4lZPQNYJ1l7N5x2ES_NH0eg3bHJIgHSDVEIEyU3c0xE-qgBvmHoWJmNdBYsH90xzE4Xv_tIeK1bsFapMueFN_oGpfjxp380maWEyOlLaVK14B9XD8wb_gy7UcfJNOFZ1JgvlGMqPowXMo82zz8R4mNSAPlCkl9IsBmlSWtirYWanFoMiWt-89pOuM0YYCS0R3GF82l8VF7G_ObkP8NikMS7s06AxxU4RKcjKYlCrxffFawQsb4qxcm6PB4mpcFxJi82JEbhIuFBq0aQwBsMCoqg51itQqFICjVhvFGYZOVSwy0pMKV_rRNUAkJYnBRKKGU-QcNgFtnUD2Q6KmeRlWxoOPaXoO4wv6Abgk4y70qliffibRa6h9cUl30_pQd42YPBDx-n1tlWschlqWgjZw7Phy_lt5S8luRJ7x_Wp6Cr9qMTrFXCkI-YmR35Q-pK_se-4KOuCba95rEWUSYkVIFkL6Us_KQyoTd_S92aPM0C_QALk2IVyVLm268Udv2k22V1qhDO8kfD_9iB6lerf5RNewN_EZV9gxYBBEUswz7_SLoigL3ivo-rR6lrYELOiLXjWbdvdqU9quA3qMdkAm7BRYLKE_NX1gHLRTSZVFetUBjy0ZGaNlMjoqCHGqK2703s0AuMXM3VjIoL-JDUgMNdGaoSpCjVDVZZM3BpCZ5rqyBdXLTBaFxVLpLGWto9QpuAoK29hRyXFOA5kl-InqL1SvyzWkebdi0PDTC7HQ5UqXRt685htoRLceBCg8oNT9aS196YanzXEvsotF1ta27t_UwNuV-N_Nf7gZQTucwQvVZRm2rYwSuk5Xw1oHArgXMRER_odi4hmYQON4KxiVMZDNMrmaswZoGYmF39SEcOlUH3ZFHPEnRBu8xAfIkdvJx9S7U45yxzLvUTy0u3hSfvowe-wwjiye5Gz7vNbn40yKjNjLufyKAKz-Y8Arl3qrXSVB-_Vyi_qzRwsGZrtbFC7mU5WS_nXpMuxgWqi640LdcQyeLbrHUEY_ZomBw6v8uQBwKy68dZiAlRUDQN_lW-PXCGYmGY4jsjqykd24ir8zhCnW5n-RbGyzR1z5dQ483p63-OtZClR9uR-SQGZhv2Kze-vlKZflSHsFh4-_kASNeAJgElHc8litvS_9Wqk-ea7R3wYFNIB12e3tSE" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) / 4. ResNet 구현 및 CIFAR-10 분류</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypAhnnM_SCmYiMIZAV30ntV85ahGQn8lONMUuj_qMsprRM3RSxY--_Pl0DpxrHbPsVX_AYNmiPLMqYyWxDed9j_B5hZyWOJ-oi0KuW_CvQJcaqGjT4lZPQNYJ1l7N5x2ES_NH0eg3bHJIgHSDVEIEyU3c0xE-qgBvmHoWJmNdBYsH90xzE4Xv_tIeK1bsFapMueFN_oGpfjxp380maWEyOlLaVK14B9XD8wb_gy7UcfJNOFZ1JgvlGMqPowXMo82zz8R4mNSAPlCkl9IsBmlSWtirYWanFoMiWt-89pOuM0YYCS0R3GF82l8VF7G_ObkP8NikMS7s06AxxU4RKcjKYlCrxffFawQsb4qxcm6PB4mpcFxJi82JEbhIuFBq0aQwBsMCoqg51itQqFICjVhvFGYZOVSwy0pMKV_rRNUAkJYnBRKKGU-QcNgFtnUD2Q6KmeRlWxoOPaXoO4wv6Abgk4y70qliffibRa6h9cUl30_pQd42YPBDx-n1tlWschlqWgjZw7Phy_lt5S8luRJ7x_Wp6Cr9qMTrFXCkI-YmR35Q-pK_se-4KOuCba95rEWUSYkVIFkL6Us_KQyoTd_S92aPM0C_QALk2IVyVLm268Udv2k22V1qhDO8kfD_9iB6lerf5RNewN_EZV9gxYBBEUswz7_SLoigL3ivo-rR6lrYELOiLXjWbdvdqU9quA3qMdkAm7BRYLKE_NX1gHLRTSZVFetUBjy0ZGaNlMjoqCHGqK2703s0AuMXM3VjIoL-JDUgMNdGaoSpCjVDVZZM3BpCZ5rqyBdXLTBaFxVLpLGWto9QpuAoK29hRyXFOA5kl-InqL1SvyzWkebdi0PDTC7HQ5UqXRt685htoRLceBCg8oNT9aS196YanzXEvsotF1ta27t_UwNuV-N_Nf7gZQTucwQvVZRm2rYwSuk5Xw1oHArgXMRER_odi4hmYQON4KxiVMZDNMrmaswZoGYmF39SEcOlUH3ZFHPEnRBu8xAfIkdvJx9S7U45yxzLvUTy0u3hSfvowe-wwjiye5Gz7vNbn40yKjNjLufyKAKz-Y8Arl3qrXSVB-_Vyi_qzRwsGZrtbFC7mU5WS_nXpMuxgWqi640LdcQyeLbrHUEY_ZomBw6v8uQBwKy68dZiAlRUDQN_lW-PXCGYmGY4jsjqykd24ir8zhCnW5n-RbGyzR1z5dQ483p63-OtZClR9uR-SQGZhv2Kze-vlKZflSHsFh4-_kASNeAJgElHc8litvS_9Wqk-ea7R3wYFNIB12e3tSE);">
+                    <div>
+                        <span class="mainTitle">ResNet 구현 및 CIFAR-10 분류</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.08.04</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        <br><br>이전글에서는 Residual Network (ResNet)에 대해 설명하였습니다. 이번글에서는 실제로 ResNet을 구현해보도록 하겠습니다.
+                        먼저 PyTorch 등에 공개된 ResNet 모델은 ImageNet을 위한 모델입니다.
+                        따라서 모델 크기도 크고, 본 내용에서 사용할 CIFAR-10 데이터와 크기도 맞지 않으므로 모델을 resize 한 customized ResNet을 구현해보도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">학습에 사용한 데이터는 10가지의 label로 분류 된 CIFAR-10 데이터를 사용하였으며, 구현은 python의 PyTorch를 이용하였습니다.</span>
+
+                        <br><br>그리고 ResNet에 대한 글은 <a onclick="pjaxPage('CNN3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>를 참고하시기 바랍니다.
+                        이렇게 구현한 ResNet의 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Residual Block 구현</li>
+                            <li>ResNet 구현</li>
+                            <li>ResNet 학습</li>
+                            <li>ResNet 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/ResNet" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">ResNet GitHub 코드</a>
+                    </div>
+                    <p>
+                        <br>그리고 추가로 ResNet 구현을 위해서는 CNN에 대해 알고 있어야합니다. CNN의 설명은 <a onclick="pjaxPage('CNN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>를, CNN을 이용한 MNIST 데이터 분류 코드의 구현은 <a onclick="pjaxPage('CNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">여기</span></a>를 참고하시기 바랍니다.
+                    </p>
+
+
+
+                    <h1 class="subHead">ResNet 데이터 분류기 모델</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Residual Block 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 ResNet을 구성하는 작은 단위인 residual block을 제작하도록 하겠습니다.
+                        그리고 ResNet과 성능을 비교하기 위한 CNN 모델을 구성하기 위해서 CNN block 제작 방법도 같이 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 말하는 residual block은 아래 그림과 같이 shorcut을 이루는 단위를 뜻합니다.
+                        즉 하나의 residual block은 2개의 convolutional layer로 이루어져있으며, 여기서 shorcut을 제외하면 단순한 CNN block이 됩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCQVJn3GTpKrQbR5sshdkQ6BThEwYo_u1VvPDfy0zoMd5bYBvtJpYOlN6uTReaQ9Vv8kvRuLLVMmUWRxmJEPaWHInedfts0SiTuH1e_bVnbrZqlpMOxSjYCevFOq7VzZH7oevYUUiCPEB2QXZOu20pBAqjBPDrFktEMMzRNQxA2y5Wc-Mm3ZIfjT0TtrDSIH5WAhyZ-u1u62l3lMboT8FlZFRcicC0ESUrfF7KE3Y6SX1nY4WgfTk4xv4nT1yeVz1gWtg2tSWgSDSgxyT-1o9n5hkQ5nokEG5NfVdkwt4zSvwUV-3SR4I7-ifsq0XoBp1G0p2m-81vJLL7j4XwGgG8pdLQM33IiHdcmdqY9Y32Lf7AqcwB8tGLoMYQYXrOPYS-z7PDX9EfxmUOTV7nK_6b3N6vPg-OVmDQgzf3cjOBhw3I1H5kssx-Sy3utrqTUaIabR2lijVTUHIdCn6Eum5I1YrhaLAwe1YXRQFYO-bH3-uaUb2rtsrhucLmvbCu4qsCk0j5Qah85-Aa16v5uwKeJk_v4kC4RFX51AiT7xtDYCLM7O2JX2IzeylbNNRRR6URXVaONgXhSxQzwrWqfH8SIPsL8etICsIAhAk_1FQ_tjCA4h3m-XBB9LviEmWv7RZZF7ii8uD5redxihAwT4U6kBHZE2VsY_qk7Udhqfsp9QCJcuQp6Gyn6JBx68ecAx_Y__BvGjh61x-C82xbjI3OA-0CLqCfOdvoBhVQ-2UqoRSeWrzK_ebsgmn-TfSLN1TAwDqjbr2XSB2aCDoR9ZDEXSX5e8PKogfcOl0r3M_9bYOXmbxB_wwSrSMm9NoMlOKzTzcBL6ttLtOgNGOjbmWf6ECE3-6j4hz9PXy3veWVIJ43umatHx6zH3JIsz-XwbKCjQk17p6_AaXI0nOdMWl2ogUpgjiwJLFvmS52qgc44Zg4D6G7j1Vao_-m3Mvmy9-Z6OB0bS0RLvc3H-oLH-PUGS18cJJNspZ8XWDip4QaJtiO2V3tzZVrVbfCv6CDZbQu7-JBfI2rq2RqEY3IinxCbD6MuZfghPmrUGHxnWCFpW1tOuA_37vds0tHMWZG6mQLpoyjyMtAZyOCtlKlzBEVm7t1BOuLiA7AUIAKz43E2mgItOCUjZUc2DEG4Gga_AaUgfgYhtmsKwkF0aRTMbIolcZORV0Id1kBnSgkZWYh_r2cUz7I7E0abvgcLLgH630EdxyFLfcWLhlqR6ZS3sNcdtUpJ_WhdgD7T-7tAVPY5Dp30p8PQAXF2HPZvWcdugN-O" style="width: 50%;">
+                        <p class="caption">ResNet을 이루는 residual block</p>
+                    </div>
+                    <p>
+                        <br>코드는 pytorch로 작성 되었으며, 자세한 모델의 구조는 아래 코드를 통해 확인할 수 있습니다.
+                        한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">ResidualBlock</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">in_channels</span>, <span class="var">out_channels</span>, <span class="var">stride</span>, <span class="var">down_sample</span>, <span class="var">zero_padding</span>):
+        <span class="clazz">super</span>(<span class="clazz">ResidualBlock</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">in_channels</span> = <span class="var">in_channels</span>
+        <span class="var">self</span>.<span class="var">out_channels</span> = <span class="var">out_channels</span>
+        <span class="var">self</span>.<span class="var">stride</span> = <span class="var">stride</span>
+        <span class="var">self</span>.<span class="var">down_sample</span> = <span class="var">down_sample</span>
+        <span class="var">self</span>.<span class="var">zero_padding</span> = <span class="var">zero_padding</span>
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">down_sample</span> <span class="reserved">and not</span> <span class="var">self</span>.<span class="var">zero_padding</span>:
+            <span class="var">self</span>.<span class="var">conv1x1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+                <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">in_channels</span>, <span class="var">out_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">kernel_size</span>=<span class="num">1</span>, <span class="var">stride</span>=<span class="var">self</span>.<span class="var">stride</span>, <span class="var">padding</span>=<span class="num">0</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+                <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="var">self</span>.<span class="var">out_channels</span>)
+            )
+        <span class="var">self</span>.<span class="var">conv1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">in_channels</span>, <span class="var">out_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="var">self</span>.<span class="var">stride</span>, <span class="var">padding</span>=<span class="num">1</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="var">self</span>.<span class="var">out_channels</span>),
+        )
+        <span class="var">self</span>.<span class="var">conv2</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">out_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="var">self</span>.<span class="var">out_channels</span>)
+        )
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+    
+    <span class="reserved">def</span> <span class="method">downSampling</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="str">"""
+        pad the 3 dimensional tensor except batch
+        padding = (left, rigt, top, bottom, front, back)
+        """</span>
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">zero_padding</span>:   
+            <span class="var">padding</span> = (<span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="var">self</span>.<span class="var">out_channels</span> - <span class="var">self</span>.<span class="var">in_channels</span>)
+            <span class="var">out</span> = <span class="clazz">F</span>.<span class="method">pad</span>(<span class="var">x</span>, <span class="var">padding</span>)
+            <span class="var">out</span> = <span class="clazz">nn</span>.<span class="clazz">MaxPool2d</span>(<span class="var">kernel_size</span>=<span class="num">2</span>, <span class="var">stride</span>=<span class="num">2</span>)(<span class="var">out</span>)
+            <span class="return">return</span> <span class="var">out</span>
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">conv1x1</span>(<span class="var">x</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">shortcut</span> = <span class="var">self</span>.<span class="method">downSampling</span>(<span class="var">x</span>) <span class="return">if</span> <span class="var">self</span>.<span class="var">down_sample</span> <span class="return">else</span> <span class="var">x</span>
+
+        <span class="annot"># first conv layer</span>
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">conv1</span>(<span class="var">x</span>)
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">out</span>)
+
+        <span class="annot"># second conv layer and residual connection</span>
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">conv2</span>(<span class="var">out</span>)          
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">out</span> + <span class="var">shortcut</span>)
+
+        <span class="return">return</span> <span class="var">out</span>
+
+
+
+<span class="reserved">class</span> <span class="clazz">CNNBlock</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">in_channels</span>, <span class="var">out_channels</span>, <span class="var">stride</span>, <span class="var">down_sample</span>, <span class="var">zero_padding</span>):
+        <span class="clazz">super</span>(<span class="clazz">CNNBlock</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">in_channels</span> = <span class="var">in_channels</span>
+        <span class="var">self</span>.<span class="var">out_channels</span> = <span class="var">out_channels</span>
+        <span class="var">self</span>.<span class="var">stride</span> = <span class="var">stride</span>
+
+        <span class="var">self</span>.<span class="var">conv1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">in_channels</span>, <span class="var">out_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="var">self</span>.<span class="var">stride</span>, <span class="var">padding</span>=<span class="num">1</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="var">self</span>.<span class="var">out_channels</span>),
+        )
+        <span class="var">self</span>.<span class="var">conv2</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">out_channels</span>=<span class="var">self</span>.<span class="var">out_channels</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="var">self</span>.<span class="var">out_channels</span>)
+        )
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="annot"># first conv layer</span>
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">conv1</span>(<span class="var">x</span>)
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">out</span>)
+
+        <span class="annot"># second conv layer</span>
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">conv2</span>(<span class="var">out</span>)          
+        <span class="var">out</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">out</span>)
+
+        <span class="return">return</span> <span class="var">out</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 80);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>Residual Block</b></span>
+                        <br>먼저 1 ~ 49번째 줄에 해당하는 Residual Block 부분입니다.
+                        <ul>
+                            <li>4 ~ 6번째 줄: Residual block으로 들어오는 데이터의 channle 수, 사용할 필터 개수, convolutional 작업이 이루어질 stride.</li>
+                            <li>7번째 줄: Down sampling 여부. Stride가 2면 True, 1이면 False로 들어올 것.</li>
+                            <li>8번째 줄: Down-sampling을 zero padding으로 한다면 True, 1*1 conv.로 한다면 False.</li>
+                            <li>9 ~ 13번째 줄: 8번째 줄이 False라면 down-sampling을 할 1*1 conv. 정의.</li>
+                            <li>14 ~ 22번째 줄: 위 그림에서 보듯이 residual block 안에 있는 두 개의 conv. 레이어.</li>
+                            <li>25 ~ 35번째 줄: 데이터 down-sampling이 이루어지는 함수.</li>
+                            <li>38 ~ 49번째 줄: 데이터가 통과하는 부분. ResNet의 shortcut이 존재.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서는 ResNet의 shortcut이 존재하는 것을 알 수 있고, 차원이 안맞는 경우 shortcut을 하기 위한 down samplig 방법이 정의 되어있습니다.
+                        그리고 down-sampling은 zero padding 혹은 1*1 conv. 레이어의 방법, 이렇게 두 가지가 정의 되어있습니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>CNN Block</b></span>
+                        <br>이제 먼저 53 ~ 80번째 줄에 해당하는 CNN Block 부분입니다.
+                        이 부분은 위의 Residual Block과 동일합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다만 shortcut이 없어짐에 따라 down sampling 관련 변수와 함수가 없다는 것을 볼 수 있습니다.</span>
+                    </p>
+
+
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>ResNet 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 위에서 정의한 낱개의 Residual block을 여러개 쌓아 전체의 ResNet을 구현 하는 코드입니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>, <span class="var">num_layer</span>:<span class="clazz">int</span>, <span class="var">block</span>):
+        <span class="clazz">super</span>(<span class="clazz">ResNet</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
+        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
+        <span class="return">assert</span> <span class="var">self</span>.<span class="var">height</span> == <span class="var">self</span>.width
+        <span class="var">self</span>.<span class="var">label</span> = <span class="var">config</span>.label
+        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+        <span class="var">self</span>.<span class="var">num_layer</span> = <span class="var">num_layer</span>
+        <span class="var">self</span>.<span class="var">block</span> = <span class="var">block</span>
+        <span class="var">self</span>.<span class="var">zero_padding</span> = <span class="var">config</span>.zero_padding
+
+        <span class="annot"># first conv layer</span>
+        <span class="var">self</span>.<span class="var">conv1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">out_channels</span>=<span class="num">16</span>, <span class="var">kernel_size</span>=<span class="num">3</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">1</span>, <span class="var"><span class="var">bias</span></span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>(<span class="num">16</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+
+        <span class="annot"># residual layers</span>
+        <span class="var">self</span>.<span class="var">conv2x</span> = <span class="var">self</span>.<span class="method">get_layers</span>(<span class="var">in_channels</span>=<span class="num">16</span>, <span class="var">out_channels</span>=<span class="num">16</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">block</span>=<span class="var">self</span>.<span class="var">block</span>)
+        <span class="var">self</span>.<span class="var">conv3x</span> = <span class="var">self</span>.<span class="method">get_layers</span>(<span class="var">in_channels</span>=<span class="num">16</span>, <span class="var">out_channels</span>=<span class="num">32</span>, <span class="var">stride</span>=<span class="num">2</span>, <span class="var">block</span>=<span class="var">self</span>.<span class="var">block</span>)
+        <span class="var">self</span>.<span class="var">conv4x</span> = <span class="var">self</span>.<span class="method">get_layers</span>(<span class="var">in_channels</span>=<span class="num">32</span>, <span class="var">out_channels</span>=<span class="num">64</span>, <span class="var">stride</span>=<span class="num">2</span>, <span class="var">block</span>=<span class="var">self</span>.<span class="var">block</span>)
+
+        <span class="annot"># last conv layer</span>
+        <span class="var">self</span>.<span class="var">avg_pool</span> = <span class="clazz">nn</span>.<span class="clazz">AvgPool2d</span>(<span class="var">kernel_size</span>=<span class="clazz">int</span>(<span class="var">self</span>.<span class="var">height</span>/<span class="num">4</span>), <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">0</span>)
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="clazz">int</span>(<span class="var">self</span>.<span class="var">height</span>/<span class="num">4</span>)**<span class="num">2</span>, <span class="var">self</span>.<span class="var">label</span>)
+
+        <span class="annot"># initialization</span>
+        <span class="var">self</span>.<span class="method">init_wts</span>()
+        
+
+    <span class="reserved">def</span> <span class="method">init_wts</span>(<span class="var">self</span>):
+        <span class="return">for</span> <span class="var">m</span> <span class="return">in</span> <span class="var">self</span>.<span class="method">modules</span>():
+            <span class="return">if</span> <span class="method">isinstance</span>(<span class="var">m</span>, <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>):
+                <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">kaiming_normal_</span>(<span class="var">m</span>.<span class="var">weight</span>, <span class="var">mode</span>=<span class="str">'fan_out'</span>, <span class="var">nonlinearity</span>=<span class="str">'relu'</span>)
+            <span class="return">elif</span> <span class="method">isinstance</span>(<span class="var">m</span>, <span class="clazz">nn</span>.<span class="clazz">BatchNorm2d</span>):
+                <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">constant_</span>(<span class="var">m</span>.<span class="var">weight</span>, <span class="num">1</span>)
+                <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">constant_</span>(<span class="var">m</span>.<span class="var"><span class="var">bias</span></span>, <span class="num">0</span>)
+
+
+    <span class="reserved">def</span> <span class="method">get_layers</span>(<span class="var">self</span>, <span class="var">in_channels</span>, <span class="var">out_channels</span>, <span class="var">stride</span>, <span class="var">block</span>):
+        <span class="var">down_sample</span> = <span class="reserved">False</span> <span class="return">if</span> <span class="var">stride</span> == <span class="num">1</span> <span class="return">else</span> <span class="reserved">True</span>
+        <span class="var">layer_list</span> = [<span class="var">block</span>(<span class="var">in_channels</span>, <span class="var">out_channels</span>, <span class="var">stride</span>, <span class="var">down_sample</span>, <span class="var">self</span>.<span class="var">zero_padding</span>)]
+        <span class="return">for</span> _ <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">num_layer</span>-<span class="num">1</span>):
+            <span class="var">layer_list</span>.<span class="method">append</span>(<span class="var">block</span>(<span class="var">out_channels</span>, <span class="var">out_channels</span>, <span class="num">1</span>, <span class="reserved">False</span>, <span class="var">self</span>.<span class="var">zero_padding</span>))
+        <span class="var">layer_list</span> = <span class="clazz">nn</span>.<span class="clazz">ModuleList</span>(<span class="var">layer_list</span>)
+        <span class="return">return</span> <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(*<span class="var">layer_list</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">conv1</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">conv2x</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">conv3x</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">conv4x</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">avg_pool</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">x</span>.size(<span class="num">0</span>), -<span class="num">1</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">x</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 59);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>여기서 나오는 config 부분은 <a href="https://github.com/ljm565/ResNet" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4 ~ 5번째 줄: 이미지 데이터의 가로, 세로 크기.</li>
+                            <li>7번째 줄: 분류 label 수.</li>
+                            <li>8번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
+                            <li>9번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Residual block 종류별 개수 설정(3이면 3*3*2=20, ResNet20 모델).</span></li>
+                            <li>10번째 줄: Block 종류(residual or CNN block).</li>
+                            <li>11번째 줄: Down-sampling을 zero padding으로 한다면 True, 1*1 conv.로 한다면 False.</li>
+                            <li>14 ~ 18번째 줄: Residual block을 거치기 전 맨 처음 convolutional layer. 여기서는 가로, 세로 크기를 유치하고 channel 수만 16으로 늘림.</li>
+                            <li>21 ~ 23번째 줄: 위에서 정해준 num_layer만큼 residual block을 쌓아주고 ResNet 구성.</li>
+                            <li>26 ~ 27번째 줄: ResNet 마지막 레이어. Average pooling 사용.</li>
+                            <li>30번째 줄: ResNet weight 초기화.</li>
+                            <li>33 ~ 39번째 줄: ResNet weight 초기화 함수.</li>
+                            <li>42 ~ 48번째 줄: Residual block을 쌓아 ResNet 구성하는 함수. <span class="highlight" style="color: rgb(0, 3, 206);">여기서 num_layer 개수 만큼 쌓은 레이어 중 맨 위의 레이어만 down-sampling 진행.</span></li>
+                            <li>51 ~ 59번째 줄: 쌓은 모든 block을 통과하여 전체 ResNet이 모델을 통과하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>ResNet 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 위에서 정의한 ResNet을 학습하는 코드입니다.
+                        아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다. 여기서는 무시해도 좋습니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">def</span> <span class="method">model_select</span>(<span class="var">config</span>, <span class="var">color_channel</span>, <span class="var">device</span>):
+    <span class="return">if</span> <span class="var">config</span>.model_mode.lower() == <span class="str">'cnn'</span>:
+        <span class="method">print</span>(<span class="str">'CNN<span class="reserved">{}</span> will be trained..'</span>.<span class="method">format</span>(<span class="clazz">int</span>(<span class="var">config</span>.num_layer*<span class="num">2</span>*<span class="num">3</span>+<span class="num">2</span>)))
+        <span class="var">block</span> = <span class="clazz">CNNBlock</span>
+        <span class="var">model</span> = <span class="clazz">ResNet</span>(<span class="var">config</span>, <span class="var">color_channel</span>, <span class="var">config</span>.num_layer, <span class="var">block</span>)
+    <span class="return">elif</span> <span class="var">config</span>.model_mode.lower() == <span class="str">'resnet'</span>:
+        <span class="method">print</span>(<span class="str">'ResNet<span class="reserved">{}</span> will be trained..'</span>.<span class="method">format</span>(<span class="clazz">int</span>(<span class="var">config</span>.num_layer*<span class="num">2</span>*<span class="num">3</span>+<span class="num">2</span>)))
+        <span class="var">block</span> = <span class="clazz">ResidualBlock</span>
+        <span class="var">model</span> = <span class="clazz">ResNet</span>(<span class="var">config</span>, <span class="var">color_channel</span>, <span class="var">config</span>.num_layer, <span class="var">block</span>)
+    <span class="return">else</span>:
+        <span class="method">print</span>(<span class="str">"model mode have to be cnn or resnet"</span>)
+        <span class="return">raise</span> <span class="clazz">AssertionError</span>
+    <span class="return">return</span> <span class="var">model</span>.to(<span class="var">device</span>)
+
+<span class="var">self</span>.<span class="var">model</span> = <span class="method">model_select</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">SGD</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var"><span class="var">lr</span></span>=<span class="num">0</span>.<span class="num">1</span>, <span class="var">momentum</span>=<span class="num">0.9</span>, <span class="var">weight_decay</span>=<span class="num">1e-4</span>)
+<span class="var">decay_steps</span> = [<span class="num">32000</span>, <span class="num">48000</span>]
+<span class="var">self</span>.<span class="var">scheduler</span> = <span class="clazz">optim</span>.<span class="clazz">lr_scheduler</span>.<span class="clazz">MultiStepLR</span>(<span class="var">self</span>.<span class="var">optimizer</span>, <span class="var">milestones</span>=<span class="var">decay_steps</span>, <span class="var">gamma</span>=<span class="num">0</span>.<span class="num">1</span>)
+<span class="var">self</span>.<span class="var">steps</span> = <span class="num">64000</span>
+
+<span class="return">while</span> <span class="var">step</span> &lt; <span class="var">self</span>.<span class="var">steps</span>:
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">x</span>, <span class="var">y</span> <span class="return">in</span> <span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]:
+            <span class="var">batch</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+            <span class="var">x</span>, <span class="var">y</span> = <span class="var">x</span>.to(<span class="var">self</span>.<span class="var">device</span>), <span class="var">y</span>.to(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
+                <span class="var">loss</span> = <span class="var">self</span>.criterion(<span class="var">output</span>, <span class="var">y</span>)
+                <span class="var">acc</span> = (<span class="clazz">torch</span>.<span class="method">argmax</span>(<span class="var">output</span>, <span class="var">dim</span>=<span class="num">1</span>) == <span class="var">y</span>).float().sum()/<span class="var">batch</span>
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">step</span> += <span class="num">1</span>
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+                    <span class="var">self</span>.<span class="var">scheduler</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 42);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 학습에 사용할 모델, optimizer, loss function을 선언합니다.
+                        <ul>
+                            <li>1 ~ 13번째 줄: CNN 모델과 ResNet 모델을 config.json의 model_mode에 의해 결정.</li>
+                            <li>15 ~ 19번째 줄: 학습에 필요한 모델, optimizer, scheduler, 학습 step 결정. <span class="highlight" style="color: rgb(0, 3, 206);">ResNet 학습은 epoch 단위가 아닌 step 단위로 학습하며, 학습이 정체 되는 구간마다 scheduler를 이용하여 learning rate 조정.</span></li><br><br>
+                        </ul>
+
+                        <span style="font-size: 20px;"><b>ResNet 학습</b></span>
+                        <ul>
+                            <li>21 ~ 42번째 줄: 64,000 step 동안 학습 진행.</li>
+                            <li>36번째 줄: 예측 accuracy 계산.</li>
+                        </ul>
+                    </p>
+
+
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ResNet 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과들은 모두 ResNet20에 대한 결과입니다.</span>
+                        아래는 CIFAR-10의 training set의 훈련 동안의 loss history 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">ResNet with zero padding, ResNet with 1x1 conv. layer, CNN 모델을 비교하였습니다.
+                        CNN 모델은 ResNet과 레이어 개수 등은 모두 같으며, ResNet에서 shortcut만 제거한 모델입니다.</span>
+                        아래 그림에서 CNN과 성능 차이는 많이 나며, ResNet끼리의 차이는 거의 없는 것을 볼 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAhnnM_SCmYiMIZAV30ntV85ahGQn8lONMUuj_qMsprRM3RSxY--_Pl0DpxrHbPsVX_AYNmiPLMqYyWxDed9j_B5hZyWOJ-oi0KuW_CvQJcaqGjT4lZPQNYJ1l7N5x2ES_NH0eg3bHJIgHSDVEIEyU3c0xE-qgBvmHoWJmNdBYsH90xzE4Xv_tIeK1bsFapMueFN_oGpfjxp380maWEyOlLaVK14B9XD8wb_gy7UcfJNOFZ1JgvlGMqPowXMo82zz8R4mNSAPlCkl9IsBmlSWtirYWanFoMiWt-89pOuM0YYCS0R3GF82l8VF7G_ObkP8NikMS7s06AxxU4RKcjKYlCrxffFawQsb4qxcm6PB4mpcFxJi82JEbhIuFBq0aQwBsMCoqg51itQqFICjVhvFGYZOVSwy0pMKV_rRNUAkJYnBRKKGU-QcNgFtnUD2Q6KmeRlWxoOPaXoO4wv6Abgk4y70qliffibRa6h9cUl30_pQd42YPBDx-n1tlWschlqWgjZw7Phy_lt5S8luRJ7x_Wp6Cr9qMTrFXCkI-YmR35Q-pK_se-4KOuCba95rEWUSYkVIFkL6Us_KQyoTd_S92aPM0C_QALk2IVyVLm268Udv2k22V1qhDO8kfD_9iB6lerf5RNewN_EZV9gxYBBEUswz7_SLoigL3ivo-rR6lrYELOiLXjWbdvdqU9quA3qMdkAm7BRYLKE_NX1gHLRTSZVFetUBjy0ZGaNlMjoqCHGqK2703s0AuMXM3VjIoL-JDUgMNdGaoSpCjVDVZZM3BpCZ5rqyBdXLTBaFxVLpLGWto9QpuAoK29hRyXFOA5kl-InqL1SvyzWkebdi0PDTC7HQ5UqXRt685htoRLceBCg8oNT9aS196YanzXEvsotF1ta27t_UwNuV-N_Nf7gZQTucwQvVZRm2rYwSuk5Xw1oHArgXMRER_odi4hmYQON4KxiVMZDNMrmaswZoGYmF39SEcOlUH3ZFHPEnRBu8xAfIkdvJx9S7U45yxzLvUTy0u3hSfvowe-wwjiye5Gz7vNbn40yKjNjLufyKAKz-Y8Arl3qrXSVB-_Vyi_qzRwsGZrtbFC7mU5WS_nXpMuxgWqi640LdcQyeLbrHUEY_ZomBw6v8uQBwKy68dZiAlRUDQN_lW-PXCGYmGY4jsjqykd24ir8zhCnW5n-RbGyzR1z5dQ483p63-OtZClR9uR-SQGZhv2Kze-vlKZflSHsFh4-_kASNeAJgElHc8litvS_9Wqk-ea7R3wYFNIB12e3tSE" style="width: 100%;">
+                        <p class="caption">Training loss history</p>
+                    </div>
+                    <p>
+                        <br>아래는 훈련 중 validation set의 loss history 입니다.
+                        CNN과 성능은 많이 차이나지만 ResNet끼리는 별로 차이가 나지 않습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCyGdpJ8wQghrKjcq5WmPFSOyiCqcMmFf-jqwQN24DZtsx6satEbG_WE3oI8QlI-HytaSMvsjrmJnpv7fTtcfyCuwcfGe5OunkWKcciuE5QNuUDfH1H5yVb58o7eNUUo2mPFCGWljv15q35vbp_nu3T0iPktCdH2cFjqYlZhl6l1SSkja1zLixlS-UJt0-C-lNmxk83Vuyes_WrnufypClf8HLU8DHsBeM78mbKGDwmHjAUar6ODukezXhSb_qIPZ4RRiH3frJmYiYZJbXUEbyCRRVwWb8EnjQHzKSYB1igzgpw2zoxqGdPDzIkYmKGN_SL4FAIOKcEpOLMITneZt2Gh5IcsLhaGrSL8BaqNRge0UB80wnD3frS_u9WqKELD8SZl-ywrZNyrgeWjGhbS0XtOOU8YsAZ-nCjbhjH0pEZ7Bhr8XLg0CV79DAVbiMvNhw7GNsOdTe0LbDMSUF_-J0ce7LG_JUaTT3pW462zeSkPLZr3MUFPGc9kWY_9HldKsyGmPvwYnY930E_418KNPhTteB_nLjqwNCsYQOg8hQd95-1AJfu_grgz-vWNbcWfTuOoklas5cyLl0f4SBYzmXpC-GfhgbBrocjiWC7faodwmKV3pNmPBG97dzk71tZEazHXBToifJUJMLlZDKVjFdF6AhImswAD_VY6ibBYxk3UQTs0HYzZpiUVGtmH7KLsGSwCuvdJdXPv3esFoIUwnxCT1RlZ5pVTkvDZme10En3a63Q2aSdyQA-CGsazTNZ37NQbWBj_EpsfV2UlcCv58TBn2iGDMV2_rV7RGUtWvHSTLrFsMQTqAYt_pMJWknI_2b9LtrINm4jIZqGoc9afanhgzuaMjzQzo7iv90O27L1rS11bEOBW9CFhr-QOXLE-ymcMYvm5OmJhE6LVu3Unt_Xks8IJpWDjnY9BLqNIUZjHh4Er5RJC9rqc4BmSa5Ru9tp98YM9r1Fe0z06TTDLg22W4o7neUKaMNLqetCAWp5hAkBzLnhiwGCJ4qvnfFzwIOR0MBhjxgJQvmaP-q4vqnlfeMFMvIZsWGN3b8hSa39kpKKTRnLIwCCuV-q-ndwT4ccswUGPu-k7zpUD58F6SOCgKVZjKP7txh_VnpwPWRHO0Bf6TtiiKevidyqSa8SyhEUkhCU-s0zMc5DcnBSsrBbLfKEOADQ6hW1zR6-xDaS7CtOfrSDYw-g9UmtnVbDPLkI6ixDopn5G4ibz4isqUrmhJ_eRxuHw8T8kQdRtegwPkxyqPGK2BXfDd2UKFGPy7kS" style="width: 100%;">
+                        <p class="caption">Validation loss history</p>
+                    </div>
+                    <p>
+                        <br>아래는 훈련 동안의 training set의 label 예측 accuracy 변화입니다.
+                        CNN과 차이가 좀나지만 ResNet끼리는 차이가 미비한 것을 볼 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAeGkZIQZrCSDxVIRccZfFyJLVIBk02cJT8cs66btfXJoZ4JWeQiCDXky2gKMW5cEZwaM_0b4lMtEkG0UKC_3C_GGxbH53jFT7RRIDN2xhk5cOEtNS8LS5IXfmyaP0keVs32og9jfgxOuXlg_3t88qirslbG67Ubvf780rT8KXgWiKHEhvWkO0dlZIKk7MZU34yCkzl-QkHDZ7eZAOQq9XLjMv55UswoElBTsstn-01UoaoMLBBOJ6PaWxt_M3JfRZa-vjkUTilfSxBLWkr1kwbZIAFljt72x51WzgLtw1ljR-eBSgEiryDEXOPR5iBxU635mLSIAXWq3walG1MQSBmEtpvQIGzpbSUR61uZ00BGMAQN0N-ykBg1Al1_BaxcVjF6xUaNF5AuGH1yc_d5Z_UC39-LOzWWce6V_SGx_Lpg97thDxV3wDaB7XH7vJnDVwpMTYdJZfqnEQToxh3nYqX5GbWy48FderX8fHV6O_4ekqMlaiBwz6EOMe5uNayux2ydjYcwPn6kdJi-T29DCR07hu095IWGU_lW9XhcJCY_3ut_thIxNisVxy2NfQ_2b_45Z8XDMRNknn7OEbLZQ49lBa9PFfEkaVz9YUNdgwPUwC_bN0tVGImXZtsfY-071ocMQ8aBIuxXwq9seCOXwKbuOSRcBkHy9tJ0UOT_dy6_JCk5wmQYgtrPtXiGXc8QABrh03_GD3UhvH12a-8TpfesQHjrr-wl3OFeoQC4EtW0T18ketdyYc4wCSJGtOwyIkuloVMaY25sdSEnnHeYCoFY1t5x3-k24ar_OQ8yEGTorYuYixmiCQEjHWjwlsO9X5hovD5SEaB3UsF4BWOQee2MpYXqwOg0MF5_FkUdnrR-yVgkq0gulP5SrUtv3gYulA5V-d0T5HAAcRDHcQ8Okig1KCGHpnaaoIXPBEI2px5hbbHljRnP6S64yHJ1fXenr8IbNzhD9ojZFxFJbI4KBycB1aYKWwGw5uICmMlubgaCjuTbx51ZKcuT1EzjoH6jUdxd9OuUIRZ0JWY1x3z0J23PP4wYYHfrFXMgyjV6h6ku7ZcQ4zKQscax3AYu0Q9jvSXaKNjCUMYPhduSDL4JOmsb-hdLmmt2zSDTE84PV8iiPBAuWLLaT3pz-FYMFigGp5tzXr5-Uf9fq_lLStfKRfU-5qdLE1l9Y_Xj3y3zWbI2nyJqw8bVy4objJVaJexzjUvGAoHJS39nwTrwuuYy6qYJSscWh8hx2fdDyRyBBIRIUSZ1bi4uPTP_96QIQqsHZWr" style="width: 100%;">
+                        <p class="caption">Training accuracy history</p>
+                    </div>
+                    <p>
+                        <br>아래는 훈련 동안의 validation set의 label 예측 accuracy 변화입니다.
+                        이또한 CNN과 차이가 좀나지만 ResNet끼리는 차이가 미비한 것을 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위에서 loss도 ResNet끼리 차이는 많이 나지 않았고, accuracy도 거의 동일합니다.
+                        실제로 논문에서 zero padding과 1x1 convolutional layer의 차이가 별로 나지 않는다고 하였는데 여기서 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypACco_eBExZkhQOJZu5iI3ZH5LyhpKfYWCpz-n7O-NImHZp4TQrpANlEV5tDerjOJ9OzSLOHCm5tGiCm2E9JxhFeXQ51ib0S3DPvPNVpAy0-b2KSXRNPyruCUouCZWR9ccDcFz-Nq6UqkaqAVd4WUwcGAWMOgwFozcCNczN2fQ7TokuthsYZplqqCOuBVP2ddCzYxrjrpAIQEHYO-8WIXSp_HlECAolBgjEa_9r_BOHsmO1wYobjJGF4Kgyy8eZ4TX2DI0f1Z7ZvxWXVGf111QRPiTzZtHYKOxHLTpezakn7eC9sKKzBcP6C24Oa_l2xeen7q0z3DOFVGwcO6oZEMlfOo5Zx8viBCjlbXeulZQnFEIcf2fK6snrEqI9j1wNJ6Z5pE3-hIX_94RAAYTeny3a7Ua9teCTSLccNLXJUHwZZoB8E3d6r54w3IjGGO_htKdVN-gZphTTkWj89VgY-Ks6iJqGhvKKblBbTsBIE-euE5JUf44SkxXRxKHrGrb0jhTqC2e2LlyIWIH5zjqDz2cNBEOLukAZLDTHBz1ie8NBmMfddESY_4SQmwxw0ete3Q_5hGBS7xphrB1VldcOMUsC6Yd4lKiLZStR-T4x2t6X4L0b6KphBTmoOedEBfFYnH_HjrKICSRfVKnNFlNRJnNg0lkDvI3uwKGtvz4tun7tRodStlGxdWex35jf6A9yDfBHd23cbJoVpbV9zeCP9v-i2C0sRec2d2ntP_ve7yqirSt3_RDIbhX6FNKCxQ5G_d-JfjpFKpy_DkWbMJ74rR4Rv0eNDeBbIItAii52txYnECxPIWF8CB1yJ_Aff1OKdBDQGHQCv5Gy5RWRB2uHW4B-3Me-fBJq46v8Svc9sEPvvaPBF5QceOHcqxWGDbozAs6nLDmTdHug9r0-xD8ZgXzoGXyPvWTjepRSgHv47wud2x3bOcpzP2ptCr2HGOqkTJruAIlS4YMoHsq5KIsNouQ5Ba2ghu1hAOv4htcs5qzGN0AuyAecbAHQy9jYMVxg7pmnpadAUAiMT1q1DE4wzjforG-ic4B8ZdS6atDOReM1wYj6GMiHRcL1Kkf9aHGheVardLNoTdjciO3py3es-b90NVCGyyXkvFC-5oEphO0pEAUHJIE-Olhnn-u6klpDxZVpYHOXP3I490ByxNRYkVr9EhzGu-QNS3pom4CbzobY4GEnNyKoVX5wc9g_s70Q8_IuOWrT5Q2OgGZc17XC90SPG32jKcbf9L65LiruPaJWXNZsZ5rBqWZ6B2X3jmExQzXq" style="width: 100%;">
+                        <p class="caption">Validation accuracy history</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 CIFAR-10 test set에 대한 최종 accuracy입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">실제로 ResNet 끼리의 차이가 적은 것을 확인할 수 있고, CNN과의 차이도 크게 나지 않습니다.
+                        ResNet끼리 차이가 나지 않는 부분은 위에서 언급하였고, CNN과 차이가 많이 나지 않는 경우 이는 ResNet의 model의 깊이가 그리 깊지 않기 때문이라고 추측합니다.
+                        이번에 ResNet20으로 실험 하였지만 이보다 더 깊은 모델로 구성한다면 CNN은 gradient vanishing 현상이 심해질 것이고 그만큼 ResNet과 차이가 많이 날 것으로 예상합니다.</span>
+                        <ul>
+                            <li>ResNet with zero padding shortcut: 0.899000</li>
+                            <li>ResNet with 1x1 conv. shortcut   : 0.902700</li>
+                            <li>CNN                              : 0.898200</li>
+                        </ul>
+                    </p>
+
+                    <p>
+                        <br><br><br>지금까지 ResNet 구현 코드를 살펴보았습니다.
+                        깊은 CNN이 가진 문제를 잔차 학습과 shortcut으로 훌륭하게 해소한 모델이 바로 ResNet입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">실제로 이 논문이 나온 후, shortcut을 구성하는 것은 모든 모델의 기본이 되었으며, transformer, U-Net 등 다양한 모델에서 활용합니다.</span>
+                        그만큼 딥러닝 역사에 영향을 많이 끼친 연구 결과라고 볼 수 있습니다.
+
+                        <br><br>다음에는 자연어 연구에 대한 첫 시작글인 word2vec에 대해 소개하겠습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#ResNet&emsp;#CIFAR-10
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('CNN3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Residual Network (ResNet)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('CNN, ResNet 마지막 게시물 입니다.\n\nThis is the last post of CNN and ResNet.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
