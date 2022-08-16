@@ -59,7 +59,16 @@
             </ol>
         </li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Word2Vec</a></li>
-        <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">RNN</a></li>
+        <li>
+            <input type="checkbox" id="RNN" checked>
+            <label for="RNN">Recurrent Neural Network &nbsp;&nbsp;&nbsp;&nbsp;(RNN)</label>
+            <ol>
+                <li><a onclick="pjaxPage('contents/RNN1.html', 'RNN1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">RNN, LSTM, GRU </a></li>
+                <li><a onclick="alert('게시물 준비중입니다.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Attention과 Sequence to Sequence (Seq2Seq) 모델</a></li>
+                <li><a onclick="alert('게시물 준비중입니다.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">LSTM을 이용한 텍스트 감성 분류</a></li>
+                <li><a onclick="alert('게시물 준비중입니다.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Seq2Seq 모델을 이용한 기계 번역</a></li>
+            </ol>
+        </li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">CRNN</a></li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Transformer</a></li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BERT</a></li>
