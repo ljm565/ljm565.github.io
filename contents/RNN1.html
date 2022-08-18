@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RNN, LSTM, GRU</title>
+        <meta name="description" content="RNN 원리를 설명하고 LSTM, GRU unit을 살펴봅니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/RNN1.html" />
+        <meta property="og:title" content="RNN, LSTM, GRU" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="RNN 원리를 설명하고 LSTM, GRU unit을 살펴봅니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypAcRufBvX0a9vsaasoxKMp85rwi6o3I-PZy3OCiTXfiw6SmXN7-ptaibnYu3xf6DHDV_1EceuWlF2a5odV1ijXlboxFjVwPIQckeYjq4VqpHxb-aSAyCL6G9nOGyPKQcTS98yqhfgwNlmBHeE0N4XNsPSONsQXE4_HwrSI_t4hnygrQ-4cZjs_F3lYNE9h-asHdVppyy7jjh4WI9bX3u-JP2Dqbz7UxZqAUw589EyhzGSsCZKoqJQ7WSeioXq_B4CbbIEaIfRyvDF-ySmTfiT1Rky2-KG3Z3EDkD1zo1-zGMnmpY0q6Q1ISO-q62qV1SUAXkVOgPE0jm8GEeZQkn-TKuFFJFDYY77_0VjAWOreiIGmgjqy4QC-LoRDu7fFgkU_1Qm_8nAVmCyJwtha_-_7m7tatyToac3WAHW_is4Bfs9de3pRr9WKJXox-pTfQFkpcHO-5tIFaE8T5J0ltKBYK4wLwpZhoCpAyoOspb1JXWvU1vSwK-qk1XvivpS8vXrXUSYCJnhgoWhN3VhRHX9WvlOh8gRnl5GyRNY9jTVBDmyA3VEQZUy4IjXiTFTLDiE3sBSsQMyeDwQTjUkpTk__XhJxuMZTctHZyYRs75TDs-ejKIhLaZetJNIa1xuRymMzyT86VdLViVvmZNEJfZFrduqpnPwadrZZGyW4i1aQQ-4ceoMC8q7krUT3AF-XRUKkZOGDgkPzUbggWETxBW88iGb8xm4igB2wNbrHwjswm0YVD8IhBY7aUvn_s8FgPFpqhjkZM9TdIHnnPlmxx73kr_w-o3wA75OdIcCnT48w5ha3XAlLshKlejhNbBe7heB3tivn0hgNiOp7VrcpSd5S7fYp4ZU1ZlrUWquU3xdX0HTGqPvNs0XRZRLVBe_LAHFBqwl9GDKtcYyEfQh3Flx9cQnxoLqnG7i7V68mAjp2nkqkH9ljWmIPdzLcQy8PVP3fPLlixUCzSPchKkP0N09vmdj3-8N5LyPIfTQ-8Nz1gXRY_Qx7-Re5nc2MUwyJQ46JNBMBVD1XybjDalq62eYVmo6XFDSYfQn1iAJi4LkiAZ65y-bBTgqRKuanWvgvsIgHL-3yB5C_q4fItxGu8_bH7aDLY_7RLY_JtZIWgnIcEJ5o6iy2WNmQkgxZ1MBTaETybv59cUrKlhCEAwPl0Pxi_I8LyxuuQJYe6sPx5X3x82Zw4DpvTgZOtS1dXJj7J6EMeIp1jmOnv48zzhXm-qQe7bMZZsbR2l1gveO76jw5t61LLVyOxkJqj8Llh-kWgM-Cr" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Recurrent Neural Network (RNN) / 1. RNN, LSTM, GRU</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypA-F7cKBspCVqAvbyAOVfbQCkSXvi4qnmOlRWoVLVn_MM1dz8vwZOXX597Q3e9NhPQnZ3HMda1PBQ4AgfA4dm8x-f4FQNfkIOL_oPVjXzp2fUYHR8fNpH0Ukn752bP0i4v3bNTYK-FelcGT_mjgE2IcK3hxHFbLH888couxd8YOTf2j_MBER6C7jsQeQlpo0FMUK6dsr3WK8Kw9fwIDW70tnkuOX9gOyqEcRGMqst2ED5_WFvc23lTOKXsot3nkyMI2P8hG7S-7XPjhhrSJyAPL5s8juljEq0Mtr627GgZ7-5Y9fym0yFOY5hznTfGa8OwAaiHkYc5MwWrnOYGeBsWtZR2iUv06aiGwGqTYuiG75cjwzc4ILDOW7Bd_XAwqK6ixRxKcC0OVH0OK3FBSo8bhphMfEeVuwTaggwWalfQ9guCIHpip_JPB2nmKSqVFLBqiacywR3iXviNSlzhB3nUmDQ6BuFql4gRBwykw1BuwTBHpCsoGzve299fgl-AIJ4kYnzHk2fQ1EjJ01qKPLiJIuTTYB1iPZa9YzgR8iabYJ8-0iw8WWQq_445QYiXo6P7irZhjVjfEXo3809aklb2GRSXLlbHZWYBKYkLU_jbdWBsgQQ_c3o6URhKn9otWZ10LQFYpwI6J8_y7nL7e9tjmsMa2By46isT-P48AFhk0avmYJGb48e7klIGPvCnPwtXZjMvEF0S-QRfZ7Y4x5KOphPQvQ0JlWlCh3JmZHwMq3NG8oZZYJz23jNGgRnyATDH8cYcqwGsQvZ70KnzbUSdvnhloT2H8xQkLhNMa36rTWYyYTv7DyXabHFeO-CGzhWxR4HZwpdWL4TpkXvi6lItayd79m_oqRpOf83kHWkCUQ-q2UEG0doFypAG0VGe1XIqYGD-bS6MYCFY4XnBLhG8bkcumbQ5kkQXLUsUpINt_m9MmMZ8wKR1LxFFtQgRFk-A-Wqy4jfq-km3-Hxbh67jbDD4InMUwiUO5j3Vd2fGloG_VX_jhbOK4rEglDG0344NUdaPJLW7D50WIy4fep7s9WlqQVXyeDltS0A3e24LeuQvthMY4CUToBO8UbJVu0dKXjj4ciJ7fnUtLKBJIDElxpKCv8s5E076DKPF75wimpRBg_GRgWB1iASmwKkOppKniuUfK6p9VC64EpvFspyCjYHzOmeDbiNP4asalJ7zapY7YyPXmzhqxrzYOWB4xCv6yWvXnyc3trxsvs8vhnxJM_UL8YJrWEoOK8MpB8h4LCF0mRSk6JjEOZVvABUigX_rO);">
+                    <div>
+                        <span class="mainTitle">RNN, LSTM, GRU</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.08.18</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번 글의 주제는 Recurrent Neural Network (RNN) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">RNN은 이미지 처럼 고정된 크기의 데이터가 아닌, 가변적인 길이를 가진 자연어를 처리하기 위해 등장한 모델입니다.
+                        이러한 자연어 처리를 위한 RNN 모델 계열 중 유명한 unit들이 있는데, 바로 LSTM과 GRU 입니다.</span>
+                        이러한 RNN 계열의 모델은 transformer가 나오기 전, 자연어 처리에 필수적으로 사용된 모델이었습니다.
+                        그리고 현재까지도 Part-Of-Speech (POS) tagging, 텍스트 감성 분류 등 간단한 task에 대해서는 꽤나 좋은 성능을 보여주기도 합니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">이 글에서는 RNN의 원리와 종류에 대해 살펴보도록 하겠습니다.</span>
+                        그리고 RNN이 어디에 사용되는지, 유명한 모델이 무엇이 있는지도 간단하게 살펴보겠습니다.
+                        마지막으로 RNN의 한계에 대해서도 언급하도록 하겠습니다.
+
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>RNN의 등장 배경</li>
+                            <li>RNN의 원리</li>
+                            <li>RNN의 종류</li>
+                            <ul>
+                                <li>LSTM</li>
+                                <li>GRU</li>
+                            </ul>
+                            <li>RNN 사용</li>
+                            <li>RNN의 한계</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Recurrent Neural Network (RNN)</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>RNN의 등장 배경</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. 자연어 데이터의 가변적인 길이 특성</b></span>
+                        <br>먼저 이미지 분류 모델과 텍스트 감성 분류에 대해 생각해보겠습니다.
+                        이미지 분류를 위해서 가장 기본적으로 사용할 수 있는 방법은 바로 CNN입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 CNN을 사용하기 위해서는 input으로 들어가는 이미지 데이터는 모두 같은 크기어야 합니다.
+                        이것이 바로 이미지와 텍스트 데이터 사이의 가장 큰 차이점 중에 하나이지요. 왜냐하면 텍스트는 그 길이가 제각각이기 때문입니다.</span>
+                        아래 그림은 고정된 크기의 이미지를 사용하는 모습과 길이가 다른 텍스트 데이터를 사용하는 모습입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAYTPkkT6JxdGkiFdHuHb3iMiYxuIgJFfwsc5n25fltlovndGX6zv8dxjCSzwdlpnmOJafMWqPI0ZGh_ilI_dH4IQL76wISDua0ArNPTTMVoKbM-dkxL9LiLHwRpTD2WUt53uES0hrJIoPvyBXZzfT2YTQYY52kE0XxSUGO9xZrQePksc4vAN6gDA3z9xWmtTzVwePXVPlVUYm2SaRSWYAlADU7zIfm4kWOBaGbzyJObK2Tfr7OP5EyDLc3SyYYI4nxJkMqoordRguTl3bgNxe2EKAcmF1WZKSKloqdYrZ7kamUXnq2Rxyceast_0QX4b6L3zceh77VMvVVW1iOtMdm0vYq9BqX5yqzIYSjsGsr7I6bZvm681sQ7Nj520wjHfMsgifgKb1OKAkgiO0x-yvFn-6SCQf0biDfgidnDptKRQNlQOgIxdBrMLJ9kNeS46iRhmWry4fu_tUuQ_6sN6vc3cAsCjNYqRqLFSI7eCBrcV47CrFKNBMNNsrjdrGCE1Ihb_0WGJdbNtjlnIoL4M86reYb1C0tkHPZCRFgV1z3JHM-Twvc5zzJfFMkGOCANpcMlCSgkPQMx_HRqU2zUtT_fho4xsQyvfoEHRioZFjkG98u2MR58InJn-YsWHZxIBKHk82m5Yh44YokmPh-swuzdzWFZ4SmzrcZKZzkHwdfU7I4JrMoSzu3OPebZmD9EXuVxjcYBdth1oSFPEqzFi2Dc0fLkydEDcmjclixAKezBxrwHxxRGNCRGhh8i6oD293MB5F0n2heEa6ZZ_sGZ1hef2am2Ku1i1LDP5uYUvqt0G3SuJoXCG3iOHt1wMrqtVcytp0pELoK2MOoTeqE2zHv6Gq7ZNXUDGWe7p1C2izGjj4Q8Qnij3GSJw53avV6j0-7oG7EZIaVQBzHhBkKPAfISibMwU8QoD4YB1Dz4rL90ZZSjOFT1oOMQtgEwEOr_S4lB9o9gG0_vEUFLrra7UK0DkdtateHslouIFy3dbtdoPqa5F6Z9ODMHK9OipWZmT_ZczON5d0wGC_UH14mnUmWKCWlsKG5Pm0VAAP_6h8MA59xf6kyxOdNdq46O0d7COya9DtZ7169ARaOv9geAA8eV3L0LLkEDK2pElR5abgRXjpAV9hEz9YXgfFq1mWJtF0GJahGaI6uom9Y379HTFJARzoB2h_BD1_gkIVTUtuCjEJT6P2vUDV_cyFip24I-h1NWgY_t-lKxFpVKvRUtF-TLbR0yQb3rUaaFpBenk0VFTG1e83zKb9R7co8C9F7CZSi" style="width: 80%;">
+                        <p class="caption">이미지 데이터 VS 텍스트 데이터</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>2. 자연어 데이터 표현의 어려움</b></span>
+                        <br>자연어는 가변적인 길이 뿐 아니라 표현하는 데 있어서 매우 까다롭습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">왜냐하면 이미지는 그 자체로 자연적이고 연속적인 표현을 가지는 데이터이지만, 언어라는 것은 사람들이 만들어 일정한 규칙을 가지고 순서가 중요한 이산적인 데이터이기 때문입니다.</span>
+                        자연어를 표현하기 위해서 아래와 같은 방법을 생각할 수 있습니다.
+                        <ol>
+                            <li><b>One-Hot encoding</b></li>
+                            One-Hot encoding의 방법은 모든 단어 사전을 구축하고, 특정 문장이 가지고 있는 단어들을 1, 나머지 단어들을 0으로 나타내어 벡터화하는 방법입니다.
+                            사실 이는 얼핏 들어도 말이 안되는 방법입니다. 실제로 단어의 종류는 무수히 많으며 당장 우리가 떠오르는 단어들도 수만가지가 될 것입니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">만약 "<i>I love you</i>"라는 문장에 대해 One-Hot encoding으로 나타내라고 하면 3개의 단어만 1, 나머지 vocab의 단어는 0이 되며 데이터는 거의 0에 가까운 아주 sparse한 벡터가 나올 것입니다.
+                            뿐만 아니라 "<i>I am John whose friend of Mary.</i>"와 "<i>I am Mary whose friend of John.</i>"은 전혀 다른 뜻임에도 불구하고 같은 표현을 가지게 됩니다.</span>
+                            <br><br><li><b>Bag-of-Word (BoW)</b></li>
+                            또다른 방법은 word count를 이용하는 것입니다. 즉 빈도수를 이용하는 것이죠.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어, "<i>I gave the ball to John, who gave it to Mary.</i>"는 {I:1, gave:2, the:1, ball:1, to:2, John:1, who:1, it:1, Mary:1}의 표현을 가지게 됩니다.
+                            이또한 수많은 vocab 중에서 일부가 될것이며, One-Hot encoding 방법처럼 sparse한 벡터로 표현된다는 문제점이 있습니다.
+                            추가로 "<i>I gave the ball to Mary, who gave it to John.</i>"은 위의 문장과 전혀 다른 뜻임에도 불구하고 같은 표현을 가지게 된다는 문제점도 있습니다.</span>
+                        </ol>
+                        즉 위 두 가지의 방법은 텍스트를 나타내는 결과가 매우 sparse하게 나온다는 문제점이 있으며, 다른 의미임에도 같은 벡터로 표현되는 즉, 단어의 순서를 고려하지 못한다는 문제가 있는 것이지요. 
+                        이렇게 자연어가 가진 특징과 그에 따른 문제점을 해결하기 위해서 등장한 것이 바로 RNN인 것입니다.
+                    </p>
+                   
+                   
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>RNN의 원리</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Vanilla RNN</b></span>
+                        <br>RNN에서 R은 recurrent의 약자입니다. 즉 반복, 회귀를 의미합니다.
+                        이러한 이름이 붙여진 이유는 아래 그림을 보면서 설명하도록 하겠습니다.
+                        <br><br>먼저 맨 처음 hidden state는 우리가 정해주어야합니다. 기본적으로 유명한 초기화 기법으로 초기화 하거나, 0으로 세팅을 합니다.
+                        그리고 weight는 세 종류가 있습니다. 바로 빨간 화살표에 해당하는 \(W_h\)와 파란 화살표에 해당하는 \(W_x\) 부분, 그리고 보라색 화살표에 해당하는 \(W_y\)입니다.
+                        \(W_h\)는 이전 hidden state에서 다음 hidden state를 예측하는 가중치이고, \(W_x\)는 각 time step별로 들어오는 값들을 매핑하여 hidden state로 보내주는 가중치입니다.
+                        그리고 \(W_y\)는 각 결과를 예측할 때 사용되는 가중치입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 중요한 것은 \(W_h\)는 각 time step별로 모두 같은 가중치를 공유하고, \(W_x\), \(W_y\)도 time step에 상관없이 똑같은 가중치를 공유합니다.</span>
+                        즉 파란색은 모두 같은 가중치가 공유되며, 빨간색끼리도, 보라색끼리도 모두 같은 가중치가 공유됩니다. 이렇게 공유된 가중치는 time step별로 들어오는 데이터에 따라 학습되는 것이지요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 가중치를 공유함으로써, 자원의 소모가 줄어들며 가변적인 길이에 유연하게 대응할 수 있습니다. 이것이 바로 vanilla RNN의 원리입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDOthJ0D2eMj895mj21-jfmxUqQzI1y0PmhLmP1fcgBFbIFeFBhyTwtIBaS7npKgCrW1ev4ZU2U9rDCVJLe8Ds_JP9w9HFj-LRNLk9nPQqpe9j5pagYP2Geje9jQsPX0yT3bKmp2ut6oplEMHQyDQ8tN0vnS1ux1z9jqMer2hiPHfW3rR-whJdXcCInfqO1yoMD_1jn39QE2OFwh8Dujb2LF_qSAJRjjv2dW939Coz6YZ_dBXfUd1lcOznKPPI1lGdsEEf6SG2r1RU4AmcMohoRHw0KZBI94PJKEl6E734RlzWDe9PdtR7DNtcVKpjhzvDsNRz6z8zZ_faqgRMfxWbKf0TZMtApcyTCJ1IO6u5N-QZUpUz1ikTEx1il_WVLP08WTsFkbnjbk107VRMPF9diCv4rvxnrz7iASkI__FBN76lQ9NgOnL6Ku6SXaJxw_igRpxSRYNYhgs12ESzAgOpiO8lkmhs5gV5AW5lHdvlO9T67PDvlwV-wFyA5C6DrVB0vUhYei9jjqXDGQe0rz06F5xZFhk9p0xlYlHdIgdhMSGMFFFQHPm8FDlBf5YysnJysx8F7z-h9q39q-i5NR20ea6JFInvzVQS_DXmGrDgopVFTgT7-HeRhILUdaaMlYqh2EL7zgrKwdmXgzs_kXT5zrwPZNJD7rYV1oSpUS0auiUEn69n3kvUo1iTr3Rv-dQ67shnPWNbolUT0HEI3sTkmRlJ3mANnAJyHjoldF5B2LX9YlNNTThuxVUyqz1Szv24ItENEX7lUXtNTr0okRAEMqvqLi3bEf01LdVYgzePHua5OF3ZTKP9Jrk_Nm93juKL8RcUEv6dO8wfU01HVRDYLY1oz32iyks_wfic6wdUwWVYTqThnzT1XsJloaIPR9t8yY2YdkJHKcTKQ9oUg7c0K5AtWDE7_Oc23-JsBrs7yqE-Jp_QUExincQIZtCCYc7dFhmlK_2YUAktG3k1Tn-NI91KNgHrcaY_ke59rrRRLMmvT9YKmLMpsYWy_e4RWv51GCrWn1qlkfeKI1jwxDBnbCVo_BGyQSsWoO7QQKYvem68CJjczyWj9CiTQiX8Oaqa2vYtO-pY5-bqPgNNB3A5dYRdBB-KQQss6fK9qkD-WTa3UaVYg_tR6Ht9Sph8kD6eqAPcW7XJvWz9OCz89SA9i5UP8CYjtuL6lZzGM5LEF_VPfu8ureiAskfnqo9uNkJFfPvEEJ4uJBR5GCgO-jFdDjxD4OPFslsb7cstq-A8EkbUxUs1hdd2awrMp7UqLiZU7" style="width: 100%;">
+                        <p class="caption">Vanilla RNN 구조</p>
+                    </div>
+                    <p>
+                        <br>위의 RNN을 수식적으로 나타내면 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[h_n=f(W_hh_{n-1}+W_xx_n+b_1)\]
+                        \[y_n=W_yh_n+b_2\]
+                        \[f:\,Hyperbolic\,Tangent\,activation\,(tanh)\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 RNN은 가중치를 매 time step마다 공유하기 때문에</span> 아래와 같은 그림으로도 나타낼 수 있습니다.
+                        아래 그림은 RNN을 나타내는 아주 대표적인 그림이지요.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCrPol6uPkPNpSwUFYfr_ZHKuPFqqIUv3qQ4VoJYryJ8UmzGfrD2P4aSyT4RdF7fhBQu9_D2QnOmRPzkyGL7gkMvsftMWKO1bHUrfUzKRfLU3S-2huZDRWVuNpj3Y4SVJoNEhwQ3qzfV5UTq47YE76ear0ZQNnJ6O9He8hWIX7zTbjpXcDq9rsfG_1QNJXdbOYJHLDFondHFk3F7iq1K8x20-wwTVFUkou8xDyhaJfcu0RXIAjUnMHLbPevt4upFz7U6J5L0v64DpHuAE2g2B8cevkUPAFN-GBdUa5rqEMrLO7WCtrox8SSjUuoOXs7KUyhg0nXXPHyCPP22uX9Gund_pGJz1NpjriUU1IdSMi23n0BXNA3iVRayPGcScjrSv2DFunk1qC2JntKdSG58LaylhhuPsReOLX8rl1MYray7ENnjC9VEjJOoZaCzsVE8H61p3cA9goOhMVjqxEsHc3p50pWIGlrEKsCGVepeZonwy15sAurUT5exKJeN8SAKz2V0TNuAysZLzgBrX5vaN6aAnO1XYcOUDVPXz7zwYXR_NEAIimF8SIGYybEuAThp6W2iUClNtB5apCx4AIEYZtqjzytgF8GupOGWLExagQkYCO60xH4WyuCOvz0WkSrsIZiCDWfreP-QthDgqBggFM24aHKpa_RsobcgS9pS0hD8wUOIomUjA3tPDC1lP-DPd32-xgOQ8wunmSF1cwLkmKZAoqX4jyF1k4pqWsRBI9gfTSanZQkzZWpxD4WjzSSCBZ4DmClqNbbVdRupBIiVBNMCfMAEMLIaG7Y4vh6xs-JIGdSktdStZ-4iDc3I08sfmrRxUcmBFg4VIePpej5J6_TirymoziYqiR6DS3gCHi7BP-Qt_VTeUBgAwVro36_zgXCaA01q8JGeuqbLVNTE_w2XoDU7tECl9-fNW8Z1jMbUhqzXgqq9YyyiyvDQfpxJtENSyNrYo95QVz4aSn9njEXqbU12nkXR-x52tdJjesK9YXiW5pM4O0Ih4Zc0CABM3jI08OyRI3qnNt7yk89YRf33AeB0UrMS9XlW-dPajYu19txNPb-L92JsOL5liNfChT4hru2uRCiW-MM4AmMu_zYSGtdc8QYFM2uMTID3mA7DNyh48KBPrLvKTS7XiD9jEj06qA1gFO2Rd7MwiIegZ16TOZsJw7iWl7ZcryFdFzsV7ElavUvff2e8Ll16QoGcOx-0GTISiAjLD8Glt19l4Iinr1eR5ey5erQByKOISPozmauo95E6MR5dTH9TY9d5SAL" style="width: 40%;">
+                        <p class="caption">Vanilla RNN 구조</p>
+                    </div>
+
+                  
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>RNN의 종류</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 vanilla RNN을 살펴보았기 때문에 여기서는 RNN 계열 모델 중 가장 많이 사용되는 <b>Long Short-Term Memory (LSTM)</b>와 <b>Gated Recurrent Unit (GRU)</b>에 대해 살펴보겠습니다.
+                        <br><br><br><span style="font-size: 20px;"><b>LSTM</b></span>
+                        <br>LSTM은 RNN의 성능을 높이기 위해 RNN을 좀 더 복잡한 계산이 가능하도록 만든 모델입니다.
+                        또한 vanilla RNN의 긴 텍스트 데이터에서 나타나던 gradient vanishing 문제를 어느정도 해결한 모델이기도 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">RNN에서는 단순히 input \(x\), output \(y\), hidden state \(h\)에 대한 weight만을 계산하였지만 아래 그림처럼 LSTM은 RNN보다 많고 복잡한 연산이 존재합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAcRufBvX0a9vsaasoxKMp85rwi6o3I-PZy3OCiTXfiw6SmXN7-ptaibnYu3xf6DHDV_1EceuWlF2a5odV1ijXlboxFjVwPIQckeYjq4VqpHxb-aSAyCL6G9nOGyPKQcTS98yqhfgwNlmBHeE0N4XNsPSONsQXE4_HwrSI_t4hnygrQ-4cZjs_F3lYNE9h-asHdVppyy7jjh4WI9bX3u-JP2Dqbz7UxZqAUw589EyhzGSsCZKoqJQ7WSeioXq_B4CbbIEaIfRyvDF-ySmTfiT1Rky2-KG3Z3EDkD1zo1-zGMnmpY0q6Q1ISO-q62qV1SUAXkVOgPE0jm8GEeZQkn-TKuFFJFDYY77_0VjAWOreiIGmgjqy4QC-LoRDu7fFgkU_1Qm_8nAVmCyJwtha_-_7m7tatyToac3WAHW_is4Bfs9de3pRr9WKJXox-pTfQFkpcHO-5tIFaE8T5J0ltKBYK4wLwpZhoCpAyoOspb1JXWvU1vSwK-qk1XvivpS8vXrXUSYCJnhgoWhN3VhRHX9WvlOh8gRnl5GyRNY9jTVBDmyA3VEQZUy4IjXiTFTLDiE3sBSsQMyeDwQTjUkpTk__XhJxuMZTctHZyYRs75TDs-ejKIhLaZetJNIa1xuRymMzyT86VdLViVvmZNEJfZFrduqpnPwadrZZGyW4i1aQQ-4ceoMC8q7krUT3AF-XRUKkZOGDgkPzUbggWETxBW88iGb8xm4igB2wNbrHwjswm0YVD8IhBY7aUvn_s8FgPFpqhjkZM9TdIHnnPlmxx73kr_w-o3wA75OdIcCnT48w5ha3XAlLshKlejhNbBe7heB3tivn0hgNiOp7VrcpSd5S7fYp4ZU1ZlrUWquU3xdX0HTGqPvNs0XRZRLVBe_LAHFBqwl9GDKtcYyEfQh3Flx9cQnxoLqnG7i7V68mAjp2nkqkH9ljWmIPdzLcQy8PVP3fPLlixUCzSPchKkP0N09vmdj3-8N5LyPIfTQ-8Nz1gXRY_Qx7-Re5nc2MUwyJQ46JNBMBVD1XybjDalq62eYVmo6XFDSYfQn1iAJi4LkiAZ65y-bBTgqRKuanWvgvsIgHL-3yB5C_q4fItxGu8_bH7aDLY_7RLY_JtZIWgnIcEJ5o6iy2WNmQkgxZ1MBTaETybv59cUrKlhCEAwPl0Pxi_I8LyxuuQJYe6sPx5X3x82Zw4DpvTgZOtS1dXJj7J6EMeIp1jmOnv48zzhXm-qQe7bMZZsbR2l1gveO76jw5t61LLVyOxkJqj8Llh-kWgM-Cr" style="width: 100%;">
+                        <p class="caption">LSTM 구조, 출처: http://colah.github.io/posts/2015-08-Understanding-LSTMs/</p>
+                    </div>
+                    <p>
+                        <br>이제 위 그림에서 LSTM cell을 하나 떼서 살펴보겠습니다.
+                        아래 두 그림은 모두 같은 LSTM cell을 나타내지만, (b)의 그림이 좀 더 이해하기 쉽게 나와있으니 참고하시면 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA-F7cKBspCVqAvbyAOVfbQCkSXvi4qnmOlRWoVLVn_MM1dz8vwZOXX597Q3e9NhPQnZ3HMda1PBQ4AgfA4dm8x-f4FQNfkIOL_oPVjXzp2fUYHR8fNpH0Ukn752bP0i4v3bNTYK-FelcGT_mjgE2IcK3hxHFbLH888couxd8YOTf2j_MBER6C7jsQeQlpo0FMUK6dsr3WK8Kw9fwIDW70tnkuOX9gOyqEcRGMqst2ED5_WFvc23lTOKXsot3nkyMI2P8hG7S-7XPjhhrSJyAPL5s8juljEq0Mtr627GgZ7-5Y9fym0yFOY5hznTfGa8OwAaiHkYc5MwWrnOYGeBsWtZR2iUv06aiGwGqTYuiG75cjwzc4ILDOW7Bd_XAwqK6ixRxKcC0OVH0OK3FBSo8bhphMfEeVuwTaggwWalfQ9guCIHpip_JPB2nmKSqVFLBqiacywR3iXviNSlzhB3nUmDQ6BuFql4gRBwykw1BuwTBHpCsoGzve299fgl-AIJ4kYnzHk2fQ1EjJ01qKPLiJIuTTYB1iPZa9YzgR8iabYJ8-0iw8WWQq_445QYiXo6P7irZhjVjfEXo3809aklb2GRSXLlbHZWYBKYkLU_jbdWBsgQQ_c3o6URhKn9otWZ10LQFYpwI6J8_y7nL7e9tjmsMa2By46isT-P48AFhk0avmYJGb48e7klIGPvCnPwtXZjMvEF0S-QRfZ7Y4x5KOphPQvQ0JlWlCh3JmZHwMq3NG8oZZYJz23jNGgRnyATDH8cYcqwGsQvZ70KnzbUSdvnhloT2H8xQkLhNMa36rTWYyYTv7DyXabHFeO-CGzhWxR4HZwpdWL4TpkXvi6lItayd79m_oqRpOf83kHWkCUQ-q2UEG0doFypAG0VGe1XIqYGD-bS6MYCFY4XnBLhG8bkcumbQ5kkQXLUsUpINt_m9MmMZ8wKR1LxFFtQgRFk-A-Wqy4jfq-km3-Hxbh67jbDD4InMUwiUO5j3Vd2fGloG_VX_jhbOK4rEglDG0344NUdaPJLW7D50WIy4fep7s9WlqQVXyeDltS0A3e24LeuQvthMY4CUToBO8UbJVu0dKXjj4ciJ7fnUtLKBJIDElxpKCv8s5E076DKPF75wimpRBg_GRgWB1iASmwKkOppKniuUfK6p9VC64EpvFspyCjYHzOmeDbiNP4asalJ7zapY7YyPXmzhqxrzYOWB4xCv6yWvXnyc3trxsvs8vhnxJM_UL8YJrWEoOK8MpB8h4LCF0mRSk6JjEOZVvABUigX_rO" style="width: 100%;">
+                        <p class="caption">LSTM Cell</p>
+                    </div>
+                    <p>
+                        <br>이제 수식을 한 번 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 \(W\)는 input \(x\)에, \(U\)는 hidden state \(h\)에 해당하는 가중치입니다.
+                        그리고 vanilla RNN과 다르게 LSTM은 hidden state \(h_0\)뿐 아니라 cell state에 해당하는 \(c_0\)의 초기값을 사용자가 지정해야합니다.</span>
+                        또한 수식에 나오는 \(\circ\) 연산은 행렬곱이 아닌 element-wise multiplication을 의미합니다(같은 위치의 행렬 요소끼리 단순 곱하는 연산). 
+                        <ul>
+                            <li><b>Forget gate (0 ~ 1)</b>: 과거 정보를 기억할지 여부를 결정하는 gate, 1에 가까울수록 과거 정보를 가지고 있음.</li>
+                            \(f_t=\sigma(W_fx_t+U_fh_{t-1}+b_f)\)<br><br>
+                            <li><b>Input gate (0 ~ 1)</b>: 현재 들어온 정보를 기억할지 여부를 결정하는 gate, 1에 가까울수록 현재 정보를 유지.</li>
+                            \(i_t=\sigma(W_ix_t+U_ih_{t-1}+b_i)\)<br><br>
+                            <li><b>Output gate (0 ~ 1)</b>: 어떤 정보를 내보내서 hidden state \(h_t\)를 업데이트 할지 결정하는 gate, 1에 가까울수록 hidden state를 업데이트 하는 데 사용.</li>
+                            \(o_t=\sigma(W_ox_t+U_oh_{t-1}+b_o)\)<br><br>
+                            <li><b>Next Cell State</b>: 다음 cell에 들어갈 cell state \(c_t\).</li>
+                            \(c_t=f_t\circ c_{t-1} + i_t\circ tanh(W_cx_t+U_ch_{t-1}+b_c)\)<br><br>
+                            <li><b>Next Hidden State</b>: 다음 hidden에 들어갈 hidden state \(h_t\).</li>
+                            \(h_t=o_t\circ tahh(c_t)\)
+                        </ul>
+                        그리고 만약 LSTM <span class="highlight" style="color: rgb(0, 3, 206);">레이어가 1개</span>라면, 위의 그림 (b)에서와 같이 \(h_t\)를 이용하여 \(y_t\)를 예측하는 데 사용할 것이고, <span class="highlight" style="color: rgb(0, 3, 206);">레이어가 2개 이상</span>이라면 위의 그림의 (a)처럼 다음 레이어의 input으로 \(h_t\)가 사용될 것입니다.
+                    
+                        <br><br><br><span style="font-size: 20px;"><b>GRU</b></span>
+                        <br>이번에는 GRU에 대해 알아보도록 하겠습니다.
+                        GRU는 한국인 조경현 교수께서 개발한 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Vanilla RNN이 가지고 있던 gradient vanishing 현상을 다양한 연산을 통해 해결하려고 한 부분은 LSTM과 그 취지가 동일합니다.
+                        하지만 LSTM보다 간단한 구조를 가지고 파라미터 수가 적어 LSTM cell 보다 학습 속도가 빠르다는 장점이 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBy-whEDLoRS0N7s1DpuVcX_6WQ_skPtIdM7K44Ibj3SOxSppmJ-z9a3c2xmqyNkcuwp-OT_KqM-SYUmWHojmR5KRqMx-NDO-FUAocgvpbYQ462SmcYcg3IBjnHhakCH2T6V6EnNReRGaegaj-9OTBjsgRb4gAn9rf0qgyZt9y3BPdXDkyB6at6a_M2vAijYpK7oy3dNq0k0L5ObEXCYDZB517lYQzhvpqf9mMUH-bP_pC5TGNIlju5fRQu2pWvjZsJQx0a3A8oy8yBU2CfBScisekhYQsAc7VMaDOQrum7IUthGCKLkM5Dt_R2PtBdk5h4wLvLDou2qc0Tr_WhCYfy642u-eHZo1xzhK9Dy1GveYXuDJ7hWnLyFqVYmV8Gn1EVnv5rTQQjtp2MboS0mk_ls7IE_UUzv78thhIwt_UjaPNt0jEnn4PW8tDtdEYyLTGiggjm_84sLo6hHh41_wSIuy8MgzOzqyhuPuMrQMBWYz3xTYjkAWGdhh_SwNYa8YV32TukP4aJisofsRf128WnATwGaEQTckdDQ4mAbEyQJm3DEpbWFq0uIzachHh4zcGWLQZa8FE_kjZzfMI8H47JhJ4GNkHjrhtvIh9DTHXHOMC3hw5-Y4SBH5UtnY0UgbAYjLasMtQjsWpAOLoE2r1L_IgIjKTKo2ZpP00ixtw81DrKBBRY9Vm00KDau5WYv7coZ5X6VhMCgZXphoaMS4t3A8BR-f1_hl67rR1qB6K6DzsXfKj5_ekop1WEWuZmghXyOht49c_nXOZhfHzwTWYxrWHtIZDwxKXGbaS1rKUPSuTlo-v3641srIive_gtSJosHa0VLd6b-0y8ojaS3kswXoA2Y_L_xSbc6mrHDyMXRSYoFpkqjDaZtGLzqy3r-GbDmLnYlMRhKdqgG6DZ1r6J3TdFS5VT2_YTr_S4x5EzNUY9JKBU_F8ztdompRfGcsu-qltfsmCic_3qGyWVuh_sWQAE3_L1kSWho9TNY-2hbtmmEMBbO3KRe0VgeUmQb6hUfs7P4LHT7vbT5UHlz_E8K3iBEF7P_1Ys41O2e9PVxgTmkcrNNBAK32KgZ08wMGRHlSXygEMTqRl3PuaDUW9u7uAVC9-ZwG9aJXU2HGwrhpDb6pBdCNobpfdk5iVjRd6A00021cLh3sFrSeJD_0SXYoC8UEqI0RI6zt8Aff8uGXv8JC0bvUWY6dh1yGlxWS8BhyeC5lCipd54BF8dCqXMwjHQz41JsBg55yuQ1Y1HhVYNjZLrSR1jFe6z2a-adO_V" style="width: 70%;">
+                        <p class="caption">GRU cell 구조</p>
+                    </div>
+                    <p>
+                        <br>이제 수식을 한 번 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 \(W\)는 input \(x\)에, \(U\)는 hidden state \(h\)에 해당하는 가중치입니다.
+                        그리고 LSTM과 다르게 cell state에 해당하는 \(c_0\)의 초기값을 지정해야할 필요가 없습니다.
+                        그리고 LSTM의 forget, input, output의 3개의 gate를 update, reset gate의 2개로 줄인 모델이 바로 GRU 입니다.</span>
+                        또한 수식에 나오는 \(\circ\) 연산은 행렬곱이 아닌 element-wise multiplication을 의미합니다(같은 위치의 행렬 요소끼리 단순 곱하는 연산). 
+                        <ul>
+                            <li><b>Update gate (0 ~ 1)</b>: LSTM의 forget, input gate와 비슷한 역할을 하며 과거와 현재의 정보를 각각 얼마나 반영할지에 대한 비율을 구할 때 사용됨.</li>
+                            \(z_t=\sigma(W_zx_t+U_zh_{t-1}+b_z)\)<br><br>
+                            <li><b>Reset gate (0 ~ 1)</b>: 다음 \(h_t\)를 구성할 때 얼마나 \(h_{t-1}\)을 반영할지를 결정, 1에 가까울수록 \(h_{t-1}\)을 많이 반영.</li>
+                            \(r_t=\sigma(W_rx_t+U_rh_{t-1}+b_r)\)<br><br>
+                            <li><b>\(\tilde{h}\)</b>: 다음 hidden state \(h_t\)를 예측할 때 사용되는 중간 계산 과정, 여기서 reset gate가 사용.</li>
+                            \(\tilde{h}=tanh(W_hx_t+r_t \circ U_hh_{t-1}+b_h)\)<br><br>
+                            <li><b>Next Hidden State</b>: 다음 hidden에 들어갈 hidden state \(h_t\), 여기서 update gate가 사용되며, <span class="highlight" style="color: rgb(0, 3, 206);">\(z_t\)와 \(1-z_t\)는 각각 과거와 현재 정보 비율을 의미</span>.</li>
+                            \(h_t=z_t\circ h_{t-1} + (1-z_t)\circ \tilde{h_t}\)
+                        </ul>
+                        간혹가다가 reset gate의 1을 빼주는 위치가 반대로 되어있는 경우가 있는데, PyTorch 같은 경우도 현재 설명한 수식으로 되어있으며 위의 설명이 맞는 듯 합니다.
+                    
+                        <br><br>마지막으로 LSTM과 GRU를 비교해보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">사실 성능 측면에서는 어떤 게 더 낫다 이런 부분이 뚜렷히 없습니다. 단순히 GRU는 LSTM보다 파라미터 수가 적고 복잡하지 않아 학습이 빠르다는 장점이 있을 뿐입니다.</span>
+                        경험적으로는 데이터가 많을수록 LSTM이, 데이터가 적으면 GRU의 성능이 더 좋은 경향이 있다고는 합니다만 이는 계산의 복잡성이 반영된 결과로 보입니다.
+                        사실 본인의 task에 따라 어떤 것이 성능이 더 좋을지는 아무도 모르기 때문에 실험적으로 두 개 다 사용해보고 결과가 좋은 cell을 사용해야 할 것입니다.
+                    </p>
+
+                    
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>RNN의 사용</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <ol>
+                            <li><b>Sequence-level Classification</b>: 모델의 맨 마지막 결과 혹은 hidden state를 이용해 분류</li>
+                            <ul>
+                                <li>Sentiment Classification (감성 분류): 긍정의 문장인지 부정의 문장인지 분류.</li>
+                                <li>Topic Classification (주제 분류): 텍스트가 어떤 주제인지 분류.</li><br><br>
+                            </ul>
+                            <li><b>Step-level Classification</b>: 각 step별 모델의 결과를 이용해 분류</li>
+                            <ul>
+                                <li>Part-Of-Speech (POS) tagging (품사 태깅): 각 step에 들어오는 input이 어떠한 품사인지 분류.</li>
+                                <li>Named Entity Recognition (NER, 개체명 인식): 각 step에 들어오는 input이 어떤 개체인지 분류.</li>
+                                <li>Language Modeling (LM): 아래에 자세히 설명.</li><br><br>
+                            </ul>
+                            <li><b>Bidirectional Model</b>: 데이터의 양방향성을 모두 고려할 수 있게끔 모델을 구성. 위의 예시들도 bidirectional model로 구현 가능.</li><br><br>
+                            <li><b>Sequence-to-sequence</b> (<a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">다음글</span></a> 참고)</li>
+                            <ul>
+                                <li>Machine Translation (기계 번역): 서로 다른 두 언어를 번역.</li>
+                                <li>Question Answering (QA, 질의응답): 들어온 질의에 대해 답변을 생성.</li>
+                                <li>Chit-chat Chatbot (챗봇): 들어온 대화에 대해 답을 생성하는 대화 모델.</li>
+                            </ul>
+                        </ol>
+            
+                        <br><br><br><span style="font-size: 20px;"><b>Language Modeling (LM)</b></span>
+                        <br>LM은 현재 자연어 처리에서 아주 보편적으로 자리잡은 기법입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">어떤 사람들인 LM을 pre-task의 일종으로 보는 시선도 있는데, 이는 그만큼 LM을 하면서 모델이 학습할 수 있는 정보가 아주 많기 때문입니다.</span>
+                        그렇다면 LM은 무엇일까요? 바로 이전 데이터로 들어온 문장 요소를 보고 다음에 나올 단어를 예측하는 기법입니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 "This movie is" 다음에 올 단어 중 어떤 단어의 확률이 더 높냐 따졌을 때, "interesting"과 "boy" 중에 당연히 전자의 확률이 높겠지요.
+                        LM은 이러한 문장들을 대량으로 넣고 각 문장별로 다음에 올 단어를 예측하게끔 하는 것입니다.</span>
+                        "I" 다음에 "love"나 "like"이 올 확률은 별반 다르지 않을 것입니다.
+                        하지만 "I like reading" 다음에 "car"과 "book" 중에서는 당연히 후자가 올 확률이 높겠지요.
+                        이렇게 LM이 잘 되었다면 이전 데이터가 주어졌을 때, 모델은 적절한 단어를 충분히 예측할 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 모델이 가장 높은 확률의 단어들만 선택하는 기법을 greedy search, branch를 이용해서 가장 높은 확률 tok-k를 뽑아주는 기법을 beam search라고 합니다.</span>
+
+                        <br><br>또다른 하나의 예시를 들어보겠습니다.
+                        "This movie is as impressive as a preschool Christmas play"의 문장을 수학적인 확률로써 나타내기 위해서는 어떻게 써야할까요?
+                        다른말로 \(p(This\,movie\,is\,as\,impressive\,as\,a\,preschool\,Christmas\,play)\)의 확률을 구하는 것이지요.
+                        이 문장의 확률은 아래와 같이 조건부 확률의 곱으로 표현할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[p(This)*p(movie|This)*p(is|This,movie)*...*p(play|This,movie,...,Christmas)\]
+                    </div>
+                    <p>
+                        <br>즉 다른말로 하면 어느 문장의 확률은 아래 수식과 같이 t번째 단어를 1 ~ t-1번째 단어들을 가지고 예측한 확률들의 곱셈이 됩니다.
+                        이러한 확률 식이 나오게 되는 이유는 바로 Bayes' theorem을 이용하는 것입니다. 간단히 말해 조건부 확률 공식을 이용하여 나온 결과입니다.
+                    </p>
+                    <div class="equation">
+                        \[p(w_1, ... w_t)=p(w_1)*p(w_2|w_1)*p(w_3|w_1, w_2)*...*p(w_t|w_1, w_2, ..., w_{t-1})\]
+                    </div>
+                    <p>
+                        <br>사실 과거에는 이러한 문장을 가지고 LM을 하기 위해서 bigram, trigram 등의 방법이 많이 쓰였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">왜냐하면 실질적으로 모든 문장의 단어별로 조건부 확률을 계산하는 것은 자원의 낭비이고, 연산량이 많기 때문입니다.
+                        그래서 모든 문장의 단어를 확률로써 나타내는 대신 두 묶음 혹은 세 묶음 처럼 묶음 단위로 계산을 하였던 것입니다.</span>
+                        <ul>
+                            <li>Bigram: \(p(w_t|w_{t-1})\)</li>
+                            <li>Trigram: \(p(w_t|w_{t-2}, w_{t-1})\)</li>
+                        </ul>
+                        
+                        <br>그리고 위와 다르게 RNN 모델을 가지고 모델링을 하는 것은 이론적으로 모든 단어를 반영할 수 있는 것이지요.
+                        <ul>
+                            <li>RNN: \(p(w_t|w_1, w_2, ..., w_{t-1})\)</li>
+                        </ul>
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>RNN의 한계</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        마지막으로 각각의 모델 RNN, LSTM, GRU의 장단점을 살펴보고 마무리 하겠습니다.
+                        <ul>
+                            <li>Vanilla RNN</li>
+                            <ul>
+                                <li>장점</li>
+                                <ul>
+                                    <li>연산이 단순하여 속도가 빠름.</li>
+                                </ul>
+                                <li>단점</li>
+                                <ul>
+                                    <li>긴 문장의 데이터에 대해 gradient vanishing 문제가 발생(Backpropagation이 멀리까지 전달이 안되기 때문).</li>
+                                    <li>과거 문장의 데이터의 기억이 손실.</li>
+                                    <li>Gradient exploding 발생.</li>
+                                </ul>
+                            </ul>
+                            <li>LSTM</li>
+                            <ul>
+                                <li>장점</li>
+                                <ul>
+                                    <li>Forget, input, output gate를 통해 과거 데이터를 유지하기 때문에 RNN에 비해 긴 문장에 더 적절함.</li>
+                                    <li>각각의 메모리의 결과를 제어 할 수 있음.</li>
+                                </ul>
+                                <li>단점</li>
+                                <ul>
+                                    <li>메모리가 덮어 씌워질 가능성이 있음.</li>
+                                    <li>연산이 복잡하여 속도가 상대적으로 느림.</li>
+                                </ul>
+                            </ul>
+                            <li>GRU</li>
+                            <ul>
+                                <li>장점</li>
+                                <ul>
+                                    <li>Update, reset gate를 통해 과거 데이터를 유지하기 때문에 RNN에 비해 긴 문장에 더 적절함.</li>
+                                    <li>메모리가 덮어 씌워질 가능성이 없음.</li>
+                                    <li>LSTM에 비해 연산이 적어서 속도가 빠름.</li>
+                                </ul>
+                                <li>단점</li>
+                                <ul>
+                                    <li>각각의 메모리의 결과를 제어 할 수 없음.</li>
+                                </ul>
+                            </ul>
+                        </ul>
+                    </p>
+                    <p>
+                        <br><br><br>다음에는 sequence-to-sequence 모델과, 현재에 들어서는 아주 기본이 되는 기법인 attention에 대해 살펴보도록 하겠습니다.
+                    </p>                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#RNN&emsp;#LSTM&emsp;#GRU&emsp;#LanguageModeling&emsp;#LM
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('RNN 첫 게시물 입니다.\n\nThis is the first post of RNN.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('RNN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Attention과 Sequence-to-sequence (Seq2Seq) 모델</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
