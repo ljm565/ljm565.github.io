@@ -271,8 +271,6 @@ function convertLink() {
         alert('링크가 올바르지 않습니다.');
     } else {
         name = prefix + name.substring(name.indexOf(st)+st.length, name.indexOf(tr));
-        alert(name);
+        window.open(name);
     }
-
-    window.open(name);
 }
