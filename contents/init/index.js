@@ -260,7 +260,8 @@ function lineMaking(id, line_num) {
 
 
 function convertLink() {
-    var name = document.getElementById("googleDriveUrl").value;
+    var obj = document.getElementById("googleDriveUrl")
+    var name = obj.value;
     var st = 'file/d/';
     var tr = '/view';
     var prefix = 'https://lh3.google.com/u/0/d/';
@@ -272,5 +273,6 @@ function convertLink() {
     } else {
         name = prefix + name.substring(name.indexOf(st)+st.length, name.indexOf(tr));
         window.open(name);
+        obj.value = null;
     }
 }
