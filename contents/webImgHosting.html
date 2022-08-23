@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GitHub Web Hosting 이미지 불러오기</title>
+        <meta name="description" content="구글 드라이브를 통해 웹 페이지에 이미지를 호스팅 하는 방법을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/webImgHosting.html" />
+        <meta property="og:title" content="GitHub Web Hosting 이미지 불러오기" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="구글 드라이브를 통해 웹 페이지에 이미지를 호스팅 하는 방법을 설명합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">WEB 이야기 / GitHub Web Hosting 이미지 불러오기</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">GitHub Web Hosting 이미지 불러오기</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.07.24</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        how to convert
+                    </p>
+                     <div id="converter" style="width:100%;">
+                        <label style="display:inline-block; font-size:18px; font-weight:bold; margin-bottom:15px;">Google Drive URL 입력창</label>
+                        <input type="text" id="googleDriveUrl" style="display:block; width:100%; margin-bottom: 10px; height: 30px; padding:5px; box-sizing:border-box; font-size:15px;" placeholder="Google Drive Url after Sharing">
+                        <button id="convertButton" style="width:100%; font-weight:bold; height:30px; font-size: 15px;" onclick="convertLink();">Convert the Link</button>
+                    </div>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CNN&emsp;#TransposedCNN
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('CNN 첫 게시물 입니다.\n\nThis is the first post of CNN.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('CNN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>CNN을 이용한 MNIST 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
