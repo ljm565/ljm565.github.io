@@ -257,3 +257,22 @@ function lineMaking(id, line_num) {
     }
     document.getElementById(id).innerHTML = str;
 }
+
+
+function convertLink() {
+    var name = document.getElementById("googleDriveUrl").value;
+    var st = 'file/d/';
+    var tr = '/view';
+    var prefix = 'https://lh3.google.com/u/0/d/';
+
+    if (name === '') {
+        alert('링크를 입력해주세요.');
+    } else if (name.indexOf(st) === -1 && name.indexOf(tr) === -1) {
+        alert('링크가 올바르지 않습니다.');
+    } else {
+        name = prefix + name.substring(name.indexOf(st)+st.length, name.indexOf(tr));
+        alert(name);
+    }
+
+    window.open(name);
+}

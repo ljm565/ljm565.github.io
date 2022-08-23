@@ -274,10 +274,5 @@ function convertLink() {
         alert(name);
     }
 
-    $.ajax({
-        url: 'https://www.google.com/search?q=javascript+GET+url&rlz=1C5CHFA_enKR940KR941&sxsrf=ALiCzsaHXZtavoGLDydebmGfKxj2fu2bzQ%3A1661219047516&ei=5zAEY5-CH8WZ-AbepaqIDA&ved=0ahUKEwjfkeKZ69v5AhXFDN4KHd6SCsEQ4dUDCA4&uact=5&oq=javascript+GET+url&gs_lcp=Cgdnd3Mtd2l6EANKBAhBGABKBAhGGABQAFgAYABoAHAAeACAAQCIAQCSAQCYAQA&sclient=gws-wiz',
-        success: function (dat) {
-          console.log(data);
-        },
-      })
+    window.open(name);
 }
