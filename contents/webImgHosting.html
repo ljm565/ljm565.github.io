@@ -114,7 +114,7 @@
 
                      <div id="converter" style="width:100%;">
                         <label style="display:inline-block; font-size:20px; font-weight:bold; margin-bottom:15px;">Google Drive URL 입력창</label>
-                        <input type="text" id="googleDriveUrl" style="display:block; width:100%; margin-bottom: 10px; height: 30px; padding:5px; box-sizing:border-box; font-size:15px;" placeholder="Google Drive Url after Sharing">
+                        <input type="text" id="googleDriveUrl" style="display:block; width:100%; margin-bottom: 10px; height: 30px; padding:5px; box-sizing:border-box; font-size:15px;" placeholder="Google Drive Url after Sharing" onkeypress="if(event.keyCode==13){convertLink();}">
                         <button id="convertButton" style="width:100%; font-weight:bold; height:30px; font-size: 15px; margin-bottom: 50px;" onclick="convertLink();">Convert the Link</button>
                     </div>
                     <p>
