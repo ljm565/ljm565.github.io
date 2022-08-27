@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sequence-to-Sequence (Seq2Seq) 모델과 Attention</title>
+        <meta name="description" content="RNN을 이용하여 구성한 sequnece-to-sequnece 모델을 살펴보고, 초기의 attention 기법을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/RNN2.html" />
+        <meta property="og:title" content="Sequence-to-Sequence (Seq2Seq) 모델과 Attention" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="RNN을 이용하여 구성한 sequnece-to-sequnece 모델을 살펴보고, 초기의 attention 기법을 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypAcYJLSDl8S_ascbuPqTA9hP0PKkrcrVLmoAhsng836GMVwd_Rw3-SNWLgik35aqDBfb1AY-3ptePPANvGJonKbounJrx_ZIJbf-2HNaYxR128KJHcDbfyeoLzftl7GYZQeEZpTJ5wG9mWhzXBuZy2AFcdN22GwHA9-2Y-JADO35g_CSumobH83zPn_HWARoQjzLT4dv1zTjYqn_78osKI9-f33LoYVxMV59E5lLS4ClOiJSF90iZnW57PvZx1YHjc-IUPtiS5M_xd3Bq2-RyoNmdHbBCcR83fVC3QUB_L_x_kjYsCa83vts0eBdpQvZGCltauNgI1MNmfMuhK7U9c_TkFWHg7kRRDMI9az-8Rvbgb8B0voW5Xeb36oaLQmI7RquoB-O3kxSR_WaZ6vZwdRvuWW7bhHtlYejijomwITo2k0O80kK6Q6FWhNgf93rYAXh0E6NG8JF2wq_5hBxvfDz5zzv54XbmFi3VnufINYUNO0e_7cvtk7HWqqoNpTgsEbjlyj6Z9EHQO6I4uT41EgZlepvzxDUIGn2VdvzqT_-45rHY89o8AXO1rFYqeId1eNKlhEz1IT67zG415zaukxk5mY3Hy1WaS1Mv7W_WAsEXqpXmEUM2kDVFUvvNSqNT2ZdkmErek30-wkMo03gUobR8vTpC2kTDiJ4fzdYnx0UFUP-NsAKeH_Y47Vb2zjL9O8uH2eFErKg-v2P3oI58Q7UhZhN4seT6poBOAncfiWstMpqgQTnY1LDNYw8x_enMDDizRp58Be3Sx_ynztXlqH2cA6I3lCA12uWZv6aCOydRJ3mSSmsFDZv6EPhIAMzthL2-sqx-n02jwscu0e_Wjop6Q1rHi2fd97aK0fsQuifneN-xfLHwUCDkMGC1usCXShf5wt28UwiDL9qFe2Ir3kBX9YxdWa4xDPuaL7ucxNSVJHBfZ06iSkBAIbtTx2AM7GmnU2RYd0nKEkbwad9xfiksbFx3rtzIHLFhEhECDQidB5G0vIv_QIHRncjH8z9w-HCPHkfjGpefdoPDLrLwIGGT74feZQVBr0eSY4iZ8zKW9ihmr-B0bdd13eLNa_VQthK8Uqka5DDkTGccwkjtwt9ZkYH9YYh39tS08V5-88K9_Y2H__514U-5KuPMw1l6nbffQVNPApwwbXDbyIBzS9wkZUR2nOHNPI1TPxyQDGCpM7CCSM6eOmoX-muP8WgH96UDBbJ2p0lLmGuwWpidWIQMbaZmkcxvb_F7lvohosQWQ6uioXm587dFWDKUchX5rXRMM" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Recurrent Neural Network (RNN) / 2. Sequence-to-Sequence (Seq2Seq) 모델과 Attention</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypAcYJLSDl8S_ascbuPqTA9hP0PKkrcrVLmoAhsng836GMVwd_Rw3-SNWLgik35aqDBfb1AY-3ptePPANvGJonKbounJrx_ZIJbf-2HNaYxR128KJHcDbfyeoLzftl7GYZQeEZpTJ5wG9mWhzXBuZy2AFcdN22GwHA9-2Y-JADO35g_CSumobH83zPn_HWARoQjzLT4dv1zTjYqn_78osKI9-f33LoYVxMV59E5lLS4ClOiJSF90iZnW57PvZx1YHjc-IUPtiS5M_xd3Bq2-RyoNmdHbBCcR83fVC3QUB_L_x_kjYsCa83vts0eBdpQvZGCltauNgI1MNmfMuhK7U9c_TkFWHg7kRRDMI9az-8Rvbgb8B0voW5Xeb36oaLQmI7RquoB-O3kxSR_WaZ6vZwdRvuWW7bhHtlYejijomwITo2k0O80kK6Q6FWhNgf93rYAXh0E6NG8JF2wq_5hBxvfDz5zzv54XbmFi3VnufINYUNO0e_7cvtk7HWqqoNpTgsEbjlyj6Z9EHQO6I4uT41EgZlepvzxDUIGn2VdvzqT_-45rHY89o8AXO1rFYqeId1eNKlhEz1IT67zG415zaukxk5mY3Hy1WaS1Mv7W_WAsEXqpXmEUM2kDVFUvvNSqNT2ZdkmErek30-wkMo03gUobR8vTpC2kTDiJ4fzdYnx0UFUP-NsAKeH_Y47Vb2zjL9O8uH2eFErKg-v2P3oI58Q7UhZhN4seT6poBOAncfiWstMpqgQTnY1LDNYw8x_enMDDizRp58Be3Sx_ynztXlqH2cA6I3lCA12uWZv6aCOydRJ3mSSmsFDZv6EPhIAMzthL2-sqx-n02jwscu0e_Wjop6Q1rHi2fd97aK0fsQuifneN-xfLHwUCDkMGC1usCXShf5wt28UwiDL9qFe2Ir3kBX9YxdWa4xDPuaL7ucxNSVJHBfZ06iSkBAIbtTx2AM7GmnU2RYd0nKEkbwad9xfiksbFx3rtzIHLFhEhECDQidB5G0vIv_QIHRncjH8z9w-HCPHkfjGpefdoPDLrLwIGGT74feZQVBr0eSY4iZ8zKW9ihmr-B0bdd13eLNa_VQthK8Uqka5DDkTGccwkjtwt9ZkYH9YYh39tS08V5-88K9_Y2H__514U-5KuPMw1l6nbffQVNPApwwbXDbyIBzS9wkZUR2nOHNPI1TPxyQDGCpM7CCSM6eOmoX-muP8WgH96UDBbJ2p0lLmGuwWpidWIQMbaZmkcxvb_F7lvohosQWQ6uioXm587dFWDKUchX5rXRMM);">
+                    <div>
+                        <span class="mainTitle">Sequence-to-Sequence (Seq2Seq) 모델과 Attention</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.08.18</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전 글에서는 RNN의 등장 배경과 RNN 계열의 LSTM, GRU의 원리에 대해 설명했습니다.
+                        그리고 RNN 모델들이 어떤 연구에 적용되는지 이야기 하면서 간단히 Language Modeling (LM)에 대해 설명했었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">오늘은 이전 글에서 RNN 모델들이 적용되는 분야를 얘기할 때 잠깐 등장했던 sequence-to-sequnece (seq2seq) 모델에 대해 이야기 해보고, RNN 모델들을 seq2seq에 적용하면서 발생하는 문제점을 해결하기 위해 초기에는 어떤 attention 기법들이 적용되었는지 알아보겠습니다.</span>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Seq2seq 모델</li>
+                            <li>Attention 기법</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Sequence-to-Sequnece (Seq2Seq) 모델과 Attention</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Seq2seq 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Seq2seq은 가변적인 데이터가 주어졌을 때 가변적인 데이터를 생성하기 위해 사용되는 모델 구조입니다.</span>
+                        간단히 말해 길이가 서로 다른 텍스트 데이터가 주어졌을 때, 길이가 서로 다른 텍스트 데이터를 생성하기 위해 주로 사용됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 seq2seq 모델은 기계 번역, 질의응답, 챗봇 제작에 주로 사용되는 모델의 구조입니다.
+                        그리고 이러한 seq2seq 모델을 구성하기 위해서는 필연적으로 RNN 계열의 모델이 2개가 필요합니다.</span>
+                        그 이유를 간단한 번역 모델을 예시로 들어서 설명해보도록 하겠습니다.
+
+                        <br><br>아래는 French-English 기계 번역의 예시입니다.
+                        Encoder RNN 모델에는 당연히 번역을 해야하는 프랑스어가 들어가야할 것이고, decoder RNN 모델의 결과는 번역의 결과인 영어가 나와야할 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 그림은 encoder, decoder 구조로 이루어진 seq2seq 모델에 encoder의 input과 decoder의 output (결과)을 나타냅니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCegQjVFP81HPvzZovhZR7WQzN372hTj-F60Oc8RHKHwpRPci0NayuaICTveGxWsAgVIG0VPKUB2FdRRm2p6eOChjP_WNPkqe_Fs96zONdt8zmBwycBoTFw3WmNrXBRmh_O66XPRS7PIsEb3EemYVEMuSSGWQkxijiNEbfi2yhnf4PrnaIxDoel3QO1bcqLPJTObk8QnGe9PC2zM-eseKTVCZ6-1C5lSp-fEUAm3uZYxQ6Ibe5LN9tOaDGlEaX1Am6ZwIfsn9FQ3Lq7OXVTxJ2nntVWUPMb6mfLB1Ld_H-8bmXMX_mHMMw4HhQouqgsc3GL5Fqpu1BihAq4hoTQd4oxaH7qpj1uPCRhjHuXsN1euPMegJLJoldMlgZiUezmDsgvFhLWFcNaBJ2A2QFLzy7bvPZptknu1nTeftghDaOD9ewFWen5-5wXAIJpseBgVk-ROKKmYuZogjSVtzNej4V4eF-S_YhG6ezEj2rT4DUZezy5fEItFJClhiAw0jGL3ihW-pzQyXhDImtuy38Do52RHaZLN-dA2M8WizYcrXKldXbMGC5Jq9vL4j2LhZxW6kB8y39lmeuizyX6XgUqSTzuV9icmWYwnUwRWeane1Fa2mYwCIDALjL6iAoaQLoyJzEq66UrHeLxC4P79aoZPqUiZqsEOZ7L9GJ7HkrJiYrJKIoduy8xSo-eRbzxERsZw88LT5WgpHHtcf-jJRidGRLpATRw574rYYRYr_CVxxnC5SMjHyi2a3i0BjpCEOxhHWbLWNnylW0_sm7cGUF_AMvwNTlccalK0PFM9Pz3MFFU416Kap2IftQZyOUqlfgKAfDIbcWuILXTr7m59s3-6wuT5vpRZ_rQyQV8Jx-vCRzZqnVUu5K5zIHr3Hvspg_vxmJ90o-gQNw-NFBmnRQxo_93-W8ixMOE8jYCA2FV9O4zlArzacQM2zQ15JeSIGisPPC8y-UNk755ReNywZ54c94iWOod6TvIxQ1ENJOdOKdP9v6L2BWyW40xJpMBm-W5ui2AtpOFFQlqB5YVRmTo__1-_x8meme_likVVu9zXrE0Lgkk8flld_IV3to4aTc9aPxBn5CSnlDZQqVQR6A7BNi5BVmh9xdsI_OgnoiRMdQcRXg9loRaApJxdUs8NhKkNa1FOxpf6apTLTgxqPG1ZZlcnnBwHNZGdGBtsqRWP8eNQF8P2oumTTrR-D6fggFW4or8zMbzNp1kleyDv3VFjpks3Vatec5OEgE-qxN2jUUToGZO3KevgyrIzm7QgeZfRXLow9M" style="width: 100%;">
+                        <p class="caption">French-English 기계 번역 seq2seq 모델</p>
+                    </div>
+                    <p>
+                        <br>그렇다면 encoder와 decoder가 어떻게 이어지게, 즉 encoder의 결과를 어떻게 decoder로 전달 해줘야할까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">결론부터 말하자면 encoder의 맨 마지막 hidden state \(h_4\)를 decoder의 initial hidden state \(s_1\)로 사용하여 encoder의 정보를 전달해줍니다.
+                        즉 \(h_4\)가 encoder input 문장을 representation 하는 것이지요.</span>
+                        
+                        <br><br>그러면 encoder의 output과 decoder input은 어떻게 넣어주면서 학습을 해줘야할까요?
+                        Decoder의 input은 <a onclick="pjaxPage('RNN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 설명한 Language Modeling (LM)을 하기 위해서 넣어줍니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 encoder를 통해 encoding 된 input 문장의 representation의 hidden state를 decoder로 넣어주는 동시에 [SOS] (start-of-string) 토큰을 넣어주어 다음 단어를 예측하게끔 학습을 하는 것입니다.
+                        그리고 이러한 학습 방법을 통해 학습된 모델을 autoregressive model이라고 합니다.</span>
+                        하지만 encoder의 output은 번역의 목적의 모델이기 때문에 어떻게 되든 큰 상관이 없습니다. 왜냐하면 encoder의 목적은 모델의 학습을 통해서 encoder input을 잘 representation할 수 있는 hidden state \(h_4\)를 찾는 것이 목적이기 때문입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypChZMAmnqGzsSvhiq843RqhGoOrAVbAYzCs4WQpF9NvXO_jk-PwlMptG1OpnWLZ_33qZLxJsP1hDiuQkzEbEX_J_5Lvt2Y5SUKoHxqtlPJf3ladozUsMpGDNy51svxpgo5JT-I-cHCWE8M1oDTOlmpsFEY2i0-BW4P_KaCk1YTOF8JEgMW1psbFM8YKF_uKfUjzoLzGaYYCH-1Vzbb2s2cNakoFaSkP4HQ_ZKmR7SlKe6Qie1xzXpuc2zyt8U6cmq0K3xTN4g0B4nzS01Gd_D85D2IFMV1n3ByeYhbR05ugnP6VyAzq55zvWKUFcC8O4tF5ih9qZt1efk1x1QOgbki0H99LJjLU2UtmfrRjqqi8NKKur_EVIrqZJ9Y1g7BuENzJYJLbdy7Yd3cYfy0-cD2eHDJcSJ6qUejKLLf-yXrO5WBBom50Gv3fMfuAM8ykR5xouEngSTE-Le5NWUmIOtW6jEwNwbJQN_Pw_1VytyTfnZcC2utlajifvYr4qBHet-QB0laeeJlHBzHIv5JApJGBWmJgv49sgQwYsKCQGI8ZZMzbuBJssuKyHhM-BVSpcb2Z18LJ_K2dfViD4-DXMAMqzySx0ZYAS4-hWCUBd-hP4gPiGr5NT8aeXdmTuYJ2QHIQd5s0aIfWGielkslTHV4y3SoqytguAlzOMtf9jRo0ThcZZ9I6OUhW-ymY9IF2gCQMKh5UbRrKm6QI4p2Qu3ef1Euo09wD_v5NcClPHdEngsXCBFgoTUQpthAtAXvUe0WpY8uuYsSB32j5aSLPYXTrRjVPzaXtI6wvQOFB1FABLXraqW-fMWC_zyZ_i2E-U5cqPh-f_a8_zFLE6REYD7-RPxqoRRmg_kZkmjxLfSJztU2SY1L7HmHqIiPNCFCEcg8OPW2jKUJXJZrtueOTSilcX-WKtXdR2PjSGzvcEnl5PIaeA9URAhExL7NS-g1QOFhDxStuNyOS0t2UJkJWh2yUg1yxzDoDkaqaC-lxO9ciLFs71Dj3Y06lvUS3JHKm2HyNUeNIZQibnCiRW-HkacNszNwFCuxBWX_m4xQTgTVNErHnx7DbIlL8NEFY_uzgeU7SQfv8JP4BoKKaZgvSNcMzd5LTI5D_vZJTNmmAOZvxkyJ67j02CjW3PcsRYoQM_gGKPByArfOXLpLY_3ZIE9_jCBKOG3O2AqX_hiIxrflhFX37tBLPH-OCRsapLmvaQsIrE7IPy4m4XQInGYRy6Ndwzc2_bXa2UvqcOgugJGgnTGn7fZDRvTsGH0Q4ZyjBPbw7diw" style="width: 100%;">
+                        <p class="caption">French-English 기계 번역 seq2seq 모델</p>
+                    </div>
+                    <p>
+                        <br>위의 모델의 loss 계산을 하는 방법을 좀 더 자세히 살펴보겠습니다.
+                        위의 모델을 구성하였다면 loss를 계산하면서 모델의 가중치를 업데이트 해야합니다.
+                        즉 loss는 decoder의 input의 [I, am, a, student]과 decoder output의 [I, am, a, student]의 위치에 해당하는 결과 값을 비교하여 계산됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서 주의깊게 봐야할 부분은, input의 2번째 토큰부터 끝까지, ouput의 1번째 토큰부터 맨 마지막에서 2번째 토큰 위치의 결과를 추출하여 계산하는 것을 알아야합니다.</span>
+                        <br><br>그리고 이렇게 ground-truth의 input 토큰을 이용하여 decoder의 output과 loss를 계산하는 방식을 <span class="highlight" style="color: rgb(0, 3, 206);">교사 강요(teacher forcing)</span>라고 합니다.
+                        즉 decoder의 output 값을 input 값과 동일하게 하도록 강요한다고 하여 붙여진 이름입니다.
+                        그리고 이 기법은 아래의 1989년에 나온 RNN 논문에 처음 소개 되었습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/yyccR/papers/blob/master/RNNs/A%20Learning%20Algorithm%20for%20Continually%20Running%20Fully%20recurrent%20neural%20networks.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">RNN 논문</a>
+                    </div>
+                    <p>
+                        <br>훈련은 teacher forcing으로 진행한다면 decoder의 input이 없는 추론 단계에서는 어떻게 해야할까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">처음에는 [SOS]를 넣어주고 나온 결과를 다음 input 토큰으로 넣어줍니다. 그리고 이렇게 해서 나온 결과를 또 그 다음 input 토큰으로 넣어주고 이 과정을 [EOS] (end-of-string) 토큰이 나올 때까지 반복합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA5QPpXN4JMvt69LjS6Rgu0UTpE4z_u-6C84YZ_LHFVyRix9H3KoocH1z02EoEh4btl6UOTNZ5xOEoukL0XxZWloXpzyJnyBC_CJeqll8fHX-GQr7D2Zizj8MOvw94PEhrfKN2CFCHjV7QguaQi1qGEQsTne-GDnfuOAFjZ0AQczhUnAMOlL3pnrgrzS_0_a1fCpgpCHGicJ1TwJj4wxwxzmPZDxysFIoFb9AGj4LSmnzVGAYJk9ZWHX8w4eOmWnvhn1H_kzgXAogSYle8XpxIRFxl4tEDh6TRS-OotzN_nTJ9HdCPxqL3W5BqYddV3swSNNSUjbFDhSMXB1n3kqJaTn4v5W--7PJQl6S6cmt4wp0tiZgaHIir_M8tpPd7uhlp6XPGseX8asmjwEkG-Xqb-2LQjyrub1ftOR_jNWoeU5LefQdVYV8Zk4cMeWJXyHF7GgXk81lC2xxARwNXACwg5ItUHuvzN8daegmKlx7mfhq_FgvjHKmswzsZwxGUXGRg_wN_ER6LhHHtdYD5rISJqlXCv6lAjmPEYRlb-Q_1jtEWb3pS_Dm80C7nGUwLTXHCRoyLtewnONU7_cSQ09kM9XLLJTmg_XbHF3ivNsTp27ptpIBBnHfN0gLcO9AhLOPyYO-J_oFJQN81RAOpgTc_jatuLuUBuEj2KBQ2PftJaHYzTOwS_CP6p3byKJ8S5pYAufi-dH2GiUxaX3Gj-UtiL6qSlcU1gzybU_6Q964mKl9zXQ9PCPCpxxet-TqFGGmL6q3KwF7tM3bDirC_9OZ6jv0fECOPfzgJDXotIob3UOqFbEg8y6Le-acT5X7wp29Pgl5vNtiewcCi7YXmz9jDEnsv70opJo_aDt2dcmdk1UIFiKRr8KqOX-qQUANmGaMevGseULCgpeosUhvFFlXlaxVwZtmU_zR2Gwpao96TnFy0q8UmJmYXHRcH_-Zip8Af72DTmTmNtNH9QE2Ozj4pO5x704gYgjBpeleTgjEHIz-RorW6x2YLlbLE-KvGeURuYMlTw8IKudIQaw_YCN7aCKuHkGnPsXVUBbrJ27j1TlYw0zNcAISQU4FyH_krC8fef2E3Dz6XA6LiGs1K3dZsx14rwJc4OzlXlkJvd23nsdRLGtgsPgG_ZwCilN3ebsFY-BQkx15wa4AujO7AUYTQmzoYBUUoXfgLricL-BZQr6iLkvkqvGOZJRnlnS0yE73czzkTNFsC0KVlaHrOE-q-I9I5lVGWEHWax-cJ5wVpf2HAlaIp0CHTO82iRpuK3p_fFVrU" style="width: 100%;">
+                        <p class="caption">French-English 기계 번역 seq2seq 모델 추론 단계</p>
+                    </div>
+                    <p>
+                        <br>번외로 seq2seq 모델 추론 단계는 학습 단계와 그 형태가 다른 것을 알 수 있습니다.
+                        그래서 몇몇 논문에서는 이러한 차이로 인해 학습이 제대로 되지 않는다고 주장합니다. 이렇게 훈련과 추론 과정의 차이를 <span class="highlight" style="color: rgb(0, 3, 206);">train-inference discrepancy</span>라고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 훈련 과정에서는 teacher forcing을 통해 틀린 토큰이 예측 되어도 바로 잡을 수 있지만, 추론 과정에서 초기에 틀린 토큰이 예측되면 그 이후의 순서도 다 틀리게 예측되기 때문에 문제가 발생한다고 합니다.
+                        이러한 문제를 exposure bias 문제라고 부르고 이를 해결하기 위해 scheduled sampling (SS) 방법을 도입합니다.
+                        SS는 훈련 과정 중 teacher forcing 방법만을 쓰지말고 추론할 때와 비슷하게 예측된 결과를 다음 decoder input으로 넣어 학습하는 방법을 섞어서 쓰는 방법입니다.</span>
+                        말 그대로 teacher forcing과 추론 과정과 비슷하게 학습 과정을 구성하여 이 두 방법을 섞어서 학습하는 것이지요.
+                        SS와 관련된 논문은 아래 링크에 있습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1506.03099.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Scheduled Sampling 논문</a>
+                    </div>
+                    <p>
+                        <br>하지만 이러한 SS의 기법을 사용하여도 exposure bias를 해결하는 데 한계가 있다고 합니다.
+                    </p>
+
+                   
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Attention 기법</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        RNN 기반의 seq2seq 모델은 몇가지 문제점이 존재합니다.
+                        <ul>
+                            <li>문장이 길어질수록 gradient vanishing 현상이 발생.</li>
+                            <li>Encoder의 마지막 hidden state를 encoder의 input 문장의 모든 정보를 representation 하는 데 한계가 존재.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 문제점은 기계 번역을 위한 encoder의 input 데이터가 길어질수록 심해집니다.</span>
+                        따라서 이러한 문제점들을 보완하기 위해 등장한 것이 바로 attention입니다.
+
+                        <br><br>원래 seq2seq 모델에서 encoder는 input 문장을 representation하는 hidden state만 내어주고 decoder에 영향을 주지 않았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 attention을 해준다는 것은 decoder의 각 time-step 마다 encoder의 output을 참조하는 것이지요.
+                        이때 같은 가중치로 encoder의 output을 참고하는 것이 아니라 모델 스스로가 더 중요하다 싶은 부분을 집중하여 참고하는 것입니다.
+                        즉 encoder의 특정 결과를 집중하여 참조한다고 하여 이름이 attention이 된 것입니다.</span>
+                        위의 Je suis etudiant &rarr; I am a student 번역을 예를 들어보자면, student의 단어는 불어의 Je 보다는 etudiant에 집중 하면 더 좋은 결과가 나올 수 있겠죠.
+
+                        <br><br>지금부터 attention 기법을 두 가지를 예시로 들어 아래에서 설명하겠습니다.
+                        첫 번째는 간단한 감성 분류(sentiment classification), 두 번째는 기계 번역(machine translator)를 예시로 attention 기법이 무엇인지 살펴보겠습니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>감성 분류의 Attention</b></span>
+                        <br>첫 번째로 설명할 감성 분류 모델은 seq2seq 기반의 모델이 아닙니다.
+                        단지 encoder 하나만 존재하는 모델을 이용하여, encoder에 분류할 문장을 넣고 나온 결과를 긍부정의 이진 분류(binary classification)하는 모델입니다.
+                        여기서 attention을 사용하는 기법은 아래 그림과 같습니다.
+                        아래 그림의 B는 batch size, L은 sequence length, H는 hidden dimension을 의미합니다.
+
+                        <br><br>먼저 분석할 문장의 모든 time-step의 결과를 concatenate하여 attention 모듈로 넣습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Attention 모듈은 Multi-Layer Perceptron (MLP)과 softmax로 되어있는데, MLP는 단순한 linear layer라고 생각하면 될 것 같습니다.
+                        이때 MLP를 통해 H 차원을 1로 줄여주고 길이(L) 방향으로 softmax를 해주어, 각 문장별 결과의 길이 방향으로 나온 결과값의 합이 1이 되도록 해줍니다.
+                        즉 각 time-step별로 나온 결과를 0 ~ 1 사이의 확률로 표현하는 것이지요.</span>
+                        <br><br>이렇게 나온 각 time-step의 확률을 기존의 LSTM output에 곱해줍니다.
+                        그럼 각 확률로 표현된 attention에 의해 0에 가까운 time-step일수록 output의 값이 0에 가까워지기 때문에 결과에 미치는 영향이 작아질 것입니다.
+                        그 후 문장의 감성 분류를 진행합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAcYJLSDl8S_ascbuPqTA9hP0PKkrcrVLmoAhsng836GMVwd_Rw3-SNWLgik35aqDBfb1AY-3ptePPANvGJonKbounJrx_ZIJbf-2HNaYxR128KJHcDbfyeoLzftl7GYZQeEZpTJ5wG9mWhzXBuZy2AFcdN22GwHA9-2Y-JADO35g_CSumobH83zPn_HWARoQjzLT4dv1zTjYqn_78osKI9-f33LoYVxMV59E5lLS4ClOiJSF90iZnW57PvZx1YHjc-IUPtiS5M_xd3Bq2-RyoNmdHbBCcR83fVC3QUB_L_x_kjYsCa83vts0eBdpQvZGCltauNgI1MNmfMuhK7U9c_TkFWHg7kRRDMI9az-8Rvbgb8B0voW5Xeb36oaLQmI7RquoB-O3kxSR_WaZ6vZwdRvuWW7bhHtlYejijomwITo2k0O80kK6Q6FWhNgf93rYAXh0E6NG8JF2wq_5hBxvfDz5zzv54XbmFi3VnufINYUNO0e_7cvtk7HWqqoNpTgsEbjlyj6Z9EHQO6I4uT41EgZlepvzxDUIGn2VdvzqT_-45rHY89o8AXO1rFYqeId1eNKlhEz1IT67zG415zaukxk5mY3Hy1WaS1Mv7W_WAsEXqpXmEUM2kDVFUvvNSqNT2ZdkmErek30-wkMo03gUobR8vTpC2kTDiJ4fzdYnx0UFUP-NsAKeH_Y47Vb2zjL9O8uH2eFErKg-v2P3oI58Q7UhZhN4seT6poBOAncfiWstMpqgQTnY1LDNYw8x_enMDDizRp58Be3Sx_ynztXlqH2cA6I3lCA12uWZv6aCOydRJ3mSSmsFDZv6EPhIAMzthL2-sqx-n02jwscu0e_Wjop6Q1rHi2fd97aK0fsQuifneN-xfLHwUCDkMGC1usCXShf5wt28UwiDL9qFe2Ir3kBX9YxdWa4xDPuaL7ucxNSVJHBfZ06iSkBAIbtTx2AM7GmnU2RYd0nKEkbwad9xfiksbFx3rtzIHLFhEhECDQidB5G0vIv_QIHRncjH8z9w-HCPHkfjGpefdoPDLrLwIGGT74feZQVBr0eSY4iZ8zKW9ihmr-B0bdd13eLNa_VQthK8Uqka5DDkTGccwkjtwt9ZkYH9YYh39tS08V5-88K9_Y2H__514U-5KuPMw1l6nbffQVNPApwwbXDbyIBzS9wkZUR2nOHNPI1TPxyQDGCpM7CCSM6eOmoX-muP8WgH96UDBbJ2p0lLmGuwWpidWIQMbaZmkcxvb_F7lvohosQWQ6uioXm587dFWDKUchX5rXRMM" style="width: 100%;">
+                        <p class="caption">감성 분류 모델의 attention</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>기계 번역 모델의 Attention</b></span>
+                        <br>두 번째로 설명할 기계 번역 모델은 인코더와 디코더로 구성된 seq2seq 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 seq2seq 기반의 번역 모델에서도 attention이 사용되는데, 여기서 소개할 attention 기법은 여러 기법들 중 Bahdanau가 제안한 Bahdanau attention 입니다.</span>
+                        이 attention 기법을 활용한 기계 번역 모델 논문은 아래 링크로 들어가서 볼 수 있습니다.                                            
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Bahdanau attention 기반 기계 번역 모델 논문</a>
+                    </div>
+                    <p>
+                        <br>여기서 염두해야할 부분은 본 번역 기법은 decoder의 문장 전체를 넣지 않고 한 단어씩 attention을 진행하여 다음 단어를 예측하는 방식입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">요즘에는 transformer와 같은 모델을 사용하기 때문에 decoder에 전체 문장을 넣고 masking 하여 학습을 진행하지만, 지금 소개하는 기법은 이와 다르게 전체의 문장을 넣지 않고 하나의 time-step 별로 attention을 진행하고 다음 단어를 예측하는 방식입니다.</span>
+                        아래에서 그림과 같이 천천히 살펴보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCwTpb52c5xfoN8Jr4WAwK7IKGHxtPrDmaL5yrH7uCaVo1PvlRcL7kYYiOyyt-Fu1vnmP6tSI78sgHJiz4cDPote8XpGJTcLpqNmNTyWKGm6qUzTaYtJqaj0B3qVZa5izhCpIpwnLWsH2BCKFbSoGueENLpRi5W5ZuggDwSr6TPg8pFpE--xRD2qK5weEqscwjt-ABquv-X33Jst_4ojRRY2_HuzAcLVXfdQsxFs4k74Wg6De6QiYyNSDUZ-SqRzYHykvYr8B5VpmdGx7dgCaNfPg8IrnZdTObNwZiV77e5BcJ5fR7niSFk0jWHkN9y6W4P0atlOHyt8HrEPqzAsrN18rgBqSRHndbn_YZ8qcd5s2m2UNaNgJFGn655D7sE4F6PVG4xWH970gTHJf4oGt1I-GhPzwdCN91Zs5TXrcn3GxmBUlg5sbfsFGYoPsnmpuhbN_QY1ey43VWfMcZ_0oSf_mEimoACpLDvxVyBcYFFpnBfMbl-HAeOMdNP1rpExdBMntaXJjXJOzpqtmOty2s-3ifFVSSMa6-HsgDguJKlFlcic5zI4M4TcOjHekjcnxJhtxlsWBqddzAmgjH2B3tY7XByjjthoxMyLbxKUNYBz0NGVThUyKNsuRx1mu5F4FRoOoeNbQaxJxCHNY6tT4Ow3c-AT_pSZLlnBeR4nBXiyHiIpwEWeos2jLwP04R93x8fbdrBUGqdT2GWFdw7-HEinORay82xqhm1kcdNcd_Ic7uLx_FKLkWcSL4mtkH0Nvw62TGn5nW7y4nGEYsoKQnv75Qw806JHS6gdl1Fhm15kdwYT8GEiYnqiIgKf2De3zDllCdxiSWCivF-vYlN2sHxvGpVJUvut66whDYOj7yFvD41gKYZQWX6PFoRd4_xr2IRkYDakqQFzRkURblujoN5CJCx-BtL6IbRwcSG7Ork2HMq8LRWkr19_d_pigfw-dXiAyK16beAYs89khRsihImUwpU7513j6ioeH2AGLbUVvRCJlO8jJf6glWwsXvpErhR-0Y6jKZa704s1bzq3xUvhZBwKbS55aPKweg5VDzmVUlQ0kfpZO6NeXyYaYBuRE7DoZb9JK1SPKzSVWKk1S-mLNk5yNxfDW6EcrW0m0D9nEixmfW9sUz20EHWJJv4GuZNpnapkcwb_JJkl8sQrxJSU2Ol3bkmLJ-q8Zy9NfKKzQvxwCMGrAdAmZ3aL5e2cieI-oP_gJ8JQD0bQF-zHDQ7OSn1pRUr1qsJWG3H86VNY6aO_f6PY_iGcfUGFW03AKWf7zQ" style="width: 100%;">
+                        <p class="caption">기계 번역 모델의 attention</p>
+                    </div>
+                    <p>
+                        <br>참고로 위 그림의 size 중 B는 batch size, L은 sequence length, H는 hidden dimension을 의미합니다.
+                        <ol>
+                            <li>번역 해야할 대상이 되는 문장을 encoder에 넣고 encoder output 혹은 hidden state를 구함(<span class="highlight" style="color: rgb(0, 3, 206);">원래 논문은 hidden state를 사용하지만, 편의상 대부분 구현에서 encoder output을 사용</span>).</li>
+                            <li>Decoder에서 현재 예측 해야하는 step의 이전 step의 hidden state를 가져옴.</li>
+                            <li>위의 encoder output은 B x L x H의 크기를 가지고 decoder hidden state는 B x 1 x H의 크기를 가지며, <span class="highlight" style="color: rgb(0, 3, 206);">두 개의 데이터 모두 서로 크기를 유지하도록 하는 linear layer를 태움</span>.</li>
+                            <li>이렇게 나온 두 개의 데이터를 element-wise로 더한 후, hyperbolic tangent (tanh) 함수에 적용.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 나온 데이터에 encoder 데이터 길이별 현재 decoder step에서 중요하게 여기는 점수를 알기 위해서 H x 1의 linear layer를 태워 B x L x 1의 score 결과를 구함.</span></li>
+                            <li>Score에 softmax 함수를 적용하여 길이 별 score의 합이 1이 되도록 맞춤.</li>
+                            <li>이렇게 확률로써 얻어진 score를 encoder output을 그대로 가져와서 행렬곱 수행하여 최종적으로 context vector를 구함.</li>
+                            <li>이렇게 나온 context vector를 다음 step의 input과 concatenate하여 모델에 적용(<span class="highlight" style="color: rgb(0, 3, 206);">즉 decoder의 input은 encoder의 input의 hidden dimension 보다 차원이 큼</span>).</li>
+                        </ol>
+
+                        <br><br>이렇게 attention이 잘 학습이 된다면 decoder의 step별로 적절한 encoder output에 대한 확률이 높게 나타날 것입니다.
+                        예를 들어 I를 예측해야한다면 encoder input의 Je, student를 예측해야한다면 encoder input의 etudiant의 부분의 확률이 높게 나타날 것입니다.
+                        아래는 실제 Bahdanau attention 기반 기계 번역 논문에 나와있는 attention 결과입니다.
+                        Attention 모델이 실제로 적절한 위치의 문장 단어를 잘 attention 하는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDfcMxET9hv9WYYVoQSbath_FHah9qBkfTq4-e7RtCKPZt5qhrmlDLtIIGEBGKkDGGLOWzPPJVZKevg-4y__W2lIBIqOoQLkCIBMaFVnGsTOpb-LeMSZ3VOOpBfNZ2czTApoK4cFAEptPmm_oW3K7gKjUmhVRZQslVd58gOQ-rpQoH6L4r3Rqm5RN9etqUFI5G_EFwFhR3CcbJXRlRR2YwnEDYKVbQ_Og1nlCr11WYaGutSgdSDy4-OyFiK5_QpprBkFLSrV_MQskdbVdip2tfMIrY1mb_dq5faj4fCOQ46zrAwa1Lw4YOe5D-Ucxgn9tPF8CxRakgmejgWmH5KQ-4j4QQvTpc7ayXuvbIYewY0-jZ48FPpsNPZPquadQGSLP3UZBV1Z6gfgLD8Wiy9h0utgkHKK1mhER1hlUv1SYow1EdX8k8g8X6URemqu7CDhwnT5RFwCFDItEGrH7MrxVko5PiRGcJDohv7O3z0PnRX32K8vER-rh3xAJhg7-MbJ5OfGvTDPG7cb1bWgJCIOIaD9j4iykqjeN2000OsbLpb62YYBWae5COny1YXIqvkG54FX2InPN9-7sjKD4kFeetSeCQQaiwBA43pRWFJUGS0mtljC67IZkEMIU7GjtxaIeigF9bEx92nq_tZn-mTromH4aBft2mI51SQPi28i_nbwlhXaD4frLY7oRT8GucEa4DcGUAG7ukAFGNAMJ43oWlky7ATanBFqb5U1mPAJhfamM4i3diQ6KDnFCM1n5XTsda6pcfw-UL0woOPCrGz1K78VvM1YzsKpWtw8BMhuxYnxfZqVF_vxpvO1pasnOAwA0X_ou8ItFZdXVBq2lEApOQu6tebX3AOobv8-l-xmt2PyFE0ZptMW7-0XoCFvimKx4hUFTtlISc2RDJJ6Lpz0yGZgdk8kZUUX44OT8HIcmDtfYbIdhHQP1grj0zao2ODe4BpJQUu4vlPy0Hv96-4SqKrONI69rE_s12IVvvEyFMb_x7MSveFk3rJgS_b9NBHVHJ8GSu3jp79kNnRP4hjEOdIBqogjy8xkwooK7HDezqHYq3bXzBSbPQp-BVBPG8o9jkGnKTIoFimFM9ooXqGh2fHtR8O6zOm_v4a-svcjbDSu6pYOyvRfDsSOAa_y8wF-lhXqprXWFWwpiLNMtWyHr0EdfSe1hPvY-_H7oGTmz9iTsqSJc5S40hCL1tmvxj3WIK_40YP9O9iHu2lIFk2u9Adm4FdCcfX9UbUg3c_QNb_zlaNOSYdFs617_DkCDngR306TQ8" style="width: 100%;">
+                        <p class="caption">기계 번역 모델의 attention 결과, 출처: Bahdanau attention 기반 기계 번역 모델 논문</p>
+                    </div>
+                    <p>
+                        <br>위에서 설명한 바나다우 어텐션(Bahnadau Attention) 이외에도 dot product 기반의 조금 더 단순한 루옹 어텐션(Luong Attention) 기법도 존재합니다.
+                        관심이 있다면 이러한 attention 기법들도 찾아보면 좋을 듯 합니다.
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>Attention과 설명가능 AI (eXplainable AI, XAI)</b></span>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">Attention은 딥러닝 모델의 성능을 향상시켜주기도 합니다. 하지만 이러한 이유 이외에도 attention이 중요한 이유는 바로 설명 가능 AI (eXplainable AI, XAI)와 연관이 있기 때문입니다.</span>
+                        원래 AI 모델은 사람이 그 원리를 정확하게 규명할 수 없는 black-box 모델에 가깝습니다.
+                        이러한 모델 중에서 유일하게 사람이 결과에 대한 원인을 볼 수 있는 것이 바로 attention 결과인 것이죠.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">물론 attention이 딥러닝 모델의 특정 결과를 내어주게 되는 이유 중 100 %를 차지 하지는 않겠지만 어느정도 사람에게 납득을 시켜줄 수 있다는 것입니다.</span>
+                        그리고 실제로 attention 모델도 non-linearity를 가지는 activation function을 지나기 때문에 이 부분이 설명 불가능하다는 주장도 있어, linear layer로만 구성된 attention 모델도 나온 사례들도 있습니다.   
+                        아래의 REverse Time AttentIoN model (RETAIN) 논문도 그러한 사례입니다.           
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1608.05745.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">RETAIN 논문</a>
+                    </div>
+                    
+                    <p>
+                        <br><br><br>다음에는 IMDb 영화 데이터를 이용하여 위에서 설명한 attention 기반의 감성 분류 모델을 학습해보도록 하겠습니다.
+                    </p>                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#Sequence-to-Sequence&emsp;#Attention&emsp;#ScheduledSampling&emsp;#TeacherForcing&emsp;#XAI
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('RNN1.html')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>RNN, LSTM, GRU</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('RNN3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>LSTM을 이용한 IMDb 영화 리뷰 감성 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
