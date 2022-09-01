@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LSTM을 이용한 IMDb 영화 리뷰 감성 분류</title>
+        <meta name="description" content="LSTM과 attention 메커니즘을 바탕으로 감성 분류 모델을 제작합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/RNN3.html" />
+        <meta property="og:title" content="LSTM을 이용한 IMDb 영화 리뷰 감성 분류" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="LSTM과 attention 메커니즘을 바탕으로 감성 분류 모델을 제작합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypCTEuVbFDYOyh9_PYqLwgIwQrACFt18LzAyCof3WVG8MIB_28198GMkKclycMh1vz6eokkdDb3hvYaYpDICVwZ54W-BpZA-N826_JS5Mubg1Nq5Uf9RSuCRcySW5EtXI8UaezSvgc2T8VQrTcq_Yfx2EIBizLzyIsddtk3kJrIOUuz_1FeAT_7qGsaMSLccy558kmU7AaNd8YFLZ-R110EJvBuRMIIuUBAplha3E0351RC4L8ymqH2AOCU-OFgenbcFFWrrxxfEBn1m0c35F3R_Wn-myzGoIOr37MhgTZPocF5RTrRjhUSwrIIPLUC0t8SQcUxzfZDuGpiKAGmidstVOW63ltlnYRiVFyJ8L92dZLzS59FmS7Cm4fq8HPQj1w4sgxqU058pMvoFMu5NRGFcPrxxOZWdB09RyPAqxciDuX5PBwKIyKGhsF9Gd3ttnvI2RInYTPc98FSvAIJiTIN08uBp3YY5Z5e-V8-2ghthePl99-pGeAoKdqNwrM8N0PlNXk0cyf4V7lxQYn6T0TYKSBuNfqljPNYwHEylffx6O5ZwmKUt_EgPJbG4hqNgcHkR-RML1-d4D_5OEGsrtvdSA3eDVQ2VvWfl35eqY31ldqaDHj8TJC16lOg49DN2Y7Uxn0rj_bpmdkqUO0R7QccKf_aZ5ku_lAUb3ocaYmsMQ6C56GSX7HSJoyFwBzCmMhpceqmqxCU6HaN6LaZf19ZzUYW5-SDP1k-UDbR8TCxAsFjC3LbUnJmgl8d_v_5Ml1sF_7MElY2oRz8oMz8PAk0zCpllR3fX90H7viMmvRypww5i99VkjQ1beDI6iqI0o4sO0YVqeico0UoXP27CY_VFqeX4LkZbzh5R-r29B_RVpGAXEXhDXB5N1H5ENJ_4sND85JgdIPlSm64CWy-53rE98X3fDAfLkH3v6LfVhHdqjwLRKnXkyTYg6cTAQ9GNzt6IKgKqNmbhpEs7i9eFuOMft5eJg_8yQVHPASA2rn85JJVx0kQ3TfTAYyuwFK1-rti82Bjc5X1wNG8e5rIJBYxBO8DQ5yggAEXsBcmUo20HQ_BlRue_PCvVesXPT5FWgWw_I-AR0TZqWi-T39Ygecxe3EepzmJ2IWx0QtBl0prmsDQO2Eus2iGyyhn3lrcMxrgvVRbcGPxtGDYtnieSMzMsN30sGZlNjWsoIhAGihhCbDE__UexYbrAv5B2fsu3OwMA5KJuld5f7NQ0uAnZ3tg-eqh_MLGueKXSUwacCmNzWn02GNmVtSikwKxRZmTlTv1_bU4" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Recurrent Neural Network (RNN) / 3. LSTM을 이용한 IMDb 영화 리뷰 감성 분류</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypCTEuVbFDYOyh9_PYqLwgIwQrACFt18LzAyCof3WVG8MIB_28198GMkKclycMh1vz6eokkdDb3hvYaYpDICVwZ54W-BpZA-N826_JS5Mubg1Nq5Uf9RSuCRcySW5EtXI8UaezSvgc2T8VQrTcq_Yfx2EIBizLzyIsddtk3kJrIOUuz_1FeAT_7qGsaMSLccy558kmU7AaNd8YFLZ-R110EJvBuRMIIuUBAplha3E0351RC4L8ymqH2AOCU-OFgenbcFFWrrxxfEBn1m0c35F3R_Wn-myzGoIOr37MhgTZPocF5RTrRjhUSwrIIPLUC0t8SQcUxzfZDuGpiKAGmidstVOW63ltlnYRiVFyJ8L92dZLzS59FmS7Cm4fq8HPQj1w4sgxqU058pMvoFMu5NRGFcPrxxOZWdB09RyPAqxciDuX5PBwKIyKGhsF9Gd3ttnvI2RInYTPc98FSvAIJiTIN08uBp3YY5Z5e-V8-2ghthePl99-pGeAoKdqNwrM8N0PlNXk0cyf4V7lxQYn6T0TYKSBuNfqljPNYwHEylffx6O5ZwmKUt_EgPJbG4hqNgcHkR-RML1-d4D_5OEGsrtvdSA3eDVQ2VvWfl35eqY31ldqaDHj8TJC16lOg49DN2Y7Uxn0rj_bpmdkqUO0R7QccKf_aZ5ku_lAUb3ocaYmsMQ6C56GSX7HSJoyFwBzCmMhpceqmqxCU6HaN6LaZf19ZzUYW5-SDP1k-UDbR8TCxAsFjC3LbUnJmgl8d_v_5Ml1sF_7MElY2oRz8oMz8PAk0zCpllR3fX90H7viMmvRypww5i99VkjQ1beDI6iqI0o4sO0YVqeico0UoXP27CY_VFqeX4LkZbzh5R-r29B_RVpGAXEXhDXB5N1H5ENJ_4sND85JgdIPlSm64CWy-53rE98X3fDAfLkH3v6LfVhHdqjwLRKnXkyTYg6cTAQ9GNzt6IKgKqNmbhpEs7i9eFuOMft5eJg_8yQVHPASA2rn85JJVx0kQ3TfTAYyuwFK1-rti82Bjc5X1wNG8e5rIJBYxBO8DQ5yggAEXsBcmUo20HQ_BlRue_PCvVesXPT5FWgWw_I-AR0TZqWi-T39Ygecxe3EepzmJ2IWx0QtBl0prmsDQO2Eus2iGyyhn3lrcMxrgvVRbcGPxtGDYtnieSMzMsN30sGZlNjWsoIhAGihhCbDE__UexYbrAv5B2fsu3OwMA5KJuld5f7NQ0uAnZ3tg-eqh_MLGueKXSUwacCmNzWn02GNmVtSikwKxRZmTlTv1_bU4);">
+                    <div>
+                        <span class="mainTitle">LSTM을 이용한 IMDb 영화 리뷰 감성 분류</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.09.02</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 sequence-to-sequence (seq2seq) 모델과 attention 메커니즘 예시를 몇 가지 살펴보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 LSTM 모델을 이용하여 영화리뷰 데이터인 IMDb를 가지고 긍부정을 분류해주는 감성 분류 모델을 학습하고, attention mechanism을 적용 해보겠습니다.
+                        구현은 python의 PyTorch를 이용하였습니다. 그리고 모델을 학습하면서 training set과 validation set의 loss와 accuracy 변화 뿐 아니라 attention score, 실제 긍부정 결과 샘플도 살펴보겠습니다.</span>
+
+                        <br><br>그리고 seq2seq 모델과 attention에 대한 설명은 <a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        그리고 학습을 위한 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>LSTM 감성 분류 모델</li>
+                            <li>Attention 모듈</li>
+                            <li>감성 분류 모델 학습</li>
+                            <li>감성 분류 모델 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Attention을 이용한 LSTM 감성 분류 모델 GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">Attention을 이용한 LSTM 감성 분류 모델</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>LSTM 감성 분류 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 감성 분류를 위한 LSTM 코드를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">코드는 PyTorch로 작성 되었으며, 문장 데이터를 input을 받아서 0, 1 사이의 값으로 내어주는 모델을 구성합니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">SentimentLSTM</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">pad_token_id</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">SentimentLSTM</span>, self).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+        <span class="var">self</span>.<span class="var">is_attn</span> = <span class="var">config</span>.is_attn
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">config</span>.hidden_size
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">config</span>.vocab_size
+        <span class="var">self</span>.<span class="var">num_layers</span> = <span class="var">config</span>.num_layers
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+
+        <span class="var">self</span>.<span class="var">embedding</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var">lstm</span> = <span class="clazz">nn</span>.<span class="clazz">LSTM</span>(<span class="var">input_size</span>=<span class="var">self</span>.<span class="var">hidden_size</span>,
+                            <span class="var">hidden_size</span>=<span class="var">self</span>.<span class="var">hidden_size</span>,
+                            <span class="var">num_layers</span>=<span class="var">self</span>.<span class="var">num_layers</span>,
+                            <span class="var">batch_first</span>=<span class="reserved">True</span>,
+                            <span class="var">dropout</span>=<span class="var">self</span>.<span class="var">dropout</span>,
+                            <span class="var">bidirectional</span>=<span class="reserved">True</span>)
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">self</span>.<span class="var">attention</span> = <span class="clazz">Attention</span>(<span class="var">self</span>.<span class="var">hidden_size</span>*<span class="num">2</span>)
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>*<span class="num">2</span>, <span class="num">1</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+
+
+    <span class="reserved">def</span> <span class="method">init_hidden</span>(<span class="var">self</span>):
+        <span class="var">h0</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>(<span class="var">self</span>.<span class="var">num_layers</span>*<span class="num">2</span>, <span class="var">self</span>.<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">c0</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>(<span class="var">self</span>.<span class="var">num_layers</span>*<span class="num">2</span>, <span class="var">self</span>.<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+        <span class="return">return</span> <span class="var">h0</span>, <span class="var">c0</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">self</span>.<span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">attn_output</span> = <span class="reserved">None</span>
+        <span class="var">h0</span>, <span class="var">c0</span> = <span class="var">self</span>.<span class="method">init_hidden</span>()
+
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">embedding</span>(<span class="var">x</span>)
+        <span class="var">x</span>, <span class="var">_</span> = <span class="var">self</span>.<span class="var">lstm</span>(<span class="var">x</span>, (<span class="var">h0</span>, <span class="var">c0</span>))
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">attn_output</span> = <span class="var">self</span>.<span class="var">attention</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">x</span>))
+            <span class="var">x</span> = <span class="var">x</span> * <span class="var">attn_output</span>.unsqueeze(<span class="num">-1</span>)
+        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">x</span>, <span class="var">dim</span>=<span class="num">1</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
+
+        <span class="return">return</span> <span class="var">x</span>.squeeze(<span class="num">1</span>), <span class="var">attn_output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 48);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>LSTM</b></span>
+                        <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4번째 줄: Vocab 중 pad token id 값.</li>
+                            <li>6번째 줄: Attention 사용 여부.</li>
+                            <li>7번째 줄: LSTM 모델 hidden dimension.</li>
+                            <li>8번째 줄: 토큰화 한 Vocab size.</li>
+                            <li>9번째 줄: LSTM 모델 레이어 수.</li>
+                            <li>10번째 줄: LSTM 모델 dropout 비율.</li>
+                            <li>12 ~ 18번째 줄: Embedding 레이어와 LSTM 모델 선언.</li>
+                            <li>19 ~ 20번째 줄: Attention 모듈 선언(Attention 부분은 아래 코드에서 설명).</li>
+                            <li>21 ~ 24번째 줄: 이진 분류를 위한 fully-connected 레이어 선언.</li>
+                            <li>29 ~ 32번째 줄: LSTM hidden state 초기와 함수.</li>
+                            <li>35 ~ 48번째 줄: 학습에 사용되는 input이 거치는 함수(x의 크기: batch size * max length).</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Attention 모듈</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위의 LSTM 모델에서 attention을 사용할건지 여부를 선택할 수 있었습니다.
+                        만약 attention을 선택하게 된다면 아래의 attention 모듈에 LSTM의 output이 들어가게 됩니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Attention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_size</span>):
+        <span class="clazz">super</span>(<span class="clazz">Attention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">hidden_size</span>
+
+        <span class="var">self</span>.<span class="var">attention</span>  = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_size</span>/<span class="num">2</span>)),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_size</span>/<span class="num">2</span>), <span class="num">1</span>)
+        )
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">attention</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">x</span>.squeeze(<span class="num">2</span>)
+        <span class="var">x</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">x</span>, <span class="var">dim</span>=<span class="num">1</span>)
+        <span class="return">return</span> <span class="var">x</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 17);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>Attention</b></span>
+                        <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4번째 줄: LSTM 모델에서 설정해준 hidden dimension.</li>
+                            <li>6 ~ 10번째 줄: Attention 레이어.</li>
+                            <li>13 ~ 17번째 줄: LSTM의 output이 들어가는 곳(x의 크기: batch size * max length * hidden dimension).</li>
+                        </ul>
+                    </p>
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>감성 분류 모델 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                       이제 감성 분류 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                       아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       여기서는 무시해도 좋습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">SentimentLSTM</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>()
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="method">print</span>(<span class="var">epoch</span>+<span class="num">1</span>, <span class="str">'/'</span>, <span class="var">self</span>.<span class="var">epochs</span>)
+    <span class="method">print</span>(<span class="str">'-'</span>*<span class="num">10</span>)
+
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">x</span>, <span class="var">y</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">batch</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+            <span class="var">x</span>, <span class="var">y</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">y</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">optimizer</span>.<span class="var">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
+                <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>, <span class="var">y</span>)
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 26);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, <span class="var">optimizer</span> 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, generator, discriminator 모델 선언 및 각각의 <span class="var">optimizer</span> 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>감성 분류 모델 학습</b></span>
+                        <br>다음은 감성 분류 모델 학습 부분입니다.
+                        코드상에서는 5 ~ 26번째 줄에 해당하는 부분입니다.
+                        <ul>
+                            <li>17번째 줄: x는 IMDb 토큰화 된 데이터이며, y는 각 리뷰의 긍부정(0 or 1)의 label.</li>
+                            <li>20 ~ 26번째 줄: loss를 계산하고, loss를 바탕으로 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>감성 분류 모델 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Attention 사용 하지 않은 감성 분류 모델 결과</b></span>
+                        <br>먼저 attention을 사용하지 않은 모델의 학습 loss와 accuracy history입니다.
+                        최대 accuracy는 <span class="highlight" style="color: rgb(0, 3, 206);">0.883560</span>입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA2bCy0-SYpKsS9zaX876mjM5V4U18hBuwsoDIbnRHt1dyk4dq4qUwJfsJDdSq-qa1Gzinz14hjqAlm9mNI9299qsQD5q8EpFNr6vrDmVHeefA6VFvi1noLkgs6FVqvYRjKG_aSF6GzYM-MCL_WjHBKvkyvb8qUEZcr624v5bqUDFTPiuj9KACLPyYpCSlZWA1v0MeMGiZRtaNxt9SlfioCd1cC8sPYhDoKO2tzMsJ1IJv5oNuxMJQrGNpjxmH3Idl5f09tcMEARh2P7dmALqS3_4pZo8h7KKowqyeWzu8FWIZJTnrYfM0SlyXgdU-FPoLMMYghh5c-akerRQGanToK1Rasjr-nx425vFE4QX8JnQXG_oZG9Zi02BlZiEF6nfkHXw5IruS5BiPNzSMdhtj75adZ82eav871OangHlyrTAiYfHBcxfHR39nXGEsyzRHjC-F2JXsonwWXsKlJj5VNHTO5jDNpIDIDNMmQiOkjgBYGmoooB6OqsIYI8PnzAK6fhdobqIQI61Z559nH1ZaujoIUXS1GtqHurnn97H5uJ_XXie7ykAcTVyK-8qAx6ZC7h-Yr5jkX6HRwk-YqfF98lsKkt89Y3F1YgzdEGjGW9VpPyX1d8vC0f6t-CjmMUPc31R4YM0A_rG3qxwnpXLI8qCIXY44VGDx7itqvd8y8RdODzSfZQmcJZApuiQtuWqAgcXg3JZmGO8iKUOJDYp8LAciHNXzDE5AnN8YqxSwUogxO8TaFAF8zFEogEsrT3wc6s9pXvYv9WmLyzMJaYYs605dRU_MXg44X83o7jSF6jXp52zyhEtrhpYzumDT022TIheEl54MQ3PlZe2xdSdImcovRz2kjERs1j8SDYyIbgH8FDWre8ZPbCEQpq3mBjoYzxFFxZUaJxp8wJrqb4n6cl5GSI-p1ITSyusCBGb-8RcybGhXXXZHQc1I5DFT4qzgjhq7NS5zfoaFoUg_5x3IuqNhtFac711xgTxfzSuKJgWDwfpLitns9VHTBVOaaQKPd0vhver0i0a0NZjCLKoqPOiJXi64kmT5vGEyu172illT99UASK9WSZC2z82pn11GpURX9eF893ZjfFB9Itvt9Trfwl1zqOe56HU2SDs1G2KuqAQWvhGlvWm1IlmN3zjyBs_K6LzgjmsgeISk9EFd1ejyM6KJeW2Yec94m3T-mdQMoO1mI15-qksKzlrqJBby3PGhgK-cJHcxNWrpdZmQAInqcYmdLXbwx5p4Z9lYnKHKIMw5Hpmd9nF2Sd6wayBXRsKI" style="width: 100%;">
+                        <p class="caption">학습 loss history</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC9CF2WXlVPPHRPpHgTCr88WL1b-6HO79mkC9N3RiDy7ImjYQytzzGOMRUh7JQoWhBgeBnzbStOqpUfT04g9FzoopsCa-gF5j5PglxPrUmy_0VCIaTu_XsYxYReBKW6_Z9pfL75RPtzb7Q4ji4ARjUw2QUXNaQHJVFPLhEgp2_3L15D_eviPgniRjiWMYGWO-qV3KNQR2WItY0JxUoJS9TqAfX_mKQ91DX-j9bC_WxFMM52D4eYLxHfJr1jG_SU0BDlVOJIJFqLUDmQM2zoi_MUw0VBpDAjW9bZ0OmaPY8NiELDmL9MiRsO3TWx0nMf3CoOCMBfviM3yDIbCkipmOvbwz5mdBOSoCNEo8UY5ozQCFONmretmwV86GeUhBLO7vrn3Io2XK_QYdgZPS6d5nbYOvr0Q4qcXi_spE785l6J2gBkigqc0KOFq4cEa_TbfpD1bOvK0S4JJ5f_KE1dV33bJ1teHuYpZTgj0BI-Cqj6eJbFQxaOxVSJuDZJgwNtAC5fhU05IZzzJafsvs3R-vcH-TbnqJvnWQD8jy7Y1FvPHSTmQutt1drHaGKTBYREcm0u1JUDbCExwCEfc4ZaEjqmRilStToo6aWJE4uWElN1EkV34dxfLSnGHizNNaI9dIOYNV3Z-fgXlPipcjroqjWAj9UgNcErk8_MbKsOayYvVaUvAdqFLGUUQth_JmgT-4XHd_u267KSHe-IllipY_KNinSIc4h7y9v5W1YB0kWNVGEpWMlt5UdGlx9aWFRNLLPobZjDzUShONmwBLRCbSylcPm-6wWnVf_0M7uZHA1Y0qbzc8oLjIXJkO2_qMLMy_jGJgwq6W2LjB40FL1Zxo9_jJv46KSXb7jR35r73HBsO1riI4rNi_eS7_CYXZkkAYFWlLYGXQ4oZ3LTmDt5g3IJf6TRIYhrbWwFFPRm9BtqMW8BweX8g52wiVFXadXVV0TpebTEbFi3yBi69F-qd4r0ecfysPsmPyFPjgkM2i20CsIrN_o3YITVjjDQEVCRB8GycWvBRKoLesGQIkSi_gK_ifIS0M9apz22nzWOiGSo9tx0j0cF95kNl_tK7UgMkW2PnEy1DSF7kI9QXqQbdZro5L2tQakLTivCf9ERZUNgtsh6x_ngPNeudCW2axwr_Zl6hsIwwW7vWyUu4CnUHgurr51aPRscB1FXgvqCZVGo5mumk4a7cQzOz1DglVoZlE2djWAqcYG3GMZF6pkZdiDEEp8leIg6S2rTXbXug-HzDjadnZ656cOnWpGi-uRcIe_SECg" style="width: 100%;">
+                        <p class="caption">학습 accuracy history</p>
+                    </div>
+                    <p>
+                        <br>그리고 아래는 예측한 몇 개의 샘플입니다.
+                        <br><br>this movie was awful plain and simple the animation scenes had absolutely terrible graphics it was very clear to see that this film had about the budget of my [UNK] bill the acting was just as bad i've seen better acting in pornographic films i would seriously like the hour and twenty minutes of my life back in fact i [UNK] on imdb just so that other people don't get sucked into watching this like i did don't get me wrong though i love scifi films this one seemed more like the intro to a video game i'm glad i only spent a dollar to see this one the story line reminded me of the movie pitch black a prisoner on a ship in outer space escapes oh my goodness what are we gonna do i would not even let this play in the background of my house while i was cleaning bottom line here you can do better
+                        <br>******************************************
+                        <br>It is negative with a probability of 0.999
+                        <br>ground truth: 0.0
+                        <br>******************************************
+
+
+                        <br><br>the beloved rogue is a wonderful period piece it portrays [UNK] century paris in grand hollywood fashion yet offering a [UNK] side to existence there as it would be experienced by the poor and the snow it's constantly [UNK] about adding to the [UNK] of the setting brilliant the setting is enhanced by the odd cast of characters including [UNK] [UNK] and [UNK] a brilliant performance is turned in by john barrymore [UNK] only by the magnificent conrad [UNK] who portrays a [UNK] [UNK] louis [UNK] to perfection and yes [UNK] picks his nose on purpose pushing his portrayal to wonderfully [UNK] limits
+                        <br>******************************************
+                        <br>It is positive with a probability of 0.816
+                        <br>ground truth: 1.0
+                        <br>******************************************
+
+
+                        <br><br><br><br><br><span style="font-size: 20px;"><b>Attention을 사용한 감성 분류 모델 결과</b></span>
+                        <br>이제 attention을 사용한 모델의 학습 loss와 accuracy history입니다.
+                        최대 accuracy는 <span class="highlight" style="color: rgb(0, 3, 206);">0.884720</span>이며 attention을 사용하지 않은 결과보다 살짝 높습니다.
+                    </p>
+
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDoE7KXI2Zh7g1hjGdzD-mPKhtvDjdQSBgm4KKqRBNFRMwZsZWSYHhTMdmsr9AWNw3LJ5WBh9A3nhAekuD_da3I7eXGRZy2iWPoPVYrD2IXhY8wky8CP3KnxpyBG3MXX7EOGAoTMfimcSCz8nGHuNhg__BJCIl4WO25QJlGU5gnUF-ftQaiq3R6GPGJw6zl8Vfa3xBxS4AG4nBtFKJVv62ybCVaPF-41TNmrE3_bLM1P2T0m9JBUv3FLvhfIathDNrEyzGDnBoydshbrx5oXVd2MhJGS_SZtJE7Jqq6q6UFC_FQelsnz1sRg8kzi3kHysWJVq1rbUTudzaL2PUcT2OieJ355sJbEveYOSlmUPgnjTXUR5fBNqmfKikRoOyEOZjQ4rnoxF1fIDaauHoDkT7mvvKnytgOXv2frZiqdMra40yDNLSkn2cZng6tHFP5qXqcYNrHRt8Bdi79Eg3k4maOgJsEtsYpX2rmtIahGBdLtrxdtifcpHBId2VDbz9_L90n--x2CFWg79OqqzOFjtlUmeMeuBKgiRB2-vVAO6NfJprm2MZ4mq70suofkJdbw-xdmbmztElQBQDp-ZktRjskWddN_TONkpnRXvAPsWO4MLXSWtdczWgbqbGBsqm75uDtYQGgmy1DhyAxZfH89dMd88eeWxnpjTWWO9279r0Ik35i9K82i2MGH89ln67kt3mDG5ai8SKKCNKGCtWXr5ADXurwK779GHMzvewy-OY33puS98f1R78ZCWm1Sr7WRnWnZu1I4dX3DETlQGiUwTXzjSkjH67TxT_pzUUYJ1BMHN9IpwXctp3MsUcQs3gsvKWJ-oi-0oW2Gp-D_SBuENG5NQ_PhOKRbw5YVtFBskAd4EP62_P0fOiwzbRO0mLHhXvLi0TXW9YKIVWy2cEzOm3BrzS4IC2GBszggIjQAW5VdMaVUE61GL68uLizutLWlv6b7zH660UktwmwJ4jsCJUhMXne9l-2VQBL8is7pgJcJSDO1lc5ywTQGxr10JRuQLqqHHECF_gj4l_GVuX_UqeVtDTfArnlBp7GWdFo-pYnmpmF3BlONbLb-Dp5YYUIzsYqOU4H93mHmtlcdIzmnXpqY_mgJiT7JXgRtnnvU9HghBzm96flNUUivI03xnBuQtbC5Ya89GBdAJwAvWK1ZHSxKkJqRIwQKyYvBnCBLstKkGlN7WnccgXNWG9itExtLzNPRoIVgKi0zrRr8OAU2CzjBzniMn1iDcrCINh7srn30og-uq4S5n260_rq99K9-uosA00" style="width: 100%;">
+                        <p class="caption">학습 loss history</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAK5pLBKIj1HjFuQNLcZcdnuygPTz4OJ1JaaMJjpu50U0-37LuvCscPsqYm7fpqDRlhJSveOxFxwZ3-XVVX5isASyGL0DaQQubhUGascfRUhQcc1292u47wM6AltPtQhX4l-5Z8dFgEwt-kQfh4UOXbdfNjTYoIwhUQVDgCpUFrq5C80h5VkddSW3qOy2yl1JtpnpzVjEdGU_43G7X37EPGmEcux9sv2hQ7tlyOjuMFCFCBPZI9m5EYsTN9Ji4qwkp4H4lpZm50Bdxapevh3mklG3LLm_FoBvyOog3-zt7j9gZySunF0YNS4Txt39VIl4eg3KxqJiO1tVGG-ji3TDUf8pogYXiuxnhBTDtGdk-NLM6gxp8V2TzzIhc7wrccGaXc9PM1asOQ7ZiUWCVNZjAS_n3wuwMXh0g_sib7T2EluaU9Hah8QycPH-Tbyj4GCFj1yXFsotFqE-8YapuermYLO_j1rWhzSQ5ry7hCwBcWlmLsmXIVXcjEicF50snmGTEifU5WEgP7OJdhTGXNbS_PlSjjlIBgNSyOjYx1x63VNCCiIUHkZi04xXAJNsIohI9uB6jDqU15nHwDsC7lNdr-f4W6TFeDS3h_jFiWWCP1tp3TrjnGkA6R8BLlDTMb-6E-Vk7U4TjnXG4Z3pFK8ySXJZ40_m6vu-K4GXPmcmfwO1_QlZoUA0OhE19LJHWaVO7t0jvVN1tCtnN-4cLMCfljUQhxNBeh0xG-bJ6ZRefhUecF1prMfoAPXlnlf_-CW4axSx70Ior6wuF6oRVUDUWDGdGj-YPu5vjq0dfDSqhTp_Svl0V4B1Z_nsUA5iBGMIMQGeaysoI5tCnM8tGhlQg7lPK8K8c4_kSdqsMPqtu4Sw2FLabtkXGzbJMIPMlr99b5fLZQOW78CwctUDJeRniqRYOvxI8o4MXQhkvZ1fyFh7dqgPhT4lKjhaL8ME-63ZNeN7orOAkR2tnu89lQ4MWIJMZMiMBjqdawAUdvarYtlYu3FxMvy0nKKdxflrguXHh8HWkEYKTuhRWtRELU4ghtk76DUy7jeEa_AAgDOamKFKOLhRTblfInE33ol5bpajRI5QH_036RHD0YmbOnqW5w_ecbsZBS8Pq8xT2tOLSdqYR648A0IL29L-EoiBW5H6NC4dFPH_UHCGxpAMPA_5XFHaHNyFsueRTML_p2Dg7lXTAvS1I40Od-1dIErtQ8uo8cgJsfRg8AmAL-r5GmK_uub8j_GyNowm-LlP0hbpV9xmMDIaI_CXou7KtuXZ1S413tIXU" style="width: 100%;">
+                        <p class="caption">학습 accuracy history</p>
+                    </div>
+                    <p>
+                        <br>그리고 아래는 예측한 몇 개의 샘플입니다.
+                        <br><br>i saw [UNK] on broadway and liked it a great deal i don't know what happened with the film version because it was dreadful perhaps some dialogue that works on stage just sounds incoherent on screen anyway i couldn't wait for this film to be over the acting is universally over the top only kevin spacey has it together and he seems like he knows he's in a bad movie and can't wait to get out
+                        <br>******************************************
+                        <br>It is negative with a probability of 0.784
+                        <br>ground truth: 0.0
+                        <br>******************************************
+
+
+                        <br><br>how do these guys keep going they're about 50 years old each and act as if they're only 30 they play 3 hours of music at every concert and barely break a sweat this dvd is their first concert in [UNK] brazil although the people don't speak english they try to [UNK] the words to the most famous rush songs and try to sing a foreign language at the concert with their best friends from tom [UNK] to the spirit of radio this concert dvd will keep you in the chair not wanting to pause or move away from the classics that you've listened to when you were young this is their [UNK] reunion tour started in 1974 i went to their [UNK] [UNK] concert and this was just as good although in [UNK] they didn't play [UNK] so i was upset they have [UNK] they have the trees they have [UNK] the pass driven [UNK] red [UNK] a [UNK] roll the bones [UNK] and much more 10 out of 10 because nothing else [UNK] if you never go to a rush concert then at least buy this dvd
+                        <br>******************************************
+                        <br>It is positive with a probability of 0.961
+                        <br>ground truth: 1.0
+                        <br>******************************************
+
+                        <br><br><br>그리고 attention을 사용하였기에 attention score도 어떻게 작용했는지 살펴보겠습니다.
+                        위의 결과에서 보여준 리뷰는 너무 길어서 짧은 리뷰에 대해 나온 결과를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 긍정 리뷰에 대해서 모델은 great, spcial이란 단어에 좀 더 집중을 한 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCTEuVbFDYOyh9_PYqLwgIwQrACFt18LzAyCof3WVG8MIB_28198GMkKclycMh1vz6eokkdDb3hvYaYpDICVwZ54W-BpZA-N826_JS5Mubg1Nq5Uf9RSuCRcySW5EtXI8UaezSvgc2T8VQrTcq_Yfx2EIBizLzyIsddtk3kJrIOUuz_1FeAT_7qGsaMSLccy558kmU7AaNd8YFLZ-R110EJvBuRMIIuUBAplha3E0351RC4L8ymqH2AOCU-OFgenbcFFWrrxxfEBn1m0c35F3R_Wn-myzGoIOr37MhgTZPocF5RTrRjhUSwrIIPLUC0t8SQcUxzfZDuGpiKAGmidstVOW63ltlnYRiVFyJ8L92dZLzS59FmS7Cm4fq8HPQj1w4sgxqU058pMvoFMu5NRGFcPrxxOZWdB09RyPAqxciDuX5PBwKIyKGhsF9Gd3ttnvI2RInYTPc98FSvAIJiTIN08uBp3YY5Z5e-V8-2ghthePl99-pGeAoKdqNwrM8N0PlNXk0cyf4V7lxQYn6T0TYKSBuNfqljPNYwHEylffx6O5ZwmKUt_EgPJbG4hqNgcHkR-RML1-d4D_5OEGsrtvdSA3eDVQ2VvWfl35eqY31ldqaDHj8TJC16lOg49DN2Y7Uxn0rj_bpmdkqUO0R7QccKf_aZ5ku_lAUb3ocaYmsMQ6C56GSX7HSJoyFwBzCmMhpceqmqxCU6HaN6LaZf19ZzUYW5-SDP1k-UDbR8TCxAsFjC3LbUnJmgl8d_v_5Ml1sF_7MElY2oRz8oMz8PAk0zCpllR3fX90H7viMmvRypww5i99VkjQ1beDI6iqI0o4sO0YVqeico0UoXP27CY_VFqeX4LkZbzh5R-r29B_RVpGAXEXhDXB5N1H5ENJ_4sND85JgdIPlSm64CWy-53rE98X3fDAfLkH3v6LfVhHdqjwLRKnXkyTYg6cTAQ9GNzt6IKgKqNmbhpEs7i9eFuOMft5eJg_8yQVHPASA2rn85JJVx0kQ3TfTAYyuwFK1-rti82Bjc5X1wNG8e5rIJBYxBO8DQ5yggAEXsBcmUo20HQ_BlRue_PCvVesXPT5FWgWw_I-AR0TZqWi-T39Ygecxe3EepzmJ2IWx0QtBl0prmsDQO2Eus2iGyyhn3lrcMxrgvVRbcGPxtGDYtnieSMzMsN30sGZlNjWsoIhAGihhCbDE__UexYbrAv5B2fsu3OwMA5KJuld5f7NQ0uAnZ3tg-eqh_MLGueKXSUwacCmNzWn02GNmVtSikwKxRZmTlTv1_bU4" style="width: 100%;">
+                        <p class="caption">긍정 리뷰 단어별 attention score</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">부정 리뷰에 대해서는 모델이 story, mess 단어에 집중이 된 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDyFLOPAT7lgt22pkvwDUb0-VS5R6OTg76eK7Uh4gceglQpqvMJeZJTCkhdFKb_Eot8BgY1g9x3NT6o9j6gWZbn3qU7z8bQzB0TFJA-5OcE0Uq0-oY5_PqUA_0XiyJ-omY2IWg_LXnTcSnRUsymeKHHr1VifgmeE7N0LOz-YDEwL0s-OnP6MVYDB_zjiOvZbm-2Ilrp-xBkr02sILwN9aREcbLeoM-xm_yhtAvapk6kEqRIHuh5GgizpvUdZrSs_0irRKDKs1dnNyNxQiyUE2sleDtUtWNeZpV1Drg4qlW0JBE7OyA39wphgbT2wCEFU1TZPNisNVhrTD4zcuJcrSuhFqk49vQfz6TyOsvgbF3pRtaP1UztJ-YKE0SbC9v_3y1ZvkEQ0ezpHUpxgeOZ0m8NeL6wTY2unpua8nIisp_28F8TVDCKNgSmf_tgksV9l6oxROwJzP8sptKZ17Wkr_55fVXPk4cJITovIW4-TMSam5nqx5M1QTOp9ZX5M2p1eS3WY5Fv04jniwEkTw8oTUIv7vO6P1vup5Q_ytWMDqXuz9pD65qmLv_O7tMxs7ZOmNhsZrkE1oZXfmm9Mci2dFfTIDjkml7sNQ3p8aK3AaEvPY4-YvzydNd1kdWD1rqI4exWdhKW4CaESGHJXgYvv6Ln39aziNN9ZvBvjiw4jP7WilUFSeOBOm-0g9yy2uqe9aL7gG0bVBT7Ugu1Hw3V0ZRZvByrNuD4n-r84aSNa1OYLf4HPQswtBYOis1-Hbufq-fGC7wTilxhtGQzaCU4cOmd6utu8QGNBJE2s1LlY5ikYs0YdTaq_RLyWewaHMPGx6LtMUp8trAutALRMPFltK7QBFbysXFduuhaM7rH8Md-__U6oKy_ccLU4YA8OL2EIU1JhOGCWraXUKBOwUCPusonSfJSWJ52XL-gV0BZ8OqA2tk8hqYYZT7yM0XmqM9bj9x_7iwb1X4Qe2y1utbrEL1UiLKg7hKXYzAEebTPcXgATZHfSAH9Yr9sIBIJJAZTtQNdaPM4DqR_McEMqhp4fkPTUa09ND0HmzF6Qc2Qn6t008Aw8cmUd5qLLs_uPUtG-HjSrk30tafKrsdjkqscrAOWQb6L_QKhjsdo4YWumt__ttIYR1p_muaMi1x4DWROJKEwUUIrQezkIc5QtDrvt9dqdo8GIsvuACmtR6yqox_rYD-ExcEn41VCXjvvDGS2L8SGkYkv3t4g44jCLqDGk3fzAZ_40ZQ9o_ih6h17_qkGwwjeLs6kFWhGc5zEbaNJV9BVhjk" style="width: 100%;">
+                        <p class="caption">부정 리뷰 단어별 attention score</p>
+                    </div>
+                    
+
+
+                    <p>
+                        <br><br><br>지금까지 LSTM을 통한 IMDb 감성 분류 구현 코드를 살펴보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        다음에는 깊은 GRU 기반 seq2seq 기계 번역 구현 코드를 살펴보겠습니다.
+                    </p>
+
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#LSTM&emsp;#감성분류&emsp;#IMDb
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('RNN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Sequence-to-Sequence (Seq2Seq) 모델과 Attention</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('RNN4.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Seq2Seq 모델을 이용한 기계 번역</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
