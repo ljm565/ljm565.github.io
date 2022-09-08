@@ -381,8 +381,13 @@
   <priority>0.80</priority>
 </url>
 <url>
-  <loc>https://ljm565.github.io/contents/iceland1.html</loc>
+  <loc>https://ljm565.github.io/contents/iceland2.html</loc>
   <lastmod>2022-09-06T01:47:48+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ljm565.github.io/contents/iceland3.html</loc>
+  <lastmod>2022-09-08T01:47:48+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 
