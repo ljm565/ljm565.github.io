@@ -87,7 +87,7 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 GRU 모델을 이용하여 Tatoeba Project의 English-French 문장 쌍 데이터를 가지고 기계 번역 모델을 학습하고, Bahdanau attention mechanism (바다나우 어텐션)과 scheduled sampling을 적용 해보겠습니다.
                         본 코드는 영어 문장을 프랑스어로 번역하는 모델이며, 구현은 python의 PyTorch를 이용하였습니다. 그리고 모델을 학습하면서 training set과 test set의 loss의 변화와 더불어, 각종 지표 (PPL, BLEU, NIST), attention score, 기계 번역 결과 샘플도 살펴보겠습니다.</span>
 
-                        <br><br>그리고 seq2seq 모델, attention, schedlued sampling에 대한 설명은 <a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        <br><br>그리고 seq2seq 모델, attention, scheduled sampling에 대한 설명은 <a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
                         그리고 학습을 위한 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
 
                         <br><br>그리고 텍스트를 토큰화 하기 위해 사용한 토크나이저는 word tokenizer를 구현하여 사용하였습니다.
@@ -339,7 +339,7 @@ lineMaking("code2", 30);
                     </div>
                     <p>
                        이제 기계 번역 모델 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
-                       아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
                        여기서는 무시해도 좋습니다.
                     </p>
 <pre>
