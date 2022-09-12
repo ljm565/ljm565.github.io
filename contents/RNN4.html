@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Seq2Seq 모델을 이용한 기계 번역</title>
+        <meta name="description" content="GRU와 Bahdanau attention 메커니즘, scheduled sampling을 바탕으로 기계 번역 모델을 제작합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/RNN4.html" />
+        <meta property="og:title" content="Seq2Seq 모델을 이용한 기계 번역" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="GRU와 Bahdanau attention 메커니즘, scheduled sampling을 바탕으로 기계 번역 모델을 제작합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypCmuAP5jAYd86yGESAgkAmRF2oAGbFirzA7P2UqI72CbdQdpChl0sux4bRcqdAIxa1kbF1QPZGQi_8c64FwuGGuqe0xCSDOiUJThUr0QNl8FMSi_DDREQHWUbARqnX0njG6zVGWgHmi-Lb35K8IyomsAttzaH042q8nedrxK7cyAms6SpSid7sJMVS2J8SEWR3h2fCcfTND8W68s1d8KHsuoGVjxbzoXe0STbJJu7yKPtQPUmDk_flwYoHtU5Gis4sTc_QeSeKCZBnFC03jBjgOIxHKcT95aiwMER7qV9_mgas8idOymxY6My5LT5eDwjwilpRpd4IhWm_6IxoMYRzP9Z-R-0E5ULVt5yRP307LqfB6wyPYyfvMSkhbehlitFtHNXMh_nilVorPOrlLuqRYG23kUJpOIzlq0054lRJag5a-QhPmoBsAwJaRvxU_YlDedzwwZFtpbB5scFdLON-schjOi0hipKpWE7TUSshWkLpOaCchFaqUl9K4o6R2pVG-15Lxmd94aTryuHg9U2_7yqBrheG71ubyk4LL43BCBbjHTknzuB_mF1R4ck2KyZ6OdmWOYpn_z3eWnB6f-oERh-2fCUTKi3D1DwZKdcRxNVHCKaDEzdMeaRovhJbR6N5SNBWjLpCCS5I_SBDqsy24KtWhjDZMFJl6tSG186R6uQGQ9JGZr8Dg3xS6HSBLYRCeKysexyUJVcn7vI5_8iJ-pelAQ_gAhiU1U715EjbJCzYgwQbWl70Y7ktrGd1SdR76tkoJVeEtpWhKoJCcWdOKPU4AZvI-jgQWhxK48qJawLzT1f5X5FKIPDK6WonwfFrWZvj7kA76-9aTUl-imRQw-6rMRAx6Cu4yZ8Kop8vM9Bw4GWFKZEUel4d_YgdJ3-ji9kr3CEcBVx8q1Dzxp5ZW-XI1Ne--zNil-msoWrXKSEkmhD45aBh_dw4kvZ10J1KTaIzTv_5HBPKVFfUdEigNcmxg22C027rtWpoAzeXok3FJVQDZp9isBaT2BLoSBypD90A7vvD0Q6SPI9_HNGeyeQvtXmemzcj7dfE4CNLLJTtoGrp-en9xwaGrU1YBLyydl0R6gHeqWXOelBGbw1lDb-ZOLxjaiaAWw915bydW65V4FWvLl15PxukRloAxinRrKwQvHPvYrHOHE7uVDNgNnjILxcBnZCVedPxStFSCiJ4dXiXSoW8cS3lvbaJoSy7N2pGtgTfrEnkzDOrYGuZZTls42P0o_X_m6_iAvzzpfpW3izdktg14fEmwGTTrGwCEE_U" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Recurrent Neural Network (RNN) / 4. Seq2Seq 모델을 이용한 기계 번역</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypCmuAP5jAYd86yGESAgkAmRF2oAGbFirzA7P2UqI72CbdQdpChl0sux4bRcqdAIxa1kbF1QPZGQi_8c64FwuGGuqe0xCSDOiUJThUr0QNl8FMSi_DDREQHWUbARqnX0njG6zVGWgHmi-Lb35K8IyomsAttzaH042q8nedrxK7cyAms6SpSid7sJMVS2J8SEWR3h2fCcfTND8W68s1d8KHsuoGVjxbzoXe0STbJJu7yKPtQPUmDk_flwYoHtU5Gis4sTc_QeSeKCZBnFC03jBjgOIxHKcT95aiwMER7qV9_mgas8idOymxY6My5LT5eDwjwilpRpd4IhWm_6IxoMYRzP9Z-R-0E5ULVt5yRP307LqfB6wyPYyfvMSkhbehlitFtHNXMh_nilVorPOrlLuqRYG23kUJpOIzlq0054lRJag5a-QhPmoBsAwJaRvxU_YlDedzwwZFtpbB5scFdLON-schjOi0hipKpWE7TUSshWkLpOaCchFaqUl9K4o6R2pVG-15Lxmd94aTryuHg9U2_7yqBrheG71ubyk4LL43BCBbjHTknzuB_mF1R4ck2KyZ6OdmWOYpn_z3eWnB6f-oERh-2fCUTKi3D1DwZKdcRxNVHCKaDEzdMeaRovhJbR6N5SNBWjLpCCS5I_SBDqsy24KtWhjDZMFJl6tSG186R6uQGQ9JGZr8Dg3xS6HSBLYRCeKysexyUJVcn7vI5_8iJ-pelAQ_gAhiU1U715EjbJCzYgwQbWl70Y7ktrGd1SdR76tkoJVeEtpWhKoJCcWdOKPU4AZvI-jgQWhxK48qJawLzT1f5X5FKIPDK6WonwfFrWZvj7kA76-9aTUl-imRQw-6rMRAx6Cu4yZ8Kop8vM9Bw4GWFKZEUel4d_YgdJ3-ji9kr3CEcBVx8q1Dzxp5ZW-XI1Ne--zNil-msoWrXKSEkmhD45aBh_dw4kvZ10J1KTaIzTv_5HBPKVFfUdEigNcmxg22C027rtWpoAzeXok3FJVQDZp9isBaT2BLoSBypD90A7vvD0Q6SPI9_HNGeyeQvtXmemzcj7dfE4CNLLJTtoGrp-en9xwaGrU1YBLyydl0R6gHeqWXOelBGbw1lDb-ZOLxjaiaAWw915bydW65V4FWvLl15PxukRloAxinRrKwQvHPvYrHOHE7uVDNgNnjILxcBnZCVedPxStFSCiJ4dXiXSoW8cS3lvbaJoSy7N2pGtgTfrEnkzDOrYGuZZTls42P0o_X_m6_iAvzzpfpW3izdktg14fEmwGTTrGwCEE_U);">
+                    <div>
+                        <span class="mainTitle">Seq2Seq 모델을 이용한 기계 번역</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.09.12</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 sequence-to-sequence (seq2seq) 모델과 attention 메커니즘 예시와 scheduled sampling에 대해 살펴보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 GRU 모델을 이용하여 Tatoeba Project의 English-French 문장 쌍 데이터를 가지고 기계 번역 모델을 학습하고, Bahdanau attention mechanism (바다나우 어텐션)과 scheduled sampling을 적용 해보겠습니다.
+                        본 코드는 영어 문장을 프랑스어로 번역하는 모델이며, 구현은 python의 PyTorch를 이용하였습니다. 그리고 모델을 학습하면서 training set과 test set의 loss의 변화와 더불어, 각종 지표 (PPL, BLEU, NIST), attention score, 기계 번역 결과 샘플도 살펴보겠습니다.</span>
+
+                        <br><br>그리고 seq2seq 모델, attention, schedlued sampling에 대한 설명은 <a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        그리고 학습을 위한 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+
+                        <br><br>그리고 텍스트를 토큰화 하기 위해 사용한 토크나이저는 word tokenizer를 구현하여 사용하였습니다.
+                        물론 현재는 unknown 토큰 문제를 해결하기 위해 <a onclick="pjaxPage('word2vec1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Word2Vec 글</span></a>에서 설명한 byte-pair-encoding (BPE) 같이 subword 기반의 토크나이저가 많이 사용되지만, <span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 attention 모델이 결과를 예측하기 위해 어떠한 단어에 집중을 했는지 그 score를 보기 위해서 단어 기반의 토크나이저를 선택하였습니다.</span>
+                        
+                        <br><br>여담으로 PyTorch의 유명한 seq2seq 기계 번역 모델 튜토리얼이 있습니다. 이 튜토리얼에서는 Bahdanau attention이 아닌 다른 attention 기법으로 구현 되어있습니다.
+                        다른 attention 기반의 코드를 보고싶다면 튜토리얼 링크를 참고하시기 바랍니다. PyTorch 튜토리얼 코드는 batch 학습을 하지 않기 때문에 시간이 오래 걸린다는 단점이 있습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://tutorials.pytorch.kr/intermediate/seq2seq_translation_tutorial.html" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">PyTorch의 Seq2Seq 구현 튜토리얼</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>GRU 기계 번역 모델</li>
+                            <li>Attention 모듈</li>
+                            <li>기계 번역 모델 학습</li>
+                            <li>기계 번역 모델 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/neural-machine-translator-GRU" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Attention과 Scheduled Sampling을 이용한 GRU 기계 번역 모델 GitHub 코드</a>
+                    </div>
+                    <p>
+                        <br>본 코드에서 구현한 Bahdanau Attention (바다나우 어텐션)과 scheduled sampling에 대한 논문은 아래 링크에 달아놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Bahdanau Attention 논문</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1506.03099.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Scheduled Sampling 논문</a>
+                    </div>
+
+
+
+                    <h1 class="subHead">Attention과 Scheduled Sampling을 이용한 GRU 기계 번역 모델</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>GRU 기계 번역 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 기계 번역을 위한 GRU 코드를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">코드는 PyTorch로 작성 되었으며, source 문장을 encoder를 통해 represent 한 후, 이를 바탕으로 decoder에 target 문장을 넣어 학습합니다.</span>
+                        만약 Bahdanau attention을 사용한다면 encoder 결과를 attention하는 데 사용합니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Encoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">Encoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">tokenizer</span>.vocab_size
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">config</span>.hidden_size
+        <span class="var">self</span>.<span class="var">num_layers</span> = <span class="var">config</span>.num_layers
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+
+        <span class="var">self</span>.<span class="var">embedding</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var">gru</span> = <span class="clazz">nn</span>.<span class="clazz">GRU</span>(<span class="var">input_size</span>=<span class="var">self</span>.<span class="var">hidden_size</span>,
+                            <span class="var">hidden_size</span>=<span class="var">self</span>.<span class="var">hidden_size</span>,
+                            <span class="var">num_layers</span>=<span class="var">self</span>.<span class="var">num_layers</span>,
+                            <span class="var">batch_first</span>=<span class="reserved">True</span>,
+                            <span class="var">dropout</span>=<span class="var">self</span>.<span class="var">dropout</span>,
+                            <span class="var">bidirectional</span>=<span class="reserved">True</span>)
+        <span class="var">self</span>.<span class="var">dropout_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+
+
+    <span class="reserved">def</span> <span class="method">init_hidden</span>(<span class="var">self</span>):
+        <span class="var">h0</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>(<span class="var">self</span>.<span class="var">num_layers</span>*<span class="num">2</span>, <span class="var">self</span>.<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+        <span class="return">return</span> <span class="var">h0</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">self</span>.<span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">h0</span> = <span class="var">self</span>.<span class="method">init_hidden</span>()
+
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">embedding</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">dropout_layer</span>(<span class="var">x</span>)
+        <span class="var">x</span>, <span class="var">hn</span> = <span class="var">self</span>.<span class="var">gru</span>(<span class="var">x</span>, <span class="var">h0</span>)
+        <span class="var">hn</span> = <span class="var">hn</span>.view(<span class="num">2</span>, <span class="num"><span class="num">-1</span></span>, <span class="var">self</span>.<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>)
+        <span class="var">hn</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">hn</span>, <span class="var">dim</span>=<span class="num">0</span>)
+        <span class="return">return</span> <span class="var">x</span>, <span class="var">hn</span>
+
+
+
+<span class="reserved">class</span> <span class="clazz">Decoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">Decoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">tokenizer</span>.vocab_size
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">config</span>.hidden_size
+        <span class="var">self</span>.<span class="var">num_layers</span> = <span class="var">config</span>.num_layers
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+        <span class="var">self</span>.<span class="var">is_attn</span> = <span class="var">config</span>.is_attn
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">self</span>.<span class="var">attention</span> = <span class="clazz">Attention</span>(<span class="var">self</span>.<span class="var">hidden_size</span>)
+        <span class="var">self</span>.<span class="var">input_size</span> = <span class="var">self</span>.<span class="var">hidden_size</span> * <span class="num">2</span> <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span> <span class="return">else</span> <span class="var">self</span>.<span class="var">hidden_size</span>
+
+        <span class="var">self</span>.<span class="var">embedding</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var">gru</span> = <span class="clazz">nn</span>.<span class="clazz">GRU</span>(<span class="var">input_size</span>=<span class="var">self</span>.<span class="var">input_size</span>,
+                            <span class="var">hidden_size</span>=<span class="var">self</span>.<span class="var">hidden_size</span>,
+                            <span class="var">num_layers</span>=<span class="var">self</span>.<span class="var">num_layers</span>,
+                            <span class="var">batch_first</span>=<span class="reserved">True</span>,
+                            <span class="var">dropout</span>=<span class="var">self</span>.<span class="var">dropout</span>)
+        <span class="var">self</span>.<span class="var">dropout_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">vocab_size</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">hidden</span>, <span class="var">enc_output</span>, <span class="var">mask</span>):
+        <span class="var">self</span>.<span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">score</span> = <span class="reserved">None</span>
+
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">embedding</span>(<span class="var">x</span>)
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">enc_output</span>, <span class="var">score</span> = <span class="var">self</span>.<span class="var">attention</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">enc_output</span>), <span class="var">self</span>.<span class="var">relu</span>(<span class="var">hidden</span>[<span class="num"><span class="num">-1</span></span>]), <span class="var">mask</span>)
+            <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">cat</span>((<span class="var">x</span>, <span class="var">enc_output</span>.unsqueeze(<span class="num">1</span>)), <span class="var">dim</span>=<span class="num"><span class="num">-1</span></span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">dropout_layer</span>(<span class="var">x</span>)
+        <span class="var">x</span>, <span class="var">hn</span> = <span class="var">self</span>.<span class="var">gru</span>(<span class="var">x</span>, <span class="var">hidden</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">x</span>))
+        <span class="return">return</span> <span class="var">x</span>, <span class="var">hn</span>, <span class="var">score</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 75);
+</script>
+                    <p>
+                        위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/neural-machine-translator-GRU" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.<br><br>
+                        <span style="font-size: 20px;"><b>Encoder</b></span>
+                        <ul>
+                            <li>4번째 줄: Vocab 중 pad token id 값.</li>
+                            <li>5번째 줄: 토크나이저의 vocab size.</li>
+                            <li>6번째 줄: GRU 모델 hidden dimension.</li>
+                            <li>7번째 줄: GRU 모델 레이어 수.</li>
+                            <li>8번째 줄: GRU 모델 dropout 비율.</li>
+                            <li>11 ~ 18번째 줄: Embedding 레이어, GRU 모델, dropout layer 선언.</li>
+                            <li>21 ~ 23번째 줄: GRU hidden state 초기와 함수.</li>
+                            <li>26 ~ 35번째 줄: Source 문장(본 코드에서는 영어 문장)이 학습 시 거치는 부분.</li>
+                            <li>34번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Encoder는 bidirectional 모델이므로, 단방향 GRU인 decoder보다 hidden state 결과가 2배가 많음. 따라서 decoder에 hidden state를 넣어주기 위해서는 차원을 맞춰줘야함. 따라서 각 레이어별 forward, backward hidden state 결과를 더해주어 하나의 hidden으로 취급.</span></li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Decoder</b></span>
+                        <ul>
+                            <li>42번째 줄: Vocab 중 pad token id 값.</li>
+                            <li>43번째 줄: 토크나이저의 vocab size.</li>
+                            <li>44번째 줄: GRU 모델 hidden dimension.</li>
+                            <li>45번째 줄: GRU 모델 레이어 수.</li>
+                            <li>46번째 줄: GRU 모델 dropout 비율.</li>
+                            <li>47번째 줄: Attention 사용 여부.</li>
+                            <li>49 ~ 50번째 줄: Attention 사용하는 경우 Attention 모듈 정의.</li>
+                            <li>51번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Attention을 사용할 경우 decoder input 차원은 사용안할 때 비해 2배가 커짐(Attention 결과를 다음 decoder input에 대해 concatenate하여 들어가기 때문).</span></li>
+                            <li>53 ~ 59번째 줄: Embedding 레이어, GRU 모델, dropout layer 선언.</li>
+                            <li>61번째 줄: 다음 단어를 예측해야하므로 vocab size의 크기만큼 내어주는 fully-connected layer 선언.</li>
+                            <li>64 ~ 75번째 줄: Target 문장(본 코드에서는 프랑스어 문장)이 학습 시 거치는 부분.</li>
+                            <li>69 ~ 71번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Attention 사용 시 거치는 부분. Target input에 concatenate 하기 때문에 attention 사용 하지 않는 모델 대비 차원이 2배가 큼.</span></li>
+                            <li>75번째 줄: Attention score도 결과와 같이 반환.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Attention 모듈</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위의 GRU 기반 seq2seq 모델에서 attention을 사용할건지 여부를 선택할 수 있었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">만약 attention을 선택하게 된다면 아래의 attention 모듈에 GRU encoder의 output과 deccoder의 이전 output이 들어가게 됩니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Attention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_size</span>):
+        <span class="clazz">super</span>(<span class="clazz">Attention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">hidden_size</span>
+        <span class="var">self</span>.<span class="var">enc_dim_changer</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>*<span class="num">2</span>, <span class="var">self</span>.<span class="var">hidden_size</span>),
+        )
+        <span class="var">self</span>.<span class="var">enc_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>)
+        )
+        <span class="var">self</span>.<span class="var">dec_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>)
+        )
+        <span class="var">self</span>.<span class="var">score_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="num">1</span>)
+        <span class="var">self</span>.<span class="var">tanh</span> = <span class="clazz">nn</span>.<span class="clazz">Tanh</span>()
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">enc_output</span>, <span class="var">dec_hidden</span>, <span class="var">mask</span>):
+        <span class="var">enc_output</span> = <span class="var">self</span>.<span class="var">enc_dim_changer</span>(<span class="var">enc_output</span>)
+        <span class="var">score</span> = <span class="var">self</span>.<span class="var">tanh</span>(<span class="var">self</span>.<span class="var">enc_wts</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">enc_output</span>)) + <span class="var">self</span>.<span class="var">dec_wts</span>(<span class="var">dec_hidden</span>).unsqueeze(<span class="num">1</span>))
+        <span class="var">score</span> = <span class="var">self</span>.<span class="var">score_wts</span>(<span class="var">score</span>)
+        <span class="var">score</span> = <span class="var">score</span>.masked_fill(<span class="var">mask</span>.unsqueeze(<span class="num">2</span>)==<span class="num">0</span>, <span class="clazz">float</span>(<span class="str">'-inf'</span>))
+        <span class="var">score</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">score</span>, <span class="var">dim</span>=<span class="num">1</span>)
+        
+        <span class="var">enc_output</span> = <span class="clazz">torch</span>.<span class="method">permute</span>(<span class="var">enc_output</span>, (<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>))
+        <span class="var">enc_output</span> = <span class="clazz">torch</span>.<span class="method">bmm</span>(<span class="var">enc_output</span>, <span class="var">score</span>).<span class="method">squeeze</span>()
+        <span class="return">return</span> <span class="var">enc_output</span>, <span class="var">score</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 30);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>Attention</b></span>
+                        <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/neural-machine-translator-GRU" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>5번째 줄: Encoder는 bidirectional GRU이므로 decoder 차원을 맞춰주기 위해서 차원의 크기를 절반으로 줄이는 linear layer 선언.</li>
+                            <li>8 ~ 15번째 줄: Encoder의 output과 decoder의 output이 거치게 되는 linear layer 선언.</li>
+                            <li>16번째 줄: Encoder의 각 sequence 별 attention score를 내어줘야 하므로 차원을 hidden dim &rarr; 1로 바꿔주는 layer 선언.</li>
+                            <li>21 ~ 30번째 줄: Attention 모듈 학습 시 거치는 부분.</li>
+                            <li>25번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Attention score를 내어주기 위해 softmax 하기 전, encoder 데이터 중 pad token에 대해 masking하는 작업(-inf로 선언 시, softmax 결과가 0).</span></li>
+                            <li>29번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Attention score를 encoder output에 곱해주어 weighted sum 하는 부분.</span></li>
+                        </ul>
+                    </p>
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>기계 번역 모델 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                       이제 기계 번역 모델 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                       아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       여기서는 무시해도 좋습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">src_tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">Decoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">trg_tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
+<span class="var">self</span>.<span class="var">enc_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">encoder</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+<span class="var">self</span>.<span class="var">dec_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">decoder</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'test'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">encoder</span>.<span class="method">train</span>()
+            <span class="var">self</span>.<span class="var">decoder</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">encoder</span>.<span class="method">eval</span>()
+            <span class="var">self</span>.<span class="var">decoder</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">src</span>, <span class="var">trg</span>, <span class="var">mask</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">batch</span> = <span class="var">src</span>.size(<span class="num">0</span>)
+            <span class="var">src</span>, <span class="var">trg</span> = <span class="var">src</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">trg</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="return">if</span> <span class="var">self</span>.<span class="var">config</span>.<span class="var">is_attn</span>:
+                <span class="var">mask</span> = <span class="var">mask</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">enc_optimizer</span>.<span class="method">zero_grad</span>()
+            <span class="var">self</span>.<span class="var">dec_optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">enc_output</span>, <span class="var">hidden</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">src</span>)
+                
+                <span class="var">teacher_forcing</span> = <span class="reserved">True</span> <span class="return">if</span> <span class="clazz">random</span>.<span class="var">random</span>() &lt;= <span class="var">self</span>.<span class="var">config</span>.<span class="var">teacher_forcing_ratio</span> <span class="return">else</span> <span class="reserved">False</span>
+                <span class="var">decoder_all_output</span> = []
+                <span class="return">for</span> <span class="var">j</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">max_len</span>):
+                    <span class="return">if</span> <span class="var">teacher_forcing</span> <span class="reserved">or</span> <span class="var">j</span> == <span class="num">0</span> <span class="reserved">or</span> <span class="var">phase</span> == <span class="str">'test'</span>:
+                        <span class="var">trg_word</span> = <span class="var">trg</span>[:, <span class="var">j</span>].unsqueeze(<span class="num">1</span>)
+                        <span class="var">dec_output</span>, <span class="var">hidden</span>, <span class="var">_</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">trg_word</span>, <span class="var">hidden</span>, <span class="var">enc_output</span>, <span class="var">mask</span>)
+                        <span class="var">decoder_all_output</span>.<span class="method">append</span>(<span class="var">dec_output</span>)
+                    <span class="return">else</span>:
+                        <span class="var">trg_word</span> = <span class="clazz">torch</span>.<span class="method">argmax</span>(<span class="var">dec_output</span>, <span class="var">dim</span>=<span class="num"><span class="num">-1</span></span>)
+                        <span class="var">dec_output</span>, <span class="var">hidden</span>, <span class="var">_</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">trg_word</span>.<span class="method"><span class="method">detach</span></span>(), <span class="var">hidden</span>, <span class="var">enc_output</span>, <span class="var">mask</span>)
+                        <span class="var">decoder_all_output</span>.<span class="method">append</span>(<span class="var">dec_output</span>)
+
+                <span class="var">decoder_all_output</span> = <span class="clazz">torch</span>.<span class="method">cat</span>(<span class="var">decoder_all_output</span>, <span class="var">dim</span>=<span class="num">1</span>)
+                <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">decoder_all_output</span>[:, :<span class="num"><span class="num">-1</span></span>, :].<span class="method">reshape</span>(<span class="num"><span class="num">-1</span></span>, <span class="var">decoder_all_output</span>.size(<span class="num"><span class="num">-1</span></span>)), <span class="var">trg</span>[:, <span class="num">1</span>:].<span class="method">reshape</span>(<span class="num"><span class="num">-1</span></span>))
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">enc_optimizer</span>.<span class="method">step</span>()
+                    <span class="var">self</span>.<span class="var">dec_optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 44);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 5번째 줄: Loss function, encoder, decoder 모델 선언 및 각각의 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>기계 번역 모델 학습</b></span>
+                        <br>다음은 기계 번역 모델 학습 부분입니다.
+                        코드상에서는 5 ~ 26번째 줄에 해당하는 부분입니다.
+                        <ul>
+                            <li>19 ~ 20번째 줄: Attention 모델일 시 encoder에 들어가는 source 문장 토큰 중, pad token을 masking 하기위한 mask를 device에 올림.</li>
+                            <li>29 ~ 37번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Teacher forcing (교사 강요)로 학습 하지 않을 시, scheduled sampling 방법으로 학습 하는 부분(Attention을 위해서 decoder에 들어가는 문장은 한 단어씩 들어가게 구성).</span></li>
+                            <li>40 ~ 44번째 줄: Loss를 계산하고 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>기계 번역 모델 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 본 글에서는 4가지 모델의 결과를 비교합니다.
+                        <ol>
+                            <li>Attention을 사용한 모델</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델</li>
+                            <li>Attention을 사용하지 않은 모델</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델</li>
+                        </ol>
+
+                        <br><br><span style="font-size: 20px;"><b>Training Set Loss History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAtlBGqmBfQ8lCOVAwgo9jvg88pPdUQTDFa67JfePHH3goeJPVmHJ7q8WnVgjU0_obQfApdklIR2KWcmz-oVmI7y018RiLOhuX6q9YqzrMn1V4MvkMtXXaj3pZC6-WmwxwtsPk3i6KtTq6hh68L7iIl6Tgt_E0r_ShNVZI1TWijoG9qiRlwoSkTsE8p3NNua_ryRX-mlddiy5Ow7pUADbmV12Vz0RctP4USpwmbQLWL9iIp7LDMj7oyiBzra2PmBs7lebrGF1yiwettgk5mxZ1nvBWbKf3nNQevNt-nsrG0j7ltVbwTuFWNtCKhXwgy3Huhm0wRH8knBNEzej6XukkKaZ2NQkxvfbA1RG_oCG1aVGGuSkgRcx3bk6uQ1KiyzXSrlFdpB2oebhwJKJ01OW96-ooMBOaRQfBtAK4HXM9W7hzTgxYUYiDv7zUbxrFVAH6DIxNAPsggFLSZViFBRUDkY51FiyT1aDqNGQSt38ALAopU2jW0ubOCVt_gx_dDyPdyU3v7d-2z0hgji__Xd4V-q6KUksvEKsjLBakfV1aW42JcdAF0tYjpEN5ir2z6VsMF4RrMwqCG1U1hYLzso095VjXj5ggRuSosq9yWImjZ76cTPkX8IQfFkOtHESxT1IicVPvPcrR1cMccL-QmBqCkPMFZyyNagXJAQW34JeGM_ueIkclp9RXoiJaRVY2SRcOU9-4NX2WS-HmUjbAGu8YcfBG1hei3gyHxJ9Uo-7GRmAV_4BeJP48KdkPKbOfRhV-6Q30LPwC5X5LwWm5uylVpffiMDhEGxsmYPJOMiIJi2HN4k2zInayDhP7eudwghbG4sQHTloAD0N9b1dpLePsMf45zqOvAz_xQXdIsliXf-Uze7zhqw277B5pD7L1EP1F2ADtqxGO6sAt24QhqLcbo_hDlWheJtO728Ka4WiapWGJEDn_QrAh98WyNDKqZHqncsy-aDXqq_E9cvOGdaC60UOkR2SaNQVNV520Ml5MEDlr7IuN-ihAtPXKLLVPXdjL37_xKBFTUfA19asJbereBV-8odJ77jFZSuGMTsw4bQq8isV-6CegGnmYenNpud_m5MdxqOxAFP8_JR9sInZtysLUjdpiPBmSNLhcIAu-UZrWS5-PyaAhRmbJrhF99bZd2Iyrfh4nzkK6jzPr0QNlPV7hyVa2rOtKbF6QElfP3XDQS5FM6mNqRVbkAjjsXHukyEZpWUFo5YlarzsofrcvZwmIMa2XYwEmOgUBmdTBAF3IYA2GEDl_qHH6OJNkEnn4-3Qc" style="width: 100%;">
+                        <p class="caption">Training set loss history</p>
+                    </div>
+ 
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Test Set Loss History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDHG5XCVV0QiShpXDcyz365k8eXk2aor0ajZt4O83JEBPmQ_4Qnj_J78ka03wj5i-JQ0eScol1_GEzqsRukkr5e7L7_-yd6Crj2AAY1IW33mwsJkA29zMMAO8oT3bNzm0ODgRMF1Bl40bDsdcAlCowzXwzt1yM1_9b4t3B2TZPDwooJRSPjMSZMvcrmkEJPFqulC7gKAn5fuwpxLz3_FvvKsHnOlw_mgnHEbSNDP9hEoHimZ-7aayp6prjPoPOm98X9LyLT_rXIR2HGfDyfTLAqesL41DNtDV2fO7a9HxKnN2REQ55pwiHzejuvYJXP7-vybdFhj33vaSHy_pmiU6xAfU1TwvO6EknLPjIjda-GAjcxaeHCnfEtBP9A9ccsfh6D6ZLLWa7ZK-H4-qCqdYah0oK3VpWjQAGUV8Ljbr0K0-gZsmQDqDBKTAHW8cEhiv5YK_Mxd1waxTa_FAiPY6HeVa3XlVvB0oH0AtAN4d5zuaM70d_wh7_-mbwLvYQU6cuJng3CH8dqDpHnqnPNVOTMlDWNGrMf3R5uc4_Y1uHFRVuuxfn6C0rbwJ3XlIvpd3zZ4x5TQSC5kdIf6kjgPq_0dZTPlzdJEDCpedK4e16rjTeESSku6oqtGycOlC0xqcLzfd7n-gP3WPOi-M5-hX-Nd4Dl1C1PX1qbxJkj07-kzD2dh1OA3vtxOyiAyhZ_U4V5pIk2QPQSETR5tedMKLODCCkbO2jURXnHSypLd8TFEZG4SyZ2n4qR1Rkm-HKGLG0-4nEUz3QMM8gZdgsleC7lzomqYpdKQW6M2sGqyPncGHPFftHXkeWmKNcvAvVR1W2I1FEnQtZx8nHyxtpDVPwOgHGA3RytKnJvNX5to4DHabYwxVuEsL1PLdMS2ltp_mRAaIc5v0hJ42kizYONr_F-TJfoHTC6HQqozIMSTjJF6eo9cmlKBoO1ExpyDKDqxr2PFr7YP-x7tkXGYbF__XkciP-56oTsWTd4pssKxFIjsrw2le3dkTh3Kvi31-NUi1RQZQY3-WmtQXokbd3GNHCmtal_RtNWUqXVFQgup3a8kbVCSsG6HML-P6ND4MOBeNZdHwc54h1-ypNeF1N6ZyzVys1U1GmeiY14BK35S-ClNoAFlHVv_1_D66iKWWoEi_Ro-fzoLeleNr_iz3Q47OdMPK7QUmm7kD_-RgtcEgIcUNgZ5xSUpN9rKdErsIB63PZowSnr4JVF9FXpEwp3CG69QiGpJy6ZayFguMBFpfLuspjK7pmWFIsAu_k_GPRxgb5i54Q" style="width: 100%;">
+                        <p class="caption">Test set loss history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 0.3367</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 0.3509</li>
+                            <li>Attention을 사용하지 않은 모델: 0.3366</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 0.3491</li>
+                        </ol>
+                        Scheduled sampling을 사용한 결과 loss가 더 높게 나왔으며, attention을 사용하지 않은 모델의 loss가 더 낮게 나왔습니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>Test Set Perplexity (PPL) History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBaPAy0sOzldovsL900xvh7NT7aN7hZwu92mgwaJ7CLyc1f1TPtuGVjQczo3W_KSGFDZUWvKfYSwjy9NxYB0USCjFeRPBkqnwB00OYR4EWh8B4mW1c_MdThRPZXd6FRIsGxPfgPJnfl9M9dtZiVUW0CVvT_dElIOO0b1Ir-AXF5bMua5AbNmS_JbrohcMjHTZCR-L0pDXy-uQAq8PtrBfJoIqc51pHRmtAOyaBN9feUC07nOqzjNQNN3Vusdi1gilwg2BGyK80cNFAuKEhyXbI4SEt119KpZQvpoQMKKZUzOu4kDIK6wvWCNBLqhVGtZPwldvnrNW_luKgDFuwZDtipJsoA5RsFgZzhYwmhvOqxQsNw0-_qP4US91YNdVZVR_4MsJnMl294ej8Z7vVcQl5fB95kDPLkH-2LbQTZzm0uY6Zj1hSSg34X-KbywFJ9zMWk7fe68b2Ww5VwwmTJH_2W08ky6DLUerqu6OZk7PkS-koSzpCmAEq-LThQ-7aT3BUZsj4sv5JzpGyx1j_0tEGkQoQFIdAm_VJC6GvQcYeHf6BG8Mx4QaKETNvfpSeaKwqwRmZuUPHpaHUDSZw5y0nPbtewfb8HzBKhA5wXX-A-DPYZ7TEdUcXjYS3KnxiMxvcjICnFFUa7cVW-xRSz-P0GqijMcRK-iewedOnhXDsYtTGiNsZ8XV7q1R5LJ9Ulx0o1RZys9hzYhBi6N2nHya4TJsxxW5IOgqUvZ9nXomO-h5mKtbAQXuzaYHXFUUi7Cs69vuCAhUdEPufHy2dFWnIEEzwqlnjehmw7FyRA9Em0RD02Jj4zUIiqKVTk_4Txo_zvDeXGRO4R3dfoFmKga-3oRYtVoAHzwT26sNVhZFK0-Z2L8Ui1h_QeqKbBj-TeDUwKIRwfBZUfVy4JqLxQGbPicLydH4g4e-U3yfllvhOQuH4QAuIxTPkm6RLkzO8EAuV6tga8P8ddqbbAXipvimZX6GJNp66XP7rMiT4OzLIoiLwNXfskMFEmmEzY5mxFQ2VFqN-lKZsLHGoNSRq4SXsf3UF8rD-VP9jQ22ZmHW7FIRupg5X78NS7SDZVhZ3hOuyx-v6_6fG43eo3tATCOMQh6PvwEPCKt7Nyx-MlQedz_OqIxuD50a5qN3k_jSBqfxL9KfKoNBqZ3glyUkH7Mwm3ArnJvADI2VvnyUmIL_GJTp1cTEYa70vHD-h5gw0AjFH1_RYj7bFufr4345WSxbvYm09oPi6Tf-btF-DWnaGugDmCYYHhVKmP6RKIswBCQCG-WdU" style="width: 100%;">
+                        <p class="caption">Test set PPL history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 1.4003</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 1.4203</li>
+                            <li>Attention을 사용하지 않은 모델: 1.4002</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 1.4178</li>
+                        </ol>
+                        PPL은 낮을수록 좋은 결과이며, loss를 통해 계산됩니다. 따라서 test loss 결과와 비슷하게 scheduled sampling을 사용한 결과 PPL 더 높게 나왔으며, attention을 사용하지 않은 모델의 PPL이 더 낮게 나왔습니다.
+                    </p>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Test Set BLEU-2 History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB7BdKAjXPuFJZAQYxbiSjl6tYLVvdfTA92jefs7KIbhcCD9P2NnY8UXIsCyzz2Sd19P7Ceqz2pM8A8B24U18p5X_YH9JjtIUSiNPrYD3iCeiw75_Zl7Mq1wSqmvUpAce2eKb1-NOjJplThHNiFvOVEfcPdIXk27W-frFsGWZ_fwqfkKg-B6K3m26T6r6Sk-qGPTG9nLWqRZa5NFVuZRdABDRzfNPV9Po0Si8Uni5N3kfdLWqAWIQmkNrsaaY2dvkZf0JDRc_T9cL6_SuEBr1xkZsuTgdcIgfU6QK5jOZApMNiVp3xpHDn99rh3vKObJcA2TkN9q-JUlJ3erbK9fMHse4QY0swdTzPwn4JAZ71tN2EvSWg3k2NJF_SHTVgAl5tryju7fYcHJs8YCKNpRQkaZpTHQCBfIjUVheO1i163gPi0jvqul906vTQqm7N1YTzxPxjqPg0kfvg9ZeHk1-Vkv8y1LtrZjUAVhXEjJnt_ZLs_top5SWl1tLKQEbQ3E4x3Hu-VVOoQUl-uN6eVxeu5L_J-iQ-hkEmkvmfzyqVPfE5xnFbBX0SVzIhnBtOMDvxTpB_svUJ_828NaI7ImrQ926S1rhXSTzUBO8MA9YrMEEM5BfX2HGPgekKQWd5eH6EGV3_zlpeCgSKBEGGMQov1wBHPTPTnN2ZogmYWQ1AXhBA7JIsu-Z7k_6_yGWyiIs7lyqNH8VqdPdYLXPkJDT8WHkzS2Dd0LJc3HZMHR8gSmcRq2EWPQrxfZtOIBPeRylTgoBotHZSxMHJRyD20uOiCvoantajW7tJpAtqZs7Hc5ifMGqXFE2YSd_Cb-NH5hcjSM6Iub-wm-nXsOvb-c5i7NdOU3pWaYen0vImVUPin1jaU0w84BBG4D463U0LmESUNkQ74Vrm6ibgg4kU2xMeKLdBySRbjPebsN5y47a8-O0PKhkxT4ysbY2u9OG-6oAyKodWer2Ufjr7kpdykJ2X858lDRqWW-wejAmePu8-nd8KYGH93w5e49c6djV3kUqqdiohgAu2Z6vpGGqlJOvvf8snsAnXqe8crSEeTvupSV1T-eK42The7gpC5DrAU3EZZTK5feKABRnxNrqc04vJWFzVXItVhULOkCafNTthJtY55OsK6XBuXbUN8F_IyUNHA5i9XyWeI8gs2plbycqKir-iP5p6mg76sVwiwXtnehuFMQLsMBt-nZE9qfvdF9YACTWMjJYf5RtTavF8crhYJV52RkFvpIisjdC42kEUz4weLoPi2QsMP5mLcJiTRoNPsDrg" style="width: 100%;">
+                        <p class="caption">Test set BLEU-2 history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 0.5789</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 0.5646</li>
+                            <li>Attention을 사용하지 않은 모델: 0.5735</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 0.5656</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">BLEU는 높을수록 좋은 결과입니다. BLEU-2의 결과는 loss와 PPL과 다르게 attention을 사용한 모델의 결과가 더 좋았습니다. 다만 loss, PPL과 비슷하게 scheduled sampling을 사용한 결과가 더 낮았습니다.</span>
+                        
+                        <br><br><br><span style="font-size: 20px;"><b>Test Set BLEU-4 History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC7VWFE6VSZ16CFVs4mGF6ZJ-4JNKxrzsZnXySzXuTdyM-b8NhstIuNKUfbxIELzyp0Ctrg8i6B5cnbUwsZ6gkmGoT3gahShn9H_yXt0wdiponP8etDCGnCm3e3VWkELt1mN7xuiFQWcTGCOYnVVxXeNs3Y4z53hCicXuFNoNvgtBLMV2-sb-Ur9xC12rQW4AMcyMlcJZOuf6GcwKxvlOm0k0mHvoijGWwe86-iwlgGM-SsIKjpFI9276eSKbQJR-NJaY0q_BAuuBXPzcRvAiL-lCj2ecXxMHgEc-ZEpm5iW2qIDVTJxUdXY-n0y9dOYd5VHBMtjSfIy4mzu6fh8B1oMEIjB5pQe8lmVQWMHQG4M26mTbTWbHXhU1EFHEMYEQkugZgxLaCEQbLLn9E1THjHFevIG3qhFxdIkDOv1uNNzgCLBXK607ZX-I4eXpymy6qj_BqCWHM9IGPLd-2qEMPtA11nE9oATpMqBdu8Ab-T4wkOEQc2YBkXjX5SaEV1xBmCyaXqteJx57SykfI4qnF65TxTAg_cr1CEvLJ_DL3fTbCBba6g7pewggh6EMhMnhnfuAevuIqQlKZVB7yO7X0nq7WrPpruOLD2fLsaXuIb-IWX8QFa5Zqm1TH4_RqYSt1z9t-e__ehpqUSzikTgSyN21ca8v-3gYVqwLRI8QA63ZCArSxzDoVnR32uuM67h3A8cAiFBWvIl0fSE36J7TdOS4zRDmwOFXeHJOAk70nTbLqv43qoOYuYCxEDr9YOCJbSObd81AuM3sPHjfJVAp8amHqb50g32Gmrdp3h-c6hyAeN28lFtzakW69eSRaGUR4ypfBuu369tvfg-hkBGx2eK0Y_uJPWbAhX2_52dtFNvFZT9O73eApxVfZJW0QH7tkt4eiWmIiKoWXz1dxnEIPl7xZefyiilYLJyrYbI2yZ6Cz5bS45729lPLqft2F60IC3WxU5pXNUlLrRACuJ14Uk8C7eFtzb935ul2A1xrlcs2YHmmtSDZ3q3muItj-ghuFQYDYfylpZWJy_VblFWyB6GGLdnAUUKFNUZOyiXs7uqKg-j44_SRCJEjmwRziYcOXkJVnJumhklG4qnq6rlNf4i7lQoXRmm1eZgW7O5bYjQPFKwjIPfQxLuc_RBaYwmlzOWGpH_Bt1XPd1x5V9qfccQdO4xf7imj8UvYmn_BJnwLZoPV4SOMagHE22rqqRJVLcrn1A486mpqRTQRPHP1H16rX5o5XeT85pcnnQ885ZLO4V8YhvRwTSHvNd5CraPnstuvQ" style="width: 100%;">
+                        <p class="caption">Test set BLEU-4 history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 0.3996</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 0.3834</li>
+                            <li>Attention을 사용하지 않은 모델: 0.3893</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 0.3849</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">BLEU는 높을수록 좋은 결과입니다. BLEU-4의 결과는 scheduled sampling을 사용하지 않고 attention을 사용한 모델이 가장 좋았습니다.</span>
+                        
+                        <br><br><br><span style="font-size: 20px;"><b>Test Set NIST-2 History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCot2wSpH94o8GTw-yy1afoX96PUbSgAXNLGpsfuNKSWBcXeQWSx9Rh8yOkYFUiOgVoCqF5Lit8Um-D7WAYiyYlqL70qhZGl0AXsSr2Ys24EwuV4et2cmaKwZOydt13HIMf22sg5c8VuFnKOUBdzaZRyLmIbCP2hgKdLNg5PQQjlZ8Vfx-RGB2XyRT0zw3DLkk0xl0kRrw9knp4R3bsH_ieoLKJ7-mcuRE7N58RNXifqjZRey_2i_sQ-mOTASFCWSLmQ58FC4proQwT7YjjJzkTBrwD7TWL41j4VilangRm2rbGB1HaJZAf5hktRJYfiN-91UZxla4GEy7jCcd2U-QH-5ciCScPJe6v8n9i0sI2s4lJbKE7BXPvDvafvHajyDodn-JloMeQfpeOlySIoFkN0eZFB9GP5glcXLNcp6RvqNITfeFA4va-T347LCgb13VTKN8bURpsCY9y4PP_rfTKLoOHSbQvdLV5E855cn4NN6QxqWZtmYoQ6O_E5WoxWxYH52ySdDGq4D7PjQQOwm90NuKKJvMGpsM90BuiVTYl2IHDI71Vx8NEEozRW3tJb3yEU4lkzUHyGDUda8xZNh53KGubmTnfxs1AflFTcgK2w2MWTk2PVT17YAOFzC2z3WMh9qcxQbY1NKTjrjod1oMId3f8uLmuGxY3d1q5GGQRrziG_BhKioV_7lSeyncO0wuw60mi3F3cFw1WPAMssJZd2Yy1JQlLGUXT9kC7LnNpNwjONNN8nMvUlJ8DdEh0vdW0lQZtshsjDXm6Xo0kWMQVRfuehlDZ3WJD1FpfrGsZIGMRFwoV-7C2SndWlS8CXiVUj2Ws-jDWNNtiF5Dfc-rBf_6dfH5g2ZiuWilRqNwK7z0OoHAxSNksux6gsvZM1Gj2gi8_12nLW0w1OIQYDgMUXjw9hFetdgd08SBnoHb56aFJTv9DOARE_nAG757Jp7ws2nFjsAY_4Nu71cKMQCOQw0rEYUEeGufzVtkfHU7WXNr--AVj5mhiLSKn--LdHrQy6xeq9KjS7f9lCKi-NcJeoPK3yT6cPh2VuFiYjatG9SkXJxp78wDxBbEN2LtPCM5LFkraWMNoOhw2kc4_IS2OAzMnM8qYvidrNwWLfPQfeZ4ZucMOnx3VvlZqwawe2r7J01aaa-4t_iAY_GpLbF3GsqtCub3KZkwKVZHeBb9Ye7USxgtQk4kmMqkMO6sBaNhbeuZ4arG5u0cE7HqTiFreOH2YFqDOicb1t20TVaprYSUJpVaty9h7AJMeHz_Eq2NCO_c" style="width: 100%;">
+                        <p class="caption">Test set NIST-2 history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 6.8475</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 6.6922</li>
+                            <li>Attention을 사용하지 않은 모델: 6.8016</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 6.7098</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">NIST는 높을수록 좋은 결과입니다. BLEU-4의 결과와 동일하고 NIST-2의 결과는 scheduled sampling을 사용하지 않고 attention을 사용한 모델이 가장 좋았습니다.</span>
+                        
+                        <br><br><br><span style="font-size: 20px;"><b>Test Set NIST-4 History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCjxtEY9yyOQAi_64DecbOmBGh7U9FYTmm81juhREBNzL0BS9xnIw8Y3UAtpCyfdDYj9Q9pEv44C9t1REnbwwnB2C8-Q1xTfkJMorzSSGM6iQni5_LhkCA8YrSuACINXeftw0HrqPt1ATU2srJjSP6JIf24qSDykIX5NW-2czzGG9KgVh3Yz_UX4v9vRyPIAlWUBVIqCroETQ7tR1W9WcGK-zvZmlCV8fJ_59EzI_HZk5I739t7LOudzrXU0a5XM0o9z5IDaHriTLFsBx3S1oJtV96id_FaRwHE-Io0lR87DCdu_RVygOtmX7-uyxKc41o7Ks1wSz0pgGp9An0viug3bblhyfUN5ZVE5Eun3SE1BboUWGeSXYg35BSPqtZHql56mUXlKQsOBCWs0LSjkLMtUT4LDsZjknTtMcoFCmfcG1jm6kuRmVmXxb9JOopLGWYST0L5wkaDP2FCkLO9HQj6rlRcLOM_caNWej_wKPtOYTA_XEGUy8C_h4q3p64-3jsqG8xddIzNaI5fMC0gac6AMtdtOtYSnyiRHszvIXs0RhHN6AXrcOfAx3UGGve6xL2-aJFXY1rAGOzxh272bXfcsiuDs4Q1Sqgvu6Mj4scrg2_2rbz8L3nTbp_DHfD4dh8qDiCy714jqoYDYeg7sU_WBpKDM_Z9yEW5DCNwH7KfI-U28gR4NTNTPpGYR4Qt4CVxDHMY6JOS4osEaZ3pEaoqFAnF8u6fGD3tXv597S8wWILczk4ww8A5WBTJ_W8wPjrFQx0oJe7kCJqCAhTKDr6YvjG1-UKxM16fG0XLFCw8ITo03vYxNcnrHM0XMO_I5idAURgiA7jFzUW3dJtdUQPT9C1--YGE8cW4nEA898huumBD61FPjrJTqzvu8ADUna9Pw090aU2qZbGkrzhihzqyEMT58HynuRgmQ_dVzjwKuFYjX54WqU9kWOnW0SiDDJ8ky1Xelm75DvLzC6MFY9gpd7YlYMYFkIIfpJSA75s_x09qdz4Z3N6U83KIR-ewL5R7OQDl_VCFFdk75SsH5b3mOu0rYzAa_w_1l2eAXvT3u3kLuhtZyWpL9m7FEkcxV527OWK-o-jPbK3cRhd9d2FBHkikRJIZizm9sxefIqMPo0SKH4YBhCgLQwX17TxZUefoQ8Xph1sVxEEAKz4DtSxtN-H_JCaKhK0plQzI_Fkc7VCZBdtdN1FQg7AH1EcsqkKhro9BieQnwYvDZ_Jt-BiAf0Ar2BoN8AXl0Lf3NtkW3Rf8zgJ9JauvktKJ0int9ByUEbI" style="width: 100%;">
+                        <p class="caption">Test set NIST-4 history</p>
+                    </div>
+                    <p>
+                        <ol>
+                            <li>Attention을 사용한 모델: 7.1627</li>
+                            <li>Scheduled sampling과 attention을 사용한 모델: 7.0052</li>
+                            <li>Attention을 사용하지 않은 모델: 7.1178</li>
+                            <li>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델: 7.0177</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">NIST는 높을수록 좋은 결과입니다. BLEU-4의 결과와 동일하고 NIST-2의 결과는 scheduled sampling을 사용하지 않고 attention을 사용한 모델이 가장 좋았습니다.</span>
+                        
+                        <br><br><br><span style="font-size: 20px;"><b>기계 번역 결과 샘플</b></span>
+                        <br>그리고 아래는 예측한 몇 개의 샘플입니다.
+                        <ul>
+                            <li><b>Attention을 사용한 모델</b></li>
+                            # Sample 1
+                            <br>src&nbsp;&nbsp;: when i was your age , i had a girlfriend .
+                            <br>gt&nbsp;&nbsp;&nbsp;: lorsque j'avais votre age , j'avais une petite amie .
+                            <br>pred: lorsque j'avais votre age , j'avais une petite amie .
+                            
+                            <br><br># Sample 2
+                            <br>src&nbsp;&nbsp;: he gave me some money .
+                            <br>gt&nbsp;&nbsp;&nbsp;: il me donna un peu d'argent .
+                            <br>pred: il me donna un peu d'argent .                
+                            
+                            <br><br># Sample 3
+                            <br>src&nbsp;&nbsp;: please answer all the questions .
+                            <br>gt&nbsp;&nbsp;&nbsp;: repondez a toutes les questions , s'il vous plait .
+                            <br>pred: repondez a toutes les questions , s'il vous plait .
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCmuAP5jAYd86yGESAgkAmRF2oAGbFirzA7P2UqI72CbdQdpChl0sux4bRcqdAIxa1kbF1QPZGQi_8c64FwuGGuqe0xCSDOiUJThUr0QNl8FMSi_DDREQHWUbARqnX0njG6zVGWgHmi-Lb35K8IyomsAttzaH042q8nedrxK7cyAms6SpSid7sJMVS2J8SEWR3h2fCcfTND8W68s1d8KHsuoGVjxbzoXe0STbJJu7yKPtQPUmDk_flwYoHtU5Gis4sTc_QeSeKCZBnFC03jBjgOIxHKcT95aiwMER7qV9_mgas8idOymxY6My5LT5eDwjwilpRpd4IhWm_6IxoMYRzP9Z-R-0E5ULVt5yRP307LqfB6wyPYyfvMSkhbehlitFtHNXMh_nilVorPOrlLuqRYG23kUJpOIzlq0054lRJag5a-QhPmoBsAwJaRvxU_YlDedzwwZFtpbB5scFdLON-schjOi0hipKpWE7TUSshWkLpOaCchFaqUl9K4o6R2pVG-15Lxmd94aTryuHg9U2_7yqBrheG71ubyk4LL43BCBbjHTknzuB_mF1R4ck2KyZ6OdmWOYpn_z3eWnB6f-oERh-2fCUTKi3D1DwZKdcRxNVHCKaDEzdMeaRovhJbR6N5SNBWjLpCCS5I_SBDqsy24KtWhjDZMFJl6tSG186R6uQGQ9JGZr8Dg3xS6HSBLYRCeKysexyUJVcn7vI5_8iJ-pelAQ_gAhiU1U715EjbJCzYgwQbWl70Y7ktrGd1SdR76tkoJVeEtpWhKoJCcWdOKPU4AZvI-jgQWhxK48qJawLzT1f5X5FKIPDK6WonwfFrWZvj7kA76-9aTUl-imRQw-6rMRAx6Cu4yZ8Kop8vM9Bw4GWFKZEUel4d_YgdJ3-ji9kr3CEcBVx8q1Dzxp5ZW-XI1Ne--zNil-msoWrXKSEkmhD45aBh_dw4kvZ10J1KTaIzTv_5HBPKVFfUdEigNcmxg22C027rtWpoAzeXok3FJVQDZp9isBaT2BLoSBypD90A7vvD0Q6SPI9_HNGeyeQvtXmemzcj7dfE4CNLLJTtoGrp-en9xwaGrU1YBLyydl0R6gHeqWXOelBGbw1lDb-ZOLxjaiaAWw915bydW65V4FWvLl15PxukRloAxinRrKwQvHPvYrHOHE7uVDNgNnjILxcBnZCVedPxStFSCiJ4dXiXSoW8cS3lvbaJoSy7N2pGtgTfrEnkzDOrYGuZZTls42P0o_X_m6_iAvzzpfpW3izdktg14fEmwGTTrGwCEE_U" style="width: 100%;">
+                        <p class="caption">Attention score</p>
+                    </div>
+                    <p>
+                        <br>Attention이 source 문장과 target 문장의 순서에 맞게 잘 align되어 참고하고 있는 것을 확인할 수 있습니다.
+                        <br><br><br>
+                        <ul>
+                            <li><b>Scheduled sampling과 attention을 사용한 모델</b></li>
+                            # Sample 1
+                            <br>src&nbsp;&nbsp;: i'm in love with you and i want to marry you .
+                            <br>gt&nbsp;&nbsp;&nbsp;: je suis amoureuse de toi et je veux me marier avec toi .
+                            <br>pred: je vous amoureux de toi et je veux vous epouser . toi .
+
+                            <br><br># Sample 2
+                            <br>src&nbsp;&nbsp;: what's really going one here ?
+                            <br>gt&nbsp;&nbsp;&nbsp;: que se passe-t-il vraiment ici ?
+                            <br>pred: que se passe-t-il, ici ?
+
+                            <br><br># Sample 3
+                            <br>src&nbsp;&nbsp;: we do need your advice .
+                            <br>gt&nbsp;&nbsp;&nbsp;: il nous faut ecouter vos conseils .
+                            <br>pred: nous nous faut que tes conseils .
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDUBURucX1RRdgJuqmA1RTFsDjoKqCdTlvK_-OzdQh7w27FUPudvKMFcvua-m8zeRCcV9Mt1qmrpht_CMqndZ-p8_JhNIj-8nKJp3iOg9r4B8QccEum09U-yznZPPPa1jP7uq29G501_Jasj_DPdzjbUpkwngi3NJE0W4muh78rrGgXhJgfX4iL0ntb6ZgTrmIW16d0FEjduSILcw4zpRva2-JJ4G-EFdmWkGTFIFOa7ijVVaHySncvSNDVWYAorYqGurtCHkwg5OF6h6ylIL5A3nQ4GVpoExV1mkH8Cqhrf8r_nDsd-0T7_tK_QoOvHJMOEdP5QrHzxKe4mMe3KOX5LAs5urCXVH5ppzRRYzCkI4W69zAzYUxAlEDdgsA1vB48tzPb5woT1KFvltw5E8YXPBYK3RSthWP_Cf_Ldz02fDjJP4wCLko0pA_I7VayGPMccPo-pcZtStYCT5sChii5c7uO5e3__b5Bm9YOsVZOgKL1PT0kX3-fA_tOinpkfD0PJjbRl1pFbrxMjvt2gyQAgk3S0j2hWw3muHOdQlcSZh3_ODc9WdVa_juVpCO7iyux-aL4H9llZ_ajmOpcBubZKwW9LffBLumfRl6l3HMbXe5z4yU6RfdIrJbQ71MM_yd9uLa3sWcpIgmgThTmgewse_c5oCaO502_WVONH2AmT7EL3ZDzSRb2QtXoUgDPPHrIWGjXigwT1SA20fHBROq59SoohKOPcJSjyMylKU5hx397aGfqNKNp7XzT-1nmiyJ1NnfnwiCpG77cx3BmhSX32edNXtHS2etWA9psOMng5XlS1kocrCisj2nAtpcWLi0yGB9CrzXBLr5bEconxXN7Pclyq8HM4WY595VNcHyCLqvbJ499fCfr09xafjUUod9Gd2olxyOs5I2blz5WiYXOatQdgNLnt1Jmj6fzktqw2M0BtCZrurSI4f-Qcq0iTGzNUkCv-Bq_035Uu7iLaPfQKrUrROrHdFyqS6p-nU0IMpdW2-jdWNZr_G4623U3NWR5CEp5kfty_hkmr5rpg-YZUssfFKvZ2bFJ8mUPSZPN3ASkrSUYh1qTINjX9eN4WruuRts0wW2kJdwaVvrTcDsnLQPUZDcJ1HDoSKnZI8h9KATkXLPWkRp0Okg2wyCbCI7YOxslbUcDjOlgj3o_YY6FBQFnd2DwDB6jBSSUXRibjw8T5MDtQnL4mv1l1xilNH6dEkde1uAKmTfDhcd7pfrYJBdtF4sYcN4BWActserpFEem7HTxa0HcA1pjzmrM6_5pJ6bAEE4v-FmZjt6kugcL-PymGI5hcSUCM-jUh_WaRVfWcanTaNKYaFjYqQIP3hXSF32ucoubmoakx7X5k9O7K0k8lqIp3nLyQt6gWcSoy-Wq0D1wGpugQdOEIblxeJGa01JM-TufgndQyiDx2O6r3NPvJvoihAIBERSMdd70xcNjoA" style="width: 100%;">
+                        <p class="caption">Attention score</p>
+                    </div>
+                    <p>
+                        <br>Scheduled sampling을 사용한 모델에 대해서도 attention이 source 문장과 target 문장의 순서에 맞게 잘 align되어 참고하고 있는 것을 확인할 수 있습니다.
+                        <br><br><br>
+                        <ul>
+                            <li><b>Attention을 사용하지 않은 모델</b></li>
+                            # Sample 1
+                            <br>src&nbsp;&nbsp;: tom asked mary for some help .
+                            <br>gt&nbsp;&nbsp;&nbsp;: tom a demande a mary de l'aider .
+                            <br>pred: tom demande demande a mary de l'aide .
+
+                            <br><br># Sample 2
+                            <br>src&nbsp;&nbsp;: you see what i mean ?
+                            <br>gt&nbsp;&nbsp;&nbsp;: tu vois ce que je veux dire ?
+                            <br>pred: tu vois ce que je veux dire ?
+
+                            <br><br># Sample 3
+                            <br>src&nbsp;&nbsp;: i haven't talked to you in a while .
+                            <br>gt&nbsp;&nbsp;&nbsp;: je ne t'ai pas parle depuis un bon moment .
+                            <br>pred: je n'ai vous pas parle pendant un moment moment .
+                        </ul>
+
+                        <br><br><br>
+                        <ul>
+                            <li><b>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델</b></li>
+                            # Sample 1
+                            <br>src&nbsp;&nbsp;: let's take a little break .
+                            <br>gt  : faisons une petite pause .
+                            <br>pred: faisons une pause pause .
+
+                            <br><br># Sample 2
+                            <br>src&nbsp;&nbsp;: they live on the [UNK] floor of this [UNK] .
+                            <br>gt&nbsp;&nbsp;&nbsp;: ils vivent au [UNK] etage de ces [UNK] .
+                            <br>pred: ils vivent au sujet de de ce sujets .
+
+                            <br><br># Sample 3
+                            <br>src&nbsp;&nbsp;: tom doesn't understand why mary is so popular .
+                            <br>gt&nbsp;&nbsp;&nbsp;: tom ne comprend pas pourquoi marie est si populaire .
+                            <br>pred: tom ne comprend pas pourquoi mary est si populaire .
+                        </ul>
+                    </p>
+
+                    <p>
+                        <br><br><br>지금까지 GRU 통한 Tatoeba Project English-French 데이터를 이용하여 기계 번역 모델을 구현해보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/neural-machine-translator-GRU" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                    </p>
+
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GRU&emsp;#기계번역&emsp;#ScheduledSampling&emsp;#BahdanauAttention
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('RNN3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>LSTM을 이용한 IMDb 영화 리뷰 감성 분류</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('RNN 마지막 게시물 입니다.\n\nThis is the last post of RNN.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
