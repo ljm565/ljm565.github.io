@@ -350,7 +350,7 @@
                     </p>
                     <div class="equation">
                         \[\frac{\partial L}{\partial W} \approx \frac{1}{N} \sum_n^N \left[ \frac{\partial \log p(y| \tilde{s^n},a)}{\partial W} + \log p(y| \tilde{s^n},a)\frac{\partial \log{p(\tilde{s^n} |a)}}{\partial W} \right]\]
-                        \[\tilde{s_t} \sim \mbox{Multinouli}_L (\alpha)\]
+                        \[\tilde{s_t} \sim \mbox{Multinoulli}_L (\alpha)\]
                     </div>
                     <p>
                         <br>이때 \(\tilde{s_t}\)는 multinoulli distribution에서 N개를 sampling 한다는 뜻입니다.
