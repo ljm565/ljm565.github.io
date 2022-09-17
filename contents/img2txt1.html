@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Image Captioning (Show, Attend and Tell)</title>
+        <meta name="description" content="Image captioning 모델 중 하나인 show, attend and tell 논문에서 구현한 모델을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/img2txt1.html" />
+        <meta property="og:title" content="Image Captioning (Show, Attend and Tell)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Image captioning 모델 중 하나인 show, attend and tell 논문에서 구현한 모델을 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypBkNhtxTgXB1dkjALLCxG5S7Ey_eJJK9AiefqGm0avKRf7279xQg2RxNv7PIDuf3qCo9GrQdB7kQCmcml02PpUIR7IpOu8fvNUqmXDEZiuCIL6bHXmPoBiEvOPJqdpeXtkAQwbF97prCvK8c6NZwTxy5DfO1F5iu0-n8ALwGCETAtY-AYJIMyLyxFT_YdcTehmfPTC_JYjrydiYeEfSNfwLcWHEo_NH22wI0Fga2trBr4-e3tR1B1Wnl-wgu4Rxq5z-ETzP7q8WlqktmZkgM7Ypk526xqOo-P8kO98atkvW7IrKMoHlMcBwBd7ydiklOAHlCkJ8_tYufMDgnVYdxcVvJGQV1HvyaBwp_eE69uBpi3gfx4hpLc3ghTJ0e_xpfgkuh3jur0EZPI1N0GCUm6VaoTw7_ZY33mIcra-BS2zPJTbVJ5mt0ScA3-pLXS_6jEy-2xdhZnDbRFHWUjLYESGMLtNE0PiVUMXyL_zCmrDhsdaW0AfDn3eIBPRhi1j4DLC6hdgfk4N4L37xMaPYJDpWUOw07FJ11eNDXLojQhwJ-BzopOlgiqE_YHprUhrPWHXhV5hS-45YhQy36kU1_uUiDVhBIjcPyUW7lOP4Sdt7qfj-tEdRNxNL6OwS_kdAJRB5osVaAS9kXVoS9taKeuq-bYALypbECEANhYICwtcKOjebWflQgS1-Z0LP12rg6lQNbeMrCimsPGH-a2-Yn7UqO2WK7D3F6GPJrCDfKWDp5eTqFvGLB5oNH5OueXe5XMxxPRPzkFIhptB4I88SnoNvhUMfFYdeo_6DxphzGZVm6_zIOLQ10JFYGmPttPdXCxmech5Uu1nOsMzoX4iHZslaJqbx8G511hrgKZbsOPmLB7x6yLn2pEB1Qx4QtS7V3irlzoxngWUzSZ2ccu2Kc7WK-iAt-OUn2B5lxl9tgivE2Ns4kZJDH8mysHRC8rxrw8i7dStVLcfyPI10iv4fzKAo_Vkg1EfP0eF6fj-meSs9yEA6KuG4UHP8c_4Y967rwy_0MbPK0S1kz2kTwWRHUNILOprc1NvKAoXvJs-iiFpKL_IWVPqZSUTfWZFC0jTqAVL8ymXro9C7C5Wu6xVIgRGEhj0xRjVWsoRAXNcueU3QaVBb0ZsdLon_san59vQ-ETYep4N0i6FYxbPek7SmUjxSlfis2VPhssAkZY_U5HmiEaEhfFi8iQVVZLaRWsBixNzmtPXbheW5w7D2X13KvRIsIxZruYqpm1uqMkRxp7ZyZ2wKL0TcRZ6JBN0VREhSLRfB4pB3ghVbf8IP1GuKB0lDgWFsqDB0eGtogrCqmdCRkBfFBQfnSiIHyBv0yS5SflRnRkEkQarCASDZMaDIohLj8HPKhJqiSYAL3uoOiq33Ba8eeKCQTjIAzjMXzMeuBYCQloK57lwGVd6CEmGS71HQG82AdORIpdbZASqnthTyt9wQlUJYlEpJBBZDXNQgxw6LY1oT7aFU" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Image Captioning / 1. Image Captioning (Show, Attend and Tell)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypBkNhtxTgXB1dkjALLCxG5S7Ey_eJJK9AiefqGm0avKRf7279xQg2RxNv7PIDuf3qCo9GrQdB7kQCmcml02PpUIR7IpOu8fvNUqmXDEZiuCIL6bHXmPoBiEvOPJqdpeXtkAQwbF97prCvK8c6NZwTxy5DfO1F5iu0-n8ALwGCETAtY-AYJIMyLyxFT_YdcTehmfPTC_JYjrydiYeEfSNfwLcWHEo_NH22wI0Fga2trBr4-e3tR1B1Wnl-wgu4Rxq5z-ETzP7q8WlqktmZkgM7Ypk526xqOo-P8kO98atkvW7IrKMoHlMcBwBd7ydiklOAHlCkJ8_tYufMDgnVYdxcVvJGQV1HvyaBwp_eE69uBpi3gfx4hpLc3ghTJ0e_xpfgkuh3jur0EZPI1N0GCUm6VaoTw7_ZY33mIcra-BS2zPJTbVJ5mt0ScA3-pLXS_6jEy-2xdhZnDbRFHWUjLYESGMLtNE0PiVUMXyL_zCmrDhsdaW0AfDn3eIBPRhi1j4DLC6hdgfk4N4L37xMaPYJDpWUOw07FJ11eNDXLojQhwJ-BzopOlgiqE_YHprUhrPWHXhV5hS-45YhQy36kU1_uUiDVhBIjcPyUW7lOP4Sdt7qfj-tEdRNxNL6OwS_kdAJRB5osVaAS9kXVoS9taKeuq-bYALypbECEANhYICwtcKOjebWflQgS1-Z0LP12rg6lQNbeMrCimsPGH-a2-Yn7UqO2WK7D3F6GPJrCDfKWDp5eTqFvGLB5oNH5OueXe5XMxxPRPzkFIhptB4I88SnoNvhUMfFYdeo_6DxphzGZVm6_zIOLQ10JFYGmPttPdXCxmech5Uu1nOsMzoX4iHZslaJqbx8G511hrgKZbsOPmLB7x6yLn2pEB1Qx4QtS7V3irlzoxngWUzSZ2ccu2Kc7WK-iAt-OUn2B5lxl9tgivE2Ns4kZJDH8mysHRC8rxrw8i7dStVLcfyPI10iv4fzKAo_Vkg1EfP0eF6fj-meSs9yEA6KuG4UHP8c_4Y967rwy_0MbPK0S1kz2kTwWRHUNILOprc1NvKAoXvJs-iiFpKL_IWVPqZSUTfWZFC0jTqAVL8ymXro9C7C5Wu6xVIgRGEhj0xRjVWsoRAXNcueU3QaVBb0ZsdLon_san59vQ-ETYep4N0i6FYxbPek7SmUjxSlfis2VPhssAkZY_U5HmiEaEhfFi8iQVVZLaRWsBixNzmtPXbheW5w7D2X13KvRIsIxZruYqpm1uqMkRxp7ZyZ2wKL0TcRZ6JBN0VREhSLRfB4pB3ghVbf8IP1GuKB0lDgWFsqDB0eGtogrCqmdCRkBfFBQfnSiIHyBv0yS5SflRnRkEkQarCASDZMaDIohLj8HPKhJqiSYAL3uoOiq33Ba8eeKCQTjIAzjMXzMeuBYCQloK57lwGVd6CEmGS71HQG82AdORIpdbZASqnthTyt9wQlUJYlEpJBBZDXNQgxw6LY1oT7aFU);">
+                    <div>
+                        <span class="mainTitle">Image Captioning (Show, Attend and Tell)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.09.17</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번 글에서는 multimodal learning의 일종인 image captioning 모델에 대해 설명하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 multimodal learning은 다른 타입의 데이터를 가지고 학습을 하는 것을 의미합니다.
+                        예를들어 image captioning같은 경우는 이미지와 텍스트, Speech-to-text (STT) 모델같은 경우는 음성, 텍스트를 가지고 학습을 진행하며, 이렇게 다양한 타입의 데이터를 바탕으로 학습을 진행하는 것을 multimodal learning이라고 합니다.</span>
+                        즉 modality는 데이터의 타입이라고 생각할 수 있습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 image captioning을 최초로 시도한 논문인 "Show and Tell: A Neural Image Caption Generator"을 간단히 살펴보고, attention 기법을 도입한 "Show, Attend and Tell: Neural Image Caption Generation with Visual Attention" 논문도 살펴보겠습니다..</span>
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1411.4555.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Show and Tell: A Neural Image Caption Generator 논문</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1502.03044.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Show, Attend and Tell: Neural Image Caption Generation with Visual Attention 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Show and Tell</li>
+                            <ul><li>모델 구조</li></ul>
+                            <li>Show, Attend and Tell</li>
+                            <ul>
+                                <li>모델 구조</li>
+                                <li>Soft Attention</li>
+                                <li>Hard Attention</li>
+                            </ul>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Show and Tell</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>모델 구조</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 show and tell 논문입니다. Image captioning을 위한 딥러닝 모델은 2014년에 이 논문에서 최초로 제안되었습니다.
+                        이미지를 텍스트로 변환하는 원리를 대략 떠올려본다면 encoder를 통해 이미지를 representation한 후, 이 결과를 decoder로 넣어 문장을 생성하는 방식이 떠오를 것입니다.
+                        너무 당연하게도 위 논문도 encoder-decoder로 구성된 모델이며, encoder는 CNN 기반, decoder는 LSTM 모델로 제작됩니다.
+
+                        <br><br>아래 그림은 실제 이 논문에서 설명하고 있는 모델 구조입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Pre-trained CNN 모델을 불러와서 encoder로 사용하고, LSTM decoder를 학습하는 구조입니다.</span>
+                        이때 encoder의 feature는 LSTM의 첫 번째 input으로 들어가게 됩니다.
+                        그리고 우리가 잘 아는 autoregressive 방식으로 decoder를 학습하는 것입니다.
+                        이 모델은 당시에 image captioning 모델 중 state of the art (SOTA)를 달성하게 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCgCDBW9O1taeuEESL7gf_oNnNuVBNaMi8hx535FBeuOxRUxMYcPgH0WrMsMnuulIDxt1tBIwwJ5NQXAh3m3HbZLzjAqAA9YFKF6myVRyba8BcFIlBD3dNkI4cRcpmqUSdrjHZgz6T4aRAkfGPtrNlxvw1TyJjAjFuPm96PlgfOU8fAVl4WrhQiMVn_Gb_42nWODFz2i96QyMaXzKsU8fasfq4p1XA7gKJFwRB0XRs9QoCgkXlWa_QGLOrM2flQXzC-lZTqZV6lJerJTDnL-FVum07XVT0DGeJ1rvHk0uJ2AIi6FSW9d7iNyUYCtNP_ilFsg44Vwh-dXsR8lmo_PzNxL3BFk_-GpfRA9Qij1_Jh8I3e2g0MkPYctSbKuilKCJPe5psk4UcHa3dm3N8rD5REY7VwBP-TH6Bf1z8LZNoV10pwf8HoZ1DYW7fQoeCLMDxu38Q5fD4HCzye2IIfsMFgDgxFOx1d4Ja42iKytPSwa79z_6aBsQWV_kQ-JG2K13wUFE23CwhJ7iP_K__Me2SEFEOI4Uu3VB1rzAAF2ys3KsvYyQkksbSvIDQ-uipQbeM6JE8ggQWsz44AN-iXME0sqjc55WNlNF3FjiscCKKAAJfigiMZCHHo6BWWNz8DbCoWxXgty48p3VTPeSQgWRFa0fMlQ3sRLsLN8F187656y0af1CjKvmh7rThV_O_mvsUJzxGh01G7A2dh_-b4_JvI_z-ydk0PryOWskDvZMaFxpVSirMDiwl-MNA5aZp2f2zeeHybznLFLoGqWTN8RyleWlne5lHNUpLcH01WIOaooYBnIgUX9kIVxpmNmLPtiy5udVrUDOEHh8IshdJs1eeIwZflVkFnyEF8qcKVd3574KfYCvqTYb7YbDIaZGjlbhSZx-_ujNG_X_Lg7ajaXTM_4ulRghp6uJ7dpqO4-64FjvOEHjFcXhPtTl1AMlUMWsga35lahPNUMw_AuBbTK8nBX6X1EgGDqy0vZtulKmxeyDWbTbXBSapN7n-UYytm15KMdjnc-LKA9_4XiB2HJVQQbHEL0GUz0hU8T6VF0qdxjy4G1s-ZlS-52s2a-v9D8jFgAhb3Ko-L_4FEeKOdFpF0Uj4MEJqHqV0N1HUfWoctmK2o4ywGnjUcjKhInw4mJbVoOLREpKBTAT5ikhbyRL4NyD9Z3uMODtjCAoyHECNrcfwVycYKx5sefrIbgkU5GGKBTg2hsqG0XaY7cwV-tytRuvUlNOK7H4ypGGIjoCkLxYBD2zm6EbIqCkLD_2AaM9adpEN_QskVldGunudLkywy4fG3ia3Q3w" style="width: 100%;">
+                        <p class="caption">모델 구조, 출처: Show and tell 논문</p>
+                    </div>
+                    <p>
+                        <br>아래 그림은 좀 더 자세한 구조를 보여주는 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCCAh0xCor0id4ynQ-hl2vaur4pGf0bmYfZtPZ3W1I3jolKEcEcnsp_1Fi686UE8lyEr8--xD9tMiCR7YVj7bnnMxlvXI9V_LQrLmj2-dwGbJfnC55KH4u1OURYD56LAffXgwcJJa8IahezFdqgSSPs3PbLoZNHG-02BLB2ILGZj4iY6-ixyAULEJCm19BRszJx2E0GtoZ_vm6jpWc-bsnn74khClHhYKO8b3k1mUwnl-X0DKPOcjmzR4H7jEFFVuXHtiOm6TNSJlgVJk0I5lSeobfbDCUCCSV2u1baZAjYKbQpXiEZIWKmO9n0CImFatd-24QFaBe-HQeR3xhFlKXxuRqt6OaI8oxS3OiFs0G6KphSzjOqFtCMBRs6_-SD_ZrZ1pMufTRkwV1En_ZGEn_AbLKy5v2b81_e2AIR6v27Zl4-TYKHePjVU9vCVfklqJi7OXAUWJyn_w61pbyUMYWJFmL-fbChHZqG73DlY-TfQSe1vQW-Shvo7wMkF1OCpJ_SGtxSQUY84YHZmdklOTFHlJcrcuMMe8P_R8qmZ5VJ8M455NUQlwDLy83SFH3dC5GUelpsHIBjTyIvRR0WF6HPU5pcaiVJxjCVh2UO3LsY93haG5CgTSHUOvFI3W3nIx7lX54BWjR8JIIj22qGjkUhQroTmk6yP-87aCdeyPATJl1OFaVREaTjhBAlBx6FqbgvuhEp9LMRotXPGTj4Ay6p6raiOUN-dL7n8K_MXM9AAu_yTrJNZy1sRDJ22BsLF4qZpy0xhgSN6f3PIY733sIptPLb3DnSgAWkFHPTKtSD0QMta8X4WsxUxWxScVZp47LNysBqoA9Oa9mkdsSJ9XuguG-fn84jq9XEj0jVv7cDE2cyNMEccY549KhaGNEHlxsrdFw5r_inF18JHjqMraD7_ERPTT_4qotPbLUCZ93395Dq3sxbc4lGQbMsrR1z7S-xAYgRnEf_Bw1zTw7McfTj51iklBeNtNmrd6xKsWEN-t4cav2Qlc8pDS31mJLdLVm8OJfszh_nxa0O3qoY7V5b8wyumN71xubYz9llC_HNKSCQiBlbdyfR5ywprSp9eq1rtB1cUfHzSTZiKSRsN0JPF0Xy60FjFtzVgO3pecO9nBpkHvopoyiSy0BzY2M3u5eXNmLhbqGLgEFNzUE05TDksP7M0C4Q5CoIsXsqFq9sSbVBdL88IHpPfUl1o2cl3_bP3szp8V6hBpFVbpBUhXNWa_1ZvtAqwzDmjBUpf3r4_KmGvD9F4AUF7jXrnaEpIaceCCfrH6Sxg_wgaqYFuRqVi2hf0q5sMg" style="width: 100%;">
+                        <p class="caption">모델 구조, 출처: https://github.com/reyllama/paper-reviews/issues/5</p>
+                    </div>
+                    
+
+
+                    <h1 class="subHead">Show, Attend and Tell</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>모델 구조</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제는 show and tell 논문 이후에 attention을 추가하여 나온 show, attend and tell 모델에 대해 알아보겠습니다.
+                        이 모델도 위에서 설명한 모델과 동일하게 encoder-decoder 구조이며, encoder와 decoder는 각각 CNN, LSTM 기반의 모델입니다(LSTM layer는 1개만 사용).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">세부적인 훈련 방식도 다르긴하지만 가장 큰 차이점은 attention을 이용한 것입니다.</span>
+                        기존 text-to-text를 위한 encoder-decoder 구조의 모델에서도 attention을 사용했었습니다(<a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">seq-to-seq 설명 글</span></a>, <a onclick="pjaxPage('RNN4.html');"><span class="highlight" style="color: rgb(0, 3, 206);">encoder-decoder attention 구현 글</span></a>).
+                        이러한 attention을 CNN 기반의 encoder를 사용한 모델에 적용한 것입니다.
+
+                        <br><br>아래 그림은 본 논문에서 사용한 구조를 자세하게 보여줍니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림은 soft attention에 대한 모델 구조이며, 논문에서 소개한 두 가지의 attention인 soft attention과 hard attention에 대한 설명은 아래에서 하겠습니다.</span>
+                        
+                        <br><br>이 구조도 attention을 사용하는데, 이전 neural machine translator의 Bahdanau attention의 구조와 동일합니다(<a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">seq-to-seq 설명 글</span></a> 참고).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다만 이전 번역 모델과 다른점은 encoder입니다. RNN 계열의 encoder를 번역 모델을 학습할 때 사용했었는데, 본 연구에서는 ImageNet으로 pre-trained 된 CNN 모델(e.g. VGGnet)을 encoder로 사용합니다.</span>
+                        하지만 기존 번역 모델의 encoder output은 (batch x length x hidden)의 크기로 나왔다면, 여기서는 encoder의 output이 이미지를 모델에 태운 결과이기 때문에 (batch x 512 x 14 x 14)의 크기로 나옵니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 (batch x 512 x 14 x 14) 차원을 permutation 하면 (batch x 196 x 512)로 만들 수 있으며, 이는 기존 번역 모델 encoder의 output 크기인 (batch x length x hidden)과 일맥상 통합니다.
+                        왜냐하면 196은 14 x 14의 이미지를 일렬로 펼쳐놓은 것이므로, 이는 sequence length라고 볼 수 있고, 512은 hidden dimension이라고 볼 수 있기 때문입니다.</span>
+                        즉 이 모델의 encoder의 결과는 이미지에서 파생되지만, attention을 사용하는 데 전혀 무리가 없습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBkNhtxTgXB1dkjALLCxG5S7Ey_eJJK9AiefqGm0avKRf7279xQg2RxNv7PIDuf3qCo9GrQdB7kQCmcml02PpUIR7IpOu8fvNUqmXDEZiuCIL6bHXmPoBiEvOPJqdpeXtkAQwbF97prCvK8c6NZwTxy5DfO1F5iu0-n8ALwGCETAtY-AYJIMyLyxFT_YdcTehmfPTC_JYjrydiYeEfSNfwLcWHEo_NH22wI0Fga2trBr4-e3tR1B1Wnl-wgu4Rxq5z-ETzP7q8WlqktmZkgM7Ypk526xqOo-P8kO98atkvW7IrKMoHlMcBwBd7ydiklOAHlCkJ8_tYufMDgnVYdxcVvJGQV1HvyaBwp_eE69uBpi3gfx4hpLc3ghTJ0e_xpfgkuh3jur0EZPI1N0GCUm6VaoTw7_ZY33mIcra-BS2zPJTbVJ5mt0ScA3-pLXS_6jEy-2xdhZnDbRFHWUjLYESGMLtNE0PiVUMXyL_zCmrDhsdaW0AfDn3eIBPRhi1j4DLC6hdgfk4N4L37xMaPYJDpWUOw07FJ11eNDXLojQhwJ-BzopOlgiqE_YHprUhrPWHXhV5hS-45YhQy36kU1_uUiDVhBIjcPyUW7lOP4Sdt7qfj-tEdRNxNL6OwS_kdAJRB5osVaAS9kXVoS9taKeuq-bYALypbECEANhYICwtcKOjebWflQgS1-Z0LP12rg6lQNbeMrCimsPGH-a2-Yn7UqO2WK7D3F6GPJrCDfKWDp5eTqFvGLB5oNH5OueXe5XMxxPRPzkFIhptB4I88SnoNvhUMfFYdeo_6DxphzGZVm6_zIOLQ10JFYGmPttPdXCxmech5Uu1nOsMzoX4iHZslaJqbx8G511hrgKZbsOPmLB7x6yLn2pEB1Qx4QtS7V3irlzoxngWUzSZ2ccu2Kc7WK-iAt-OUn2B5lxl9tgivE2Ns4kZJDH8mysHRC8rxrw8i7dStVLcfyPI10iv4fzKAo_Vkg1EfP0eF6fj-meSs9yEA6KuG4UHP8c_4Y967rwy_0MbPK0S1kz2kTwWRHUNILOprc1NvKAoXvJs-iiFpKL_IWVPqZSUTfWZFC0jTqAVL8ymXro9C7C5Wu6xVIgRGEhj0xRjVWsoRAXNcueU3QaVBb0ZsdLon_san59vQ-ETYep4N0i6FYxbPek7SmUjxSlfis2VPhssAkZY_U5HmiEaEhfFi8iQVVZLaRWsBixNzmtPXbheW5w7D2X13KvRIsIxZruYqpm1uqMkRxp7ZyZ2wKL0TcRZ6JBN0VREhSLRfB4pB3ghVbf8IP1GuKB0lDgWFsqDB0eGtogrCqmdCRkBfFBQfnSiIHyBv0yS5SflRnRkEkQarCASDZMaDIohLj8HPKhJqiSYAL3uoOiq33Ba8eeKCQTjIAzjMXzMeuBYCQloK57lwGVd6CEmGS71HQG82AdORIpdbZASqnthTyt9wQlUJYlEpJBBZDXNQgxw6LY1oT7aFU" style="width: 100%;">
+                        <p class="caption">모델 구조(soft attention)</p>
+                    </div>
+                    <p>
+                        <br>참고로 위 그림의 size 중 B는 batch size, 초반 그림의 H는 height, 이후 decoder 부분의 H는 decoder의 hidden dimension을 의미합니다.
+                        <ol>
+                            <li>Captioning 하고싶은 이미지를 encoder에 넣고 encoder output을 구함.</li>
+                            <li>Encoder output을 두 종류의 linear layer를 이용하여 LSTM initial hidden, cell state를 만들어준 후 넣어줌.</li>
+                            <li>위의 방법대로 만든 hidden state를 \(beta\) linear layer를 태워서 가중치 값을 구함.</li>
+                            <li>Decoder에서 현재 예측 해야하는 step의 이전 step의 hidden state를 가져옴.</li>
+                            <li>위의 encoder output은 B x 196 x 512(B x 512 x 14 x 14 변형)의 크기를 가지고 decoder hidden state는 B x 1 x H의 크기를 가지며, <span class="highlight" style="color: rgb(0, 3, 206);">두 개의 데이터가 decder hidden dimension H의 크기를 가지게끔 linear layer를 태움.</span></li>
+                            <li>이렇게 나온 두 개의 데이터를 element-wise로 더한 후, hyperbolic tangent (tanh) 함수에 적용.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">이렇게 나온 데이터에 encoder 데이터 길이별 현재 decoder step에서 중요하게 여기는 점수를 알기 위해서 H x 1의 linear layer를 태워 B x 196 x 1의 score 결과를 구함.</span></li>
+                            <li>Score에 softmax 함수를 적용하여 길이 별 score의 합이 1이 되도록 맞춤.</li>
+                            <li>이렇게 확률로써 얻어진 score를 encoder output을 그대로 가져와서 행렬곱 수행하여 context vector를 구함.</li>
+                            <li>\(beta\) layer를 통해 구해놨던 가중치 값을 context vector에 곱해주어 최종 context vector를 구함.</li>
+                            <li>이렇게 나온 context vector를 다음 step의 input과 concatenate하여 모델에 적용.</li>
+                        </ol>
+
+                        <br><br>이렇게 attention이 잘 학습이 된다면 decoder의 step별로 특정 단어를 예측하기 위해서 이미지의 적절한 영역에 attention을 하는 것을 확인할 수 있습니다.
+                        예를 들어 captioning 할 때 baby를 예측해야 한다면 이미지의 영역 중, 애기가 있는 영역에 attention을 더 하게 되는 방식이죠.
+                        
+                        <br><br>아래는 실제 논문의 결과입니다. 바로 아래 이미지는 잘 된 attention의 결과를 보여주고, 더 아래 이미지는 틀린 attention의 결과를 보여줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDZybBCYVeiHOgMkFf1r33XouG5eMX6kdVxB5TkpRj3xDbxjt15UWzBsj5x9caV-Nh096ZWHNEX65MidFR7U-JAu62h8NFLPJnVJgp0bjlEkFuTC3QfxeAMK2nGuCnk5YbdfRUdeMpYVo-_DVcT7-npN1GQdXtpZ85_aCGgifLl_xUcm-YbUUR1fTxatHQxKt1MTvEGQbijFD4ZKGFUmTW_ETYmuC_yUFieWr6wq0PieKqQGjA3AGKR8wNe_1Xz8dyAUGTNzH91oLZ270xaxAE_YGSxT9fT0o13QngKUjerfFPvNKJwvHISIdLD2NmHxYGEF0es7VaJh2FaMNWwK7EoXuBNCjH-4kDBe-QiEnf6Iom3X6R-fUwWt2cyic6EXVZEgcYxerVJ9mIR7aE7ocD1iiLhH9Xo0ah8WN_NbRpEAnaNJNv13ZWaJbdBLIwC81uVT6C1z-inXd2tdVjyZrlKz8mBhPGIbzTP4sBmiIlrMFW3ICrfMc73vXE0XlftWrDDsRnATs2ZwLhJw1x8W-4l4BOTumwcztPJmbxGMQGL7zln7DhV4WdyN_OyGugFvHjxLMhocHcNS_gxltyO9K-zhX-_AhjvxrelWlOM8ODkhXvutpf5GvlkgzeknCPpfYiSr8nxjQ8Axwy2rwQnFqLv8_7RwIWSqzVblmrscnZKP6fqHbLiE5LK8vh4PNieBpsaCtPKMHqBQVodam-0qVv6Foiz9swvVq2x_5rHHEPr8sHnbxd1VfUkchg3DCrqrytnIiN8FdTn1Z6m-QK8WpJGCsiCBJBsB1SFeUVgDB4nA_x60t4vcR2xl6S0qo6VyzPAd0maH9hjtj4o9rjQuGLHn-wokVfhi1AIkqitUXLhguD_YuAKODtvZKi7E0mp12LpRm8J5Q7SZV8J-co6QUrYPXpJLPJabSkczirRErBeIymHNSWIHvi-eLluXkHOM0fb9yxyj8Qe7DUrPTWptvTkhBCXWzDngStUPuaEpObYLMPTwbsyJ8sIFpQJDTeyiFESLGzarSsOBu1-uxuDcy5nmetrQrIQxEK_whju8tBCHVr2bK11MIYdeQn9WUXY_lLfiZ_wvVPAWdys9ZTIySUJn5MUrxUaUiZ6UYsgPrI6nuDimvzdBmkDCJ9_tRfFxViJ99EVQXGhbuvKr3cznMNUZbgMH_R43cdhBMAkGSu3FZLIdP1bmNfRX4OyKFjhRwHc5HqlM2JJ8OUawPbn68hJQFyHnPCJuDaRRnumF9BLAKmiHaH-Bi6rsL5zwz_4BUBwx7MSV6-psdYSe8H1XbWXtEe3B5vIaQ" style="width: 100%;">
+                        <p class="caption">올바른 Attention 결과, 출처: Show, Attend and Tell 논문</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">아래 예시는 틀리게 예측한 경우이긴 하지만, 이미지의 전체 모습을 대략적으로 잘 파악하고 있다는 것을 보여줍니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBvrPDZhMF_KHwEUFIqVb7cGJZS_dsjuXGRhZLRmELu9UqJ8fXq7WOru3PkX4wREaVqBAOv_PfqqgPOZtAOpcn482V3mVykKevPr2rdaUJurdNni5z5rEqrS-opBOXEXPAVXfOKyhQ1CZYoxP28kBrN1lbOEoYNDMFXs3bvKCNyYVbhzwn-sfuwzPiB_F2Y9grQI-QLkP0Wn3lK6eey8EM5tQqXssuxRucampzq65becTkChin0FZQFLJ_JU37ezGATVNTmmmVtQq9zS_ko9ARJ_NXk_XM4CGTJiICotfWg268mhLVFZG9eiFS1P7ZZf8qC-pLu3wyYKZcQFD3QcwjdJbuipH095X7tTMsrcEApauNW-kEmBNFZcnUTOgTlBXO0UAKHvglzKxBr_Zuf8CTs-6eBE2_kBzsRbux5nRF6BDCZXLFVWhioko3FKvJFGM5shuDHIhPXI1Wyilmpdv1VOxvLz6KljWKlBbbi4S4zOomMd6wZOvXo5tEVG3eVX1Ncu-IHfLBkWykAhiZvtdQstaAMIMOYSysL0BgXJC1XBNIpLul-n2axS4mLBU_FHdTEtLKH2R7kFF7n0pljI5XWvCiOCVsruymgguOxpYbtWdUgM2mYFenZBM7kaLtV69QYxTYRCcB8MtBHbeTmT9kayEv2wQX16iyAmhtd1kYiwavejGac9i9SB3V7FwvMfpPwRksriaZ0hurSpc9zLRuVV7Fux2XBPcTPrGvGoSJT-VVL-8JX-fu9q9BFxpf2FoRz5TWHTUSBeErmNd2U_TY89sv6qqSrrADqj6GC8xaYFI-K58grMwTlkGLsAc6hv5LIc4BUdSX4_rV7xVY8jooE9twJqt-qZXtVfPsKGwl-Ah3mMcEX5OtxcyTEZeqvIwoeMvatoWf5ubGZecHVToJXcCECuLAFYHJA8uwqRXAia2FcSeaHQ9clmlrbr2mO9PmUCBsg7KakXbz0KHNbjAaadd8RFRyVbnFe-l5amiQcuOLsWr4deYfQPQ7afYIrGxkbSsmV4xvXS9jp7a6YXu3tKyeCCAEhUAbz3MJF21vYN7uGehPbdoqAybqs7kFDIUsEbjGczhDuocKTj698wqysumlvdswrhlTFvGwVTnBhgZfySsezJUDMIcHlCNflbyU0xe20WU1cCjmXDGTGsarzxFDiR9tjoPbBEmBrV0jWqYYbTbsZd8urxQRRh8Fjk0OeEC6VWe7MyUZh2NNzQVNdZGWBlNAB6dotOucngMk2Pc1mebnRFvGkqqI4CT8hAbbm_iez1lXOnTVPVzwBKTyE5VNrHwfgDvtdo7UraQyvlGoA9Zq7p-6EotRD00OCFo5tQAtt8AT3u5PdWg237Luk99gvZpjtaIkJleiwO9TWqPdkXxPo7hhb8aT4OpJX2sdt33Yfzsy7rOlIOSl1L94NyENq8ZMPNjMufRggov_4yRvtz0JNgqjadb2ACRIuwmL9MRsAcWEN" style="width: 100%;">
+                        <p class="caption">틀린 Attention 결과, 출처: Show, Attend and Tell 논문</p>
+                    </div>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Soft Attention</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <br>Soft attention은 위의 결과 이미지처럼, 실제 이미지 픽셀별로 softmax를 통해 모델이 어떤 픽셀에 얼마나 집중하고 있는지 계산하는 방식입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 방식은 당연히 미분이 가능하며 gradient backpropagation (기울기 역전파)를 통해 학습이 가능합니다.</span>
+                        따라서 soft attention을 사용할 경우 end-to-end로 학습이 가능하며, 우리가 흔히 사용하는 backpropagation으로 학습이 가능한 것이지요.
+                        이러한 경우 사용하는 loss function을 살펴보겠습니다.
+
+                        <br><br><br><br><span style="font-size: 20px;"><b>Negative Log-likelihood Loss</b></span>
+                        <br>Image captioning task는 당연히 들어오는 이미지에 대해 캡션을 다는 모델이기 때문에, decoder의 결과와 실제 target의 캡션과 loss를 계산합니다.
+                        실제 이미지를 \(x\), 캡션을 \(y\)라고 했을 때, loss 식은 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[-log(P(y|x))\]
+                    </div>
+                    <p>
+                        <br>즉 위의 식은 들어온 이미지 \(x\)에 대해서 ground truth 캡션 \(y\)의 우도를 최대화하는 maximum likelihood estimation (최대 우도 추정)을 하는 것입니다.
+                        논문에서는 위의 loss 말고도 regularization loss를 추가합니다.
+
+                        <br><br><br><br><span style="font-size: 20px;"><b>Regularization Loss</b></span>
+                        <br>위에서 사용한 attention은 하나의 step마다 이미지로 가서 attention을 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를들어 t step에 진행된 196(14 x 14)개의 픽셀의 attention score를 \(\alpha_{t,1}, ..., \alpha_{t,196}\)이라고 가정해보겠습니다.
+                        이때 196개의 score의 합은 softmax를 통해 나온 결과이므로 그 합이 1이 됩니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[\sum_{i=1}^{196}{\alpha_{t,i}}=1\]
+                    </div>
+                    <p>
+                        <br>하지만 regularization loss는 각 픽셀별 attention score가 1이 되도록 하는 것과 비슷하게, 각각의 픽셀의 time step별 attention score 합이 1이 되도록 loss를 추가해줍니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를들어 캡션 길이가 32라면, 32번의 decoding step이 있고, 각각의 step마다 attention 결과가 있을 것입니다.
+                        이때 \(\alpha_{1,i} + \alpha_{2,i} + ... + \alpha_{32,i}=1\)이 되도록 규제를 한다는 것이지요.</span>
+                        어떻게 보면 위의 수식과 비슷하지만 1로 만드는 방향이 다른 것이지요.
+                    </p>
+                    <div class="equation">
+                        \[\sum_{t=1}^{32}{\alpha_{t,i}}=1\]
+                    </div>
+                    <p>
+                        <br>하지만 여기서 의문이 듭니다. 각 step마다 전체 픽셀별 attention score는 softmax를 통해 그 합이 1인데, 합이 1인 attention score들을 step마다 모아서 하나의 픽셀을 선택하여 step별로 합을 다 했을 때 이론적으로 1이 나올 수 있을까요?
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 그림에서 빨간 화살표는 attention score를 계산했을 때 softmax를 사용하였기에 무조건 모든 attention score 합이 1이 나옵니다.
+                        하지만 규제하고 있는 내용은 파란색 화살표처럼 각 픽셀별로 모든 step의 score 합이 1이 나와야한다는 내용인데, 이 가정에 따르면 모든 attention score는 196이 나와야겠지요.
+                        하지만 실제 합은 32이고, 규제하고 있는 내용은 196이 나와야하는데 time step이 196인 특별한 상황 빼고는 이론적으로 불가능합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCeIFa4bZEIR5FqgTnHTIlF6esIEY41LWG6P04rpDk_Yh6zd8LqyZBuSxcnPX92B4xGttY0apELXpgzDHuPagwE_USE-5nsoSnU1xjrSPkVsPu6gv3KsgjASNkpv76mU5-QcHCNormKFzbdgLol4m9HxWcubBIEo52Ip3UpC_FMlyhYPzhD4TKWjqvrZnV48nEZLXw0W0s7JGtis-rqclDU7wtlvBikhwEVdKEp1x4WLV8HhF4oBReLKSwlv-mF2Wmw9ESbXHQiMKyfohekW87MTosThGtVJ0KpkbFNAiLi4P4nFFztszEQSdRavaD3oraIbfuTFJCkhjIFUvIB-HsBlPS5vVlNfyclKQiTqagwDPD-HZ7MT9CK3QJgSQDz6hiVTBwZUeHXNHWcYtAehb5umywDfxj9J1r6ECUEMcLu7UN23_a-Q6_kdZ_M28aCc0evAr2sbx16nwrLtI0ZkhXcHsmvkMOfc7ZM1992mefeOBO9iVkOAjPCdZcOS-Vyq0uUAdDio1YNBtpoej-Jv9JWfenB_sAq0zYZXmUHczkixOT_mc0vNy_lmx32ixG80MX1eoLBOWYvSFteqS8Rp6kM_jUbg7mzcrsdas3ZypLjbzh5feVPnQP28n7C8RtEdgBJuEGdUcwv6OHeGcfujv8JKaFk5CrYHKuo4Enml_SZy8QkB88TkIhhu59bb_wI5NdMpldo5cv2dAK6bznsjTH0N_xS4DjDA-HCSJ1WmCKaOzzOazuGIqegeQtBxTxEvo9oBLh26aWnyEEiRwgKtrPN7NrlbtnHfJkmcz6OXtfB56g6QnfWUOLx9EYoP4C2nA8Euy-RU1acj8oEv20ZLcZlNGt-RF7GZ6DIoc7_0LSYfGKExGEGzAgx6STivSQPxr5NpjNjCADdcwJXT2okj2XESV1fKz1I-EK9noxYrrCaiGYiudtyirqR-AJPSeX4fRVgBW8ARBtzgRaCg3CV0ORf8G5FyVi3W8tY64giK-7SZs42i-yPdTQ0rbmYC6ErB_awYg5gB0vv0uxmVkWzOgTdZb1F2a8SuWXOeB4k1IO20PJLajnlFI8puxFEUuw2C9FGuwsKrTfAa4_cNSJQXW48c6rahM9FkZ8wrAx0UbkXWggB0MFFGqOn1m7Plcji35RPZaMfDyTuYn0CagLtYxHxM8O4MGi_J2JnYHUxHHKndaxKMCYLYrhJz0h0A7A9W4p3NBJ6aMmwzdI8H3WO-gy9cZThBvzkzw-rPMnz6XWuTb3uef0aWgX_vzERfxtCw_PEY_oVXSMGcr7FyvhuY0qbuOfQAcAdrw" style="width: 100%;">
+                        <p class="caption">모든 time step의 attention</p>
+                    </div>
+                    <p>
+                        <br>따라서 실제로는 모든 time step의 각 픽셀의 score 합이 1이 될 수는 없지만 그 방향으로 학습이 되도록 "규제"하는 것이지요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">논문의 저자는 이 규제가 캡션 생성 과정에서 각 이미지의 모든 영역에 골고루 집중할 수 있도록 도와주는 역할을 할 수 있다고 주장합니다.</span>
+                        즉 이 방법을 통해 모든 픽셀이 캡션을 생성하는 데 중요한 기여를 할 수 있도록 유도하는 것이지요. 그리고 전체 time-step 동안 모든 이미지의 부분을 똑같은 score로 집중하는 것도 방지할 수 있습니다.
+                        최종적으로 regularization loss는 아래와 같이 나타낼 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\lambda\sum_{i}^{P}{(1-\sum_{t}^{T}{\alpha_{t,i}})^2}\]
+                        \[\lambda:\,regularization\,constant,\,P:\,전체\,픽셀\,수,\,T:\,전체\,time\,step\]
+                    </div>
+                    <p>
+                        <br>즉 위 식을 이때까지 들어왔던 예시를 통해 설명하자면, P: 196, T: 32가 되는 것이지요.
+                        그리고 우리는 기존 \(\sum_{i=1}^{P}{\alpha_{t,i}}=1\)만 사용하는 것이 아니라 이제 규제 term을 추가하여 \(\sum_{t=1}^{T}{\alpha_{t,i}}=1\)까지 고려하기 때문에 저자는 이를 doubly stochastic attention이라고 부릅니다.
+                        따라서 최종 loss는 아래처럼 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[Loss=-log(P(y|x)) + \lambda\sum_{i}^{P}{(1-\sum_{t}^{T}{\alpha_{t,i}})^2}\]
+                    </div>
+
+
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Hard Attention</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Hard Attention</b></span>
+                        <br>Hard attention은 각 픽셀별로 얼마나 집중하고 있는지 계산하는 방식이 아닙니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 attention score를 직접 계산하지 않고 확률적 sampling을 통해 영역을 선택하는 방식입니다.
+                        즉 soft attention은 각 픽셀 196개의 attention score의 합이 1이였지만, hard attention은 하나의 픽셀만 1의 값을 가지고 나머지는 0의 값을 가집니다.</span>
+                        즉 one-hot encoding의 결과가 나오는 것입니다.
+
+                        <br><br>좀 더 수식적으로 접근해보겠습니다.
+                        먼저 \(a\)는 이미지가 encoding 된 feature, 즉 B x 2048 x 196의 결과라고 하겠습니다.
+                        그리고 \(\alpha_{t,i}\)는 t-step의 각 픽셀에 대한 attention score라고 가정해보겠습니다. 이 score는 soft attention에서 softmax로 구한 픽셀별 attention score입니다.
+                        즉 \(\alpha_{t,1} + ... + \alpha_{t,i}=1\)이 된다는 뜻입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">마지막으로 \(s_{t,i}\)가 t-step의 i(위 예시에서는 최대 196)번째 픽셀에 대해 one-hot encoding으로 나타낸 값이라고 하겠습니다. 즉 \(s_{t,i}\)는 0, 1 중 하나의 값이고, 하나의 값만 1이 될 것입니다.
+                        그리고 모든 \(s_{t,i}\) 대해 동일한 확률로 1을 줄 순 없겠죠. 그렇다면 \(s_{t,i}\)가 1이 될 확률은 어떻게 구할까요?  바로 이 확률 값을 soft attention에서는 score로 사용했던 \(\alpha_{t,i}\)가 됩니다.</span>
+                        그리고 \(s_{t,i}\)를 아래와 같이 나타낼 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[P(s_{t,i}=1|s_{j &lt; t},a)=\alpha_{t,i}\]
+                    </div>
+                    <p>
+                        <br>위 식에서 '\(j&lt;t\)'라고 적은 이유는 이전 step들을 고려하여 나온 hidden state를 attention에 사용하기 때문입니다. 그리고 attention을 할 때 \(a\)도 사용 되기때문에 조건부 확률에 \(a\)가 있는 것입니다.
+                        예를 들어 '개가 잔디 위에서 뒹굴고 있습니다'라는 캡션을 생성하기 위해서 현재 step이 '잔디'를 예측해야한다면, hard attention을 위해 잔디에 해당하는 픽셀의 \(\alpha_{t,i}\)(1이 될 확률)가 높을 것이고, 반면에 '개'에 해당하는 픽셀의 \(\alpha_{t,i}\)(1이 될 확률)가 낮을 것입니다.
+
+                        <br><br>우리는 일상생활에서 날씨 확률을 계산할 수 있습니다. 
+                        예를들어 오늘이 맑은 날이었을 때, 내일이 <span class="highlight" style="color: rgb(0, 3, 206);">맑을 확률: 0.5, 비 확률: 0.2, 후보 C 눈 확률: 0.2, 태풍 확률: 0.1</span> 이런식으로 나타낼 수 있습니다.
+                        <br><br>위의 \(s_{t,i}\)도 동일한 맥락입니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">\(s_{t,1}\)가 1이 될 확률: 0.4, \(s_{t,2}\)가 1이 될 확률: 0.05, ... , \(s_{t,196}\)이 1이 될 확률: 0.1</span> 이런식인 것입니다. 이때 이 확률이 \(\alpha_{t,i}\)가 되는 것이고요.
+                        즉 \(s_{t,i}\)의 확률은 일상생활에서 볼 수 있는 multinomial distribution (다항 분포)와 그 모습이 비슷합니다. 하지만 이 확률의 숨은 의미는 1이 될 확률이기 때문에, 즉 1개의 값만 1이 될 수 있기 때문에 <span class="highlight" style="color: rgb(0, 3, 206);">multinoulli distribution이라고 볼 수 있습니다.</span>
+                        
+                        <br><br>이렇게 구한 \(s_{t,i}\)는 특정 1개의 값만 1이 되고 나머지는 다 0으로 이루어져있습니다. 이렇게 구한 \(s_{t,i}\)를 \(a\)와 곱하면 아래와 같이 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\widehat z_t = \sum_{i}{s_{t,i}a_{i}}\]
+                    </div>
+                    <p>
+                        <br>이렇게 구한 \(\widehat z_t\)를 attention의 결과로 사용하는 것입니다.
+                        즉 soft attention과의 차이는, soft attention은 \(\alpha_{t,i}\)를 그대로 사용했다면, hard attention은 \(\alpha_{t,i}\)를 바탕으로 하나의 값만 1로 바꿔줘서 사용했다는 점입니다.
+
+                        <br><br>이제 loss function을 생각해보겠습니다.
+                        우리는 이미지 feature \(a\)에 대해 캡션 \(y\)의 log likelihood를 최대화 하면 됩니다. 그리고 이 log likelihood 식은 위에서 구한 \(s_{t,i}\)를 이용하여 아래처럼 나타낼 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\log{p(y|a)}=\log{\sum_{s}{p(s|a)p(y|s,a)}} \geq \sum_{s}{p(s|a)\log{p(y|s,a)}}\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">즉 우리가 구하고싶은 log likelihood의 lower bound는 \(\sum_{s}{p(s|a)\log{p(y|s,a)}}\)가 되고 이를 loss function으로 사용합니다.
+                        즉 저자는 lower bound의 log liklihood를 최대화하면 원래의 식도 같이 최대화 된다고 주장하고 있습니다.</span>
+                        즉 최종적인 loss는 아래처럼 정의됩니다.
+                    </p>
+                    <div class="equation">
+                        \[L_{s}=\sum_{s}{p(s|a)\log{p(y|s,a)}}\]
+                    </div>
+                    <p>
+                        <br>따라서 위의 loss를 모델의 weight \(W\)에 대해 미분하게 되면 아래처럼 쓸 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\frac{\partial L}{\partial W} = \sum_s \left[p(s|a)\frac{\partial \log{p(y|s,a)}}{\partial W} + \log p(y|s,a)\frac{\partial p(s|a)}{\partial W} \right]\]
+                        \[= \sum_s \left[p(s|a)\frac{\partial \log{p(y|s,a)}}{\partial W} + \log p(y|s,a) \cdot p(s|a)\frac{\partial \log{p(s|a)}}{\partial W} \right]\,(\because f' = f \cdot (\log{f})') \]
+                        \[= \sum_s p(s|a) \left[ \frac{\partial \log{p(y| s,a)}}{\partial W} + \log p(y|s,a)\frac{\partial \log{p(s|a)}}{\partial W} \right]\]
+                    </div>
+                    <p>
+                        <br>하지만 위의 결과처럼 모든 s에 대해 경우의 수를 구해서 parameter를 업데이트 하는 방식은 오래걸리고 비효율적이기 때문에 Monte Carlo Estimation을 통해 충분히 많은 N개의 데이터를 추출하여 이들의 평균값을 이용합니다.
+                        충분히 많은 N개의 데이터를 이용하여 전체의 데이터를 사용한 효과를 도모하는 것이 바로 Monte Carlo Estimation이고, <a onclick="pjaxPage('VAE1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">VAE 글</span></a>에서도 언급한 바 있습니다.
+                        따라서 위의 미분 값을 Monte Carlo Estimation을 적용하여 아래와 같이 다시 적을 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\frac{\partial L}{\partial W} \approx \frac{1}{N} \sum_n^N \left[ \frac{\partial \log p(y| \tilde{s^n},a)}{\partial W} + \log p(y| \tilde{s^n},a)\frac{\partial \log{p(\tilde{s^n} |a)}}{\partial W} \right]\]
+                        \[\tilde{s_t} \sim \mbox{Multinouli}_L (\alpha)\]
+                    </div>
+                    <p>
+                        <br>이때 \(\tilde{s_t}\)는 multinoulli distribution에서 N개를 sampling 한다는 뜻입니다.
+                        하지만 Monte Carlo Estimation을 하게 되면 분산이 크게 나오는 문제점이 있습니다. 우리는 전체를 고려하는 것이 아니라 일부 데이터를 고려합니다.
+                        따라서 매 추출마다 무작위로 서로 다른 영역에서 선택되면 분산이 커지는 것은 당연한 것입니다.
+                        이를 방지하기 위해 저자는 아래와 같이 exponential moving average를 사용합니다.
+                    </p>
+                    <div class="equation">
+                        \[b_k = 0.9\times b_{k-1} + 0.1\times\log p (y | \tilde s_k, a)\]
+                    </div>
+                    <p>
+                        <br>위 식은 이전 정보를 90 %, 지금 정보를 10 %만 이용하여 업데이트 하겠다는 뜻입니다.
+                        또한 분산이 커지는 것을 막기 위해 entropy term \(H\)도 추가로 넣어주고나서 최종 loss는 아래와 같이 표현할 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[\frac{\partial L}{\partial W} \approx \frac{1}{N} \sum_n^N \left[ \frac{\partial \log p(y|\tilde{s^n},a)}{\partial W} + \lambda_r \big( \log{p(y|\tilde{s^n}, a)} - b \big) \frac{\partial \log{p(\tilde{s^n} |a)}}{\partial W} + \lambda_e \frac{H[\partial \tilde{s^n}]}{\partial W} \right]\]
+                    </div>
+                    <p>
+                        <br>위 식에서 \(\lambda_r, \lambda_e\)는 각각 exponential moving average와 entropy term의 적용 비율을 나타내는 파라미터가 됩니다.
+                        뿐만 아니라 분산을 줄이기 위해 주어진 이미지에 0.5의 확률로 s̃의 값을 s̃ 대신 \(\alpha\)로 넣기도 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 이렇게 구한 최종 loss 식은 강화학습과 비슷합니다. 왜냐하면 1이 될 위치를 고르는 action에 따라 \(L_{s}\)라는 reward를 받게 되는 방식인 것이지요.</span>                    
+                        본 논문에서는 이 두 방식을 사용하여 나온 attention의 결과를 비교합니다.
+                        아래 이미지 중 위의 결과가 soft attention의 결과이고, 아래의 결과가 hard attention의 결과입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBlXGzO6VAdOZe8yoCwEeVkoCpHGREHVgKw93AbCCPHqVDEZOqIPC58r4Zydz1Tz1Qu09Bs5_RJB34W8OWUAwGYGHAcpxC1W5Xv5WpG689chrTTFKFLUxoauzQkNj2CI99oVWwN7u12UYtNnRguUkYb4wHQeAydRbTMsP6aKizSOfzxoYldr9YwDDIz6LXqSmi-xt0DFBHKKyc-YJEzvKc_JuAPJ36FL363RRTzTT-wZDMGh10HyQE05dHDI0nIQdrPZeG7IcnhRBzy69PtJ_HUlBJk2ev51VrlMWArxYMiPeL3P9-qovcWFSpSL-gkaCs_wuE1lR_hoKzoijVeqIkeShUs_bbUHWganXaHMiOb205KSyMyG2t8ic9mSkfFa0trs7vfjCjyIWrwndAN0A3aXOmpHn36km5Nes6bkWcUqEcLH1AvE5KAU07IHLSNPD7IxbI2gFY6MFtzfn1diGiNOuiC9PVqaiFLzOCURY9nUkZdt57ANVVE1G95OtWSG0CdxZ3txsmQEnJfqHbj0yvedU9jOhVpH2YE0LC7UxfQSQmy3leD757TgTn8CmfHgd4kFlzDc7MsdO-5ZtQAZ8rioickQQax-4-YccrOhD0BqXmtOyrT2WVhuAiqjzAsU1hN-vqXwTUWPV1PfW5R7eDZfnREOUMQHaldflDuzMGmyE19CnWpL1-a3W0mu9CxBpsp-MwoFwzRQkeEIWuhw0I1jJiWUh3nsXeOqAaNFXy-FSyh_dl8SD2SVYQ2rLnwA-kY2sxZmauZHS51HdoLZg3cd7qef4n-5QI7wYD0EvcxhptDjEzCtv63wSjpwY0udgGlc2wTBkOMEvhyrgBhAXdIXKJ-MO8B9vsJMPs90tVzuL2KyYWUanDoI1aEuOG2lMz1GWhHFRKjDZXO3SUNOWz9BqyJY6sGEts-vQjH_qCA0lw5_KnrtefCo8SXw4JlBH-B1DEmqHNJGOBnewUW-vEc62lJg1YJ5ZruODx4THS20OowkDRs8UZhdLmqgJUmU2cK5cn77gaePu1-43uPmqlW6XRrdfRSdwxBua1wXQli1t64NHl3oJqWGOFuGnon8pWHqrpSeOCTo_i0ThkyTbrbDo55c27hkIG-xSaIhmoSsQY97ogo5hrpkP5YGzSjU3IW577S2ILZQmv3lf-s2-0IUASbXc_6UNa3PXoELMJIrUTxawNv_627isZClMjkQMdyPPer48wa3H1P0vph8bPuaHfi7xIcw8nHSLzi0jnKA7oBZDR8b0ESw8Zv9KvWoqlD6Hd_oSUpiB3SstSMCwjVcojLEUJa2g" style="width: 100%;">
+                        <p class="caption">틀린 Attention 결과, 출처: Show, Attend and Tell 논문</p>
+                    </div>
+                    <p>
+                        <br>논문에서는 캡션 생성 모델 성능 평가를 위해 BLEU, METEOR 지표를 사용했습니다.
+                        COCO, Flickr8k, Flickr30k 데이터에 대해 실험을 진행한 결과 hard attention을 사용했을 때가 soft attention을 사용했을 때보다 더 결과가 좋았다고 합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAzxPF5CmToW9h_HB9LRjRJfvWFWQ0rZ8dlSIowtJB4OdNBIutcrC7NZyixp671v34BAhI1TZYPdwAXn1rUogPqUwlvZeu_6aHgjckEWL7RxNm-7cKCZFx61W_BQQmxVyNvt9aEhJCuZbVPeeTw5ai_APLwN4psISgkW0x2vYWooeJI1mvo_hDr7JlDXgMowQ1gGYFlPv4pRdlDDuq267oGP4hOpneIFqHkW_FFhDr-D7dV1Mm4j7ZcarIeJkiWSyNABMbdWpWQXroF4tMG3JhZOZQ6_CDEfs6di4B5FO6I_nq3PvbQNXySnkJPb81nIRDdM27DpQnvw3Rqpx_WZ8II5jWslsdo8XsGF1veHPbk1MMVeiNTCnv44N_G4n8CiPxkrr1WUGRfhWei_pVL7o-RHFXHli50Ocw_yBZ17oIGwMb2jK2CLBLY_iZCv2IKjBLoO8-NS2IX5EVe1fGqTyoyPxsFB1QJJzygrbPI7nQUqPEx2Voq_Cb0TgpVitYoOuk1wEi3LSFlpZE2kJkluDa1J8eTZpeO2GB5IE6bnasWVlMwHjN9KmQpeOCeLKl9Ve2A3LyDAfcNkx4l6qV7YX3OeZGWXYKypcxmk1m40VN6zDNsTBnzJWwbbg1Zq-Z-XVv0a2sIcQFocPW_N944oHAUhuShnLdW8Jza9_dJ66YJ_m5reoYlWcLrGygqzwB5AKYPOIdRr6via3Xmjxe9qMh74zH3f_wNXwghWreC2K-D0Exp8BgAYoCHOWrZp5sAL_5eii38xBa7cTjhbaRD3djtdWo5TnTByymPvBU5qVmoZcG1L-_QU3cSdN1fpYXAl4KKzs615eKTcNpr3UQ2EZ35yO5FhXbCcXPfbQbPHMDGJOYZPAtcAaWaxYdtylfOh4hO8Wv8NEwh1K4yTrvkyiTwdEZtBJvn3Sf_a29JoPyggoJRu-FN_GlbJPJTM2uPesyrJ6aIWC6ZIuH9eMvFpfpMVbE6GmtqquUkha0MmfomUIX4mgRxJ7N6KbNT0hd6aGtDfn33_lRJZCGIND1h1LKoGlFnnBpTUplgbkomsYrQZsaxCUAI30rcm67rx-Vw7DecL-0JOc9M5fbH23L5pyEysQxbjIDkxSRePZYZUMhLNcnor_KyoU9Glj06s2VLD_d9qM0eJlAm6lbwzNCtwBnNk-yjTgiQaa2ZVLZLCyjyjMY0FBH_Z0MMdRk54lhfSf5tDj4eOulHgoQgQeP_gnGWlgvl_aWInJypaXbxKa285kW-lLrWqSgvhLN8N6Nili_asBHliRFCcjik6SLVVcQkpTtR2HV4vw" style="width: 100%;">
+                        <p class="caption">모델 결과, 출처: Show, Attend and Tell 논문</p>
+                    </div>
+
+                    
+                    <p>
+                        <br><br><br>다음에는 Flickr8k 데이터를 바탕으로 Show, Attend and Tell 논문 구현을 해보도록 하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#ImageCaptioning&emsp;#SoftAttention&emsp;#HardAttention
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Image Captioning 첫 게시물 입니다.\n\nThis is the first post of Image Captioning.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('img2txt2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>ResNet, LSTM을 이용한 Flickr8k 이미지 캡션 생성</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
