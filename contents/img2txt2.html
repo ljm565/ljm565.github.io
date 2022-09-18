@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ResNet, LSTM을 이용한 Flickr8k 이미지 캡션 생성</title>
+        <meta name="description" content="ResNet과 LSTM을 바탕으로 이미지 캡션을 생성하고, decoding 단어별로 이미지의 어떤 부분에 attention이 이루어졌는지 가시화합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/img2txt2.html" />
+        <meta property="og:title" content="ResNet, LSTM을 이용한 Flickr8k 이미지 캡션 생성" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="ResNet과 LSTM을 바탕으로 이미지 캡션을 생성하고, decoding 단어별로 이미지의 어떤 부분에 attention이 이루어졌는지 가시화합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypCRtVyFxJSg3Oitbn8QXrFWDPhh-HcflJv0z_6NAV7ZTGoER1RjgJQluQRv9KZ-_H_HnQGvS8QliTiJisN1SatzoiemvwSMOjEI6nvtxpQPA3nCHv4Yz73PzDzq-Sz_kN5IGhUX7kwS4LURH575gIgD_NweTHqctaAk6SaChqiMpRlL9x4tZaW80BPH-gZk73tFLRDmJLP7JTiuiCe1hHzLy7tsB51c88lL7TP_w0X9dip596sMKbDZnbdSzdMPcvlq_lJvTEmXatWCq81HujgOMJFkKp0QYj1KzmJemAmv41m_oeHVMTjb3nebSVD7OiyOc0vJ3gBp6yxGisp2MRc7VJNJ09B7ib5OsG4FI4LPUKxk014SE6hjE6P3vRAfhD83tJw3PhlubEix-IxCB4jtJm5pFs2TAMtUPI8Gsd-9S3IcCUmPvtJoG_78BcFlVClm5JC0DqK3A5UMZQq70Oeqtef8pLH6gXpnE-8WE7M_Mv5EX2RbRFCjLKx9B_tDtT6gHwKx8sSBSOw85g2TGFQvQHvq625UA4AD-dh8nh5HasXJgaf5n3N8pgOTca2WHFbQMxnBvLJg1-jaIgY_apbl-xdhqOWCnPNhX7DDFcLcfl48LKU6LlpopfarGnqkbXE63NAHD6wYT-kriVVqJJm2KlGoFoNwc_SY10jpYOvtNRuCqZR4czXowJlzBfPKGnvxKcktVtFOQQMHsqSLKAvqpMt_2gF7VpFuFtuvYalgbWkTKrBmqH_L3QAD_StzjW2JxwjRcoV7KyGRIby-FoBkuhiAz49RRXJxC8EQKN7cgrUJBfMPxdOtkgY9YHfIa2t22fbnwQb9URyYUPcR7oaMALRXzlF9Ke8HNlI0eKzCn3TJ9NDhrCL2EXytz2pcGfA5JOxVuCgPzAxD6Py0q6NwQHhkH3SF2zWDA-WB0sa8WVHRTRBI2p0gQI7wM-vsdP5AMhJxVpthwmpsh2op4uLYfuxlUhSi9fvoF72FmPTYyMJYnuRkpPOQuvCSlh2qm-fJ3sk9cLm_5X_4FLAMFpKWdcygsMAihAjpbzQeNeAhCuDOzjXJTdH_s0Sf8yaJPL8K6eP3Xa_8CFWQ7Cs2Z0GZJYooMWEimU__NhC36mUWlydbG8WcNTMvh0DclS2R_F5MmDGKWibxGYV_bQezWEl8BEfCVQdBKx8Lu7FbFZuB-cvXIyPrzsdUauzC61dXTPMSYyK_x0s8xdz4lWMP86gRgduPe-hYKNGz7pOg1flhCrCi4thX4nYw1U_SMp0NM9i9VvtdPhpYKJWcWaO2GaTkrdGg4ohvhw" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Image Captioning / 2. ResNet, LSTM을 이용한 Flickr8k 이미지 캡션 생성</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypCRtVyFxJSg3Oitbn8QXrFWDPhh-HcflJv0z_6NAV7ZTGoER1RjgJQluQRv9KZ-_H_HnQGvS8QliTiJisN1SatzoiemvwSMOjEI6nvtxpQPA3nCHv4Yz73PzDzq-Sz_kN5IGhUX7kwS4LURH575gIgD_NweTHqctaAk6SaChqiMpRlL9x4tZaW80BPH-gZk73tFLRDmJLP7JTiuiCe1hHzLy7tsB51c88lL7TP_w0X9dip596sMKbDZnbdSzdMPcvlq_lJvTEmXatWCq81HujgOMJFkKp0QYj1KzmJemAmv41m_oeHVMTjb3nebSVD7OiyOc0vJ3gBp6yxGisp2MRc7VJNJ09B7ib5OsG4FI4LPUKxk014SE6hjE6P3vRAfhD83tJw3PhlubEix-IxCB4jtJm5pFs2TAMtUPI8Gsd-9S3IcCUmPvtJoG_78BcFlVClm5JC0DqK3A5UMZQq70Oeqtef8pLH6gXpnE-8WE7M_Mv5EX2RbRFCjLKx9B_tDtT6gHwKx8sSBSOw85g2TGFQvQHvq625UA4AD-dh8nh5HasXJgaf5n3N8pgOTca2WHFbQMxnBvLJg1-jaIgY_apbl-xdhqOWCnPNhX7DDFcLcfl48LKU6LlpopfarGnqkbXE63NAHD6wYT-kriVVqJJm2KlGoFoNwc_SY10jpYOvtNRuCqZR4czXowJlzBfPKGnvxKcktVtFOQQMHsqSLKAvqpMt_2gF7VpFuFtuvYalgbWkTKrBmqH_L3QAD_StzjW2JxwjRcoV7KyGRIby-FoBkuhiAz49RRXJxC8EQKN7cgrUJBfMPxdOtkgY9YHfIa2t22fbnwQb9URyYUPcR7oaMALRXzlF9Ke8HNlI0eKzCn3TJ9NDhrCL2EXytz2pcGfA5JOxVuCgPzAxD6Py0q6NwQHhkH3SF2zWDA-WB0sa8WVHRTRBI2p0gQI7wM-vsdP5AMhJxVpthwmpsh2op4uLYfuxlUhSi9fvoF72FmPTYyMJYnuRkpPOQuvCSlh2qm-fJ3sk9cLm_5X_4FLAMFpKWdcygsMAihAjpbzQeNeAhCuDOzjXJTdH_s0Sf8yaJPL8K6eP3Xa_8CFWQ7Cs2Z0GZJYooMWEimU__NhC36mUWlydbG8WcNTMvh0DclS2R_F5MmDGKWibxGYV_bQezWEl8BEfCVQdBKx8Lu7FbFZuB-cvXIyPrzsdUauzC61dXTPMSYyK_x0s8xdz4lWMP86gRgduPe-hYKNGz7pOg1flhCrCi4thX4nYw1U_SMp0NM9i9VvtdPhpYKJWcWaO2GaTkrdGg4ohvhw);">
+                    <div>
+                        <span class="mainTitle">ResNet, LSTM을 이용한 Flickr8k 이미지 캡션 생성</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.09.18</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 image captioning 모델 중 Show, Attend and Tell 논문 모델에 대해 살펴보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 ResNet, LSTM을 이용하여 Flickr8k 데이터를 가지고 image captioning 모델을 제작해보겠습니다.
+                        본 코드의 구현은 python의 PyTorch를 이용하였습니다. 그리고 모델을 학습하면서 training set과 validation set의 loss의 변화와 더불어, 각종 지표 (BLEU, NIST, top-k accuracy), attention 영역과 캡션 생성 결과도 살펴보겠습니다.</span>
+
+                        <br><br>그리고 Show, Attend and Tell 논문의 설명은 <a onclick="pjaxPage('img2txt1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        그리고 학습을 위한 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에, 데이터 전처리 및 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+
+                        <br><br>그리고 텍스트를 토큰화 하기 위해 사용한 토크나이저는 word tokenizer를 구현하여 사용하였습니다.
+                        물론 현재는 unknown 토큰 문제를 해결하기 위해 <a onclick="pjaxPage('word2vec1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Word2Vec 글</span></a>에서 설명한 byte-pair-encoding (BPE) 같이 subword 기반의 토크나이저가 많이 사용되지만, <span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 attention 모델이 각 단어를 예측할 때 이미지의 어떤 부분에 attention을 했는지 살펴보기 위해서 단어 기반의 토크나이저를 선택하였습니다.</span>
+                        
+                        <br><br>여담으로 PyTorch의 유명한 image captioning 튜토리얼이 있습니다. 본 코드의 모델 initialization은 튜토리얼을 참고하였습니다.
+                        하지만 튜토리얼의 캡션 길이 기준으로 sorting 후 decoding 하는 과정이 비효율적이라 판단하여, 한 번에 max length를 모두 decoding 하는 방법으로 모델을 훈련하였습니다.
+                        마지막으로 원래의 논문에서 소개한 Tanh를 이용하는 Bahdanau attention 기반의 soft attention을 구현하였습니다(시간이 된다면 hard attention과 beam search 코드도 추가할 예정입니다). 
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/image-captioning-show-attend-and-tell" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">"Show, Attend and Tell" Image Captioning 구현 GitHub 코드</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Image-Captioning" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">PyTorch Image Captioning 튜토리얼</a>
+                    </div>
+                    
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Image Captioning 모델</li>
+                            <li>Attention 모듈</li>
+                            <li>Image Captioning 모델 학습</li>
+                            <li>Image Captioning 모델 학습 결과</li>
+                        </ol>
+                    </p>
+                    
+                    <p>
+                        <br>본 코드에서 구현한 Show, Attend and Tell 논문 링크는 아래에 달아놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1502.03044.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Show, Attend and Tell 논문</a>
+                    </div>
+
+
+
+                    <h1 class="subHead">Attention을 이용한 Image Captioning</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Image Captioning 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 image captioning을 위한 encoder, decoder 모델에 대해 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">코드는 PyTorch로 작성 되었으며, source 이미지를 encoder를 통해 represent 한 후, 이를 바탕으로 decoder의 <span class="var">hidden</span> state로 넣어 target caption으로 decoding 합니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Encoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>):
+        <span class="clazz">super</span>(<span class="clazz">Encoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">enc_hidden_size</span> = <span class="var">config</span>.enc_hidden_size
+        <span class="var">self</span>.<span class="var">dec_hidden_size</span> = <span class="var">config</span>.dec_hidden_size
+        <span class="var">self</span>.<span class="var">dec_num_layers</span> = <span class="var">config</span>.dec_num_layers
+        <span class="var">self</span>.<span class="var">pixel_size</span> = <span class="var">self</span>.<span class="var">enc_hidden_size</span> * <span class="var">self</span>.<span class="var">enc_hidden_size</span>
+
+        <span class="var">base_model</span> = <span class="method">resnet101</span>(<span class="var">pretrained</span>=<span class="reserved">True</span>, <span class="var">progress</span>=<span class="reserved">False</span>)
+        <span class="var">base_model</span> = <span class="clazz">list</span>(<span class="var">base_model</span>.<span class="method">children</span>())[:<span class="num">-2</span>]
+        <span class="var">self</span>.<span class="var">resnet</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(*<span class="var">base_model</span>)  <span class="annot"># output size: B x 2048 x H/32 x W/32</span>
+        <span class="var">self</span>.<span class="var">pooling</span> = <span class="clazz">nn</span>.<span class="clazz">AdaptiveAvgPool2d</span>((<span class="var">self</span>.<span class="var">enc_hidden_size</span>, <span class="var">self</span>.<span class="var">enc_hidden_size</span>))
+
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim_changer</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">pixel_size</span>, <span class="var">self</span>.<span class="var">dec_num_layers</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+        <span class="var">self</span>.<span class="var">h_mlp</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="num"><span class="num">2048</span></span>, <span class="var">self</span>.<span class="var">dec_hidden_size</span>)
+        <span class="var">self</span>.<span class="var">c_mlp</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="num"><span class="num">2048</span></span>, <span class="var">self</span>.<span class="var">dec_hidden_size</span>)
+
+        <span class="var">self</span>.<span class="method">fine_tune</span>(<span class="reserved">True</span>)
+
+
+    <span class="reserved">def</span> <span class="method">fine_tune</span>(<span class="var">self</span>, <span class="var">fine_tune</span>=<span class="reserved">True</span>):
+        <span class="return">for</span> <span class="var">p</span> <span class="return">in</span> <span class="var">self</span>.<span class="var">resnet</span>.<span class="method">parameters</span>():
+            <span class="var">p</span>.<span class="var">requires_grad</span> = <span class="reserved">False</span>
+
+        <span class="return">for</span> <span class="var">c</span> <span class="return">in</span> <span class="clazz">list</span>(<span class="var">self</span>.<span class="var">resnet</span>.<span class="method">children</span>())[<span class="num">5</span>:]:
+            <span class="return">for</span> <span class="var">p</span> <span class="return">in</span> <span class="var">c</span>.<span class="method">parameters</span>():
+                <span class="var">p</span>.<span class="var">requires_grad</span> = <span class="var">fine_tune</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">resnet</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">pooling</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">2048</span>, <span class="num">-1</span>)
+
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">dec_num_layers</span> != <span class="num">1</span>:
+            <span class="var">tmp</span> = <span class="var">self</span>.<span class="var">hidden_dim_changer</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">x</span>))
+        <span class="return">else</span>:
+            <span class="var">tmp</span> = <span class="clazz">torch</span>.<span class="method">mean</span>(<span class="var">x</span>, <span class="var">dim</span>=<span class="num">2</span>, <span class="var">keepdim</span>=<span class="reserved">True</span>)
+        <span class="var">tmp</span> = <span class="clazz">torch</span>.<span class="method">permute</span>(<span class="var">tmp</span>, (<span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>))
+        <span class="var">h0</span> = <span class="var">self</span>.<span class="var">h_mlp</span>(<span class="var">tmp</span>)
+        <span class="var">c0</span> = <span class="var">self</span>.<span class="var">c_mlp</span>(<span class="var">tmp</span>)
+        <span class="return">return</span> <span class="var">x</span>, (<span class="var">h0</span>, <span class="var">c0</span>)
+
+
+
+<span class="reserved">class</span> <span class="clazz">Decoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>):
+        <span class="clazz">super</span>(<span class="clazz">Decoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pixel_size</span> = <span class="var">config</span>.enc_hidden_size * <span class="var">config</span>.enc_hidden_size
+        <span class="var">self</span>.<span class="var">dec_hidden_size</span> = <span class="var">config</span>.dec_hidden_size
+        <span class="var">self</span>.<span class="var">dec_num_layers</span> = <span class="var">config</span>.dec_num_layers
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+        <span class="var">self</span>.<span class="var">is_attn</span> = <span class="var">config</span>.is_attn
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">tokenizer</span>.vocab_size
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">self</span>.<span class="var">attention</span> = <span class="clazz">Attention</span>(<span class="var">self</span>.<span class="var">dec_hidden_size</span>)
+        <span class="var">self</span>.<span class="var">input_size</span> = <span class="var">self</span>.<span class="var">dec_hidden_size</span> + <span class="num">2048</span> <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span> <span class="return">else</span> <span class="var">self</span>.<span class="var">dec_hidden_size</span>
+
+        <span class="var">self</span>.<span class="var">embedding</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">dec_hidden_size</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var">lstm</span> = <span class="clazz">nn</span>.<span class="clazz">LSTM</span>(<span class="var">input_size</span>=<span class="var">self</span>.<span class="var">input_size</span>,
+                            <span class="var">hidden_size</span>=<span class="var">self</span>.<span class="var">dec_hidden_size</span>,
+                            <span class="var">num_layers</span>=<span class="var">self</span>.<span class="var">dec_num_layers</span>,
+                            <span class="var">batch_first</span>=<span class="reserved">True</span>)
+        <span class="var">self</span>.<span class="var">dropout_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>) 
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        <span class="var">self</span>.<span class="var">beta</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">dec_hidden_size</span>, <span class="num">2048</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        )     
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">dec_hidden_size</span>, <span class="var">self</span>.<span class="var">vocab_size</span>)
+        )
+
+        <span class="var">self</span>.<span class="var">embedding</span>.<span class="method">apply</span>(<span class="var">self</span>.<span class="method">init_weights</span>)
+        <span class="var">self</span>.<span class="var">fc</span>.<span class="method">apply</span>(<span class="var">self</span>.<span class="method">init_weights</span>)
+
+    
+    <span class="reserved">def</span> <span class="method">init_weights</span>(<span class="var">self</span>, <span class="var">m</span>):
+        <span class="return">if</span> <span class="method">isinstance</span>(<span class="var">m</span>, <span class="clazz">nn</span>.<span class="clazz">Linear</span>):
+            <span class="var">m</span>.<span class="var">bias</span>.<span class="var">data</span>.<span class="method">fill_</span>(<span class="num">0</span>)
+            <span class="var">m</span>.<span class="var">weight</span>.<span class="var">data</span>.<span class="method">uniform_</span>(<span class="num">-0.1</span>, <span class="num">0.1</span>)
+        <span class="return">if</span> <span class="method">isinstance</span>(<span class="var">m</span>, <span class="clazz">nn</span>.<span class="clazz">Embedding</span>):
+            <span class="var">m</span>.<span class="var">weight</span>.<span class="var">data</span>.<span class="method">uniform_</span>(<span class="num">-0.1</span>, <span class="num">0.1</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">hidden</span>, <span class="var">enc_output</span>):
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">embedding</span>(<span class="var">x</span>)
+        <span class="var">score</span> = <span class="reserved">None</span>
+
+        <span class="var">gate</span> = <span class="var">self</span>.<span class="var">beta</span>(<span class="var">hidden</span>[<span class="num">0</span>][<span class="num">-1</span>])
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">is_attn</span>:
+            <span class="var">enc_output</span>, <span class="var">score</span> = <span class="var">self</span>.<span class="var">attention</span>(<span class="var">self</span>.<span class="var">relu</span>(<span class="var">enc_output</span>), <span class="var">self</span>.<span class="var">relu</span>(<span class="var">hidden</span>[<span class="num">0</span>][<span class="num">-1</span>]))
+            <span class="var">enc_output</span> = <span class="var">gate</span>*<span class="var">enc_output</span>
+            <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">cat</span>((<span class="var">x</span>, <span class="var">enc_output</span>.unsqueeze(<span class="num">1</span>)), <span class="var">dim</span>=<span class="num">-1</span>)
+        <span class="var">x</span>, <span class="var">hidden</span> = <span class="var">self</span>.<span class="var">lstm</span>(<span class="var">x</span>, <span class="var">hidden</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">x</span>, <span class="var">hidden</span>, <span class="var">score</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 107);
+</script>
+                    <p>
+                        위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/image-captioning-show-attend-and-tell" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.<br><br>
+                        <span style="font-size: 20px;"><b>Encoder</b></span>
+                        <ul>
+                            <li>4번째 줄: Encoding 된 이미지 feature의 width, height 값 설정.</li>
+                            <li>5번째 줄: LSTM decoder 모델의 hidden dimension.</li>
+                            <li>6번째 줄: LSTM decoder 모델의 레이어 수.</li>
+                            <li>7번째 줄: Encoding 된 이미지 feature의 전체 픽셀 수(가로x세로).</li>
+                            <li>9 ~ 11번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Encoder backbone model, pretrained 된 모델의 마지막 2개의 pooling, fully-connected 레이어는 제외.</span></li>
+                            <li>12번째 줄: 위에서 설정한 encoding feature 가로, 세로 크기를 맞춰주기 위한 pooling layer.</li>
+                            <li>19 ~ 20번째 줄: Encoding된 이미지의 feature를 LSTM decoder의 hidden, cell state로 만들어주기 위한 레이어.</li>
+                            <li>22번째 줄: Pre-trained 된 모델의 첫 5개 레이어를 제외한 레이어만 학습(high level feature 레이어만 학습).</li>
+                            <li>34 ~ 48번째 줄: 이미지가 학습 시 거치는 부분</li>
+                            <li>41 ~ 42번째 줄: Decoder layer 수가 1이 아닐 때, hidden, cell state 차원을 맞춰주기 위함.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Decoder</b></span>
+                        <ul>
+                            <li>55번째 줄: 7번째 줄과 동일한 값.</li>
+                            <li>56번째 줄: 5번째 줄과 동일한 값.</li>
+                            <li>57번째 줄: 6번째 줄과 동일한 값.</li>
+                            <li>59번째 줄: 모델의 attention 여부.</li>
+                            <li>60번째 줄: 토크나이저의 pad token id.</li>
+                            <li>61번째 줄: 토크나이저의 vocab size.</li>
+                            <li>62 ~ 63번째 줄: Attention 사용하는 경우 Attention 모듈 정의.</li>
+                            <li>64번째 줄: Attention을 사용할 경우 decoder input 차원은 사용안할 때 비해 2048이 커짐(Attention 결과를 다음 decoder input에 대해 concatenate하여 들어가기 때문).</li>
+                            <li>66 ~ 71번째 줄: Embedding 레이어, LSTM 모델, dropout layer 선언.</li>
+                            <li>73 ~ 77번째 줄: 논문에서 언급한 beta 레이어.</li>
+                            <li>78 ~ 82번째 줄: 다음 단어를 예측해야하므로 vocab size의 크기만큼 내어주는 fully-connected layer 선언.</li>
+                            <li>84 ~ 93번째 줄: Decoder weight 초기화.</li>
+                            <li>96 ~ 107번째 줄: Target 캡션이 학습 시 거치는 부분.</li>
+                            <li>107번째 줄: Attention score도 결과와 같이 반환.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Attention 모듈</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위의 image captioning 모델에서 attention을 사용할건지 여부를 선택할 수 있었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">만약 attention을 선택하게 된다면 아래의 attention 모듈에 ResNet encoder의 output과 deccoder의 이전 output의 결과가 들어가게 됩니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">Attention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_size</span>):
+        <span class="clazz">super</span>(<span class="clazz">Attention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">hidden_size</span>
+        <span class="var">self</span>.<span class="var">enc_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="num">2048</span>, <span class="var">self</span>.<span class="var">hidden_size</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>)
+        )
+        <span class="var">self</span>.<span class="var">dec_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="var">self</span>.<span class="var">hidden_size</span>)
+        )
+        <span class="var">self</span>.<span class="clazz">score_wts</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_size</span>, <span class="num">1</span>)
+        <span class="var">self</span>.<span class="var">tanh</span> = <span class="clazz">nn</span>.<span class="clazz">Tanh</span>()
+        <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">enc_output</span>, <span class="var">dec_hidden</span>):
+        <span class="var">enc_output</span> = <span class="clazz">torch</span>.<span class="method">permute</span>(<span class="var">enc_output</span>, (<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>))
+        
+        <span class="var">score</span> = <span class="var">self</span>.<span class="var">tanh</span>(<span class="var">self</span>.<span class="var">enc_wts</span>(<span class="var">enc_output</span>) + <span class="var">self</span>.<span class="var">dec_wts</span>(<span class="var">dec_hidden</span>).unsqueeze(<span class="num">1</span>))
+        <span class="var">score</span> = <span class="var">self</span>.<span class="clazz">score_wts</span>(<span class="var">score</span>)
+        <span class="var">score</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">score</span>, <span class="var">dim</span>=<span class="num">1</span>)
+
+        <span class="var">enc_output</span> = <span class="clazz">torch</span>.<span class="method">permute</span>(<span class="var">enc_output</span>, (<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>))
+        <span class="var">enc_output</span> = <span class="clazz">torch</span>.<span class="method">bmm</span>(<span class="var">enc_output</span>, <span class="var">score</span>).<span class="method">squeeze</span>(<span class="num">-1</span>)
+        <span class="return">return</span> <span class="var">enc_output</span>, <span class="var">score</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 29);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>Attention</b></span>
+                        <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/image-captioning-show-attend-and-tell" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <ul>
+                            <li>4 ~ 14번째 줄: Encoder의 output과 decoder의 output이 거치게 되는 linear layer 선언.</li>
+                            <li>15번째 줄: Encoder의 각 sequence 별 attention score를 내어줘야 하므로 차원을 hidden dim &rarr; 1로 바꿔주는 layer 선언.</li>
+                            <li>20 ~ 29번째 줄: Attention 모듈 학습 시 거치는 부분.</li>
+                            <li>28번째 줄: Attention score를 encoder output에 곱해주어 weighted sum 하는 부분.</li>
+                        </ul>
+                    </p>
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Image Captioning 모델 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                       이제 기계 번역 모델 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                       아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다.
+                       여기서는 무시해도 좋습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">Decoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id)
+<span class="var">self</span>.<span class="var">enc_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">encoder</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">enc_lr</span>)
+<span class="var">self</span>.<span class="var">dec_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">decoder</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">dec_lr</span>)
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'test'</span>]:
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">encoder</span>.<span class="method">train</span>()
+            <span class="var">self</span>.<span class="var">decoder</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">encoder</span>.<span class="method">eval</span>()
+            <span class="var">self</span>.<span class="var">decoder</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">img</span>, <span class="var">cap</span>, _) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">batch_size</span> = <span class="var">img</span>.size(<span class="num">0</span>)
+            <span class="var">img</span>, <span class="var">cap</span> = <span class="var">img</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">cap</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">enc_optimizer</span>.<span class="method">zero_grad</span>()
+            <span class="var">self</span>.<span class="var">dec_optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">enc_output</span>, <span class="var">hidden</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">img</span>)
+                
+                <span class="var">decoder_all_output</span>, <span class="var">decoder_all_score</span> = [], []
+                <span class="return">for</span> <span class="var">j</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">max_len</span>):
+                    <span class="var">trg_word</span> = <span class="var">cap</span>[:, <span class="var">j</span>].unsqueeze(<span class="num">1</span>)
+                    <span class="var">dec_output</span>, <span class="var">hidden</span>, <span class="var">score</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">trg_word</span>, <span class="var">hidden</span>, <span class="var">enc_output</span>)
+                    <span class="var">decoder_all_output</span>.<span class="method">append</span>(<span class="var">dec_output</span>)
+                    <span class="return">if</span> <span class="var">self</span>.<span class="var">config</span>.is_attn:
+                        <span class="var">decoder_all_score</span>.<span class="method">append</span>(<span class="var">score</span>)
+
+                <span class="var">decoder_all_output</span> = <span class="clazz">torch</span>.<span class="method">cat</span>(<span class="var">decoder_all_output</span>, <span class="var">dim</span>=<span class="num">1</span>)
+
+                <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">decoder_all_output</span>[:, :<span class="num">-1</span>, :].<span class="method">reshape</span>(<span class="num">-1</span>, <span class="var">decoder_all_output</span>.size(<span class="num">-1</span>)), <span class="var">cap</span>[:, <span class="num">1</span>:].<span class="method">reshape</span>(<span class="num">-1</span>))
+                <span class="return">if</span> <span class="var">self</span>.<span class="var">config</span>.is_attn:
+                    <span class="var">decoder_all_score</span> = <span class="clazz">torch</span>.<span class="method">cat</span>(<span class="var">decoder_all_score</span>, <span class="var">dim</span>=<span class="num">2</span>)
+                    <span class="var">loss</span> += <span class="var">self</span>.<span class="var">config</span>.regularization_lambda * ((<span class="num">1</span>. - <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">decoder_all_score</span>, <span class="var">dim</span>=<span class="num">2</span>)) ** <span class="num">2</span>).<span class="method">mean</span>()
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">enc_optimizer</span>.<span class="method">step</span>()
+                    <span class="var">self</span>.<span class="var">dec_optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 43);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 5번째 줄: Loss function, encoder, decoder 모델 선언 및 각각의 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>Image Captioning 모델 학습</b></span>
+                        <br>다음은 기계 번역 모델 학습 부분입니다.
+                        코드상에서는 7 ~ 43번째 줄에 해당하는 부분입니다.
+                        <ul>
+                            <li>26 ~ 31번째 줄: Decoding step별(토큰별)로 attention을 하기 위해서 for문으로 반복하여 돌림.</li>
+                            <li>36 ~ 38번째 줄: 논문에서 언급한 regularization loss term.</li>
+                            <li>35 ~ 43번째 줄: Loss를 계산하고 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Image Captioning 모델 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>Loss History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBqhL3apAG-fVpqR2kQPg31lI_CXgD10BuRPojUiapmGD2tBQG_5eyqUFczbiFfTCWwEaui-ugtLfVRvI5V5BWuNoqSG6x_Nf7j9ziUQdyaa6h-FuXxdL9x_VLpdkbUf7H70jd04yVW1CKr8jivU1M__lG_Q0Q9Ok0KL3TWOm4kB7bAIsXt-F5Xw0N1fR4Uz9o_IAwQL_eK8ifCNxj23KXFSJQuAmCZy8P7gQcB27xTkK9xMV5r7FsviopfJaSEQlLngIiZ8RVee0gItjXZvu5hLJBkpcBUh3HmUPcZZu_AjRpOmK6tF_Ah69dVvwqKvLcA3LM0YjURUVu_hQizzP_qa0w-asy0_Opxpx0l5Hd0v9tqcqxHmQ-oJil6YRz2usdAYFIPxKtjhztjvDRoGLIr7Q0Xewkq7B1NL4TklXXd7CtHxArkGjASVc_VOasBe5JNflMwF9DGPQLybfcttTU-aWb-DUzh3PgcGxmPatF1zNZVj_PVuUQRvJksVs43erGjFyUGa0ohRHmG0FHrV3wQWX8vWTtiqaSQfJoDgQDq_6bJBfW9P-osY1I5ZWhhGVbahIYfVkQZBrSlvy4FcuS30-9lFSVdZzfusf-72NCO7EWalpwYHVn-x51LWAJ-h4IT3Pe__KjuBvUk1dceu--Bnt9sUDbqsYbTWaYs9p79TfgSoOWec5E-C1RcxtaNL-RJcpC1AcP0M4DHE2Kr_ikpppFnIuSeKACWN1aUZe6PJHlhTHphO1CKT1GiTwlsorwQehTGQnNn7h3vvxYzSeo1qyQsdHrd6f857SsivJgUDuqddu_BkOoigogP7JoJtq4iQx1G-dQJSUmB58Qcb0XclN04DIjJEMlD3kEHNdhpxoHsmCSpm4wQccvOTFF0BgJCOFwj8B-XpOwMZ90fdywClONCsmQ7DwxfiMRBEwjJB0GZ_uy26Or7iMjPjekGXCsbt8U0nUMkxUneEyzBq1UF50jtNcNU3Q4zKSvUGKw7G8xTGCxxZIETVOMB7xWyUecDt1mN3TfQDvELlQKK80oAUAq4q9OX_9vP5NniHIRrasgJxokGflZdeIzSo9ewylD99D-KFy3qjH3S596SfcEUFJukYqTruSlSmHy_3B9VscSIsTsAHKgfDYPEHhPBjpxbYR8j8blGfTj1AEH1CexEAes9EeBTSwF5miqjNwz3iXp4LQmhwYi2qoE2xJYP5WNMOGQyCjJgoBW6usAanFZCdqLxX6IYPqCjN8V3wG7FQY0BG_n97LOMXraC5GITS3ZyJPhUM5ztF2QM1A9z36vzz95s_0p7ehCUeX1tsCHPeJ71-WhEljZseESRNbsHPNTdzVcr2pP7PajQSZD7Sp3x-LA4GWHFkO7ZRrnu93gV1SGSKPManqz4d81tgnx8nmwhERebCXC2BA4C8iNU1hisfF_h-WgOei2a-3EU298BSP40D7Arw8Hp9c1TH_PKnaj1Zl4aoOse" style="width: 100%;">
+                        <p class="caption">Loss History</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Validation Set BLEU Score History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCClrNBvRXx4nECHyfospaAs3q4mGs8Vygvtre1uXHHijAZFhcgXC3oqF9Hi1fYDiiaUwckSxlQzxnXOiQhTaUggATJkRGE6DgaRQGFBrClrt2BoTJlt6ofQxsPikF8F34C-Fxqw0Vx94tqxVObYa6q4U_JPN1lWK5Vg-5ebCJTD8ywTHwWAwzmxKxmBVjrKWr9Gvovw2zDIhltZg5tCFygy5RhVUHEEOoMBkVmi1dVdFlnxuejyeHuRoqWiSdXNZx_SsxnPeE06Hatdi-jnQhOokRP2YMXFnZEs4cfzhR4wMAf8B0qu95_4aULsadA6jacBTSf6VivmttotwH_UcbDTXYK8xYapJ1apnpOqU87u-V4B57V17M2pcHBvXfgX1YPuWEwo6KNeEbmCglduvLB9z_eaP1OQBcTmis3w5iPl_Ts0JDw28_I4PhdWr1aSlNS6GPrzV4w233KBIw5qwejgOo5OGaV9Q27qgWZWTU7kc0EMC5M-_mtGEq9o9t6hZXtlfSMEn7Nbd_OTzS2Gq-2hqSHAv0iVFIT-FMnYzV75LHiRRiESPb8Cj2m3ei_YvQda379aM21KRqiqxnICaj5RJdUJOX5_Z2xXZtxLa8LmQEflV2LiIstY-6E8K0iLjrOYrnF4UkpbzTgzOHOeIreIFj4Q8EA2-4RnCPCRfBsU0X9gjtsNsYztlzPWyLhx5kSpcJwk6CjXpdV-qSIIMzRGqVKV8U20lLPLQgPgQbFhL1PrB6hhzGt2voM0WATJ3GWa6HS6KuI0nGIR7ZA-KNL7IbZ9vi5PfGOXLmvviZzQ_6J7EhOMaJf2_N0lihQimO-4AlXu3BVF5rPD4sDI5jn7DxHe-YvqlA1Oy_92iivtkPfXBTiip0ZZT3M-PiQc1f4IujIAkjhHL75e9qRGJZcooIZlFrvZnS_a3VpurFHmHCZGZymj9m2joJ_i5f4C9cn7I8cN92nuWiNzBmjVGeAzt65TecmTCIeQs45cQIr2KQ3O61lakF1MVagfe455yVdH9ncjg0UV4tG0BQ6cG9CSLG_wzxQ2o9lbn7ky62yS1XEZjFsAtdc_DwPnp3JCW-nspGe8HQ3XB6JN0UqbUq_SXh1VDmoA4jDDHGq6NH82dRw13rMe32-n5oSAdkUm9Ur1rI9SL1pVYKcGAUMSi2SNUz-QSSR2MBND0eH20Cs4H12EhA9F6EcA51DM8pLptVLuhNqt1f_ZP-MswT_ijarKRlFPdmHIT4KqL5K1P0IcA9jAXSWJz8BasWFeTb-OWc8y9fogVbO53LcHxbuDRiQ3FYTHEtuqQ" style="width: 100%;">
+                        <p class="caption">Validation Set BLEU Score</p>
+                    </div>
+                    <p>
+                        <br>
+                        <ul>
+                            <li>Best BLEU-2: 0.3053 (22 epoch)</li>
+                            <li>Best BLEU-4: 0.1402 (23 epoch), BLEU-4 기준으로 best model 저장.</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>Validation Set NIST Score History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAUcCieB59_wed3yTyZZPWV8wHRAeTLeDmevyJc2Iq-TT-s-fME4kJbBeYF2ToeZrk0fgSOxu-2PcYpoAPgIRm90kyR8FjICaGn-FJipWWYx4NP3As0Okeqtz6L51rnX-25RLl6X3FL83a0HMLqV6-sGsh4FJKA3O8iHvK8px8uhqS0mIm_OzQXFLV6u-0fhP-uVH3S4X5ArJq1Pzzkh-t1UDLZOc3VjE1ZRgItXtUG9hRV3PcqZYYOoiRjvbtzDqlQhqgO3sgdDc0b7r0CP8O5YjqcxeuM-ixPydu1h4Q4NkbeOrcydE7vDdskRCruPKffipV2wm0oF7fK4Rdpx701CK_b_8DSwZt6bDbBdma0oS1M6wSPTbva1NUtIlwBcSi5jclHVBR96dOyII-3TKW9S9vWmMwOo9wyHn7HT-6U8Q23xe3ePnuxAE2P4We3-qtOUm9x5ymlcQ9QEIKRx4_8hH0bPxCkRukYoyym0HGglMHfluZy3DyZMa8EwsUaHvB8pSqMVM5S9ihD52FZa4XSa2lATGPJpFy73GRyUFlReHSi5tU42nFRbQyV7515YSca9B9n0MUdvsefg8Tw6IHiqEWQtJ-KqOpMu5Bn04ojkHPOy5AqelRjnrYqGhAvsaN7-_peF2dWAeZTCZTw5ayhegsiSoUlqO13JAXE74F9BCCkg_7AWpeysGiS2wAMC_SaNzLid9EnKAoZPs3xIKMDEyCr8jIIrdY8rRGkGcNjT6xOmKD0fdlveR-DlA8uJIlQZbEYgA3N4e96NsQOnuYyL0-llVMjLgiklLnHEef9firNLJuj5oQI5OdtPqXK52Dec8PC_IOFC4L5Eq7PgPGmsT5mAS3BpRAikDlzCv8J_5zeHoY9M_48dHi7uz2Bwn4I6Vte_2L5ta-FnUu0HSyszO2xiXlC_W6oTTdPjAETsqlAoOQ8YJma5vUhuMFhjARYnx9njOI0Ev2kTX6cJf5ClqkQrBvVZYhhZKvSEUqNRfd4FfLQe3l2HTmQ3r4PkO9hfw3ONUNMkE9l38giggepI4CnMCfJSul3asc_Fx6EJpsm-Vl23KvHK2IBUQlGE3Qyua2geX0_AC12F53r7EDRPbBE36xTjs2rRdU85sr2WjD4Ob6O8iG5tM4EYrF_XYaYOxb-LWnB4rdy_Kxyrdj0dGbiinOVmQeGHvJSpRqAEIZ1d_q8lfuVei2uPjXQrJ9-CvJ2rbY8AYx1EiyM_Zfod0aqwJlgcARS90-4fEKB9zv2wQy1ZQOU-kU2guvj8wIvz0CFs75He9gSbE0cXhVJHNKhaCh_m21mqKN7baWMkVtbdbeUjU4ycVqGTYRVlmyOE2i1xCUTpxOQYFEwWRKCWBDzoEBVtkR4HFkiYltIvaDDvsGQFR6I-o9yf4GuoUIJ8Mn535kOmZOqgD565uhLjpUC_yc3NQJYqCifUnEPvtz-iCYAcqUfjfM0Vqx5HoH9jFoMip4c" style="width: 100%;">
+                        <p class="caption">Validation Set NIST Score</p>
+                    </div>
+                    <p>
+                        <br>
+                        <ul>
+                            <li>Best NIST-2: 3.9032 (22 epoch)</li>
+                            <li>Best NIST-4: 4.1633 (22 epoch)</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>Validation Set Top-5 Accuracy History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCrSoktgWaOzIaSrAWrCmEEYrZk_SN1YpBCGX2Iv9xZ_qfIKASyCuBvIdoRjsk3vrwU-qbaLxQx5g24XbDQtNyqUvIEgCMkvp3GOSI8y5prLl6s1UfAKVQV8SsEZdiQTt4hLg6Za9mObTqklt47h_EZqARtUK6MepjJlnrZIfShewgFuKz2WELPKtSEFe15R85C3783diM2YB4RHxzlpJGvcxm5tR4DUol0DrWsEbgk4-BWM8ESvKV6avkweFowpj6Gl-5gzwOC4qmh8RpyILDJv-Gn5LdyLERmnzrMa9Zk4_Uy7PlJEaPcajcEhOucgegWJWL9U7FDr0xPM4qsuZPLMFmLmkaWMtWxW87nUZ9oH2nstCsGgWD_fUmzFwq_edcr6vhj_SWzZhXEDihfZetwRPwjfeuHpA_qD63WnaPin2Uu-pea3DeKjmTMftnXJh2YR5N-uPoJUQZShv13gw2uiV7GHBLCALaeKuN7cjnUwx39cculyEyxsorNzQyK5m9nJb3oYbYa62wpRVVXpnquAqi6umBHlELPoYJwibI6rhJcIlbDZAiZJRN-mIUlQnHZm0gyKWHlTrMHwV6PK4COJnTvcSMFrJAs8bWOIaBIhxYZf_lxH1IZb-_Slt-e7FqFx-b48osyQ160eJSLAlzpuFf7TWbi1KO0DNU-JhJZ3h2AO2ZexQjZXRM5tb7nO50_tgCD5qsaXj8hAbPGY8f-Djt3NP2dFc4j-6D5AaC3-8jisvOtRTnW_0h7dU3fhoqYZdHZUxMgesNjFKXURxCfjLyWqO2ZQIiayqASGzQ-a2GhZwf1Y-qKMBoMbSb7zYF5XUVWAPI42IW8G-ubZK2k-ke7Q2rJup9caQErfa5zU7tPPb0RgwqCWrpUGJh63saDQWTt-Pc4qBZmTQKuKAOo0h-Ix3ovYQzokNF__Oo_Y2TA1UMXUijx4ULb52rtT_qXzSE1_iijHpPJLlH25xe3zQOp25lIhS7Msw-PW7Bzd_XO2OGpcRIoweWN9SbuB8wId3jeP9OdO7uxhzO1rOxa4f6hy8OLF51yl8yq3CCcxPbq5W7GM9OwG15asTE5hShN3rQYiYi6tn2wfxEiZDy2hdeYf8ftYN_b6J-GWdB8STObpNI5hvEYYf_xBnNTaIbF502B3OECfNx9oqtJluewXYW79g6LmtSpkntmxYfsFQ-XHArmfy0A7tHC9HbXGdjIZQ5vYbt95DviKsdTPLjvK540pEYYd3sTDRN6Zq6A9J1fqOdbH5-0AmHYJx17azYOU087W9aMSqXrJJdzgyNvVlNsLJzFfvwUeE3BF_kD7HPfasE6Os6N_r12nlTVQaVkNgK0yweg9agKgeWVEsY8f3eIW5OuKTVfiTvEsoDhFJzjMLrvcC1HsSolSwYLlMzVMgvU62IWDkEQlZ_Do4djcG16o1-n0tRXooJSWmISUfFNPtYsk2lBm1mEt0PW78j6r-YKrZx9" style="width: 100%;">
+                        <p class="caption">Validation Set Top-5 Accuracy</p>
+                    </div>
+                    <p>
+                        <br>
+                        <ul>
+                            <li>Best top-5 accuracy: 73.3850 (16 epoch)</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>생성된 캡션 샘플</b></span>
+                        <br><b>샘플 1</b>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypD4HSNNeoIWrBZ8fqSCEwL4H12d6GepLgPhXe5ZiPBIRiPq194piK7HVB4zpgy40N9fktbhR4Ay9T7_5MNEn2CygnGme0VATM-hxnRZLgeKEHWw2wRqut-yc5SDsIaygSmGgeffOoy4IdQ_nBk7pYVROIREUHSrWBPwWZHOf_2WYeJClNqJuMcomcctqgnnJCHqqoHsz1sbe-gVvLHgmkdA4Mfy8VaLy5weXfj_Xe0XIKogoA7sum2C2CR4hAqsmWxjpkyiHQR9a_mTn00FjaUiiSg399Z2Ts4xnWerKSR-sLNJFj3CEAPtxOYEn81o32CHtYIPMNa19qQTctggxfoZVbIC-mLmjx9r8WREXLc8vpaLET463og7-K47getEsYjQn7UF67HJ82Ktdz_0pXCFgprUd9ElqShZrJmfmkzaPfCqTV6SrNnPyaXuYOz8t1nX6tVLVNyCjQINNB0VUkr6REasYw4gd2ghvNghyV8lJhvrbj9jZEd2CNmdSjYtnqhxHWGtAmZyWthTxpNuAFay9rb1Q2ypzVK0O97qrvxbokIoRMByAfYcKqwapKtyuc3162034y1KPa7D0VLPI0sMl7DvHMXXhcCKO3fFVuXx6tGdscnEHm8bfZpJX2zW4yY9HM5AcpbQ2aL4lfsUOFRd-bextGilo4tNU0UA5LYMOesHWOhslizcpq9VmJJFz6_4hdBG-AjnLJ1QiUBpHo_HwMUa64OeEXnT9E5JfAZtq_BJVzZRFvhkowDydW16-GhnzrzF4WlXUqgiQ7LIji9DzhbocG-Ly0it5EKRhqEPHJLywNaTCJXgnWKOsQwZOPp5Sv7TZp-gW-FW-LGWWB478USRYFMjx9v5dlmz8OwmymD5AOFuic15oWKVbboe5hKXgkTtxKkyiUbwLWgAPfC0tkIH9D2nLQ4V1J4ZNa6SR_YSBgoI7JWI7OmfP8klg_Txmm8tNSFfVdJ5tao9hJBqrvhIwO2oFGlDGO4FURzji99eRhrtwj7Hu-fFvnC3wFuFosRxNOGVfqlipx0QqnxiCIJG-VqT7wF63t9Ig_ok_Lc1v0jPiedEC2SZUe8sxIbffWe4w_OkRyPIxQsRbIp7zaQs5ipvAlmM-mdAIB1sRgbMVM1AO7t8PL04fIv15SUI02LbLojVaSCrfExWkkqHPYZBy2TQ1pn5iG05ki1TKG-ch3F2HthUweAs4T3F6mTdqVYsfUn6Tp_TkFUJusDq-qqYmspdQQ18ZpC27FuZBQdhj-urdv3m4gdNPE3wf2AagbOywyssy0Yzv-M1GJbIfxTwsva-lA" style="width: 100%;">
+                        <p class="caption">샘플 1 캡션 생성 결과</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCJLgGYdoPZYB5LsQT2zZ6ksNyG4zXnPGszyukLWBibFFQrmVa9cer9Ga5wUrXDKQXdlhsEAo3M1CAFwaEAqzjxt96WIX0h7j6MxKmVs5DHMwhq3ubB6tPIA2rhRrfvXZ-fQPkiw0bX5DNY1I5p-YHKNMyXx0jt2nADl9mWmHw7oV5-KzLiEtc0F7U-B78sFun4PbCGjkZ172mlmLY_i74MWgX295O2HjLkJY0ojWY3q7V1v_hLz1ODk8oN9WQB9uVdK2xpoVQmJVSnKs1jEpoiNQz3soX6TEJ76IwC6HWJ7ZQdnEnzKTykYOfJMjXImSg8QVedxlufPaOYTIhi0dbNexKLuN7zBjvZhUSqFRzUtrvt-pB0v3kymL3rNOdYD5IPghlEXjLXj5448gzQzZqdg8O0C7bbHWVJPadhv56eop6Z8nz0SsyOC1fnuUcWsNfln4216AVVQn1Df2zM-AWwI_WFix9p_5_mWu_lDbYoeogUpGID4yQCRFkKwep9KAXTkNc9fB74QDWkaB7Xikt_mc-kNI7xnTxzzv-UtjdpKC3zMXt6TS6vXH9Cem9z2RK5MknB2yb_lORB1bI4T5Be8xkRzaxAyWsdy_M03wM9TobEw3rROhmg64uOSCDccBwxi52Y1JOYkUeUouOangFZvGp1rUuE6ZO-cKxASQyKVjfeuXxrmMDeu5U8gmtew4zH6_Urm03m-UKCnzxopZTSYfLgW9fnqaJ9YNE_PtoYGg89Pq3KL368FoGSEXiFNLpDPJO0c_Wt2fi2929xtcWa2lcIraud2InpNbGwdhfhDcHY-mAMMW4VXQB9mIziermJOFtaAime8RRuYKEAKr-5rBHPR9ZuSxWCZFhJhkDmOny-WxEFi-kc_JBxxnTyXs6l0NmNI7K4iqLR6l5ySf0jdpFr6BqgB8QtGjdnZYCKbMFqGIcd5ndhS_iS_J6-BrKtWi13lkT6j5hkOW5AnqVI0lsurruiv-IrrGdcnZnF1OtrE6rK5VrScAd9_P6UuIivaaXWtO4mMo9cHaUuPNYQisnZMFVJYeoqdIArRKtph2n5F3y38kGPOoGkAvV2vpL5oUy0xoWlf0H0xytUobxSMFbkxwTF37_TuoPM9LsvI0TtmHWG2viTP6EqOjvpk0m3YqaXDBBdgZApGX2MOVqxwe9zSDm7VGdAR4KcZDwxRIfUUlf2Fn3YP09vbFrpr6csHoeB7P52utcPYGkgG-Ut-EQ3IWNVyMBhAYFF270Sq_kCuUxm6u6gV3CkcU2ClU5udkAV_E5-ZMhcVvTPtDPnfUVZiwPOOw" style="width: 100%;">
+                        <p class="caption">샘플 1 attention 결과</p>
+                    </div>
+                    <p>
+                        <br>캡션이 잘 생성 된 것을 확인할 수 있습니다.
+                        그리고 boy, rock이란 단어를 생성할 때, 이미지의 적절한 위치에 모델이 attention 하는 것을 확인할 수 있습니다.
+
+                        <br><br><br><b>샘플 2</b>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB2a7YDgAEqCzK7c4zqa2iy6HDqu7Gk8Dy2fKABh4xzTxSF6eidR1QEV-bycXcQ3k0KBF-ZzZg5HTSoZ5NxnRkCmbxpMR6WbWO0yLOL28MMFpVjUf9eY8_ril6TMUJSN2ItdI2-dLNCiQUR3527BCMeOIlaOBuFHeFAwd49alb7wahCdEMaPwOKf_CtZBH4-NdS6nh3SA9YJWAY_FUATmIZ2eag1GVC2RwjeV5Zaeiihd9u38UZQM18swILxaSTTGn4H7hlBAHpjZkNz_mthAQsnhTYhzK95ctaAmwCsoCu048K_kENx1y5VkOye3aTqnlvA5GTcsrbWSQyPPPQrOSQrfu5ZqIDV0jQeB8Fr8WYw6TB1DHMKMK9TT7XGlQ1H4h7_sPvAsa5rHBs7rBENPKvUzKAZPAujrLJcBCMC0rtwZ-RwZj8ZY8C1B6pVogxVnRc4Wt2a9p29DQx80Qzvm632vpbjLRSr4K_B3jBe9Iv6VPoS-tviMr15Od6hFFK_wLu5dZwwnZAecYh6HE9r4dT6_ZBw1Mh-W_i0f9-bSzj11mkeMkykQo-XPgjM42uxCgWDFq2YJuICq6Gl1voF4J1vmxLuq6YWg8sQVrYb1e950i7KM-SkeyGOL_CCfxenmSuVJjRN2ICT0A19zqOMvl5oo__iljZstHJu10vjB_JMe3mGn2W2oTiUlEbes0daMHXSyrKeBlUN7lG0-RiKfr694b0Omz54z7u0jqGDyKLHaltc1YIyjfng3vQC-K1YMb5XPquHl6bjntVkp3kZB1EJ8r0WGOyU-wt9r9pplim7IQLEaHE1_J-9dnQQounTy5XIIuyTKK1-siImBBL4o_k7DyWTllK2L4r4RmOZfOJLEUTsVhhsSMDlc7bke1ZjwGvrUX5wOx2pmCshbhP3YIGO-WnlC7v0FyXGcDsfwgITlaTtj2mIMX0aKC6sGkXTLcyljRU0S-Cm1aWvh-iZe-3Oa8S5-TNmXaBgdOnRgVd3Tit22ZiC50cT_sxFj7uxzKXM1EbPGqy2ZAgRHNAnwnaar6lawFyZb2OniaZoviP2uXZuEu9bT_AavucIx2AqCVW8rtYsWpvlSwbOnbYkMeyes97gzsXBS5WHceMtRsWIOP_xykwc46yrYtg71v9JLdwsDJGpXYeL022uro7MwJcaGofZWpfuNw18WrcBfm_z3iPy4HhFONpxdxWo6b5GgZkJON2HK9QcmsZ4BiTuQkOQho5EqZDOs7vFF3chP5lKV0ijdRSbdftkfmyRAJsrryu8B1yk7K-AfmVUuIkBnFl3CkWT3x63wO-OFBKJZotv1BsaImZ46TJyZJHRr8EbwGtdT8OsqiKV_A745qRgn08r2d_ruDMl4x5BAYP1A1djtjjUwgOEpIFKxiGUdK22Eguid-ubNVsWEEbkhw-yPvkKLXTCYQ1Fr3Y2LgQwgmX5ZL-83sd7H6kYRcESQsa2Wm3KW2YAG45" style="width: 100%;">
+                        <p class="caption">샘플 2 캡션 생성 결과</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB4g6apm__J82kHoDpgNNOHrljVIJG-IpzP5DndyjiqvaZTofMn01lEwQXjf5_htf89UI_mddrwudQ0aYe2hceok-zo_cXtj6E3uodTmkbnHBrgfXxI5ispedK5oHBK-UMCJpYNmTXBw8jqcCpzfrEcjqeLAtuE3KAt_yyD0WYB11YJfpB_dAX51PsrSnbcOMHP2chw710G6S8NEWECewhyFNz1-Vx07eBV_j1o3_fjDOb9Ne7IhLUoz398-XsFcDjpGaX9lyreqV1dqw3v16f_eL4P1_HOD6oGV-2lXqUCVpJkb93pADtsvtyMt4KMV3OFgUGqByZEhDNBmekE3PCw65ZlkQ7lKsA5f3oD1EJWFgKywdkh4DqTTncwWLtCsakIRUcj77C03jZrAPVXmL_P659PlC6iJt-2G44hIAYmOZ6dBFqyt7jfmy0z_sB-OfGdv235qpCwGiHqxThU2N1uVV0XTR3Mubi9-H1SDsDv-iwfemumF8VzHlPK4mWVVqsJsgHKv3DZZsCHK7nE689ydQyJn1ZY85RxBaUzv0RVFivaLzTUoK4Jz-lxK9qbC2tZn9oOL9sbBQFlQL_xMNrn7NpVpfkOoDCQ0-yqNTA-h66fw4xFHKwk6XF18YtMw7G_dVQHFaG3QwjBEIK8mFuJOHZF-IMdKGVaTwMzHDD0_MlKLCxpPvLbnNWl9hQBoLTDTTsGsN9eH_3yOmAj9RooSNnFu4TPoJAm8a-mrgoGDfEM9VX7kqyJjhiSaTZ7t1o40NcGLuYqtVFzBnq4V5dXJ_YMco9zZqCO0HO1al-KBstuMD2hwXhg1BLSerQMloeSk4ilrMfqXpVRY9eARG3ES9ObQTemSGWlhYvi_UDuA8hCf7JlSsuNNL-VbCl5L-G4jHOeV76-iaeMdRsD3qXBmmTKFpeRJ4-_vK3A8cEEHBqkIcp6rJIT9FSuZvnLc2Xyl73Qdc2Z47oXrmOm6sAU7t13q3fItvDMMGc-SB1jx1aBNQnKIJfeAl9sIJIhUU6IV_QzlitY797Clt71I79tV5GcnapR7E3sM3R2dWmI_UM1QWmgsClk8VIItQki_fZqm3yoRqPiMgJnzy04eFdNy0lrj8ub20ucteAY2kD7KnSJiSiNl4du4E6N4x1_xYpYjtoSsnbyIxCcjiPGC2aqZJc-61e7gvy4_8_4nZaxnXKcSkdEyPyAyKvQnC3JfOZ01jaRaBWel1QAbKUWibmSTqIVhAy1vSgeVfCwr8efsBYl5s1stjRxKOYiz_yM4OAfO9FDLMO4zGM5ej7Z2TW7nUdh-SHh6Q" style="width: 100%;">
+                        <p class="caption">샘플 2 attention 결과</p>
+                    </div>
+                    <p>
+                        <br><br><br><b>샘플 3</b>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBz6OVT_yLel1vfKzPcSZdtPgzquLCv08xtAFsJHn_flccQFBsAOieSlD6mbw0hOWwHJ95ieZqukngP2hcfmcIpC7ZcgiQPjgN1TX-n7MNQU-krr3bt5XGgFzs9muFV6dvwaFMfdOU-xqEFnioMa15tUom5a4Dldu5r-vLKRd4rGO3rSzL2ajOJoCdqixS0Hdo7yjZldNUgVO5KnsA5lVjrcgd-ejPnTY7RdIA96AFHkBm03ah2a6_Gnja7kyDv6rzE3iWEXy_61KVLjYrILBj_JdHEgFvCVR2gnb14aOLAqwq3r5ERV_t0hmlZ3aML733KZExp7C4FL-gWX4wMOheOOWhWHn9DdqAbfssxj3GM92-GjGuAwJLBlCve1Bq81d_nAmY6Hjm46acImFrjqh3KG2_uwlXf9mcdT1mNKY6icvOci4iauaYcGsTpudNkvxXy9ZCwOenJ1MXUhStNu-iBrYvS9-WSWZZFkbIJN3p6_nx7MrkJLJm4ocVXDqfYo9BJxzQK5KEL-zBBWm7LeZbxlBtcvDucSYy0OAvn29YwdwuRoNSRoFQ-BpZ2-wThzIWx2cncp4xphVi1Q0faVCv_x39roOCxw314rpVQfKKTLiEaz9g_ZJMSgbDwUWu9qlbt8A7Cs7pm7oz_ej-CPWXOhCYBSISuXmSN1pl6E_dkSoaboSo2nRTBxw1BZ-Xx4iumUQ4H8vyp51_NoPLKUd52G_F_oV2FcduybKVuoBsPEnt4uhnwH_7i66DKKXZtI2b92w_pAVxdLWZr3aXMd6wxk0gKpesFZmYjxYW1Z3zZyrYjm4dguHgxTxp-QpdOj-BWojJ3wddyCRGmnpG3AacEBVUuQQ55dASfFoGZFs4tAzqjen3AS9a_t_i7D7gVxfd55v-9OAyDK_EekQOXI_ype8nGwKFImM7NNBktqFGOi8gP3jstkAegfd1YPClcK15cIgFyhtXqFoL0uRrIWh81CxZo3ZimKGtoI2TJ6mfWgTIEJ3KIEVnGxGOX-MsCQ7dreXSBSXd-4we6F-b7yKd8tGPuTFIKo6JZahb0S-bqeRUr3eLrCa6iCQPr9JQYhM2R94Qn-GrE8tAAh10tJvrVUJh2x20QqJ_AjKnxzJIvM_9vZSolIwTBY0V1TKiAGpBo8c2WQfBMWLROgDtE89P8AHHG7_OlL2DT5ZgQDOoAvdF9mjXlqO3ZdDDB7ApL7IMF8ax6aWfDNSsr9pxw7nPsutQszTmBnlBknVJUM68mLtMsl9VmRM-VpPfphnTHKM5iCq0jcUzvCtmWS9lggVKRjGyrDNhQ4Q" style="width: 100%;">
+                        <p class="caption">샘플 3 캡션 생성 결과</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCRoYzcC-19cJ6aobvuNjXjKgM2bUBTxi8Rom40jlXE6ougG4smZ8uq72f3ewQxrNYmlmKG7YZQAKgV2BFyKm-tfM009EC2B5xMxkG0aOR9JCsXrCaiL4KxA5eCy8mTS9KLR7VOBRpBWgjuV_5JDKX_NHvMAcZ7wSRqmpBk0Ryf2bBot9IRk8ay-tG0miWjjr-XY8Hyod4q2JA_BuQo1TSXno64MON0eSUgPTVInYyH-nqGtrF25b0ySX1bYd1HiCcpULVfbyVMRQ7t5MfVuiNfqB5VrrWciUo_PK3ejiuy_qT6KQljSWGevtLKOnFvwpcOhzscDJmHl9atu-z7Z2Y_yQXxH0ASbRcfiQ9-xf14gUIthfchooN6TxrGo4-R_D29VFdsvQFLdaKJvxVnxndLn1qP5RhbdIP-Kbo7BXzlUP83D1FH51RH5BGZXXRr9vQFALKCVrtVRQIxbmdzgeZdbChFsDblgc_5DmwnfV_SKrgu9CajlBd0-Qxs1FOUJlbM1iFtpqWx4boCuHAbSDaEYlBWrbN73zPcG70zCohvCa4suJU7CLBsgtMY6NYhitOsMujVRXWZahxJK7rLf5nnB08qtOBFmy1NzYwLWaYynUViMooqin2_VvyttPZvh6m0QaL3oDvo4pOm-E2TaOwd4r_2A8PofM1t7EvPM2ZrBMihWyz6WwZUg2bDT7NSjlqcQgOQrUjmlO3x-2j7RaoEBGp6dfGKNG8KAmACyIcuTXTFIM0QW2Vejmcq8bHka1ipj3irpnx-OxfrRt9qz1lWHg-Ciyu180C6glroJp8NyEXqiMkmzYpi78uBzEpMEopMpyb3dqvzAfnaysSMn20i1YwQfLTLdOmdqEXN7zziUwVNBlACLfOZyv_e-rA2n8EqMAEiecGDMaGfQ3rHmchYKc_A-HE3Lagx5ZBvIZDmAXe-h7xXhrnHAdHB6zDdTWrUnCmUQ4Ti7PR_QIG-QRvTFpJZ4R0oO0C_xONNwdxj9hMEjWMs6gMNbjCf7CJHaA7nOl3ZY3fBe5i29UzsBDBcw3OkIjaWhdALLad5hYjOWUbyRVk74ohWQJBWTD03u_Re4LBmQTvqtywFrkMRlcrNFbEtyRDq2a-QE385COePT8P2rGy5FlZjAZMh-H13WEDkx00pOGxTXyYzJC9biX2vIXumprfC62ietBWO9UwbbQ8myufvE_IaQiQcYKxA3GRInv0kHnySlc_pCKHJBRnEWfVKMSMdmSGWId6lDxfwHzMVJEbp4i_gZroE3wnHTAjwOSleu-Gc6ISNDQ-ZF6R1nf3LUIsgRQ" style="width: 100%;">
+                        <p class="caption">샘플 3 attention 결과</p>
+                    </div>
+                    <p>
+                        <br>샘플 3 또한 girl, hair, wind 등의 단어를 생성할 때, 이미지의 적절한 위치에 모델이 attention 하는 것을 확인할 수 있습니다.
+
+                        <br><br><br><b>샘플 4</b>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA1bAbpeIWjEywF7n-cknWCT6tOA737Lr94k9i1uCzodSM96H0711L3SrFMHXvG-9dJ9ZWto9lROw5vjcYKeQL1XABHbTNbV8TskDd54QwC_5Ilb6YoeOIIJhG_WY8sS-kQa6S7R58mx_FlZnUUORUvCceSMkjrOKZxw32qwO1hk713aoAOFQN7BzWjCb77iDQqDBySwbnvCkP-6_vAaU5XmO47xNIqQJNiKmBHND7Q6kxKUxBfZw9ocqHYj7NVjou06WA9UTQAlb3jbyr9QbcqX0ofauotN19Racpp9_ENgM0bXPfaVuAvgGSNee50lTEAnVEMhyIrmjHOgnqrB8X5OPngKAGCxcDwuqi9AVlLQ2VSUOwfU5wOTm2Uq19KtbinXeDD1cK72W9d8-FUZFYq9bsuQcgxpJ9XsTTJEsbXgR1MkigAcJiI2syL1PI0swkOzZDfyZnTsWx941L4ZA0bFKCKOnU7rPRuVxIngd_Z8hhsfvs0kMnOWp1_c9nfCmmYnKcIs2oIB8pthKHlzkEWPsOIWWUZ_3G2YnLPm2JJCH2aEdg87puGFv22JZS-zJ38rLN_iURmJe_g-jVBy0QyUVuV9ymfIAvAwvBTVcnSmaYwNW7jUG8781S4LP_4bHye4CDknP1UTZAglQAgBSC9F2spCBOkbCmp9HWgfnwXotJTXjj8WQ42TyCQrIEMF4Z1vZ7rOKeMRlCHI9Oh0PZCLw5EU6F1CZKiKv9foR9BFXqyouI7PWbKVlYydEdFDvgnC9Th6MpjNJm-CoxAwmBdysTislS21V4xvpS3UBjKbV9t6VXPPbxbJkRZWScTu436LELcPsR8aztjTc0RyXafY_5-gzTAUvBH99rJyN1O_9IIBYDz4dWQCQAomINxXE1ELkA3SZRvumNbvIV6VhII-XmovH9VI2lJ1jkrQV_mSq4kug024193vQP9lr3OIXmES9UTqHLM-usy2WuGSe9Z8Rbj2tz78MMZx_clB9F7cGZ2FvuSi2nyAvQtQQumXuv7TDJimYfwn_byIUqS4UGfFvOh5nbPvdUAK7NzZba8REy4tPQDz6Z-TyfBUkYYuY6sasMXJeB1Wbg_IfjlkfFOIJStEwpzdSMV5rVuviExHcG3uk5BZS8pQLAytzYNIXptfXRi6GJY6t5Whai42KEw6n-RJePrMltn2o6Ysr-B4p1AGdr9ydtr-jz5FLEF0vAGhl5c1AYzcXpI0eD37TjGx5k6ITAb3ENYzzRnserghwrC_X98m5sS6bdTd3iCNwmz8WL7SNHuO88RxXLLxAb3H_clSjQVmQ" style="width: 100%;">
+                        <p class="caption">샘플 4 캡션 생성 결과</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB1vZE6nrgvj1F7lHidD6Nd34ueRlT17PRQP7z1QGe6IWRzlMYOydvOK5JV_TiuSZkoBs2iNi8FDuFWIgj9gCXXknZEdKo-__l0chassvhsdnAjg5P-5DkWrggIk6W7IN3M9s7JmWagXX8-h9yCwx42KlCwhy1rglXaD3d5annbia_KtkjdMbFbEUWibZc4VMPGhnlDsVMn1CDW5PpDNsNO-dZxD-n9OMSCxONWUEmZhu4OSTrQbPCKtTR5XI5Mi16bKjIKf-cBc_daRRjis5uuEHo2dXSBS12kDBipWs_-y5szMhxCrG44XnZ9RpOfObtJ-xjGhP9CuRfttKKMHJPLMbhMAFt_-P5LD8QDSAewjv3xFtDS_l7M_hYH47FVfhhFGmyCZdJqpMLuZOtJGATEZPxo6lkTBTeTez99ak2abNP7MQMNLCtGLuwd8ttZwpvOA6lNva0K5W5MUYiTrSIDz8hvexLueD3qGhZn3wHt0_NaXwChngnSlYaA8VGn5JPuyl0KFZxwgesvnCmDmTFbT2iOfv7KiE0U7BoLPMnNLn-yECj-uEDb0Ob-_dd5HgC3G6ZDaAz8D9BEsJosnzXylJJdSkA0RrzITWOjZ34DRHqMksZvugwgVty7EWfJKvgd2aM2gS6ZLFMPXSpk2RrKjfshLBIDpui5qfO1_CWxIO4JWN1USvZq5bZxuvuV_Lb7bQRS-e1bzgx60nIt1tw5529MXkij9aF5rbxC5tFr_eZo4D_s85Pm1CdPrzrryoLw_Un1bHX-b9qafTf-BeZFr1wctzCmhsRSyYj7wY6usUBk7E9d7IN8nEk3zZL1T4tUsLLMU7dnLMtrW8x9SDbF3D6ZO6HL5VeivtxCftUsXhgUiPYRcRGziQo19gGncY8INbB2U8k26zO2lbQvTIO7_1GbE8xajiMaqZKRXO9cyZDvwMtrwJ6QTdiUJuhyalelFxg5P0j2HYPCzJ5BryToTZY7PpSpxY97-2QCZGywop-m_pv_rjCUKBN7Qr3x4MKWsiGcnR7AYnsncSjzCCNwAT2zC97gKFZ0iue-8KyeoULglV31fn-evwo3G4rN3aVfLEdEiwNu1fm2u83wCfPdNe5__QFFk-XRy_TjP1b5tN1nIPlEErOlZ7TxJJSMqLC5N82Tp53weBfhu6mnM1RNNvCV3qkVWmzNW0ckzPl-_G9Scbt9oFcVu_t24yxiij-GoiC3_2DfzKgHl4c36Mp36zPR6yN0dgUkchImtc8dlprgjPRBMywUoi59zlc4HvjAQ3VrF8x0_cvfew2mc3tYoNk4u6LJ1A" style="width: 100%;">
+                        <p class="caption">샘플 4 attention 결과</p>
+                    </div>
+                    <p>
+                        <br><br><br><b>샘플 5</b>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCBQQAFSOQXbspUa6mG7C3kEr6r1wQhF40qY45-irjUV_fHPeKTUEbGcoRQfF3cHpwO8IPGUTkz1Ywql4LlNLbPIZbx91ONLiW2NSzdA8UiiRtxaJhQU1jCvQjvoCmPsPMB2pAGhEtRzDEG00JDMZYip3LP3MkgcUwcmzGosXK2FyNutJTfEfOQJgIXB8kpWie98xVWt_EzO_p8OGwMjJJ4XNEquYXKDOJRRfPVtV2Ut6qBFCBXyc-kYxYbP2wVKaKrVvs5OoVLOuPTqVSidGiqgSXmXS0RAPfEtkMMfrnfDSgFcmLGotCAfJVcqkUhGs3BODjZiZS3jTdYDUF-euXUEA8Wzk7FGZ9ui7yUHpFio1nqnmwLiSRpR2BzsRuBGZU4LkN0nFEGHqdX-T2hbYAoJlKODfJl9qxlU9wg7FFA2BKhbda1lI_KP-qht2JtD2VCDntHWOErweuP81QKpQ-vwIlReEzo2bgU4De6_6oPeiP7mfmoHJ9U9_CrH1NkBqIY442D_4lgE8pesQsSOrmYvkl5YsODO2ADzvroVDa4HN6TcpF1_Q5gN-zoXYcMVodey204oDB-PVWPYcZ1_oL7eWbXajllbMrDXyZuA68zcxEjp9kVukrgF2cdkFNwi46dWjaqT3X3U16-a_-tY1ODSaiiaPu47gDpq86Zq9hctYwrpIzVnIde1EGMRUi_ttq_llk3XORok2I1PwDb_kAOpcte1Fj001yhzB0Fb3nFDrr2nB9EwpcCmzc3MC5H4pOmr3ZPsTVi3xCZXo0mX3Obd6SaC31aAYZ6CeEjkzrdXSrRI3M3iGsO9daMLoCV48ehwbHCAOTeSiIWp_5qoBrBYlVl0flJ5H4EstkztCkfm54fF542KQ3c5tlWneb9sVIkla7uCExNxV326KgceIw_z-Qa96tbgZDHReix9xgBbULGabrKt_MLp2L3V6V_CedoxyVcPsvNYYBGVbajl8eV2UjXdi2fKu4tWzSFhONV1LeY_1n4kMt65lVUq4vRYGi-az_QXTgNdIa5b9NEuYOZhrhzLY5O2LoR06FUn1-Rmf0VTKW9h2YLp4OjmLOObtwCkHvpgd49GRJjYafFEicw7rIG4Im5jKfM7ecubLXbG79ISPVo_c17CN5SXNkM3qxX7mYFrPHfslmmBk-WtIkrSlD47GH2Axq0ooldN9g4fvdfC_ui0NNiwVOAHBcHf_hIjLlM88P7O1nQbIzcjJpzbtCXvbZGcKQflhZzNlv9Uvbw5GKRJ-4qoIrwQ5wyhvaSheo7ZwMxbFVB13hSSs-eaVpCmWFSqE9PSDtoVnXcTOlMFqsua88OmsvAZyzmcCzvuubVh1Uz3jKZ82SGQ_CqQc_oQjIisE0-AfVxs57B33-ij6IaozKqkdsynYGPWnLPTXw40_ovETQN6QzEtqrPWZfaKChsn8p1cebRQn6BQ2VYrIG9z8PZPa449gD0MSErGfR1uw94" style="width: 100%;">
+                        <p class="caption">샘플 5 캡션 생성 결과</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCRtVyFxJSg3Oitbn8QXrFWDPhh-HcflJv0z_6NAV7ZTGoER1RjgJQluQRv9KZ-_H_HnQGvS8QliTiJisN1SatzoiemvwSMOjEI6nvtxpQPA3nCHv4Yz73PzDzq-Sz_kN5IGhUX7kwS4LURH575gIgD_NweTHqctaAk6SaChqiMpRlL9x4tZaW80BPH-gZk73tFLRDmJLP7JTiuiCe1hHzLy7tsB51c88lL7TP_w0X9dip596sMKbDZnbdSzdMPcvlq_lJvTEmXatWCq81HujgOMJFkKp0QYj1KzmJemAmv41m_oeHVMTjb3nebSVD7OiyOc0vJ3gBp6yxGisp2MRc7VJNJ09B7ib5OsG4FI4LPUKxk014SE6hjE6P3vRAfhD83tJw3PhlubEix-IxCB4jtJm5pFs2TAMtUPI8Gsd-9S3IcCUmPvtJoG_78BcFlVClm5JC0DqK3A5UMZQq70Oeqtef8pLH6gXpnE-8WE7M_Mv5EX2RbRFCjLKx9B_tDtT6gHwKx8sSBSOw85g2TGFQvQHvq625UA4AD-dh8nh5HasXJgaf5n3N8pgOTca2WHFbQMxnBvLJg1-jaIgY_apbl-xdhqOWCnPNhX7DDFcLcfl48LKU6LlpopfarGnqkbXE63NAHD6wYT-kriVVqJJm2KlGoFoNwc_SY10jpYOvtNRuCqZR4czXowJlzBfPKGnvxKcktVtFOQQMHsqSLKAvqpMt_2gF7VpFuFtuvYalgbWkTKrBmqH_L3QAD_StzjW2JxwjRcoV7KyGRIby-FoBkuhiAz49RRXJxC8EQKN7cgrUJBfMPxdOtkgY9YHfIa2t22fbnwQb9URyYUPcR7oaMALRXzlF9Ke8HNlI0eKzCn3TJ9NDhrCL2EXytz2pcGfA5JOxVuCgPzAxD6Py0q6NwQHhkH3SF2zWDA-WB0sa8WVHRTRBI2p0gQI7wM-vsdP5AMhJxVpthwmpsh2op4uLYfuxlUhSi9fvoF72FmPTYyMJYnuRkpPOQuvCSlh2qm-fJ3sk9cLm_5X_4FLAMFpKWdcygsMAihAjpbzQeNeAhCuDOzjXJTdH_s0Sf8yaJPL8K6eP3Xa_8CFWQ7Cs2Z0GZJYooMWEimU__NhC36mUWlydbG8WcNTMvh0DclS2R_F5MmDGKWibxGYV_bQezWEl8BEfCVQdBKx8Lu7FbFZuB-cvXIyPrzsdUauzC61dXTPMSYyK_x0s8xdz4lWMP86gRgduPe-hYKNGz7pOg1flhCrCi4thX4nYw1U_SMp0NM9i9VvtdPhpYKJWcWaO2GaTkrdGg4ohvhw" style="width: 100%;">
+                        <p class="caption">샘플 5 attention 결과</p>
+                    </div>
+                    <p>
+                        <br>위에서 샘플 5개의 결과를 살펴보았습니다. 전반적으로 켑션이 잘 생성되고, 단어를 생성할 때 이미지의 적절한 위치에 attention을 하는 것을 확인할 수 있었습니다.
+                    
+                        <br><br>지금까지 ResNet과 LSTM을 이용하여 Flickr8k 데이터를 이용하여 image captioning 모델을 제작해보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/image-captioning-show-attend-and-tell" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                    </p>
+
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#ResNet&emsp;#LSTM&emsp;#ImageCaptioning&emsp;#Flickr8k
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('img2txt1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Image Captioning (Show, Attend and Tell)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('Image Captioning 마지막 게시물 입니다.\n\nThis is the last post of Image Captioning.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
