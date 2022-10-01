@@ -85,7 +85,7 @@
                         
                         <br><br>이번 글에서는 multimodal learning의 일종인 image captioning 모델에 대해 설명하겠습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">먼저 multimodal learning은 다른 타입의 데이터를 가지고 학습을 하는 것을 의미합니다.
-                        예를들어 image captioning같은 경우는 이미지와 텍스트, Speech-to-text (STT) 모델같은 경우는 음성, 텍스트를 가지고 학습을 진행하며, 이렇게 다양한 타입의 데이터를 바탕으로 학습을 진행하는 것을 multimodal learning이라고 합니다.</span>
+                        예를 들어 image captioning같은 경우는 이미지와 텍스트, Speech-to-text (STT) 모델같은 경우는 음성, 텍스트를 가지고 학습을 진행하며, 이렇게 다양한 타입의 데이터를 바탕으로 학습을 진행하는 것을 multimodal learning이라고 합니다.</span>
                         즉 modality는 데이터의 타입이라고 생각할 수 있습니다.
 
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 image captioning을 최초로 시도한 논문인 "Show and Tell: A Neural Image Caption Generator"을 간단히 살펴보고, attention 기법을 도입한 "Show, Attend and Tell: Neural Image Caption Generation with Visual Attention" 논문도 살펴보겠습니다..</span>
@@ -229,7 +229,7 @@
 
                         <br><br><br><br><span style="font-size: 20px;"><b>Regularization Loss</b></span>
                         <br>위에서 사용한 attention은 하나의 step마다 이미지로 가서 attention을 합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">예를들어 t step에 진행된 196(14 x 14)개의 픽셀의 attention score를 \(\alpha_{t,1}, ..., \alpha_{t,196}\)이라고 가정해보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 t step에 진행된 196(14 x 14)개의 픽셀의 attention score를 \(\alpha_{t,1}, ..., \alpha_{t,196}\)이라고 가정해보겠습니다.
                         이때 196개의 score의 합은 softmax를 통해 나온 결과이므로 그 합이 1이 됩니다.</span>
                     </p>
                     <div class="equation">
@@ -237,7 +237,7 @@
                     </div>
                     <p>
                         <br>하지만 regularization loss는 각 픽셀별 attention score가 1이 되도록 하는 것과 비슷하게, 각각의 픽셀의 time step별 attention score 합이 1이 되도록 loss를 추가해줍니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">예를들어 캡션 길이가 32라면, 32번의 decoding step이 있고, 각각의 step마다 attention 결과가 있을 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 캡션 길이가 32라면, 32번의 decoding step이 있고, 각각의 step마다 attention 결과가 있을 것입니다.
                         이때 \(\alpha_{1,i} + \alpha_{2,i} + ... + \alpha_{32,i}=1\)이 되도록 규제를 한다는 것이지요.</span>
                         어떻게 보면 위의 수식과 비슷하지만 1로 만드는 방향이 다른 것이지요.
                     </p>
@@ -307,7 +307,7 @@
                         예를 들어 '개가 잔디 위에서 뒹굴고 있습니다'라는 캡션을 생성하기 위해서 현재 step이 '잔디'를 예측해야한다면, hard attention을 위해 잔디에 해당하는 픽셀의 \(\alpha_{t,i}\)(1이 될 확률)가 높을 것이고, 반면에 '개'에 해당하는 픽셀의 \(\alpha_{t,i}\)(1이 될 확률)가 낮을 것입니다.
 
                         <br><br>우리는 일상생활에서 날씨 확률을 계산할 수 있습니다. 
-                        예를들어 오늘이 맑은 날이었을 때, 내일이 <span class="highlight" style="color: rgb(0, 3, 206);">맑을 확률: 0.5, 비 확률: 0.2, 후보 C 눈 확률: 0.2, 태풍 확률: 0.1</span> 이런식으로 나타낼 수 있습니다.
+                        예를 들어 오늘이 맑은 날이었을 때, 내일이 <span class="highlight" style="color: rgb(0, 3, 206);">맑을 확률: 0.5, 비 확률: 0.2, 후보 C 눈 확률: 0.2, 태풍 확률: 0.1</span> 이런식으로 나타낼 수 있습니다.
                         <br><br>위의 \(s_{t,i}\)도 동일한 맥락입니다. 
                         <span class="highlight" style="color: rgb(0, 3, 206);">\(s_{t,1}\)가 1이 될 확률: 0.4, \(s_{t,2}\)가 1이 될 확률: 0.05, ... , \(s_{t,196}\)이 1이 될 확률: 0.1</span> 이런식인 것입니다. 이때 이 확률이 \(\alpha_{t,i}\)가 되는 것이고요.
                         즉 \(s_{t,i}\)의 확률은 일상생활에서 볼 수 있는 multinomial distribution (다항 분포)와 그 모습이 비슷합니다. 하지만 이 확률의 숨은 의미는 1이 될 확률이기 때문에, 즉 1개의 값만 1이 될 수 있기 때문에 <span class="highlight" style="color: rgb(0, 3, 206);">multinoulli distribution이라고 볼 수 있습니다.</span>
