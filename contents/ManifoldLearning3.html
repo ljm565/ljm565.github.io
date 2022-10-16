@@ -112,7 +112,7 @@
                     </div>
                     <p>
                         먼저 가장 기본적인 vanilla autoencoder 구현 코드를 살펴보겠습니다.
-                        코드는 pytorch로 작성 되었으며, vanilla autoencoder의 전체적인 구조는 단순히 linear layer을 여러개 쌓은 모습입니다.
+                        코드는 PyTorch로 작성 되었으며, vanilla autoencoder의 전체적인 구조는 단순히 linear layer을 여러개 쌓은 모습입니다.
                         한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
@@ -180,7 +180,7 @@ lineMaking("code1", 33);
                         <br><span style="font-size: 20px;"><b>학습될 때 거치는 부분</b></span>
                         <br>다음은 forward 부분의 코드입니다. <span class="highlight" style="color: rgb(0, 3, 206);">이 부분은 모델을 정의 하고나서 실제로 데이터가 학습할 때 직접적으로 거치게 되는 부분입니다.</span>
                         Pytorch의 모델을 정의할 때 nn.Module을 상속 받기 때문에 자동으로 데이터가 forward라는 method를 거치게 됩니다.
-                        그리고 pytorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
+                        그리고 PyTorch에서는 forward를 거치면 자동으로 데이터 backpropagation이 가능하게 구현이 되어있습니다.
                         <ul>
                             <li>27번째 줄: 데이터가 들어왔을 때 batch size를 저장.</li>
                             <li>28번째 줄: 데이터의 크기를 변화.<br>(e.g. 데이터가 크기가 칼라일 경우 128 * 3 * 10 * 10 (batch * channel * height * width)이고, 이를 128 * 300으로 변환).</li>
@@ -202,7 +202,7 @@ lineMaking("code1", 33);
                         다만 압축하고 복구하는 과정에서 vanilla autoencoder는 linear hidden layer를 사용하였다면, convolutional autoencoder는 이름에서 알 수 있듯이 convolutional layer를 사용합니다.</span>
                         바로 그 유명한 CNN (Convolutional Neural Network)에서 사용하는 레이어이죠.
                         Convolutional layer는 좀 더 복잡한 데이터에 대해 모델의 성능을 향상 시키고 싶을 때 사용할 수 있습니다.
-                        코드는 pytorch로 작성 되었으며, 한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                        코드는 PyTorch로 작성 되었으며, 한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
 <pre>
