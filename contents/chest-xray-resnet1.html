@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>흉부 X-ray와 ResNet을 이용한 환자 상태 예측</title>
+        <meta name="description" content="헬스케어 데이터인 MIMIC-CXR-JPG를 바탕으로 ResNet을 이용하여 multi-label 진단을 예측합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/chest-xray-resnet1.html" />
+        <meta property="og:title" content="흉부 X-ray와 ResNet을 이용한 환자 상태 예측" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="헬스케어 데이터인 MIMIC-CXR-JPG를 바탕으로 ResNet을 이용하여 multi-label 진단을 예측합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypAIVv0t5V2rsi5Pc8rYqHStoc6SsIt5qBkEUsF5XYnMIVCoZPQlcIWnsCp-giCE8s1xCmvKzYCNxICtALL0nMsO5DY7ejDZXxNxi3CNROxkupEyyLg5ObaENKTcZXcrZoWDq8jrEOHf4gRrlPeyD9r9dUicuISJHxUzwI6xxP5Ug8PrCN5kv_Xps-fEDbWHiWboOo_zbVV-j45aVAOsNiHfOY4SiiOoWrcRcrBXMGmLRLnBJ3_lqvKDolWyvgQE5s9Hd6P5E6hqSuI0WgpKLJJaJ-ap9EA4Nbz9oU-4xRkRQhSNqjOFUx165wVakU08LtPkcvmwS5Jp22se_eEQlzL8Ei-q-EdtDCFf5xardXRsiUsJhTsHdPOKBuE41ak-LpCvAhlLZsw7POStCP9CO4fQPBj03yqpE2odSpK8MY7oedBBcVB65vXp8hnn9mq5sEqC8BcOLi9MxIy95nPMWDjN_DSKN-aWv6ZVLzA1xYv1bRbBhVioQ04iEE1lHGrEi-iipVdbmP0RJlsfclZJRbuKuA4ZF9ey92gxxu9lG91kYdLFHjWijn1eK2gykvOtzPZyPnp10wXlpPYcENc8L0lkny_ci6Y4Yyc4n2J4oHykas81y2ioJJRholjyXfNYVdwSnY_MZKP1x8Q-Z7XsL2FzV5H106bmxH1d5bVe7Sdw9LiNZQ3VmwiBf8ZITjtQUzMphoWVLtf5A7Z7lXepp_GWuLJG9J7ISnAxk9kV-NGKzY6eXqaD7umv_ZfVLKrxmeNfDFBgXevgfqvSkLGwa9luAR1aHuFw_97XnFIM50UWzdniRx1iOhj4oU7Xg5ukZDl9VL9Ck9uy2CTFgTegNxbiodJpXjcE7y-vRHSKaaN7ghopQpof-3BX0oqJmjPIgpCYgiGQA1TlaIOHzXSlAo3xftQU-ziaMOIg0GcIn77F4XZOCwKbUZhb7OYLv5SVyUgE1ZujQfXzHRmJRmH9P7YGBK8Sdom8WehofKnNn3LVbpRTrJnxIzvtOv-7idEtCxvpf3IMVOZhArTeHUiyyRkGaxbfIPsSHSy4w1-lm9VZFH6oNE7l1SdzH-YUi3I-pdbF7lwHF3YR4-w1ro94X36Ma7mzEoGN93UliiKJRdFdWEgIM-hqIvX1CWu9HIBuiCT3FctubiS-iB4EW029wo79MqyCNtAJIyJ8yfgELc3SHNrAC3zhLNGmKLmVQ5gNX9JTqpKEX_GpJrQzKKBSm26HctHYSML_tMpqu_ZYQB2DUYnwBzwY57_fJRKeCTr44JlhJyakeHTY75XQZ9TLj2n5BlXnneC7ktib9WVPLIALA3joNczJjQeOuTwPei7ZcQRoPdo31gorFd-Hn6XRi1oUJXf0thJabMhNRC_h0p8_TOTzn8oIuVGhWXApSFXW0clqg41S9cBDQbqCDuNscultA5kZzjHgl5pYxmFM-Zdd_0JhaEtTVvdAez7N7AUhSDeKNV0nK3Lt" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Multi-label Diagnosis using Chest X-ray and ResNet / 1. 흉부 X-ray와 ResNet을 이용한 환자 상태 예측</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypAIVv0t5V2rsi5Pc8rYqHStoc6SsIt5qBkEUsF5XYnMIVCoZPQlcIWnsCp-giCE8s1xCmvKzYCNxICtALL0nMsO5DY7ejDZXxNxi3CNROxkupEyyLg5ObaENKTcZXcrZoWDq8jrEOHf4gRrlPeyD9r9dUicuISJHxUzwI6xxP5Ug8PrCN5kv_Xps-fEDbWHiWboOo_zbVV-j45aVAOsNiHfOY4SiiOoWrcRcrBXMGmLRLnBJ3_lqvKDolWyvgQE5s9Hd6P5E6hqSuI0WgpKLJJaJ-ap9EA4Nbz9oU-4xRkRQhSNqjOFUx165wVakU08LtPkcvmwS5Jp22se_eEQlzL8Ei-q-EdtDCFf5xardXRsiUsJhTsHdPOKBuE41ak-LpCvAhlLZsw7POStCP9CO4fQPBj03yqpE2odSpK8MY7oedBBcVB65vXp8hnn9mq5sEqC8BcOLi9MxIy95nPMWDjN_DSKN-aWv6ZVLzA1xYv1bRbBhVioQ04iEE1lHGrEi-iipVdbmP0RJlsfclZJRbuKuA4ZF9ey92gxxu9lG91kYdLFHjWijn1eK2gykvOtzPZyPnp10wXlpPYcENc8L0lkny_ci6Y4Yyc4n2J4oHykas81y2ioJJRholjyXfNYVdwSnY_MZKP1x8Q-Z7XsL2FzV5H106bmxH1d5bVe7Sdw9LiNZQ3VmwiBf8ZITjtQUzMphoWVLtf5A7Z7lXepp_GWuLJG9J7ISnAxk9kV-NGKzY6eXqaD7umv_ZfVLKrxmeNfDFBgXevgfqvSkLGwa9luAR1aHuFw_97XnFIM50UWzdniRx1iOhj4oU7Xg5ukZDl9VL9Ck9uy2CTFgTegNxbiodJpXjcE7y-vRHSKaaN7ghopQpof-3BX0oqJmjPIgpCYgiGQA1TlaIOHzXSlAo3xftQU-ziaMOIg0GcIn77F4XZOCwKbUZhb7OYLv5SVyUgE1ZujQfXzHRmJRmH9P7YGBK8Sdom8WehofKnNn3LVbpRTrJnxIzvtOv-7idEtCxvpf3IMVOZhArTeHUiyyRkGaxbfIPsSHSy4w1-lm9VZFH6oNE7l1SdzH-YUi3I-pdbF7lwHF3YR4-w1ro94X36Ma7mzEoGN93UliiKJRdFdWEgIM-hqIvX1CWu9HIBuiCT3FctubiS-iB4EW029wo79MqyCNtAJIyJ8yfgELc3SHNrAC3zhLNGmKLmVQ5gNX9JTqpKEX_GpJrQzKKBSm26HctHYSML_tMpqu_ZYQB2DUYnwBzwY57_fJRKeCTr44JlhJyakeHTY75XQZ9TLj2n5BlXnneC7ktib9WVPLIALA3joNczJjQeOuTwPei7ZcQRoPdo31gorFd-Hn6XRi1oUJXf0thJabMhNRC_h0p8_TOTzn8oIuVGhWXApSFXW0clqg41S9cBDQbqCDuNscultA5kZzjHgl5pYxmFM-Zdd_0JhaEtTVvdAez7N7AUhSDeKNV0nK3Lt);">
+                    <div>
+                        <span class="mainTitle">흉부 X-ray와 ResNet을 이용한 환자 상태 예측</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.10.16</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        이번에는 MIMIC-CXR-JPG의 환자의 전면 흉부 X-ray 이미지 데이터를 이용하여 ResNet 모델을 통해 환자의 multi-label 진단을 예측하는 프로젝트에 대해 설명해보겠습니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">프로젝트에 대해 설명하기 앞서, MIMIC-CXR-JPG는 환자의 민감한 정보를 수반하고 있습니다. 따라서 인가 받은 사람들만 접근할 수 있기 때문에, 데이터를 따로 보여주거나 GitHub에 공개하지 않겠습니다.</span>
+                        MIMIC-CXR-JPG에 대해 자세한 데이터 설명을 확인하고 싶다면 아래 링크를 참고하시기 바랍니다.
+                        그리고 ResNet 모델을 통해 multi-label 진단을 예측하는 코드 또한 GitHub에 공개되어있으니 링크 달아두겠습니다.
+
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/chest-xray-multi-label-classification-ResNet" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Chest X-ray Multi-label Diagnosis 구현 GitHub 코드</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://physionet.org/content/mimic-cxr-jpg/2.0.0/" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">MIMIC-CXR-JPG 데이터 설명</a>
+                    </div>
+                    
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>데이터 설명</li>
+                            <li>프로젝트의 조건</li>
+                            <li>학습 전략</li>
+                            <li>ResNet multi-label 진단 예측 모델</li>
+                        </ol>
+                    </p>
+              
+
+
+
+
+                    <h1 class="subHead">Multi-label Diagnosis using Chest X-ray and ResNet</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>데이터 설명</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 프로젝트에 사용한 데이터 종류를 소개하겠습니다. 이번 프로젝트를 진행하기 위해 사용한 데이터는 MIMIC-CXR-JPG는 3가지 종류의 데이터입니다.
+                        이중 위의 2개는 인가받으면 직접 .csv로 내려받을 수 있으며, 맨 아래 이미지 데이터는 그 용량이 크기 때문에 wget으로 인가된 아이디와 비밀번호를 입력하여 다운로드 받을 수 있습니다.
+                        <ul>
+                            <li>mimic-cxr-2.0.0-negbio</li>
+                            <li>mimic-cxr-2.0.0-metadata</li>
+                            <li>Chest X-ray</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>1. mimic-cxr-2.0.0-negbio</b></span>
+                        <br>먼저 이 데이터는 subject_id라고 하는 환자 고유 번호와 study_id라는 연구 고유 번호가 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 한 명의 환자의 4번의 연구를 위해 각각에 해당하는 4번의 X-ray를 찍었다면, 한 명의 subject_id에 4개의 study_id가 존재하는 것입니다.
+                        즉 subject_id는 중복이 일어나며, 이 데이터의 코유 key는 study_id가 됩니다.</span>
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 각각의 study_id에 해당하는 X-ray 사진에 대해 무기폐, 심장 비대, 폐경화 등에 해당하는 총 14개의 label로 이루어진 진단이 있습니다.</span>
+                        이때 각각의 목록에 대해 labeling이 되어있는데 그 의미는 아래와 같습니다.
+                        <ul>
+                            <li>1: 그 증세가 있음.</li>
+                            <li>0: 그 증세가 없음.</li>
+                            <li>-1: 불확실함.</li>
+                            <li>비어있는 경우: 의사가 언급하지 않음.</li>
+                        </ul>
+                        
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>2. mimic-cxr-2.0.0-metadata</b></span>
+                        <br>이 데이터는 각 study_id에 해당하는 X-ray 이미지들의 이름, 종류 등의 자세한 정보를 보여줍니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 하나의 study_id에 여러 X-ray 이미지가 있을 수 있습니다.
+                        하나의 study_id에 AP, PA, Lateral 이렇게 3 종류의 X-ray를 찍었다면 3가지의 사진에 대한 정보가 이 데이터에 담겨있습니다.</span>
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>3. Chest X-ray</b></span>
+                        <br>이제 각 X-ray 이미지에 대한 정보도 알았으니 실제 이미지가 필요합니다.
+                        X-ray 이미지는 다른 이미지 데이터에 비해 고해상도이며, 데이터 수도 37만개가 넘어 용량이 매우 큽니다(참고로 이미지는 흑백 이미지입니다).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">실제로 모든 이미지의 용량을 다 합치면 500 GB 이상이나 됩니다. 따라서 이미지는 wget을 통해 아이디와 비밀번호를 이용하여 받을 수 있으며, 다운로드 시간도 상당히 오래 걸립니다.</span>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>프로젝트의 조건</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 프로젝트의 조건을 설명하겠습니다.
+                        <ol>
+                            <b><li>하나의 study_id만 선택</li></b>
+                            먼저 프로젝트의 조건은 하나의 subject_id에 대해 하나의 study_id만 사용하는 것입니다.
+                            앞서 하나의 subject_id에 여러 study_id가 있을 수 있다고 언급했기 때문에 하나의 study만 선택하기 위해서 lowest alphanumeric study_id를 선택하였습니다.<br><br>
+
+                            <b><li>AP view에 해당하는 X-ray 이미지만 사용</li></b>
+                            AP view는 X-ray가 몸의 앞쪽에서 뒤로 통과하여 찍은 사진을 의미합니다.
+                            따라서 위에서 하나의 선택된 study_id에 대해 AP view X-ray 사진을 사용합니다.
+                            만약 AP 사진이 여러개라면 jpg 파일 이름에 대해 lowest alphanumeric 파일을 사용합니다.<br><br>
+
+                            <b><li>Labeling</li></b>
+                            위에서 설명한 negbio에는 총 14가지 종류의 multi-label이 있으며, 이 프로젝트에서는 1을 제외한 나머지 label을 모두 0으로 취급합니다.
+                            이때 label이 비어있는 경우도 0으로 취급합니다.<br><br>
+
+                            <b><li>Training/Test Split</li></b>
+                            위의 조건으로 필터링된 33,501개의 데이터 중 study_id가 8, 9로 끝나는 경우를 test set으로 두고 나머지를 training set로 정하였습니다(train: 26,807, test: 6,694).<br><br>
+                        </ol>
+
+                        위의 조건을 적용시켜 37만개가 넘는 데이터 중 필터링되어 남은 총 33,501(train: 26,807, test: 6,694)개의 데이터를 사용합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAIVv0t5V2rsi5Pc8rYqHStoc6SsIt5qBkEUsF5XYnMIVCoZPQlcIWnsCp-giCE8s1xCmvKzYCNxICtALL0nMsO5DY7ejDZXxNxi3CNROxkupEyyLg5ObaENKTcZXcrZoWDq8jrEOHf4gRrlPeyD9r9dUicuISJHxUzwI6xxP5Ug8PrCN5kv_Xps-fEDbWHiWboOo_zbVV-j45aVAOsNiHfOY4SiiOoWrcRcrBXMGmLRLnBJ3_lqvKDolWyvgQE5s9Hd6P5E6hqSuI0WgpKLJJaJ-ap9EA4Nbz9oU-4xRkRQhSNqjOFUx165wVakU08LtPkcvmwS5Jp22se_eEQlzL8Ei-q-EdtDCFf5xardXRsiUsJhTsHdPOKBuE41ak-LpCvAhlLZsw7POStCP9CO4fQPBj03yqpE2odSpK8MY7oedBBcVB65vXp8hnn9mq5sEqC8BcOLi9MxIy95nPMWDjN_DSKN-aWv6ZVLzA1xYv1bRbBhVioQ04iEE1lHGrEi-iipVdbmP0RJlsfclZJRbuKuA4ZF9ey92gxxu9lG91kYdLFHjWijn1eK2gykvOtzPZyPnp10wXlpPYcENc8L0lkny_ci6Y4Yyc4n2J4oHykas81y2ioJJRholjyXfNYVdwSnY_MZKP1x8Q-Z7XsL2FzV5H106bmxH1d5bVe7Sdw9LiNZQ3VmwiBf8ZITjtQUzMphoWVLtf5A7Z7lXepp_GWuLJG9J7ISnAxk9kV-NGKzY6eXqaD7umv_ZfVLKrxmeNfDFBgXevgfqvSkLGwa9luAR1aHuFw_97XnFIM50UWzdniRx1iOhj4oU7Xg5ukZDl9VL9Ck9uy2CTFgTegNxbiodJpXjcE7y-vRHSKaaN7ghopQpof-3BX0oqJmjPIgpCYgiGQA1TlaIOHzXSlAo3xftQU-ziaMOIg0GcIn77F4XZOCwKbUZhb7OYLv5SVyUgE1ZujQfXzHRmJRmH9P7YGBK8Sdom8WehofKnNn3LVbpRTrJnxIzvtOv-7idEtCxvpf3IMVOZhArTeHUiyyRkGaxbfIPsSHSy4w1-lm9VZFH6oNE7l1SdzH-YUi3I-pdbF7lwHF3YR4-w1ro94X36Ma7mzEoGN93UliiKJRdFdWEgIM-hqIvX1CWu9HIBuiCT3FctubiS-iB4EW029wo79MqyCNtAJIyJ8yfgELc3SHNrAC3zhLNGmKLmVQ5gNX9JTqpKEX_GpJrQzKKBSm26HctHYSML_tMpqu_ZYQB2DUYnwBzwY57_fJRKeCTr44JlhJyakeHTY75XQZ9TLj2n5BlXnneC7ktib9WVPLIALA3joNczJjQeOuTwPei7ZcQRoPdo31gorFd-Hn6XRi1oUJXf0thJabMhNRC_h0p8_TOTzn8oIuVGhWXApSFXW0clqg41S9cBDQbqCDuNscultA5kZzjHgl5pYxmFM-Zdd_0JhaEtTVvdAez7N7AUhSDeKNV0nK3Lt" style="width: 100%;">
+                        <p class="caption">Chest X-ray AP and PA views, <br>출처: Quora, What is the difference between an AP and a PA view of an X-ray?</p>
+                    </div>
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>학습 전략</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 간단한 학습 전략을 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래에서 성능이 더 좋았다고 언급하는 것은 test set에 대한 기준입니다.</span>
+                        <ol>
+                            <b><li>이미지 전처리</li></b>
+                            이미지의 전처리는 training data의 이미지의 평균, 표준편차를 구해 정규화 합니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">이미지를 [-1, 1] 사이의 범위로 정규화하여 실험도 해보았지만 성능은 평균과 표준편차를 사용하여 정규화 한 이미지를 사용한 학습이 더 좋게 나왔습니다.</span><br><br>
+
+                            <b><li>모델</li></b>
+                            모델은 PyTorch의 pre-trained ResNet101 모델을 backbone으로 사용하였습니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">ResNet101 대신 ResNet50 모델을 통해 실험도 해보았지만, ResNet101의 성능이 더 좋았습니다.</span><br><br>
+
+                            <b><li>Optimizer</li></b>
+                            Optimizer는 Adam, learning rate는 1e-4를 사용했습니다.
+                            그리고 추가 실험으로 weight_decay를 1e-4를 두고 실험을 진행해보았지만, 적용하지 않은 경우가 결과가 더 좋게 나왔습니다.<br><br>
+
+                            <b><li>Best Model 선택 기준</li></b>
+                            Best model은 accuracy로 정하였습니다. Sigmoid로 나온 결과를 0.5 이상이면 1, 미만이면 0으로 만들어주고 accuracy를 ground truth와 비교하여 모델을 저장하였습니다.
+                            이는 loss 기준으로 선택한 모델보다 성능이 더 좋았습니다.<br><br>
+
+                            <b><span class="highlight" style="color: rgb(0, 3, 206);"><li>pos_weight</li></span></b>
+                            이번 실험에서는 PyTorch의 BCEWithLogitsLoss를 사용하는데 여기에 argument 옵션으로 pos_weight라는 것이 있습니다.
+                            이것은 label의 0, 1의 개수가 unbalance 할 때 적용할 수 있는 방법입니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">실제로 이번 실험에서 사용한 데이터의 0의 개수는 410,175, 1의 개수는 58839로 1보다 0의 비율이 훨씬 많습니다.</span>
+                            따라서 1의 개수를 동일하게 고려할 수 있도록 positive loss에 가중치를 곱해줄 수 있는데 이때 사용하는 옵션이 pos_weight인 것입니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">하지만 pos_weight를 사용했을 때 성능이 약간 더 안좋게 나왔는데 사용 유무에 따른 결과는 아래에서 보여드리도록 하겠습니다.</span>
+                        </ol>
+                    </p>
+                    
+
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>ResNet multi-label 진단 예측 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 ResNet 이용한 사망 예측 모델을 살펴보겠습니다.                
+                        코드는 PyTorch로 작성 되었으며, 데이터 전처리 및 훈련 코드는 <a href="https://github.com/ljm565/chest-xray-multi-label-classification-ResNet" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">img_size</span>, <span class="var">label</span>):
+        <span class="clazz">super</span>(<span class="clazz">ResNet</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">feature_size</span> = <span class="var">img_size</span> // <span class="num">32</span>
+        <span class="var">self</span>.<span class="var">label</span> = <span class="var">label</span>
+        <span class="var">base_model</span> = <span class="method">resnet101</span>(<span class="var">pretrained</span>=<span class="reserved">True</span>, <span class="var">progress</span>=<span class="reserved">False</span>)
+        <span class="var">base_model</span> = <span class="clazz">list</span>(<span class="var">base_model</span>.<span class="method">children</span>())[:<span class="num">-2</span>]
+        <span class="var">self</span>.<span class="var">resnet</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(*<span class="var">base_model</span>)
+        <span class="var">self</span>.<span class="var">layer1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Conv2d</span>(<span class="var">in_channels</span>=1, <span class="var">out_channels</span>=<span class="num">3</span>, <span class="var">kernel_size</span>=<span class="num">1</span>, <span class="var">stride</span>=<span class="num">1</span>, <span class="var">padding</span>=<span class="num">0</span>, <span class="var">bias</span>=<span class="reserved">False</span>),
+            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+        )
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="num">2048</span>*<span class="var">self</span>.<span class="var">feature_size</span>*<span class="var">self</span>.<span class="var">feature_size</span>, <span class="var">self</span>.<span class="var">label</span>)
+        )
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">layer1</span>(<span class="var">x</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">resnet</span>(<span class="var">x</span>)   <span class="annot"># output size: B x 2048 x H/32 x W/32</span>
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
+        <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">x</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 24);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>ResNet</b></span>
+                        <ul>
+                            <li>4번째 줄: ResNet을 거치고 나온 feature size(1/32배가 됨).</li>
+                            <li>5번째 줄: Label 종류 개수(14개).</li>
+                            <li>6 ~ 7번째 줄: Backbone 모델 및 마지막 fully connected 및 pooling 레이어 제외.</li>
+                            <li>9 ~ 12번째 줄: ResNet은 칼라 이미지이기 때문에 흑백 X-ray 이미지의 가로, 세로 크기는 유지하되 channel 수만 3으로 증가시켜주는 레이어.</li>
+                            <li>13 ~ 15번째 줄: Fully-connected 레이어.</li>
+                            <li>18 ~ 24번째 줄: 이미지 데이터가 학습 시 거치는 부분.</li>
+                        </ul>
+
+                        <br><br><br><span style="font-size: 20px;"><b>실험 결과</b></span>
+                        <br>Test set에 대해 실험 결과를 내었습니다. Test set은 위에서 언급하였듯이, 필터링 된 데이터 중 study_id의 끝 번호가 8, 9인 데이터로 구성하였습니다.
+                        평가 지표는 AUROC (Area Under the Receiver Operating Characteristic)과 AUPRC (Area Under the Precision-Recall Curve)로 측정하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">또한 BCEWithLogitsLoss의 pos_weight 옵션 선택의 유무를 바탕으로 실험 결과를 비교해보겠습니다.</span>
+                        <ul>
+                            <li>AUROC: 1에 가까울수록 좋은 성능, 이진 분류에 있어서 0.5면 random guessing을 의미.</li>
+                            <li>AUPRC: 1에 가까울수록 좋은 성능, AUROC에 비해 좋은 결과를 내기 힘든 지표.</li>
+                        </ul>
+
+                        <br><br>결과
+                        <ul>
+                            <li>pos_weight (X)</li>
+                            <ul>
+                                <li>AUROC (macro): 0.7191</li>
+                                <li>AUROC (micro): 0.8360</li>
+                                <li>AUPRC (macro): 0.2804</li>
+                                <li>AUPRC (micro): 0.4764</li>
+                            </ul><br><br>
+
+                            <li>pos_weight (O)</li>
+                            <ul>
+                                <li>AUROC (macro): 0.7594</li>
+                                <li>AUROC (micro): 0.8649</li>
+                                <li>AUPRC (macro): 0.3091</li>
+                                <li>AUPRC (micro): 0.5313</li>
+                            </ul>
+                        </ul>
+                    </p>  
+                    
+                    
+                    <p>                  
+                        <br><br><br>MIMIC-CXR-JPG chest X-ray 이미지를 이용한 multi-label 진단 프로젝트에 대해 살펴보았습니다.
+                        학습 과정과 전처리에 대한 자세한 코드는 <a href="https://github.com/ljm565/chest-xray-multi-label-classification-ResNet" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                    </p>
+
+
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#MIMIC-CXR-JPG&emsp;#ResNet&emsp;#multi-label
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Multi-label Diagnosis using Chest X-ray and ResNet 첫 게시물 입니다.\n\nThis is the first post of Multi-label Diagnosis using Chest X-ray and ResNet.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('Multi-label Diagnosis using Chest X-ray and ResNet 마지막 게시물 입니다.\n\nThis is the last post of Multi-label Diagnosis using Chest X-ray and ResNet.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
