@@ -17,7 +17,8 @@
 
 #content{
     line-height: 180%;
-    margin: 8% 25%;
+    margin: 8% auto;
+    width: 720px;
     font-size: 17px;
     text-align: justify;
 }
@@ -192,15 +193,16 @@ pre .annot{
     padding: 20px;
 }
 
-@media(min-width: 1500px){ 
+/* @media(min-width: 1500px){ 
     #content, .tag, .pageTurner, #disqus_thread{
         margin: 8% 30%;
     } 
-}
+} */
 
 @media(max-width: 1000px){ 
     #content, .tag, .pageTurner, #disqus_thread{
         margin: 8% 10%;
+        width: 80%
     } 
 }
 
