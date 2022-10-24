@@ -283,36 +283,34 @@ article{
         width: 300px;
         height: 300px;
     } 
-}
-@media(max-width: 800px){ 
+
     #mainImg .slides{
         width: 3000px;
     } 
-}
-@media(max-width: 800px){ 
+    
     #mainImg .h{
         width: 140px;
         margin-top: 20px;
     } 
-}
-@media(max-width: 800px){ 
+
     #mainImg .w{
         height: 140px;
         margin-top: 50px;
     } 
-}
-@media(max-width: 800px){ 
+
     .controller .prev{
         left: 0;
     } 
-}
-@media(max-width: 800px){ 
+
     .controller .next{
         right: 0;
     } 
-}
-@media(max-width: 800px){ 
+
     .controller span{
         top: 110px;
     } 
+
+    #container{
+        height: 100%;
+    }
 }
