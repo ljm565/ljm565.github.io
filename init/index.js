@@ -93,22 +93,24 @@ function hoveringOff(self){
 
 function openMenu(self){
     // $(self).fadeOut(100);
+    $("#menuRelated").val('menuOpening');
     $('#menuRelated .menu').animate({
         'left': 0
     }, 300);
     $('#container').css('opacity', 0.5);
 
-    // for preventing contents scroll
-    $('body').addClass('preventScroll');
-    $('#container').on('scroll touchmove mousewheel', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
-    });
+    // // for preventing contents scroll
+    // $('body').addClass('preventScroll');
+    // $('#container').on('scroll touchmove mousewheel', function(event) {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+    //     return false;
+    // });
 }
 
 function reload(){
     // $('#menuRelated .menuButton img').fadeIn(500);
+    $("#menuRelated").val('menuClosed');
     $('#menuRelated .menu').animate({
         // left: '-20%'
         left: '-19rem'
@@ -116,8 +118,8 @@ function reload(){
     $('#container').css('opacity', 1);
     $('#mainHead h1').fadeIn(150); 
     $('#menuRelated .menuButton img').fadeIn(150); 
-    $('body').removeClass('preventScroll').off('scroll touchmove mousewheel');
-    $('#container').off('scroll touchmove mousewheel');
+    // $('body').removeClass('preventScroll').off('scroll touchmove mousewheel');
+    // $('#container').off('scroll touchmove mousewheel');
 }
 
 function colorOn(self){
@@ -231,6 +233,9 @@ function detectScroll(){
     
     $(window).scroll(function(){ 
         didScroll = true;
+        if ($("#menuRelated"). val() === 'menuOpening') {
+            reload();
+        }
     });
 
     setInterval(function() { 
