@@ -5,20 +5,11 @@ html, body{
     height: 100%;
 }
 
-
-
 a{
     color: black;
     text-decoration: none;
     cursor: pointer;
 }
-
-
-
-/* #container{
-    height: 100vh;
-    overflow: scroll;
-} */
 
 .preventScroll{
     height: 100vh;
@@ -36,7 +27,6 @@ article{
 #mainHeadWrapper{
     width: 100%;
     margin-bottom: 99.5px;
-    /* z-index: 2; */
 }
 #mainHead{
     position: fixed;
@@ -89,7 +79,6 @@ article{
     vertical-align: middle;
     width: 700px;
     height: 700px;
-    /* border: solid red 1px; */ 
 }
 #mainImg .w{
     height: 400px;
@@ -138,25 +127,21 @@ article{
     bottom: 30px;
     right: 30px;
     z-index: 4;
-    /* border: solid red 1px; */
 }
 #modeButton .modeImg{
     margin-bottom: 0;
     display: inline-block;
-    /* border: solid red 1px; */
 }
 #modeButton #modeImg{
     height: 15px;
     padding-right: 3px;
     padding-bottom: 2px;
     vertical-align: middle;
-    /* border: solid red 1px; */
 }
 #modeButton #modeState{
     position: relative;
     font-family: 'Noto Sans KR', sans-serif;
     display: inline-block;
-    /* border: solid red 1px; */
 }
 
 
@@ -175,8 +160,6 @@ article{
 #menuRelated .menu{
     position: fixed;
     top: 0;
-    /* left: -20%;
-    width: 20%; */
     width: 19rem;
     left: -19rem;
     height: 100vh;
@@ -225,7 +208,6 @@ article{
 }
 
 #menuRelated .menu .tree{
-    /* border: solid red 1px; */
     padding-left: 20px;
     padding-right: 20px;
     list-style: none;
@@ -233,7 +215,6 @@ article{
 }
 #menuRelated .menu .tree label{
     cursor: pointer;
-    /* border: solid red 1px; */
 }
 #menuRelated .menu .tree ol{
     padding-left: 30px;
@@ -250,7 +231,6 @@ article{
     font-family: fontello;
     display: inline-block;
     width: 13px;
-    /* border: solid red 1px; */
 }
 #menuRelated .menu .tree input[type="checkbox"]:checked~ul{
     display: none;
