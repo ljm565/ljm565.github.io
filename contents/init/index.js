@@ -109,17 +109,13 @@ function openMenu(self){
 }
 
 function reload(){
-    // $('#menuRelated .menuButton img').fadeIn(500);
     $("#menuRelated").val('menuClosed');
     $('#menuRelated .menu').animate({
-        // left: '-20%'
         left: '-19rem'
     }, 300);
     $('#container').css('opacity', 1);
     $('#mainHead h1').fadeIn(150); 
     $('#menuRelated .menuButton img').fadeIn(150); 
-    // $('body').removeClass('preventScroll').off('scroll touchmove mousewheel');
-    // $('#container').off('scroll touchmove mousewheel');
 }
 
 function colorOn(self){
@@ -168,7 +164,6 @@ function pjaxPage(url, url2=false){
                     headHighlightColorChanger();
                 });
                 reload();
-                // document.querySelector('#container').scrollTo(0, 0);
             }
         },
         success: function()
@@ -181,7 +176,6 @@ function pjaxPage(url, url2=false){
                 headHighlightColorChanger();
             });
             reload();
-            // document.querySelector('#container').scrollTo(0, 0);
         }
     });  
 }
@@ -214,7 +208,6 @@ function pushFunc(){
     window.onpopstate = function(event){
         $('iframe').not('iframe.map').remove(); // for disqus 
         reload();
-        // document.querySelector('#container').scrollTo(0, 0);
     };
 }
 
