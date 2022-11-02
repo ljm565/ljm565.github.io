@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Transformer (Attention Is All You Need)</title>
+        <meta name="description" content="Transformer에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/transformer1.html" />
+        <meta property="og:title" content="Transformer (Attention Is All You Need)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Transformer에 대해 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypCqoN07EUXpoz7MhGa0Obz1JdjU7dCRcSW8WJLq53k_LhAO4q-bwWT_HYaD978NMXltcR7vfcM_5z7IE5PY6WmPY1t2-5BKhmEpVXdvPlWSXYQZaXVUn27UaUiAB9NKClsMioByM3SHLxSLbt5_sLUGflOu1wzU81IdibpHbc01vd0URxSZVgTtjCLRxMIPBsxaG4Zl0_neU408KHduvioKlOf5alcVzFMYVLCg57ojzS0IfcKwBYDz60qsbQ8SRxErCq4D1QIzaxSWzCM6sHg5meV3awGvnqSXvQ7nVf8G1iydLHsgOOL_DO7PdyF2bi5biT1BeoozJgi-T5xCbXmWT9sMPw31JRZHw1LEscIo0KKsZpTJZTw3Hu4TH9_SaRMIpN-udVZF8MW9uhwIq6Nu8bqQDKr1VKU1bXGBt6VAPuSoDNA-J94Nrs4T-e_GVsq2KOJ_O5voMR55v6Bl7lMRagU88Uq8Z-glTmdMI35PhkouiIqApFV-fz2J41tQ5VOeW_CxYTflTQFbcfdju9tQYP1Xx6VQPjX-oY6KTxYCGOl27Orejx1v0skj-6i6JUk6qp3IGELwdmB-1WeGZaii3eGuOSMArruMD4nT5vEsLN9Z0TPD8FJMHrEWFHVXKOr_2hXtNs1yln52yoWnSBsJVIioYPDS8M4DdhuUSM9Ve1hp2NiK7stxTMAAkmAGavplla21JDOMXm_UkISETsbRbvQH3IM_aRgC8SagcaZ5SpRJcHQHdmHKZrAAShXKvZVLM72-JVvyGUPHFR_g7OvfuZBeIIeokt1-Z7L29x4xT5vb1iqtOQYz8URJJy8-OKN5kQmyHiGg5AQU5P_MVLehgCB0jlPJ9yGy82DWd2H_H_BXvXVCU3ac56C3LqCFtUQO2GqMaMsgjS2PvxkTUXsjbPRUSnSOgpPi1EtatjV1HTjY9IfVKccefJvVaroJ0Z3h3zar1A79LSFkPoG3WDwe_ketK807vkQR4p9YNoFlNbs6J5JCNekFzH8oI3sJVkxiu4VIgcJGEZ2e2Xq0TOANzO9fW_bRWn7fp2-vL0-kSbCJ76lW7PqBpVoYHhV3Jl8m5F7wmcKpT0DgEWQvRZXWkjUoyI_uyDgSJIf_Ehb-kUSa9n4Q8EpMJ38PAilWToPVyhRpA50IEKuCj1-v94Qrs5afBaTUSg8O6GfhditSNB2B1aRW_T-W4w7LphtHGL30Xu4qOTQYBaxS0TiNJ0xRwLDFNGzxtED2EUijGkEP8pApEQpviKYpwVhsvO1rvbtSY5X0Mk9VmkOBXxTJNYBccDWSEjQZRkj3eZxmFzhrGiLVFkEOJoD90L38BSrszqY2GVpumHb7VzpQPR6OqUVlqncpM8Ag2m5qXi5ObEvuhB5e9Xt58H40wJ2jNHAySEtH5sOE6XVwAe8Id4bKgEIUqbdwNcXteNgBh9M3paIkeY1dFMJ1mt36pyxKMcD4ytKel5MPBflzRyb700o" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Transformer (Attention Is All You Need) / 1. Transformer (Attention Is All You Need)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypCqoN07EUXpoz7MhGa0Obz1JdjU7dCRcSW8WJLq53k_LhAO4q-bwWT_HYaD978NMXltcR7vfcM_5z7IE5PY6WmPY1t2-5BKhmEpVXdvPlWSXYQZaXVUn27UaUiAB9NKClsMioByM3SHLxSLbt5_sLUGflOu1wzU81IdibpHbc01vd0URxSZVgTtjCLRxMIPBsxaG4Zl0_neU408KHduvioKlOf5alcVzFMYVLCg57ojzS0IfcKwBYDz60qsbQ8SRxErCq4D1QIzaxSWzCM6sHg5meV3awGvnqSXvQ7nVf8G1iydLHsgOOL_DO7PdyF2bi5biT1BeoozJgi-T5xCbXmWT9sMPw31JRZHw1LEscIo0KKsZpTJZTw3Hu4TH9_SaRMIpN-udVZF8MW9uhwIq6Nu8bqQDKr1VKU1bXGBt6VAPuSoDNA-J94Nrs4T-e_GVsq2KOJ_O5voMR55v6Bl7lMRagU88Uq8Z-glTmdMI35PhkouiIqApFV-fz2J41tQ5VOeW_CxYTflTQFbcfdju9tQYP1Xx6VQPjX-oY6KTxYCGOl27Orejx1v0skj-6i6JUk6qp3IGELwdmB-1WeGZaii3eGuOSMArruMD4nT5vEsLN9Z0TPD8FJMHrEWFHVXKOr_2hXtNs1yln52yoWnSBsJVIioYPDS8M4DdhuUSM9Ve1hp2NiK7stxTMAAkmAGavplla21JDOMXm_UkISETsbRbvQH3IM_aRgC8SagcaZ5SpRJcHQHdmHKZrAAShXKvZVLM72-JVvyGUPHFR_g7OvfuZBeIIeokt1-Z7L29x4xT5vb1iqtOQYz8URJJy8-OKN5kQmyHiGg5AQU5P_MVLehgCB0jlPJ9yGy82DWd2H_H_BXvXVCU3ac56C3LqCFtUQO2GqMaMsgjS2PvxkTUXsjbPRUSnSOgpPi1EtatjV1HTjY9IfVKccefJvVaroJ0Z3h3zar1A79LSFkPoG3WDwe_ketK807vkQR4p9YNoFlNbs6J5JCNekFzH8oI3sJVkxiu4VIgcJGEZ2e2Xq0TOANzO9fW_bRWn7fp2-vL0-kSbCJ76lW7PqBpVoYHhV3Jl8m5F7wmcKpT0DgEWQvRZXWkjUoyI_uyDgSJIf_Ehb-kUSa9n4Q8EpMJ38PAilWToPVyhRpA50IEKuCj1-v94Qrs5afBaTUSg8O6GfhditSNB2B1aRW_T-W4w7LphtHGL30Xu4qOTQYBaxS0TiNJ0xRwLDFNGzxtED2EUijGkEP8pApEQpviKYpwVhsvO1rvbtSY5X0Mk9VmkOBXxTJNYBccDWSEjQZRkj3eZxmFzhrGiLVFkEOJoD90L38BSrszqY2GVpumHb7VzpQPR6OqUVlqncpM8Ag2m5qXi5ObEvuhB5e9Xt58H40wJ2jNHAySEtH5sOE6XVwAe8Id4bKgEIUqbdwNcXteNgBh9M3paIkeY1dFMJ1mt36pyxKMcD4ytKel5MPBflzRyb700o);">
+                    <div>
+                        <span class="mainTitle">Transformer (Attention Is All You Need)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.11.02</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 바로 NeurIPS에 소개되었던 transformer 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">현시점으로 무려 5만회 이상이 인용되었으며, 초기에는 자연어 처리에 적용시키기 위해 나왔지만 현재는 이미지, 음성 등의 분야를 막론하고 다양하게 적용 되고있습니다.
+                        특히 모델이 커지면 커질수록 더 좋은 성능을 내는 것은 물론이고, 기존 LSTM, CNN 등의 모델들의 성능을 뛰어넘는 모습을 보여주기 때문에 많이 사용하고 연구가 꾸준히 되고 있습니다.</span>
+
+                        <br><br>Transformer는 자연어 처리를 위해 나왔지만, Vision Transformer (ViT) 등 꼭 자연어 처리 분야에만 쓰이는 모델이 아닙니다.
+                        뿐만 아니라 그 유명한 BERT, GPT 계열의 모델도 모두 transformer가 기반이며 이외에도 BART, T5 모델 등도 모두 transformer에서 파생 되었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">현재는 transformer 기반의 모델이 너무 용량이 거대하기 때문에 이 모델들의 크기를 줄여도 그 성능을 유지하게끔 하는 모델을 만드는 연구도 활발히 이루어지고 있습니다.
+                        그 대표적인 모델이 바로 BERT 모델의 크기를 줄인 ALBERT가 있죠.</span>
+
+                        <br><br>Transformer는 엄청나게 powerful한 모델이기 때문에 서론이 길었습니다.
+                        Transformer가 처음 소개된 논문은 아래 링크를 참고하면 됩니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Attention Is All You Need 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Transformer의 구조</li>
+                            <li>Positional Encoding</li>
+                            <li>Encoder</li>
+                            <ul>
+                                <li>Self-Attention</li>
+                                <li>Add & Layer Normalization</li>
+                                <li>Position-Wise Feed Forward Network</li>
+                            </ul>
+                            <li>Decoder</li>
+                            <ul>
+                                <li>Masked Self-Attention</li>
+                                <li>Add & Layer Normalization</li>
+                                <li>Encoder-Decoder Attention</li>
+                                <li>Position-Wise Feed Forward Network</li>
+                            </ul>
+                            <li>Transformer의 의의</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Transformer</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>트랜스포머 구조</span><br>
+                        <span>Transformer Architecture</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 transformer가 가장 먼저 소개된 논문에 나와있는 모델의 구조를 살펴보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAt-7CflliZ050XOLfdCMpouTtcjwWVWBqR8jzBkYL3XYVcWWDbdkJ-icJCwn_WYzY3oQodFanDVJ4AcxGEDZxEBcUQ-LDyOLL-zeVnhbuT5Vz0BSQjoJEjiMu0pTEsnlW2cYr1C5zj-kyC1PIGF_Wo2JjRfKTb5r9hl7zkAzYtz63tJ-iW0lSQvBhydpTaPUT3OMCRgsAAR5vbzreZyUMBUmPHKWlSjjVqmLESovcFOvBXmBtLLFGU1NOxcWbO6gCtc4Q6ukMt_wKl5SnfyVv5WcxE0mkLNaU6BrFOLyRRkF2bdk_WNV9_9pZLfwc_c_dLy2fQFeEtkE3amWIhir1ZciuCQKCyHe0c8_VYr07TblDC-muS5OtUBg6W7AIcyD-CG-P6WwXr4C0XnE8ZNFbFO_VfYGCQ9bxx0nm6pW1yIeZhigrAwt1I8_V8TXOlpRDaa6UusK3-syijvE2-uEMT9fjrj71PfawByi0sKIfFvNSVAw1sVABd0d9yjuOv_1t5Z-0xfb4SdA-F0K1hfXQA6Ubdw0eKIk6AAm64Im3sx_1fxVXybJcRZV7ozmKjkgBvBV-7Isqpk7AuKtA3_TSqt1mCJb8znJigh7fzvnStcGHeLvQHyxflDxQHI6tJpBax7r49Zj6zqXzF8hwWBRVZqKogvSK1RjTmZi6uswduAWbs2xOA32OT_MlghYIFn6u300I5HfYVI3nIVR1R7TH3S48XuYkH0nRlDCuICs9IjU00lnfReKslcTF3UV2htrL2uHS_6JKq3wJv-nabVMgg9OE0mV-dcqNy7iA6MHrC2mlL0ZNIY3BAmKKUMp2trUVWoHWv8AEvmUGiV20fqiLrWECzbZ41mj9yQa_xT8hGt5x8SHvmwzz9IIY-GldFxweKISkgPVRfv41m1JrJeqkx-U5DQ2r13vSb9posEInYSjLnW-3eRvXHgZEswsDZjd5omY4bregSl7KrG_sdYMlAijHK9tePlCx2N9Wt109ptYN7x9fUYn8hS3D47CLcIgiqTmroPaFEvoyly2uh26ncM3ugFQEEi5NyRmnLMJAYbkxvpihrd_0ojR4laZg1lMjm_9S3pwA0Jzp5k4AYgr1fdsknGTyj58gJZV-gdPv9JxfUBWoKseMxkVGt8j1MxGtjBmqKjHc_6rnRC9MXjAgRyY3dLAJRow5gd_QDLa2qSOb_mJIH5TvAN2JVVl5jLd8YMr1TjtA1V3HVdjpHGh2Bb4CApxXlywKVwqdKFaqPa1rYtOL_uh4AwWLKH07-z_WTJBOxjImmDchHiUhVbrS0nBmi23eSMW6gP6wNfjqkekkJ3S18Kgp5HwHbQCkquwEkmXZ-M1D6c-_AEIbjoYpext1oNdpY_n-oeTavjYxguz2AVcO8xsBZKLPND2MKdVXuLPoUqNRjWRnG4SSaGj-Ior_oMMYEf8CnppHGFEGeUwShhJflrZnBoTsYKE38TNEf5FmmrXHcoTmvFO0" style="width: 80%;">
+                        <p class="caption">Transformer 구조, 출처: Attention Is All You Need</p>
+                    </div>
+                    <p>
+                        <br>사실 논문에서 소개한 그림은 처음에 볼 때 직관적이지 않습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그래서 아래에서 자세한 구조를 그림과 함께 설명을 해보겠습니다.
+                        그 이후에 다시 논문에서 보여준 구조 그림을 보게 된다면 이해가 될 것입니다.</span>
+                        
+                        <br><br>사실 transformer의 전체 구조는 sequence-to-sequence (seq2seq) 모델 구조와 다르지 않습니다(Seq2seq 모델 구조가 생소하신 분들은 <a onclick="pjaxPage('RNN2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>를 참고하시기 바랍니다).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Encoder와 decoder로 구성되어있으며, encoder의 결과를 decoder에서 받아서 사용한다는 점은 transformer가 seq2seq 구조를 따라간다고 볼 수 있습니다.</span>
+                        가장 기본적인 seq2seq 구조 활용의 예시인 기계 번역 모델을 바탕으로 설명해보겠습니다.
+
+                        <br><br>아래 그림은 French-English 번역 예시입니다.
+                        Encoder, decoder 구조로 이루어져있으며 encoder의 결과를 decoder에서 사용하는 전형적인 seq2seq 모습입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 아래 토큰이 들어가는 곳에 Postional Encoding과 Token Embedding이 있습니다.</span>
+                        Token embedding은 말 그대로 lookup table을 이용하여 token을 임베딩하는 레이이고, 이 부분은 누구나 다 아는 내용일 것이라 생각하고 넘어가겠습니다.
+                        따라서 encoder, decoder를 자세히 설명하기 전에 positional encoding에 대해 설명해보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBqJxb5E6a-bgYN2S3bdLDJ7XXPTkISqX6-q38K3vrzuv3kws6azjhdjjYccoKok5ygkYOnGQLqgdsG4uFVPNw1uHhcOcj7Bgm8j80KYPdSACYZaZqyaZpNf0esY0hNyP25cESDVFTv32lJr_ZJ9scZ0O9FRi0sRAjyj1LLMGFMX6X5X-TN_XLCbFJhq0NUURID9c1iq-5LCOpq2xzkaKTtwV0CN6Q_oiFkyPB2XYgvZixKGKrfaXG2GkrDZgoJ3uVH32lk7WgnKjRgkg9ZL02zOFrcieLTXjsXmBd2XDv2H7J3a8baWTOpvQSpXTIS3wdVV_vuRWxZ3RKV3ZTeO09QMIxDOF-2dFUBkouBMjIUowQ6J-26FnldovFZpCHI04sgBEmBqbc2EF_HVF8gfqxX-UigKui6R6-txdWHn8r2jZxpl4hOGgcbeNQwA73vKdRxvf_pMSLHks-urlEnaxtbl4C-kZ2Vn9wOdDYggkDu3n6p49_kfrjtxUNbHYrLv_mXkZ3eR2al9yWlin543A1apoYss_ol94_xmvuypdRaWgpLoGT5xoGksKUugfbmR2BM6G8Cx6ECsPc82wKW8Y1Nb0wWY3UZo1o9hph5-HuSjF_Y6-D24aDv420CMXoUDX0g3xfLV-DeLKXUyhNxGj11ffQPn66hFB3jgzk9yekxDlijGzfc_-ZtBKVeSfz26fxLJmnNMVWz_P9mNz4B1B1eXWMixoUDGP5VPOZ7D2LUkywPkflp_s7ePW7LorBc04B_7aBv9qHVkp6oUOsKbWWU0pZykX-zga7JUVjE4r2c7hsNxKCzLCzEQWX2m5E0SUyQ7XFJ5HuC8_T_c9xmzigj2Yfn94T-Bb7G0z8-fQAlwGfPhF4BFN9KS3l_D-nPXZEGyEKLTnzm8Fis_p66giJf53oiq94naDMMMPk6uhu_T57X8fmS3uh11vnRxia4EumMGA0fbjNeoS1WbjqFkmerXpklvNEJVCqjHCbC2OibP-7q6PWk6j139EXjZvMg_7Fgv_ZPjm4StBmFvbyVlQHtYoXUlQDFcTdzz6LOH0umd-BX0ZDK3YKiiZFnwkgpu0fA48SJeLaq3O6QO91g7AugCVRXndJ_EkOvWgQWJVVPbmoitYaLehMYpUSHLoyT4uqXYtwkxokxRqKgtNfdDhsln6PAXr0CvPBRHqBDsNRoNMb2zMo-PlsSPMc6rz2JkdSJ86pq0Q9eA3DR92j0h_uJNyD-KMrIOcz1AfNAwoeCpz1HXfRtJl9lGohayRzBNZt4DPA4ftWaopD0qsqHK7WyOFuo46ls1HH705VgY57xtwNKk0PIe8oZtDpEZ6qu8OXZOk0WSYGRYtfJ3vbz02SAMsbdO2ubZJsPgf4-h34Di9pOy9i4oMTfRfsUi4pZBQ0VjNVYuweXiEqWmYVqHw8XWPQZsHrrIeM2_8kWwqq8AlfAzGV3YcUbHRWt5ZjqY2sm8G25xKmKHN1oCZM" style="width: 100%;">
+                        <p class="caption">Transformer 구조</p>
+                    </div>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Positional Encoding</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        Transformer의 구조를 살펴보기 전, positional encoding에 대해 살펴보겠습니다.
+                        먼저 positional encoding의 목적은 토큰의 위치를 알려주기 위해 위치 임베딩을 하는 것이라 생각하면 됩니다.
+                        요즘에는 위치 정보를 위한 임베딩도 토큰 임베딩처럼 lookup table (e.g. nn.Embedding)을 이용하는 것이 일반적입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 당시 transformer가 나왔을 때는 위치 정보를 모델에 알려주기 위해 임베딩 하지 않고 \(sin, cos\)을 사용합니다.</span>
+                        먼저 자세히 파헤치기 전에 positional encoding을 의미하는 식을 먼저 살펴보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[PE_{t, 2i} = sin\Bigg(\frac{t}{10000^{\frac{2i}{d}}}\Bigg)\]
+                        \[PE_{t, 2i+1} = cos\Bigg(\frac{t}{10000^{\frac{2i}{d}}}\Bigg)\]
+                        \[t:\,Postion\,of\,tokens\]
+                        \[i:\,Hidden\,dimension\,postion\]
+                        \[d:\,Hidden\,dimension\]
+                    </div>
+                    <p>
+                        <br>이제 위의 식을 이해해보자면 이렇습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">당연히 \(d\)는 모델의 hidden dimension 크기입니다.
+                        그리고 \(t\)가 토큰들의 위치를 의미합니다.
+                        마지막으로 \(i\)는 토큰의 위치를 나타내는 것이 아니라, 임베딩 차원의 위치를 나타냅니다.</span>
+                        
+                        <br><br>좀 더 이해가 쉽게 아래 그림으로 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">가로는 hidden dimension (그림에서는 10), 세로는 토큰의 위치를 의미합니다.
+                        그리고 파란색은 \(sin\), 주황색은 \(cos\) 함수를 의미합니다.
+                        아래 그림을 보면 각각의 hidden dimension 위치에 할당되는 \(sin\), \(cos\) 함수가 있고, 토큰 위치 t를 각 함수에 넣어서 embedding을 구하는 것입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDBh5Do4DdJ7DqqhCuW1s6jk9t__vy2QLgrk8hwt5iP2iNLZqsoykS91rcY2E6AMhi3wMM_NA7ZXOX21yQ8iSxOBuGXwdofbsc32gM-NVe5L1I-SCNJupE8c1NHYYctXCxND29mqIoVjfmp6dTKVR-vVhyU6evNCRH8B8xQq3EZkUCoEzHaEadAAEtj5i5J_nvbr18vtP1UiHpgIThwhWmeDy_7EuhLaoNe9YKNZu25WjKHTjzBzzrEXPK8dW_aAhqV0qx8Y2UjxIWlKwmhBFumhAkgMtGXzStpdlWSr9NH6NNkO7-9LvoJY69Q1veG5d8HW8i4ewE1jirRIkSw1hEresegMA54ONt1iTcPBxaEODGGWj8YM3c6QnsdX9Dg-0PueXjQmVHccRCWebsv5G5_1mvAoMOzMhBWILYHU_FLJN9XgudFSp_NCF_-34jH04zF9DdxMkuw5YF75Szi_TxMEHKtv1-4ohJfNwePWtgxceWmyUkSrlKnF0PQ-TfECfASTcc4QpQLsdyP3tsvMw9WiK7nMhW4yFK4RSXyc1Gs_ThXqw0sy1hLjQuywLMEaKHdqIOspBNSP-uuITTYKVTZzaSlzH0Opkaq2G-L9G3V6IG1GvOKXcgFa9gIscYcZbKJRTmi08frFEqsq9G2hDWLwkpvbRlLut9o5JZmuGqvbksJ1MUtxCEpgHYoP3yGeSrgFstqjJqLP4MCocKDCLEkWnzqf8b2BLWjmMlo0YvHtXQLCXXg9CiEIRiiceJsfNXWfcB2A37ZvWbg8Wg230xTMpoc3v9xpYV6UF_9d0CrWDCIWQIO46UwlBY_-x7BTyvxs09R669SkpZy82rXtpc6Uu4yxCej2aKxE1yaw40bV5H9JS_zn4gvHBZhHayz_iF7wdgdiIoQXHPFQ6X6PDIBnvoFnknLcMiStXvsuKZ8u_uJUBo1SKxwd5KIzMSa0Uq5_yjaUP_qbgJB1bOmf6g6PLf8pLQpIBXkiA29rtAQ4SXq1XYeVEtAgkVRNQwd1biYqmMJQqbDiaq38DwtJdWmwZJ1_fOE4O9iG1R96iWbOJJRSBbNUi-wVcOXNZ5NlPkYz1cVXOSC949YEbd_xEpox0nqlL2ozgijKNrUn1t4o1s4Q4nOd_qCMsH6aChFS8_1WZkCcMs2X9adnMT3p_7Gspv7S6ahmTzGfSJXmYLLaEJtniuLg0mpiVlyyROxEujubI5adNiXUm48PzoEMIgny2YeSq154B1sr1eruK4fyown-NitnwgIhs7kSWOre45s2okZQ6vraeU-b8if6gUrQUrtZ2V2XPYmRWowGJyKoltaUqFJnw82_g_6VQ7I2fOBLxru9qNFYGXqBb6MJW2nyGeuVnFpA6ydYmVLvrTCY7fSB10nwAz9ZaI2wYwHUaMYX9R0NYxvxnui7atMmbb16NO43gwtitvGUDAVc0vXpsxJ-rInxIKSQs8bBLgwyJK_IRyAYvA2DAJ28cA" style="width: 100%;">
+                        <p class="caption">Transformer Positional Encoding 그림</p>
+                    </div>
+                    <p>
+                        <br>즉 위의 'have'에 해당하는 임베딩 값은 아래처럼 구성 되는 것이지요.
+                    </p>
+                    <div class="equation">
+                        \[\Bigg[ sin(2),\,cos(2),\,sin\Bigg(\frac{2}{10000^{0.2}}\Bigg),\,cos\Bigg(\frac{2}{10000^{0.2}}\Bigg),\,...,\,cos\Bigg(\frac{2}{10000^{0.8}}\Bigg)\Bigg]\]
+                    </div>
+                    <p>
+                        <br>그리고 실제 \(sin\), \(cos\) 함수를 적용해보면 아래와 같은 스펙트럼이 나옵니다.
+                        아래는 hidden dimension이 128, position이 50인 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCkmF_p8_HvEHgZ_B5RC6bF5X6qqrrS0v8nboAsd2wQBT3JARWDes3XCUPiEnEmenJu-HOItPgcl3MPKapXnN1cn1TuBkl2-ocha0I9Qc_A9WMt5MKggBkCSQqeKeNoV6Kf6mBly07Dudy5cP66CrVfwzU9C9HRys9PD-8VKfWFXb6vkimOErP0KAm4HgnLhiR8tHrr5-3-epYyF8rUYIhmLdqGmA83mBtdu0R68TcKlW_rdQN8ZsSBhwiuLg6tKWtS-oTgxiXkQaW5NHi_LoSHlGOmoUibouqe_qiBfq9LQI-x6QaR-R9HLATiSSLfEYcDdlr9lijLsRqAO168WRlFEEQXak5X1L2sAY6Cdr-MxcFsVXFHsyrq-_HvReBHvUymRrD1TPD9IYH4H5Takyj5a3Xx3ttHFfWBdfMWwcl7mvWu2hi5a6qpOkfFDIipEhrloVwQ3p04y3RwpRqoYOXFfz-zFLbKysFppnN2v4xj3OqfWkiFDM7exnAkbGMRyY6G-ZiMPReNXz5qtblRUCkuQQFcxf0jVfVGZXtrd-lmOKUfBbWG3etjEzCf0eQ-o6m0KGvv8iBdpGBRR_nxpwVaj2yYw5XVKtouK-1KHRPrCkKSyaPbc5Xuqhn2IzedQM6ngaP1qwbkoTSDxqhH_GdQmqRRavSfbeCUbmqzxGsFf-MGG7A6fHSlaMYZ61Tjcgr8Nr0y_r0AcisAS46FV36oA2zrlwuDCH3bEqzBgyou52IrHAQr4GbUFxQWLeEGjsnKVs2RCaVDd7WBR-ZoBuEC8o_UZbuhBILUR13Bajz_7PhFBWUZkJnSOJrsxWpK2vv-1bDOgbbJ3-WkdTGkh47c-U2laqzYpCp3Ckn0y_5k6nHgNdjct9MUA2G1_RZmRXC1FJ2gkEJOC4WJjOm76xN6VUuy6b1JcgricgZi-k-9xuJRm7ayKgRUP0KRi4Eb8OHVLKOfmQ1r51PVkB7cdoyAFOlQqiIgFH25eETeRsgZuxk2RM7cknq9aLWRZdkjB-A1PAUCZ03G7lahWXYvPuyeH_nb05Ai-DfVc0UcxfcyVx7qcbeahxoncuX7QXtbVKQsVGSCQtlq_HSl8Of9gB9llH5gkHMNnIOvlwBV5ytm6C07AAqDmMVwlydAhxhBH4d39jXqZkG_M7XXEhNXWip5joQFjUpKPnp96qHB8MaCX663i2CbWDDrm-LOYShuduPGIHHqQPQxlkAFIqHwts07pwTbEfskrSwCNrhErbgOEVPX1S63-T2F0Hl3t0T8OZFyqXL_vXUdgjyr0WLFzrRiXcMKT2Sn4mNZofDVXbMOa-q3lMQWZlLW6O1mWtp59e8wUlRPy0yl4jYrn2CrP_G3mLzp_aAtx9hrJs4qARZtJEkfbW0--j8EZvDATklW9jSde0KzRHNROFdy6TsSSRWqsw5jUJTIVpT7i4YIyRDRik2Cyv94FQ0zZ8XMNxjbPGiw5whh14RFnF_T04Y" style="width: 100%;">
+                        <p class="caption">Transformer 실제 Positional Encoding 그림<br>출처: https://kazemnejad.com/blog/transformer_architecture_positional_encoding</p>
+                    </div>
+                    <p>
+                        <br>그럼 저자는 왜 이렇게 복잡한 수식을 써가면서 position의 표현을 나타내려고 했을까요?
+                        위의 수식을 대체할만한 방법 몇가지를 생각해보겠습니다.
+                        <ol>
+                            <li>단순히 포지션을 정수로 표현</li>
+                            <b>train</b>: I(0) love(1) you(2) <br>
+                            <b>test</b>: He(0) may(2) love(2) you(3)
+                            <br><span class="highlight" style="color: rgb(0, 3, 206);">위처럼 train position encoding을 2가 최대인 문장으로 학습을 한 상태에서, 그 길이보다 더 긴 문장이 들어왔을 때 대응을 할 수 없다는 문제점이 있습니다.</span><br><br>
+                        
+                            <li>문장의 길이를 0 ~ 1 사이로 정규화</li>
+                            <b>train</b>: I(0) love(0.5) you(1) <br>
+                            <b>test</b>: He(0) may(0.33) love(0.66) you(1)
+                            <br><span class="highlight" style="color: rgb(0, 3, 206);">이러한 경우도 test할 때 0.33, 0.66 처럼 training할 때 존재하지 않던 값이 등장할 가능성이 매우 높아집니다.</span><br><br>
+
+                            <li>이진법으로 표현</li>
+                            <div class="contentImg">
+                                <img src="https://lh3.googleusercontent.com/fife/AAbDypA46wxfUnNXoLLEYaxGhQxC44RBp8XNCN0HClfkuJTRMNte2yPZhlchKRWXB0qP4Ebp7ZVDMxHjY8hRKE1kgcrf3mvW21__yW41WNzaqZVYA-ZJX_DNtfHiKIFX-UJ0INCz0y1EihC8kzqinUf5j9-5m4zEzIo8v11yDScT-FDbcvaG9oeRXT9IdOYb7SE5oy-2V1CZ1qI70ECx2FDnPvGO5TvwFuIOO4v1AUhuP6s6KNrELnPqbSVOSithIy9QJcgeJTXyAW7ytnmPXUj9YCPy2heOjYmI95PYbiLneSaB8YsNhnakmN8w0cuLmX_G4p51iqmbIGcFt2DoVhgAOQ-KkYagTqkT2T10NpbmWAxsyR3yKszz-CsIkqbuSnUH8-i1LSPsDw-SJfc4Y2IxMQsPsGdPIEaV_FxlJjwCLMOeDB-s7n4mnzG0z3GzJAbdiRo-bH2WCD2v6OkwfhauZ_nA4ZsKTgM5vPs3EwLvmzLodrpscQMuN1EdKmwoP1hmK2skgXolfuURRmTwFqNccaVEUoBr7cCGu2xVsE2c3q2iCajhniZYoEm7wjhIM6TD9JU-l-eYDyqvHzIuwP169e2MQpHVTrMCX58L9z00MXa0dmlYVvxKFyXlHdIZiv36LsTiBhVssIm3YKPt8h2qWKyE6fQzGLw2IAssZ5AN-hc5S4DFFuRwSvpjfZvuvqP9KEHnx_iwEW6XKrJqSYOhmNwg2-HmtozP1kQYrYStuTP1lrKvZ9as0D_puWGI1QGoKLJaGNx7CMwfjbG08SQpgcQFuAaRzd3WAfCPCPwx6wr3VokC_fC5zQGJqdW4-4MmlTBAZAbcOpWJrVE-LPBgRaUNOZfXvqRvbS13hN8_IHHfSM51EfNdPdsMvWu_bQyGq2eX9cHgKUnzIcloUm4PVtn2jTrpEDG35lWGIJm6wQg_6FbbaBqmJwBjLUNm_DFwcHidIewn4XUQLKIWldBIp4kQtc5yrW_jwnILKbWUBLhu6Ly_DXnUUKXLRQVMQ3W4SsRLOcO1GkvTarB6mX7mp6rewjdV8NuN30s31V_R3TmwrlfOviaO0jHQpJM1c0GFk6NVwgveCuMlVp9DHOnJJ7tac5Fu5fj17XRVvuKVRmuu0jx8DfvYqnQ-85a38SJrsFDK24XJLh2G90SEkv2AljBM1C31sDk-enLm0yPiriqb_08jZqxXsfdN0Sxv0kgWmXa2WVZAdME0lxCHaURwsFrdmGa_pFpODG7tNHczxCJkR090Bdum1Tl80eIbjxiH83s-d5Az83IwfPq6wNxg1JmBRXmeQTQ3lszbkUrv1sKwibQqO6f3Dnh5hr2P6XzONDeg6x_VWsPa5cJB7R5ks2iDnRVrfl_FLlbDasC7Dk7tTg2VppzDWwFBnD05Ckowa3PRCy-GDYbHn3l49kQcS4N3e_VnurYBkwgP8mIc23WZ7i0x_UpiPPI5o79xVjg6s2M5GnIHqSKYbpT0tDQ" style="width: 80%;">
+                                <p class="caption">이진법 인코딩<br>출처: https://kazemnejad.com/blog/transformer_architecture_positional_encoding</p>
+                            </div>
+                            <br><span class="highlight" style="color: rgb(0, 3, 206);">이러한 경우는 길이에 유연하게 대응할 수 있다는 장점이 있고 각각의 column을 보면 1이 나타나는 주기도 다릅니다. 하지만 float을 쓰는 입장에서 굳이 sparse하게 binary를 쓸 필요가 없는 것이지요.</span>
+                        </ol>
+                    </p>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 위의 이진법 인코딩에서 보는 것 처럼 각각의 hidden dimension (column)의 0과 1이 반복되는 주기가 다르다는 점에서 아이디어를 얻어 transformer는 \(sin\), \(cos\)에서 얻어지는 float를 이용해서 discrete하던 이진법 인코딩을 continuous하게 바꿈으로써 sparsity 문제를 해결한 것입니다.</span>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>인코더</span><br>
+                        <span>Encoder</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>                    
+                        이제 본격적으로 모델 구조에 대해 살펴보겠습니다.
+                        다시 한 번 위에 나왔던 transformer 구조의 그림을 보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBqJxb5E6a-bgYN2S3bdLDJ7XXPTkISqX6-q38K3vrzuv3kws6azjhdjjYccoKok5ygkYOnGQLqgdsG4uFVPNw1uHhcOcj7Bgm8j80KYPdSACYZaZqyaZpNf0esY0hNyP25cESDVFTv32lJr_ZJ9scZ0O9FRi0sRAjyj1LLMGFMX6X5X-TN_XLCbFJhq0NUURID9c1iq-5LCOpq2xzkaKTtwV0CN6Q_oiFkyPB2XYgvZixKGKrfaXG2GkrDZgoJ3uVH32lk7WgnKjRgkg9ZL02zOFrcieLTXjsXmBd2XDv2H7J3a8baWTOpvQSpXTIS3wdVV_vuRWxZ3RKV3ZTeO09QMIxDOF-2dFUBkouBMjIUowQ6J-26FnldovFZpCHI04sgBEmBqbc2EF_HVF8gfqxX-UigKui6R6-txdWHn8r2jZxpl4hOGgcbeNQwA73vKdRxvf_pMSLHks-urlEnaxtbl4C-kZ2Vn9wOdDYggkDu3n6p49_kfrjtxUNbHYrLv_mXkZ3eR2al9yWlin543A1apoYss_ol94_xmvuypdRaWgpLoGT5xoGksKUugfbmR2BM6G8Cx6ECsPc82wKW8Y1Nb0wWY3UZo1o9hph5-HuSjF_Y6-D24aDv420CMXoUDX0g3xfLV-DeLKXUyhNxGj11ffQPn66hFB3jgzk9yekxDlijGzfc_-ZtBKVeSfz26fxLJmnNMVWz_P9mNz4B1B1eXWMixoUDGP5VPOZ7D2LUkywPkflp_s7ePW7LorBc04B_7aBv9qHVkp6oUOsKbWWU0pZykX-zga7JUVjE4r2c7hsNxKCzLCzEQWX2m5E0SUyQ7XFJ5HuC8_T_c9xmzigj2Yfn94T-Bb7G0z8-fQAlwGfPhF4BFN9KS3l_D-nPXZEGyEKLTnzm8Fis_p66giJf53oiq94naDMMMPk6uhu_T57X8fmS3uh11vnRxia4EumMGA0fbjNeoS1WbjqFkmerXpklvNEJVCqjHCbC2OibP-7q6PWk6j139EXjZvMg_7Fgv_ZPjm4StBmFvbyVlQHtYoXUlQDFcTdzz6LOH0umd-BX0ZDK3YKiiZFnwkgpu0fA48SJeLaq3O6QO91g7AugCVRXndJ_EkOvWgQWJVVPbmoitYaLehMYpUSHLoyT4uqXYtwkxokxRqKgtNfdDhsln6PAXr0CvPBRHqBDsNRoNMb2zMo-PlsSPMc6rz2JkdSJ86pq0Q9eA3DR92j0h_uJNyD-KMrIOcz1AfNAwoeCpz1HXfRtJl9lGohayRzBNZt4DPA4ftWaopD0qsqHK7WyOFuo46ls1HH705VgY57xtwNKk0PIe8oZtDpEZ6qu8OXZOk0WSYGRYtfJ3vbz02SAMsbdO2ubZJsPgf4-h34Di9pOy9i4oMTfRfsUi4pZBQ0VjNVYuweXiEqWmYVqHw8XWPQZsHrrIeM2_8kWwqq8AlfAzGV3YcUbHRWt5ZjqY2sm8G25xKmKHN1oCZM" style="width: 100%;">
+                        <p class="caption">Transformer 구조</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위의 encoder는 사실상 아래 그림처럼 여러개의 encoder block으로 구성 되어있습니다.</span>
+                        아래 그림은 4개의 encoder block으로 이루어진 encoder의 모습입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypD1E-3TjSZ8PkbHYdoCP6tAPVvD3einYiv0pVesKV3KBpaQ3lHt8w266-bPFNZvfnT8le9ugzxwtgVV9i0Fm0G_lreBL1S7dMdS8rcq7GWwpF9bLr_KLxAQ_vBMpew9Eae5VVrKSZG0rr48xzV13yocO5FhqB-wyhgXX0kvRXCC3ISj3nWPJplD3tPkiwYfeNaax5mlSRtFpv1HzXzqa2WFHraxltevVEiHi-etP7fe101x-a1SkS8-6BYd_oqEPMI0W5nqNn_tPBTOp3FHeboUc-pZvcyJuna13PfPZJpygVCIFMRaFjnznFlfyVE_0CHtJEF0VMJZhgG7EEPFQHpRzvzn28fHD7P54YSD8L-wGIbk2quYDAHjuHsvcxwChihYEUwBs9NmX7nXXNRosN2PUBlzdjgOPj_Rcht7vSG77xwNaIWG1rVDX22L6MdaPD0IMWI5tJnsXeqGH__jSThprlgnD5uZJUqzPBejzGhkhb-5EDfS_fhl1malWRaTelSZF-pn20CDmlGFqxiMVYkcmw1gWIJTL_GBh0DQqPOIoxKz4PpDfNHILW8o_XMy2Mc9rstvzuExqFqx4nvhShCgtMqPwP8uvrbjSez2zVlDuATkaKMGQlpXYmPGvF-yPhP1BbL0lrXiNayDw03i-R1YhSqj_WRjtxp5LB3B3TKOctsmuIRw_HyxGm_mhZDEWpWs7mILl2mgdtWg8qcxCKUJcyGZV1xEJyJ0_iCbXOhDGnApww5HHmSJ94rCx9WycJE7_56X1CPOWfhnGc86Fp1fnDWzguNPhfdlwnPW_FWcWBChvurrafNzJlMzDQXSj6VYz4RwGRvi7vQCWaDEPDdKf92k62xMDVhuvP1AGbY6OesZFIDKa0j9u-R9vAKKHtBVijGyeti5UCe8mK7_nwpKOMRD9nH6KEKxS1tjxjsera6HbJ-cT49mfPKhLZVlr9uC1yMGT5WLYtP9NGcpWhwuOC2JQwtK1Sc9eyQxZSkeFOLVwZzUtI1O9oqMIwC2Pt6_oP8HSGAbJLWzUH2uA3RCaksdbohWC01xAP7TU0sfGDPBmDT63b-QYEnKGgq6C7neYsWMqlZArhRuWURs-yfZN6NOgcgf4Rtjd3qFHlwg4hNGkHCSkBD6vAbHLnEVrt3TUyFxdRvjGG7ksQiTa_YZzb1JPNhX_liS2O3gQ4wbgT_UQaSdy8__jHfzUQEuaTWD6DrJT3t3GGl8n10WVdLXfhrx3Shm9106aAMLJqqp8HYv9p8Co1zzg1kZqXaBmNu9qOWIRyBJhWiymCyxdfXJ8ShWjOXms801NMyn098wOX_b9QGK_3RIpUY3Hft8FU0OifQW7eQnneZN8IVXzw4TwAlx8jPDsuphuNr2Z8N8uNkYRHx6r3xH5NsYjrvZDb1i9bAiRk3pMN5HuYhjeFP3U3aDaQ1qtSk5SJnSXBUZA0zJH741HcpYpeksrbvPmzBuWnoI2xPNLWj-oM8" style="width: 100%;">
+                        <p class="caption">Transformer encoder의 모습</p>
+                    </div>
+                    <p>
+                        <br>그렇다면 우리는 encoder block이 어떻게 구성되어있는지만 알면 transformer encoder의 모델을 알 수 있습니다.
+                        아래 그림은 encoder를 구성하는 encoder block을 확대하여 상세하게 나타낸 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAgwZ7hqodSoRTMLmc81QBP9Z3i01QwYbg1aQCVY0n5KXepM73LJ7l0_6AlLIfhVYnTeTkEc0QeEufzoh9hUbRHp127qn2Y7TKFslV7EuRNrrRKbRxR-c0Q0FzPDxFio8HfyPT4VarnAn42Q82jOaQlGXQPcAXZenxzaMZnOGumloXNfv1ZXzqVBF63BFTLHapozR5AZmATBBhJwH9wce_XNNLfvAZMmXb0DTnNFZZUlksMAmWYfIG_EnhZLsA1mYllIcQFRPmADaAqz36Gnr0uXbCPZXwPvcuKdQq7osByyE0vsNpO8QxUMhh_ZnvJTo9J5eT4YeNbLpIM5Z68B9Bk3ONFv3aw5vxDRE487JCAcaR8g8gzSjoHNFeT1VF-MbjSX6jI878I10fR30YPIi1J32RqVVCrv_-31sVRKVJrqb3dHSDjbM1MvhbqRnOiRfAoBQZ0eh8PfghVRyrb7vuSZulDahUmJn-94-z46MK0SA67-fnkoWJxT5R9waeOlYs1bBcv-J4zbbyKeqBGba-coipZ4u2h0pAx6kcYppKJbQC76LsKA6rpAO3R4FI8PW8abVdnhBCXI5Lk_evxRi_vKsbAu-7VC0kxaFo8ifGG3b40ONeZ30XfgteSG-Wv5ClVPDznYvvRDDgULA-RszQGMLLLEjIQlrK0VDjYG5NP41fNE2j6d8gPATed8iAELjfLv8NApuVWGWbXCvBBzimbCn0hVqAS74h45HNRdz9_vlL2yPbCQCvgEqeggn-_EEyd2JjUO3MBxvRbB5qeVX_AsIOLiCOiZnclnFnHAPxOJfpsUtKQ4v3guXDkG-I4Cb2oE2gjFHPNLpc92sueKG7JS0aekXMdZKqyUTYYs1E9Ra1RMftIfwidaTKS2CBwiVxvaDaaJuxfzME5ZQsUYhwX1kDBdTsuOZcEztCqmlH9YVODsCKITVpvfT7l2zy-bHZsK53g2XIF65hBIIFEubEL4mNzfOhDGrzY6tsKskOIveqceJowCuOrxxefWw2oa0rwdj0_4SwBzxGWFc_l91lyvl-KUFJKk8ZrYAAVV0UEgbwkOElyQ9EPlpgpLRBOzyyI16djs9Mc4knBdWqDXizZiPGKX6i4a3YzQAqA7fkiVQ83klN4rMoQl9J4JQwDEXHd9eb1a64JaSohTcYh54LYdlEj1s3zCtyzXoKgVexbwm0vtZILh5yqJq3qS3ei0z3XUVN9PVRh9ElJ5xLbxtGqQ1SHOJ8r0wpKeq9NWQXKYrNheGU3uw1Rv2x-2emjrtfjVTa_r-yHkomzvNT6MaOF7IAMf1NmaiMrPWYcfEKyFnV09LMoaS5WgJHsZOl9_XenxRjU2GOdS--p_MlWk_6_DugjpGSfPSPT0h2433IerjjyTguIyJ9_ftzf0jKHQUoP3XVL1Fc7Ysx565wEoTT5SWDUfW_0JM13rvAvb5TZnjzxoFWXDVJX0hcJWtbJ_EYmfj8VTZPMJPeYbPU" style="width: 100%;">
+                        <p class="caption">Transformer encoder의 모습</p>
+                    </div>
+                    <p>
+                        <br>위 그림에서 알 수 있듯이, encoder block을 구성하는 요소는 3가지 종류가 있습니다.
+                        <ol>
+                            <li>Self-Attention</li>
+                            <li>Add & Layer Normalization</li>
+                            <li>Position-Wise Feed Forward Network</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Self-Attention</b></span>
+                        <br>이제 transformer 논문 제목에도 나와있을 만큼 모델에서 가장 중요한 attention 부분입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 attention을 위해서는 Query (Q), Key (K), Value (V)가 필요합니다.</span>
+                        <ul>
+                            <li>Query: 모델에서 연관성을 구하고자 하는 주체.</li>
+                            <li>Key: 모델에서 주체와 유사성을 비교할 대상(Attention의 대상).</li>
+                            <li>Value: Query와 Key의 구한 유사성을 바탕으로 구한 가중치를 구해줄 값.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 encoder에서 Q, K, V는 모두 같은 값으로 들어갑니다. 그래서 이름도 self-attention인 것이지요.
+                        즉 자기자신이 자기자신과 유사도를 계산하여 스스로 가중치를 찾고, 그 가중치를 또 스스로에게 곱한다고 생각하면 됩니다.</span>
+                        <ul>
+                            <li>Query: Encoder 벡터</li>
+                            <li>Key: Encoder 벡터</li>
+                            <li>Value: Encoder 벡터</li>
+                        </ul>
+                        아래 그림은 Q, K, V를 이용한 attention 연산 중 sclaed dot-product 하는 과정입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 decoder의 input인 '[SOS] I am a student'의 토큰 길이를 맞추어주기 위해 encoder intput [PAD] 토큰이 추가되어 'Je suis etudiant [EOS] [PAD]' 문장이 encoder로 들어갔다고 가정해보겠습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDW96vC4rrhJwUie5pXhkesotrR6S_zuGIIUPNMh0w8yxLKpCLWOtuAt8-1d36PZC_sPqq0Vx54iafp6uyIZbcFWf3iav_jgoUQfnuj0mESB2hk8qM3K9z0YMvvs87gqBYauMylCuq6-QtTAvKAaZL7YgvSZKpZIypi_9GTJPRF9juF8pyT_5YIkjDqTgT54gwRQJUhkFFEglAaeh2YR_AsyR82stdw7s8nzC2itpTGcxaUg4e3yewtN-yJt-eikYBDY62jNbnav7Pl-H9_sM2rv0lShxAJsof7QK5pZLG9okAhU25psCR8qbwBigbIkcd8UwWgORJTACLkTNe5vCn19pSdmgKcJ4UdfrEfvbAtjp-1tKsPpKIVeQ4oFebGABxaCq1LWYEMG7HFORQ-XgKuLgtQm5ZGcJ9IBB6N6cqKPNFAysrsnd91B4DxfBNX0pZu1sPjl-7jm3bI-tdw8rEPzILvmd3MZsN3J4wfE-Ll4zEPpAi5nYw7pojENsSdUemDHvjvPKkZEQ5QaIN9JDP5MuiTvW7ikI9-Q89LEmjkGv6ULqGFvELGmjj7vbUzTm73ZVWoFXyYo6oY2lizrPFks2NmcY1yIGkv6ExTHUSy3TxEr_1I5cYmi5apqNewspB_o5C05lKGkojIuwoQfq5y0G12jZgj-ZuHQraCokloT5j6oXsQ9t6OlCBDHxvyo1J5OYQP4iVAo5XQIEPXd6wPHS3ozBqiiJnRGHS9MP7dDIKJmBktJZ10T1Ldh9OxkJncgfNoLV1-Uq4A1O9uzBLM08cM5Dci8oWoZ167ffGBwWUjhrc5Nq6nfkbNIfskq_0RVGc6mImP0xPpoOiN2JABtTDMKWt8_0QZSlgF33HqAZ8xf4kIImfI8CGBaQ264pV11_xE2F4tsJYjgdUmNT9jODlgfMJcVGqO1EPfEuO_eSy8gibkcn1YAgt6W1MDtGH4GmCmB3YyDXGnX5_fIy_vEuxWBL0mr8dgg74yo876S9MwvoiRhNHBaBlLYJJ6aeFevm01FSUxHjby1pXE-Xl4uT0K2qBNMb-UPJmMM6NZIHEbyYLgoFkVgSAPhalO3LXdo1iJMNh8Kl75YoVOaT_UMPaHwMSPIaU5Z7w_glIsgKNOhN7KtHIl8JT21kutavCjKTApgDJSBNYOfV37FjBXNVq9tMUOcEGtqeTiBqveAby_SC5uO4FvGCqWMxuJH8LC6Ecskqiag_m5ZAkGyJ7JPIikt_jlZ10GfQ0t39Gg1LnbtaUPXT4U_ZIvXFOsVw5S-i628_-x5bxurobTC9TbPU7zECliURHzq9EVGdWym2fHibXN6i9kcIRbYJLr9SPLKjeudmavfpoq8OkoOyYzWf1WiAxBE1t70W4H5ixey-f42G3YuOmh7lUqvwGr37gNNav2VG4HVhVQdcbOwVRrT5dvLB3RjyqH5P5Evt-HqdZm-r5gR7Hl_tx3OAHlo1y39lnNRdT3FKnL9ck" style="width: 100%;">
+                        <p class="caption">Encoder의 scaled dot-product</p>
+                    </div>
+                    <p>
+                        <br>위 그림은 attention 과정 중, scaled dot-product입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이 과정은 Query와 Key 사이의 유사도를 계산하여 softmax 함수를 이용하여 가중치를 구하는 과정입니다.</span>
+                        <ol>
+                            <li>임베딩 된 값으로 Q, K, V에 해당하는 각각의 가중치를 곱하여 각각 독립적인 Q, K, V 값을 구함.</li>
+                            <li>Q, K의 행렬곱을 하여 Q, K, V의 차원 크기의 제곱근으로 scale 한 후, 가로 K 방향으로 softmax를 씌움.</li>
+                            <li>각각의 Q (row)는 각각의 K (column)에 대해 가중치를 가지며, 그 합은 1임.</li>
+                        </ol>
+                    </p>
+                    <p>
+                        이러한 과정으로 각 Query의 단어가 Key 단어별로 얼마나 가중치를 가지는지 계산합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 Q, K의 행렬곱을 바로 softmax 씌우는 것이 아니라 \(\sqrt{D_K}\)로 나눠준 값에 씌우므로 우리는 scaled dot-product라고 부르는 것입니다(여기서 주의할 부분은 임베딩 차원 크기의 제곱근이 아닌 Q, K, V 차원 크기의 제곱근이란 점입니다).</span>
+                        
+                        <br><br>하지만 여기서 Query는 Key의 \([PAD]\) 토큰을 고려할 필요가 없습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 softmax를 하기 전 \(QK^T\)의 결과에 encoder mask를 씌우게 됩니다.</span>
+                        다만 여기서 주의할 점은 Query의 [PAD]에 해당하는 부분은 masking하지 않는 것을 볼 수 있는데, 이는 Query이기 때문입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCxhi-Ac3MJN1mhXz6wuxaTXd9q17M8Jh3AwaqnuoS3NatAdA8XkM7JhHOX1abuw8psZ-5zImL9xwupp18EWP9ktMyJcaObhbqFVLrbp317B6FUtwnaMJFc7GWsgCKju7t22aMknVvNN1F1tltxlkQ_9Kn9Y5TqlALU1UpgyAMrWu3ClLXx5GHEhAah65O3supvgmKNcaj6Ys1_wyKSFJhE9dHPiBfyxulWllzMgSPJKEoscP66WBW1ufn5ohpaF52WUABu0gBUbOZuAxbE0tGNqxXc-0mjLcEfUQ84C9wZIqr18I4YCREjYHBaH9kXTWkh9IT36rom0Y4s0tNTPRpRVfbsGdumspzW_5bfn5qWEUfGJ222F4jlIh-zBULcX7Puqo5OZZWwzV4gU7r8yJ2XvRTzUsFI6smWhH_9_x2A9aMVHrQqJszTAPGdOmgGqE7Zh5dPRISCEs6PfuyB-gGHiRC0YmpQ0_d8yJsMZV9KElKamMDFzf3tBSNwpOhcjUXmk5hNvosjkGTzKhSOvjZR7C_T2I6xhZx2jOhNfzd_i7Vw3zAw_EbBk-FEQwd9q5kgu_jiCHZ2LUvs9PDidswq4bQqNvLi-an_sT7BdwoklC7myvlE9kM21BaZWRumDss415SXAz1BqDPIP2UF7lTmK8ZADaesdWF80g-u6lgfiroojOOCEKIr80seVrXOxvE2MlBnvyMI7bWhEfb4e4XyZLd_P2Yq_cQBkjoXTjSNVjsUFZ8DxQ6jKwDlL6gl8ernc-dsdgcNDJ5GCjUT7JYtNptjyTUFs8jYCKLh9NX-xSen27Ap1IFvy1mVnDkt2xwFq3X3MCE9ExVABoMYasVBBfVLlIvwYjA-Uh-nI_ihXjNYYaMfItiQNe4g7xfdQfiGN7B_T5MlWvr8dRPLv3VW7e_HACGVpSitc3hT0WLHy1Uv57ZgNvqo1AhgQEz5kWBsM5X1TsbzW2S1XQppYCBFM1QQY3YG5WgyewNt6oCBClt6ofbGgNLYaGdDl7TkV1ai9wCeOI5dlCc8MYuDnw_5kX9ffXavSO30fcoU_q6fUowyVzdwM8V1KQRzfY1fyTlzDYS6AIAtTqj5z7xURJrVvyM1FqS9yUmJ2lGG4mL9FqpQH9BInvkYOHu4Zl4TSczy8aJ9s6K___-xxVDZHdKIpr3_0ULJqpSqjnW4lKCZCXsmRqa_rwuYuCoi8Fqp_DsnIFbZ9ndZ7NoMMdh5GThvhb38ecANrZz_uBCqp1Lt0AuiL8ZlihkRjRh-kusp5Z8xKsbqj5wzJ4xMgWd9Vjqer14KC6iFlsqTM15UBCtf7fF9qsPQ_2WCY56KE1qkR4g4DLJi5J9dAwMlIFQZX31R1PUnjZRfBsVDj4fiQHosSeajJeX91jrgkfx7RXh8eW_DWX81PNDkuAeDvRdG_HkxQlia4xUCpbO5qHYDOD-wNdVZPGlP6-kpmrn_IiJMVer_iyEX6LUx0U_X90g" style="width: 100%;">
+                        <p class="caption">Encoder의 scaled dot-product와 encoder padding</p>
+                    </div>
+                    <p>
+                        <br>위 그림은 최종적인 scaled dot-product의 과정입니다.
+                        그림에서 \(QK^T\)의 결과에 \(-inf\) (음의 무한대)의 값으로 Key의 \([PAD]\) 토큰에 해당하는 위치에 masking을 하는 것을 확인할 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">\(-inf\) 값으로 padding을 하게 되면 softmax의 값이 0으로 나오게 되어 Query가 Key의 \([PAD]\) 토큰에 attention을 하지 않도록 만들 수 있습니다.</span>
+                        최종적인 scaled dot-product의 결과물인 attention score는 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[Attention\,Score\,=\,softmax(\frac{Q \cdot K^T}{\sqrt{D_K}})\]
+                    </div>
+                    <p>
+                        <br>이제는 attention score를 구했으니 이 값을 Value랑 곱해주어야 합니다.
+                        그럼 아래 그림처럼 최종 attention 결과가 나오게 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC8VAZOawsWBMH55lgSlfz2SNxBpLW_i6CHPCCmla7TsPJL_17TdjLynOeB9Q2MXb028jC2QgWti8Mf9UNa54yIBIUs3-1CLup3mP91EsBco17ZVFWJWniX0GW0S-map9-ZxMVLZZ2zOYV-FfUDCceZxLScLp5EogG7Dz5oXGi-X4sCfSkokg20E2AF-RFIEySccbD55hjyejA1DVybcinBhBRHvxO8zY0_bpM3Gyq-3_2dXz3wEF3MdKUimZSOT9DjBJRt5UjYdnAmKt-edJZxCGvzZqI9IPSdGwFSmzue4AUdIifho_6rnBuzFU7WXOx4OQ-hnze_Hz4Py5o5sI9NXRssQJEwOG5Cz57ufaE8l91IIBiNRtZ3sWwdLF-g1AxHdA2SLrFWOFEULttBpE7Jv38tKRAvEDnd8V5gcRt438uJba3QAUYck0yCI08cmBy9IgeKOo9NhVsmL3m4ST851ODaPiu1eAaC3qkn7xrMROmrVHLHvH2tSmIGRsfhtAK2-kr3xX4X4N_EB38PpJWGRiDvHfCEtLShvIzSiTx-EIwGPGk1aMPTzF6jHpavZJcfLiIjaubd_FodcV3E3EdcyhbLowFRliRg9pUEexByPXee_-ppnmfDVf-C1-hNrEawg2WGSSfXb6yfC7QjXW0BVmHF9FTjGFCzAH7tZxOIbapaxiFntdgFIZvXkYd3lP_h9LT1iZJQpAj97K0ISzZNoSMiNvyGaFK-6MNey1w_k8VWL36V3GiDVfSrpkwrlMZnJg64U33I7eREwDd9Ua6dyxAxAQ9cp0d-U83AOWjBGq7as0kt0YryBL0S5EVp5S4LbCLQR40ftBeSgGoMXrhapUjK0jomuiNBD5VjKbdzXWP31k8hnzpaDfDoFaIL44k2mdNBCBr72Hmlg8T5yf0BXr8RJIRt9Sug1HIj_B0uxKUxcjgkfEka-HttfyDx-UInqdS_qOzArAvAmTpTs_WaU53ynaqeT9ficuzP9JJCmSZ-4pepTrliXq19FZp22CYldIbyvkBCSMd3R1HJNlvUOt_rHkTY1U0Kzsz7mAVve8OB44CrTfleMc3uYp3XyRSpl_1XN58y4wF-WMsNJcp1FVC_oRXiW94CyAJqYHRkbSMKSBUUUen_BLIeXExktoNivRKZev5E9Vcb4AXx2ycVtZk5UJMnrrN7i201OdUrMsShnnOcBxXy2jI3nGlBowxco-sZh1_UUfvJ-QtQKtYxBulAS2eNgXvIjYqrnfrcium-W4sAjgLIUSCj91ofmwLmx4Q80TpnanQ6dtOFcSbqoTXrYfvAdO165uX4dFyHuGeRvZRbxV8znNL05tNvZ47gJGVuS2GiDaXpMz9ZyTVTcwa8yHUwhOwBL8sID3mgie0n6WRWboIztFozR0xBG0gW7C7su4HAVHeA7vl2xMa-FiRlkWTByvI2TcXXAknVjDtUtY8wkpna54-s6iA7GGlizMA2F5t6g7qBSBY" style="width: 100%;">
+                        <p class="caption">Encoder의 scaled dot-product의 최종 결과</p>
+                    </div>
+                    <p>
+                        <br>그리고 최종 Query, Key, Value를 가지고 구한 최종 attention 결과 식은 아래처럼 쓸 수 있습니다(Q, K, V는 x로부터 구해지기 때문에 x도 식의 변수도 넣었습니다).
+                    </p>
+                    <div class="equation">
+                        \[Attention(Q, K, V, x)=softmax(\frac{Q \cdot K^T}{\sqrt{D_K}}) \cdot V\]
+                    </div>
+                    <p>
+                        <br>이제 마지막으로 multi-head attention에 대해 알아보도록 하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">쉽게 말해 위에서 설명한 attention을 여러번 하는 것이 multi-head attention입니다.</span>
+                        이러한 과정을 거치는 이유는 하나의 attention이 잡지 못한 context를 다른 attention들을 통해 보완하기 위함입니다.
+                        간단한 예시를 생각해보자면 하나의 문장에는 긍정-부정, 평서문-의문문 등 다양한 특징을 가지고 있습니다. <span class="highlight" style="color: rgb(0, 3, 206);">이러한 특징들을 여러개의 attention 과정을 통해 다각면으로 바라보기 위함입니다.</span>
+                        물론 위의 예시처럼 간단한 특징을 잡을 수도 있고, 우리가 알 수 없는 high level에서 특징을 잡을 수도 있을 것입니다.
+                        아래 그림은 attention head가 3개인 attention의 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAzivNss2V8s08jian6O3YPGPLW7gZdpIH-ns9KisO2LLO93qfgghYSjoUr2O3X5cekA7RbBlv8CIqh-bfj0ipJUiHyxyHIyN01OOQSMVVOSSfo0DL2fb68bQq8s54e3pEitcpV28jyk1LYasGHn5QnOkadSf058qbho91dyirF9ZRJa4o22Yf4gZcO55W3TJiKJRRlmRqjaoo0MQ1zEoXgPlQ-Dh2ScihpUvUgHfPcPcQibAvl0N65ZD1zy6o3RbZarl3wBTCto_RTKe_Af1ey3EVcx6Wx3BzYB6YBKb9EhUfOTMIcZOXZQg7_-U5RVl7J8tLHhlHivlEQ7nWs1NmujM4oyt7zWsJdm9RXwN0bZ9mG5HqSHou92wQfrvMlXQmRxAuE2WyfTbZ-pA2QI7nCXQ_fRzB4RbTE3EZgwGey6Pl7kKuczX3g52k_GRiVVR0Kk4O5txVTqmEntBqjdt4ZEew03Bge2yi0zy9FOYO1x2YQbl4WmMP2chnASd9lmP1h3Ywf_qU2KCBBLGgVlWhtRo0yQhRYlLlJT2My_eMZk0ZHpBSQKdSGwJkrUXXwMogAJRVhnu63iIGEOaPfGUe-8-7TkEp60768YGjf8xSpqoIAKt2npxMbaSCj_7RLD4aSILZ1wYUKK0-ooiwSpHfEi18u9RlMcVruhB1MIvOchk7WTL852hxjt0N8k_m0d2r_-Kud9GHYIEwl9ffN680lfC3U7-mGju4twL-Vc1KlXptUVzeYziGsiCOrH4tdHD__-Pu2zea51JD45DPFLjEF-eLG3mOkQzxr8m04TiXX-BpIKGPBAxmKEURG2DLIj2peVGkWfPnv2O-L-ezWV8QEkGNqpN-8lm6gVkNAbmkDkIk-KJ9aZlLP70TTdOHxdCzjd-QP-rrVVNIxhbFkFalzVoWQi3DsgnUjDYzKxwWLxLEm0DI8ef2nmr0JYPIE6wk-MT8xV9hHgDtluT1uNdYjH48nNZnYAA9-cnvM677FQ2GfwQkP_RjLogxxMZzhNBeNUta8qhuCGcHpSm1mq7mJ5job3HmHiZGDm0mQFHfkivF3LEmVvCHP3g56tQP7SQHCeBzfteIq3d8FWksgOIF0LDfGr9__P4W-47eFWf3yw_MP2vQGUquTJC03ouXcl2diQDmGTqsPWWGE4mjntjNOvod1LVr03PRjwWpRkX-i5ocxGRRIqdINVC73It7-km2qH_ucJ7m9AvfI262IdPI57BQDpgSMRTAlUnSj9aCrkL0BY40R4Dr0FXDv6jwAwSvSAo1IxxUcal4AzcKE4x0moNwchjlbEue6uV5-ZacFQpDkfbf48BwwyrOazVVe0OCmkm7NXD7XPrudlAYTpu3CocYeNy1GNuTGqweP4ixdWRp51NTVDqFhZlsZ2Hvr6JIEmjUErWu8RHrLB1tjdGFRIXLR7dt8SynAOFrskBC6PS862NZBu-AsgrQMcbzIW1ig-9GId7Ap1Tb3J_4" style="width: 100%;">
+                        <p class="caption">Encoder의 multi-head attention (3개의 head)</p>
+                    </div>
+                    <p>
+                        <br>아까처럼 하나의 attention을 하는 방법은 이해가 쉽게 되지만, 여러개의 head를 한 번에 병렬 계산을 하는 방법은 잘 떠오르지 않습니다.
+                        이제 한 번에 여러개의 head의 attention을 진행하는 방법을 설명해보겠습니다.
+
+                        <br><br>먼저 아래의 경우 생각해보겠습니다.
+                        <ul>
+                            <li>batch size: 128</li>
+                            <li>sequence length: 16</li>
+                            <li>hidden dimension: 256</li>
+                            <li>attention head #: 8</li>
+                        </ul>
+                    </p>
+                    <p>
+                        아래 그림은 위 조건의 데이터 차원입니다. 이때 head 개수만큼 데이터를 나눠주는 과정을 'Split to Head #' 과정에서 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 중요한 점이 데이터의 차원을 쪼개어 여러개의 head 연산을 할 데이터를 만드는 것입니다.
+                        즉 기존 모델 hidden dimension \(D_H\)을 8개의 head로 만들면 head dimension \(D_K\)는 32가 되는 것이지요. 만약 4개의 head로 구성하고자 한다면 \(D_K\)는 64가 될 것입니다.</span>
+                        그리고 이렇게 구해지는 head dimension \(D_K\)는 scaled dot-product할 때 제곱근의 값을 구할 때 사용되는 것입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB5oFw3ixmrOKo9H7SYUIki6WQiqhPpYNZyM2UBm6E5CGCuJPjEh_L9hyU3mqCCcebvqZpREG5-tQB8ZOryho-5c0pxlP1j8EcwPAhgUTC7cpm6_iVuBgEAkv-th1FcukqSjrfF6mvahnKbO2Fgdh25ENwwAYPie_2hIFY-lHH5kGnGd6TDfbNeaIpDxJ_K51jWGtrDxt9fV3_DNkLLGNf-kDddvln8cDGWv774PBT-r8gB2b7DsNR8g-2IlGBKqKh-oZEqnEx6tz-bPSyeaCynO4F0cUlcMU1hgVuRwg_1al4tjdLaZglGI0BuCmRAL4NU-qkO9XFCp7k-X4nm5krlqjbMfb3Nrd9T6VOlfo97-maXNHmHKRHMlJnTLsWcQfnW80Lp7Zw479QmuyWX1bNGiQf4XF3kQhpuAC7Aw1yR_ROHy73TMmOv1IiSdpWfYE4ObNr6H_1foD9UhF80U84X3bma6iU2nYOpj5ASTR05N17cIrZOKeyrRU4vIQweAXmAlnVzepYKk1HICYU1qQbq1f3ggqSKp33Yp_tKrfvt-Q5ZQPThy37ntET6dPB8QCI0Q5BZTiAIdd-hU8Fqr1fYwYLz8CERS99TkbxdG_ywD4lFla8QRU8m1SjBdYwFolhthWUpiguyeJLF6PIFB_zFGLgH8Fb_duIauc_qggqMZEMqaovYy7GvAmc24eGFqOROzABunYbpK2w_RwpYQhvI8-uL2Y-xG3xgFd9esYixxuKnp_h0nuQr4YkV0SWe9cBtOVJKXaHScddKDlrh86dfnULCJyppAKiDAGM2reCDc-Qbx6D81F0yMdcEtFfKocfjX6ZYLaKGr3pEklUpDfLP3lJr4Y9QKnUfNPAJGSf16i73E7vI-4ChR3NaC8CPFP4I3rRHAQc-0ucyR79w7XNC4AiEjxW_8m9DFg5AtPyHab-cehwCO-FbMLzI0iSDpCo-yHI8w4c5kJD39B1738Z1HlfkTTmM6Ux4ItQf5SgsyNtN3Fk4KdqvhCmOKPisx7oT6GWXCluoOBFckV9j1phZy_XG1y32JYzRw8gynhZLGkowkiPFC94Gq5YA8OnILQQTqQ_LPjdLqAOEf3XujF9aFGC4uDt7T4kApAxqwvC9c-azcXw5nphjCS-outARwXxZj-iW5IXYO87AYvc1XfKvWx1eOJD3-3t02Z1E0SP4KIIa4ZlpB3XSpvU8wM-1-uY6JD6jAXNJk2rshSQRZhOIsCedL1uRlEsWww6yiOxMqJ0962gs83PrMPk6eKiqTARXyA-3pX5MtUe9e3X5spoLOYknzvZ_stKn5SqMPNNXvy7IBCyZ-QhTZU0Tq7zD8O-CZhP1iaPDY64MFw-AQlXbIjMWZVkcNg9fzvsLAvQlYMjbD_YDAWYJH5hoAuzNIm_BziuKGCcAqCAVIiUytUuh4RxSLdOM_4It-VIJtsfJcWvQLTN8qK9mki0gbkN8P1dydp-2dNop9msporA" style="width: 100%;">
+                        <p class="caption">Enocder의 multi-head attention (3개의 head) 행렬 차원</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Add & Layer Normalization</b></span>
+                        <br>Self-Attetion이 끝난 데이터는 Self-Attetion을 거치기 이전 데이터와 더하는 'Add' 과정을 거칩니다.
+                        즉 바로 위의 그림의 맨 처음  'Data'와 맨 끝의 'Data'를 더하는 것이지요.
+                        이 과정은 컴퓨터 비전 분야의 <span class="highlight" style="color: rgb(0, 3, 206);">Residual Network (ResNet)에서 처음 제안된 residual connection에서 아이디어를 얻어</span> 구성을 한 것입니다(ResNet 설명은 <a onclick="pjaxPage('CNN3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다).
+                        그리고 이 'Add' 과정을 수식으로 나타내면 이렇습니다.
+                    </p>
+                    <div class="equation">
+                        \[output\,=\,Attention(Q, K, V, x) + x\]
+                    </div>
+                    <p>
+                        <br>그럼 layer normalization은 무엇일까요?
+                        먼저 컴퓨터 비전에서 많이 쓰이는 batch normalization과 layer normalization의 차이는 아래 그림에서 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Batch normalization은 batch 방향으로 정규화, layer normalization은 feature 방향으로 정규화 하는 과정입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBth6NJek_jLlL9-Nd4zPUhN7iXm4SX34-EIPpf4G1ADR2knwLS4eUzHJcLIR5hIqqmFfGJ-9-aLhgq862daYdLNU6oH8J7-qb9n63suRO0nb3TCSL7foLOgNi2i8qVuUPl6ejwOXK7rxiENiQbtEFJ-c7dx9AhL6P1EfaWdntTwkny77mTXxd0ozYv0KdwEdae2ZeqLSxZzVGJCHhqeiDjNfmnzKuMf0kCCiWeuJHuRzBB3Lb8sBE5NkuX8jypnOBa7YJWd0PK6fe4DlFcTrsTt01ONl0xeFOU4ig44Q_XbgUR2er3ra5V6OeFQjvFRBnGoHacRRo7lnCDlZXtLtG-hqZm2fFuaGPljhI0CzUQewUh4Eh46pZx_N049aN1poEYPbyN5n7e8G55d7K6NB_xe4NKwTPnTLrCtJVo55wVyp48snb_Iaa8O0ryNI6SFuFOqUa6B1eqwn2sdjIhKcFrsOmt8kKrjCUvEmxIUVElRbh4w_GWkyI2800KlovqhzKseOT5vJmrTp1VfobxgMfHwbaT3IM8hrLRsZ9as7JfyMYMEyvZ7FjbxgNxcL9tYyjoMxD4eITCu5mEPTirtcAYIaCvaLzE1un8LHBD3BVV3YYv8cY0NPplL9gmlPDr6MJQOJf-uLueZY7gL4Kf5b5S8m7EL_lOYJYHCOkYR963-mCkbI612TUict8w9glGVEtFWFT5sK28RLKZ-n3qLJXtXRjIqx9WUSK4VGz2xAdPTrFvggxXIU9mp7iLPpmxo5x2RhMqcTlJMY_Im8ENUG0Yb8Kvr1BJXtGqORDvgUypY55hoIOGippBfKWktjsQiUEXFu_ayX8YionZhfNB0ylaN7YrYyzgPsoo8yScAn7MLz3qjzxLeUYIUjN3li3RjpLcZyAb3J5tI5JOPDClglhif5LTtjLxmEV2AymBMwjOVvcS3BmyumkrABA4bpqYUKYuOeHvnxInzDmtbdKrg0UH29JFBwbgUn2I1vBX8rJ0fma7NhsqnwfzcXsqjyBS2ZjbbqXv0eutrupDGUzbdhiqT6Lnj_P1KXEBQByKdegZNLl4J6ka4mjhnD61brxMD6WlScAKfAJ3gn43jfvuVsc6KwYIDmquKkxbL8WuFxyYKBckekMJFOFSe4eZAx5fV2GQtSuzGeshdBE11QOu7VCws31ouEvzm2Y6Zq-BULm2WTMdlGhE_ABbPKj-LOqO7rLrT72IJv0YoqldZltmcHP4wkTKlfZ8ZFqi1DUPx7RurWUPD9L0X_nTajTZKPaL2WpS_JNLB5_Vk4Bdd6mhruRikm1JJDDU1l6Jzbqw_uEw7TjL4mgH925jhkrLMZLb_gd9dP3i9CEuID8JPF0zpjL7b2P0ejWvLm-3pk979HXii6I6cfQKK2Ref9Q3MjuopV5evUCKk4aQ4-uz0UaL9CWsJxkw3oL3UDqnyCtiyLYZPmWant4UNNFTVSwOKdyb6s6QBdrIaVsCGR1OmwI" style="width: 60%;">
+                        <p class="caption">Layer norm. and batch norm.</p>
+                    </div>
+                    <p>
+                        <br>이제 layer normalization의 자세한 수식을 보겠습니다.
+                        아래 수식에서 \(\mu\)는 각 feature 방향의 평균, \(\sigma^2\)은 각 feature 방향의 분산을 의미합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 분산이 0이 되면 분모가 0이 되는 것을방지하기 위해 아주 작은 값인 \(\epsilon\)을 더해준 값으로 나눠줍니다.</span>
+                        이러한 \(\epsilon\)은 보통 1e-5 혹은 1e-6 처럼 아주 작은 값으로 설정합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">마지막으로 \(\gamma\)와 \(\beta\)는 훈련하면서 학습할 수 있는 parameter입니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[y = \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}}*\gamma + \beta\]
+                    </div>
+                    <p>
+                        <br>Layer Normalization 논문은 아래 링크에 달아놓겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1607.06450.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Layer Normalization 논문</a>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Position-Wise Feed Forward Network</b></span>
+                        <br>인코더의 마지막 부분인 Feed Forward Network 입니다.
+                        이 부분은 단순한 2개의 층의 linear layer로 구성 되어있으며, 보통 activation function으로 ReLU 혹은 GELU를 사용합니다.
+                        그리고 이 레이어의 intermediate 차원도 hyperparameter로 두긴 하지만 보통 모델 hidden dimension \(D_H\)의 4배의 값을 사용합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 종종 모델 사이에 dropout layer를 추가하기도 합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB2lj0ihXqDHuae-AWMyZ6STHwFqw4Qy8wBGEKhWoOQy4Dibj1tzQ5aCnOIZMbTIqpjjbQU0FV79BTGbml5THYRbWrhG1Q8jBfS6Fok2RBGi3YyJvXDKxXkFcxER-Tc8LIaEtzv-_HwuVV0SKliV7LjYRlOwlo6HOPFWhSzaM568b1127vS2LtkRF-jHekj1GPz-49h2OifWrA3uMszwnMpF7KYjCxRUlhdqYlW68smGjMQu8Un0jW_SIV2i9gmeTeUTLpazrb_vCib4_HEB_lp1jh0QJoXCZ4GCbEitG7enIM5BJ_ZR0t6sS535a0ZMrMnYmkAFl_6Y7wJbkmlXRLau8D5cfydFfkkMV8VnId5-PPozdlFRdmsNOZBpKqYcee9gwUpNE-FoDEplcWWrVhH7iNlj6TPSndT_eHbD3HvM2xdyJ_vAFN32VOiD9boZ6MiTdDvtiUL3u59N3BkW8loqoCVYv08AHvQtKK3LpxKTobnlZ69o1IEcQce9KHbpk6NhNOo9olu198xi4WBoe4EOKc6HOBNMFGcksVvrWMsTit-nNi-n46LEzogf03snIlPLR780ZoSRtVYrKkF3qmrDsbYsLPbc_mn-8G38Rn32zICz15zVp_l4Z4ZVYKGzCpf8nD43VrD82t3Jh0NLwh5RziEojVBLLNpxKD8wAwcQYkTf4NiA1xR6vBfmaex2gzqFdUs4XFn4P1vwz856uBpkzmGw8PwVzfqUnmLHvqqiJdDpvHcZ-VHXrE8-W1hOsmAKWN_fgXAVegzEnmqxbYVHwBKdJH0woMhFsJZQw3UAxU7MMeXss853A16xllqYucnMeWiVOW6iWY7Wcy5hUZ8LJo-sGTX959lkkO9QzAER3BQDFR20dPU3thVgj4miB6jH1yL_ED58uT-2haSI4yXcVwVuY0lGI4_0i5ytI1j_-1fyIjNW5dXJQmAeM61dSm-Li4LsUzVD65OMsf0jog3xLQxNWxF-MAePNvKFsjspteGClsJI2-A6HErfEQiX0O9NHNPHDgRzOb5pQ-CrWkmOXCZoDu2VJC9k3qQpTOVN2A1w3FKL4Q9h13eOKKIGM01waIEqHvwUPl1TCSyioDbvfcFLXqijlApWPrEnNxXzu6CMBdw1HQs1mr5xbAoe405nv_pYtPril-P1Gv1N2_A3xNriqQcGH5qSQwVU6iY5m0bBxlQ055H2DEyf2O3hueuYflE0SB7zxzteean-rIKP30Ium9vzUU3X-cBV-RT-xOvSb5-eUWo6hJK0IxN7lFx9pCO6wQyJhbrq-0zWxK7vwv2iaIPE42ovoAxKlED3paWwgx60YMW2wTGL7OVLEvxsyB6IB72nzFJkNFiQMJwntzMKLwATG20RSj2rCszlW5koGe0zfFmBY_T61Ho6dmsM2BsSY5ywWQoWqr5UQfauzYH97BBZ_N36LX7BSMArREcjl3a6nj9uoLVBLHsL_-zgVrRjwS1LFFtXdI" style="width: 60%;">
+                        <p class="caption">Position-Wise Feed Forward Network</p>
+                    </div>
+
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>디코더</span><br>
+                        <span>Decoder</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 encoder의 구조를 파악했으니 decoder의 구조를 볼 차례입니다.
+                        다시 아래 transformer 구조를 보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위에서 설명한 encoder와 동일하게 decoder도 여러개의 decoder block으로 이루어져있습니다.
+                        즉 우리는 decoder block의 모습만 알면 decoder를 파악할 수 있습니다. 그리고 encoder의 output이 모든 decoder block에 사용 되는 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA_RVCrt6kSC3gMbipvpythqu6vnV_BsICDKHw5IM9qPYv48dBXla62yTsyFNQJnSgTPRfxd5-d61sPmhPDf3kny6GiBEqDj3h1f4PKr9fqS85y0IknfymcUI4wabv_Wjbx9L6CzVbh4DE8qhS9N9nAoza-6WhtQ0dIHTbi0RhIjO6LQoui-9FXA8duWJXAVIQIhHUoOGn-aI31dn8yEWSQAhg6gKDthJAd-laxezFyw8gQvqglGPKz8hnA5wnY8qqQdSe_Dmj3w08tduYoEiurUc8WOx1DLg193XzwBruxgy1ziDcK6HurTHW83BA_RvBPjpn9zHingYlysnNiqSuvFz70ydc4kMPu-Z3ztDkdNpgonrafe6xgRNIX1Vf3eFmduawDUV3LjA0RrkM7cf58g2jMe2BgqMJan9oCVtQUEW-mDKEejqXzOepHy161QaoZO5_pf4H5iHPh5VljU0PDyXwQtQetlT3mEOrAHvOXAo9FBuDz_c4dQYk7T5Q6U_RvZX23ud1MxF6Ujif78UBbvbSUZCa745j4y_s5Oy7hiXduetTaiWQ_JBiTbHy_RkAhzmdW1K8VqK7qttwKzjUcrRlhcrzM7MxSGoaQwaHH2w53PSPCyMdRR-2TKebLHcjvXgwkSj5y5bHxEq35T7DxZ1df2mPlHKzjfg8z3Ss0Fj5mgQzxTRwt5Fd5igWbhzKXSYTIIHvTgLbYuCVgLoQ8yxH6B2mh_nX_rSBRES0PIligb0EHPCeTJp22mWQsEzB88_VnrkHn2MZLdCRhdp9JQ856Dp7ray58xtzWKcB25GlpfqvlxzbArshD1pijpT7qfMo2vShf1ZBT3gVN18JLXrvcYZKH8m6K2L75ly8y2B53YW0fmLm8CjtZcSS4sCmhSYhSUlzw1DF5r95BMTActkhd419cuoFSNRjAxbAiTlS3nJlyl_0qZ_uqxrR_BcGfEBWmA-TN-kRiy0rz1mRDwwT5dc9dtpwwYIjnTzo9Ryo4b_fSP3zGFKcMjHhLWXGONpAdQWXAosWGdGeM7l3PZ0Mejz1UaPqWJS0-JHFELqbpZdkfSbn32PhJvSMk6J3E6XYkiqaf96WYUPJ3LnYeJCP8cZlwEL7B3rl1DB9FMTfaok6Kc0LqxE-qSW5iM9v2SbIksZUIrLR0-XJAJe1bXIQTuLgJBCLVQwVtjCWEt59aRptb8XyJHsWBnqBmsrIBptzymV5PJb1d04O5OpkuH9FpfXTDfqkS4BUJ5nLTghdAa9OCONCWNmkyarY7o-BD0BfmWBjp7aa_Z0iIRQCMzm9qJvSA9ZPZk3biuY5kr1NqBqmEbwGl_5LNQz4D57uXNYxrtH7qyRrEWRERrYO8T6Wfw13wkrDDsJaga1xJix4JLpktpQTjqBl2Zvv8fKJZss1h23gKWJPYbJ4Q4za_YE4NVTgNOkvVonfUU0ZLUpTcKcmj--G_fjItrCEyNn4X0KofDqhOt1HaOxk" style="width: 100%;">
+                        <p class="caption">Transformer decoder의 모습</p>
+                    </div>
+                    <p>
+                        <br>그렇다면 이제 decoder block이 어떻게 생겼는지 확인해보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAFyDDq78kDBahhYXfqCaqNdJK2h8uPgKd_k0r4C0A8GdSm49K0bzU7OwxhJrfCEv87Hpv2fzTzZsjyhgbyX-i0RAFMRUlM8rrq8hlBR14lClJxcEwbcQC-1oimJQwoJ52GZfOfcRbB2V1lYqkGm_32fiqbEdNhtlzkqYgIUHfC0zWM7ClDaRq2k3EE0WTlwBpKrzQklr4yyMJkbEGrqbYoqntcj9FsNUZejq1gXh1I_vqSOgU0fCspLd7gnRZI6UHyBDxda9Zmd8ChTCDMAp60ZMSxzCfwmimzP4UsT6-vcTkaSgsRFE6g7DiNluTFCYO5eZu_L5vEi9W71dZSe-NXNXCH3zZAuYGgztz3AbIcmtLT1XO7iNd8sKjJo450N-EKrb_yiZq8j7sbQwF3bfuuO-6XjD9LsoRbKU_SxpL_Q5TWJDLCdd3bDmaMVFTR1i2pMV-tEZqznqeh1cOQllnXdcEA2dVIJHzH-zFoBEPRBp3NCuuqOiMyGL38RYrrDgf-bc1c_dwOWit5ZLiytJZRCjEWNwaUVBs8IIWVqhXjOnDihn_PdEInGI1D66m_ewHu9Ye7Aqn_tXJGIxlosYtD4AkcR1VsVTSSrIPm0rhZXyXXfitpynMdbPQWSijUTFAgSnNcdv20TSaovXoZiiJ3vQQ0OUIgm8ISIUshUDtuM8z7kxGII0bEyveBvfpGNSzJMCY0xR-9Sy1Ogtg3DP_snTemUvNhakqThgIUX-YjpbeOMq4KWnhKH1Wlgvzs0jGpXmR_LLvQ0OfgkHC5tCUgKAIVRpMbLwFPLP6HyFQwVBiYgfQ6KfJ6vKjfCkrLs-iXgdlHX-xe_yHFYNbWxWulHQE8ADW53OpeTloZ3yhznwehYZe7uLXfYpVrCMUdT_PQ5PjYL7PRPqqVtqX4nFIEXku5QPcyPGsWQSbrTki-FMeITzzn8X5qgTOu8g1YNAHTre9PeIvJMmYwosomoZVa5WHhbER3UpKmJ_S0qoyFpD6yA9PLa2LQxTf4qAV6NXPLBpzwB319cJc5WhKn3U4m09-KrPbFqRxZCAGoveJ7QGxVqRUJav-z-9DV-xsxG9GUgHogiKKC436RmMwfbPZtvUEvjRb5FfwO55Gs5OreOGxzP7ibzQiGNR3dR1LWO_njAW00eU-murA-K1aoibx0CEbPzMWHEZJvd1ph6Sg9ni_2VpPtcV4l6B_9Z04laLjyJV1xlgITOspwexOkXFPgpezA_2nxFByfGwHxi08DH3skx8QLMmZc1p1XCAb22dxTgRQ-LKTsHtKOaBIrgJ1HitEFxabK38OF9VpDicrr2QUijkRAviTOTCarM4xqz3gOhxirUR8Ca3huYDvdGRd4HcF-wV8dXGezsYd2cwMMv9da9BAkBxdv9v1VkkMt17bjH7iijD7w3iVZ5xrBFs7siNJRgM4yRZKwjYJB4HpdSghVD5QH-cgqzx5NnyahWiIRCkkBzkfJksBuhBs" style="width: 100%;">
+                        <p class="caption">Transformer decoder의 모습</p>
+                    </div>
+                    <p>
+                        <br>위 그림에서 알 수 있듯이, decoder block을 구성하는 요소는 4가지 종류가 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이중 'Add & Layer Normalization'과 'Position-Wise Feed Forward Network' 부분은 encoder에서 설명한 부분과 똑같으니 위의 설명을 참고하시기 바랍니다.</span>
+                        <ol>
+                            <li>Masked Self-Attention</li>
+                            <li>Add & Layer Normalization</li>
+                            <li>Encoder-Decoder Attention</li>
+                            <li>Position-Wise Feed Forward Network</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Masked Self-Attention</b></span>
+                        <br>이제 transformer의 가장 큰 contribution 중 하나가 바로 attention입니다.
+                        그래서 decoder에서 또한 attention이 존재합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">앞서 우리는 encoder 스스로가 self-attention을 한다고 설명했습니다. 그것과 동일하게 이 부분도 decoder 스스로가 attention 하는 부분입니다.</span>
+                        다시 아래의 Query, Key, Value의 정의를 살펴보자면 이렇습니다.
+                        <ul>
+                            <li>Query: 모델에서 연관성을 구하고자 하는 주체.</li>
+                            <li>Key: 모델에서 주체와 유사성을 비교할 대상(Attention의 대상).</li>
+                            <li>Value: Query와 Key의 구한 유사성을 바탕으로 구한 가중치를 구해줄 값.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 decoder의 masked self-attention도 encoder의 self-attention과 동일하게 Q, K, V는 모두 같은 값으로 들어갑니다. 그래서 이름도 self-attention인 것이지요.
+                        즉 decoder의 input이 자기자신과 유사도를 계산하여 스스로 가중치를 찾고, 그 가중치를 또 스스로에게 곱한다고 생각하면 됩니다.</span>
+                        <ul>
+                            <li>Query: Decoder 벡터</li>
+                            <li>Key: Decoder 벡터</li>
+                            <li>Value: Decoder 벡터</li>
+                        </ul>
+                        아래 그림은 encoder에서 설명한 Q, K, V를 이용한 attention 연산 중 sclaed dot-product 하는 과정입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCxhi-Ac3MJN1mhXz6wuxaTXd9q17M8Jh3AwaqnuoS3NatAdA8XkM7JhHOX1abuw8psZ-5zImL9xwupp18EWP9ktMyJcaObhbqFVLrbp317B6FUtwnaMJFc7GWsgCKju7t22aMknVvNN1F1tltxlkQ_9Kn9Y5TqlALU1UpgyAMrWu3ClLXx5GHEhAah65O3supvgmKNcaj6Ys1_wyKSFJhE9dHPiBfyxulWllzMgSPJKEoscP66WBW1ufn5ohpaF52WUABu0gBUbOZuAxbE0tGNqxXc-0mjLcEfUQ84C9wZIqr18I4YCREjYHBaH9kXTWkh9IT36rom0Y4s0tNTPRpRVfbsGdumspzW_5bfn5qWEUfGJ222F4jlIh-zBULcX7Puqo5OZZWwzV4gU7r8yJ2XvRTzUsFI6smWhH_9_x2A9aMVHrQqJszTAPGdOmgGqE7Zh5dPRISCEs6PfuyB-gGHiRC0YmpQ0_d8yJsMZV9KElKamMDFzf3tBSNwpOhcjUXmk5hNvosjkGTzKhSOvjZR7C_T2I6xhZx2jOhNfzd_i7Vw3zAw_EbBk-FEQwd9q5kgu_jiCHZ2LUvs9PDidswq4bQqNvLi-an_sT7BdwoklC7myvlE9kM21BaZWRumDss415SXAz1BqDPIP2UF7lTmK8ZADaesdWF80g-u6lgfiroojOOCEKIr80seVrXOxvE2MlBnvyMI7bWhEfb4e4XyZLd_P2Yq_cQBkjoXTjSNVjsUFZ8DxQ6jKwDlL6gl8ernc-dsdgcNDJ5GCjUT7JYtNptjyTUFs8jYCKLh9NX-xSen27Ap1IFvy1mVnDkt2xwFq3X3MCE9ExVABoMYasVBBfVLlIvwYjA-Uh-nI_ihXjNYYaMfItiQNe4g7xfdQfiGN7B_T5MlWvr8dRPLv3VW7e_HACGVpSitc3hT0WLHy1Uv57ZgNvqo1AhgQEz5kWBsM5X1TsbzW2S1XQppYCBFM1QQY3YG5WgyewNt6oCBClt6ofbGgNLYaGdDl7TkV1ai9wCeOI5dlCc8MYuDnw_5kX9ffXavSO30fcoU_q6fUowyVzdwM8V1KQRzfY1fyTlzDYS6AIAtTqj5z7xURJrVvyM1FqS9yUmJ2lGG4mL9FqpQH9BInvkYOHu4Zl4TSczy8aJ9s6K___-xxVDZHdKIpr3_0ULJqpSqjnW4lKCZCXsmRqa_rwuYuCoi8Fqp_DsnIFbZ9ndZ7NoMMdh5GThvhb38ecANrZz_uBCqp1Lt0AuiL8ZlihkRjRh-kusp5Z8xKsbqj5wzJ4xMgWd9Vjqer14KC6iFlsqTM15UBCtf7fF9qsPQ_2WCY56KE1qkR4g4DLJi5J9dAwMlIFQZX31R1PUnjZRfBsVDj4fiQHosSeajJeX91jrgkfx7RXh8eW_DWX81PNDkuAeDvRdG_HkxQlia4xUCpbO5qHYDOD-wNdVZPGlP6-kpmrn_IiJMVer_iyEX6LUx0U_X90g" style="width: 100%;">
+                        <p class="caption">Encoder의 scaled dot-product</p>
+                    </div>
+                    <p>
+                        <br>Decoder의 masked self-attention도 위의 encoder의 self-attention과 비슷합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 어떤 부분이 다르고, 왜 'masked'라는 이름이 붙은 것일까요?</span>
+                        먼저 아래의 decoder의 masked self-attnetion의 score를 구하는 과정을 보겠습니다(<span class="highlight" style="color: rgb(0, 3, 206);">아래 그림의 예시 문장은 target인 'I am a student [EOS]'가 되어야하지만, encoder의 self-attention과 비교를 위해 encoder input 문장인 'Je suis etudient [EOS] [PAD]'로 나타내었습니다</span>).
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCqoN07EUXpoz7MhGa0Obz1JdjU7dCRcSW8WJLq53k_LhAO4q-bwWT_HYaD978NMXltcR7vfcM_5z7IE5PY6WmPY1t2-5BKhmEpVXdvPlWSXYQZaXVUn27UaUiAB9NKClsMioByM3SHLxSLbt5_sLUGflOu1wzU81IdibpHbc01vd0URxSZVgTtjCLRxMIPBsxaG4Zl0_neU408KHduvioKlOf5alcVzFMYVLCg57ojzS0IfcKwBYDz60qsbQ8SRxErCq4D1QIzaxSWzCM6sHg5meV3awGvnqSXvQ7nVf8G1iydLHsgOOL_DO7PdyF2bi5biT1BeoozJgi-T5xCbXmWT9sMPw31JRZHw1LEscIo0KKsZpTJZTw3Hu4TH9_SaRMIpN-udVZF8MW9uhwIq6Nu8bqQDKr1VKU1bXGBt6VAPuSoDNA-J94Nrs4T-e_GVsq2KOJ_O5voMR55v6Bl7lMRagU88Uq8Z-glTmdMI35PhkouiIqApFV-fz2J41tQ5VOeW_CxYTflTQFbcfdju9tQYP1Xx6VQPjX-oY6KTxYCGOl27Orejx1v0skj-6i6JUk6qp3IGELwdmB-1WeGZaii3eGuOSMArruMD4nT5vEsLN9Z0TPD8FJMHrEWFHVXKOr_2hXtNs1yln52yoWnSBsJVIioYPDS8M4DdhuUSM9Ve1hp2NiK7stxTMAAkmAGavplla21JDOMXm_UkISETsbRbvQH3IM_aRgC8SagcaZ5SpRJcHQHdmHKZrAAShXKvZVLM72-JVvyGUPHFR_g7OvfuZBeIIeokt1-Z7L29x4xT5vb1iqtOQYz8URJJy8-OKN5kQmyHiGg5AQU5P_MVLehgCB0jlPJ9yGy82DWd2H_H_BXvXVCU3ac56C3LqCFtUQO2GqMaMsgjS2PvxkTUXsjbPRUSnSOgpPi1EtatjV1HTjY9IfVKccefJvVaroJ0Z3h3zar1A79LSFkPoG3WDwe_ketK807vkQR4p9YNoFlNbs6J5JCNekFzH8oI3sJVkxiu4VIgcJGEZ2e2Xq0TOANzO9fW_bRWn7fp2-vL0-kSbCJ76lW7PqBpVoYHhV3Jl8m5F7wmcKpT0DgEWQvRZXWkjUoyI_uyDgSJIf_Ehb-kUSa9n4Q8EpMJ38PAilWToPVyhRpA50IEKuCj1-v94Qrs5afBaTUSg8O6GfhditSNB2B1aRW_T-W4w7LphtHGL30Xu4qOTQYBaxS0TiNJ0xRwLDFNGzxtED2EUijGkEP8pApEQpviKYpwVhsvO1rvbtSY5X0Mk9VmkOBXxTJNYBccDWSEjQZRkj3eZxmFzhrGiLVFkEOJoD90L38BSrszqY2GVpumHb7VzpQPR6OqUVlqncpM8Ag2m5qXi5ObEvuhB5e9Xt58H40wJ2jNHAySEtH5sOE6XVwAe8Id4bKgEIUqbdwNcXteNgBh9M3paIkeY1dFMJ1mt36pyxKMcD4ytKel5MPBflzRyb700o" style="width: 100%;">
+                        <p class="caption">Decoder의 scaled dot-product</p>
+                    </div>
+                    <p>
+                        <br>한눈에 봐도 무엇이 다른지 볼 수 있습니다. 바로 masking이 encoder self-attention과 다릅니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Transformer는 input 토큰들을 한 번에 넣어 계산하는 병렬 방식의 모델입니다.
+                        따라서 모델에 토큰이 들어가게 되면 각각의 토큰은 자기 자신 이외에도 모든 토큰을 다 참조할 수 있습니다.</span>
+                        하지만 우리가 일반적으로 아는 RNN 계열의 모델들은 이전 time-step들을 바탕으로 다음 time-step을 예측하는 방식인 autoregressive 방식으로 학습하며, 이는 우리가 inference 하기 위해서 필수적입니다.
+                        그리고 이러한 모델들은 현재 시점을 예측하기 위해 과거에 나왔던 모든 representation을 볼 수 있습니다.
+                        
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 transformer는 이전 토큰뿐만 아니라 미래의 토큰도 볼 수 있는 모델이기 때문에 attention을 할 때 자기 자신 이후의 토큰을 보지 못하도록 masking을 하는 것입니다.
+                        이렇게 간단한 트릭으로 autoregressive으로 학습하는 효과를 낸 것이지요.</span>
+
+                        <br><br>이렇게 decoder self-attention을 할 때는 미래에 나올 토큰을 참조하지 못하도록 하며 이를 <span class="highlight" style="color: rgb(0, 3, 206);">causality</span>라고 부르며, 이 마스크를 <span class="highlight" style="color: rgb(0, 3, 206);">causal mask</span>라고 부릅니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 물론 encoder self-attention과 마찬가지로 decoder의 masked self-attention에서도 Key의 [PAD] 토큰을 마스킹 합니다.</span>
+                        또한 encoder와 동일하게 Query의 [PAD]에 해당하는 부분은 masking하지 않습니다.
+
+                        <br><br>그리고 마지막으로 decoder의 masked self-attention도 encoder의 self-attention과 동일하게 여러개의 head를 바탕으로 multi-head attention을 수행합니다.
+                        Multi-head attention의 logic은 encoder의 self-attention과 동일하기때문에 encoder self-attention 설명을 참고하시기 바랍니다.
+                        
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">결론적으로 decoder의 masked self-attention은 encoder의 self-attention과 연산 과정은 완전히 동일하지만 유일하게 다른 부분이 masking 방식이 다른 것입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCy25aWh0hsswaVmtg64qKYzqZOtzoLpZlh8bZ1ROIsA0Mok3h0S4Lvi_i1R8tsZGYC6s8tyyycFc8T16xkjGp53BPW48-JTEgA-CbfEa8Ecajnfd9Y0RudsYVzKgE3HvkqgylcRYQWbua3HLFekQPZtuMCbyslZymR4aARnqQkQJuKoY41yDjj63xKO-_TmXKAhvA9tofkNoYP3oHMVNOpKXUDwW6nhuVNRQW17TswP4154MRZC9CKNEZjOLKjc1rQAr7xbVHfGtk8ffHqEiRTt8LZS2ErspXm9xR3ZKthgsgQDw8FXippcL2V01Gl8IkS5D5-CW-vovVqPA1kvziNG408wk2_VIWk3d_hEkypS66ChPA0oZlsKep--tdgwgzU9BJLhDge-zwImP9RUguVIkxgnikO8k2v5mtrF3ccrteaQXFoi_8NIwokj7Uf4jBIBBXmQmzuJRnYcv_jJ-ItCa01cZoQevfusg9pwKC8rm_erA8pyBRAA16fZfEfzTuWWwH1UQLxLN9yv7cK7pGdjADEKAxKXu1NDYv3qrFs17J22I7vxfkiMSRIEcXDSiE9BRu3UBc0pXIbcknkm9s8evoBvj3tmENhdkUW_5DWieaz8t60dYH2xCGwnNw5BYIqi30HWB42gTwAjRcteK1mczaoBwEjvZl2jd9bLkarKrk9du8FO84pHZNZtCx53BQ7QQGk9pd0TZ8PUTO5yq8Ohn7sj4ork5YDy5CT0PCJpfMZk4VJj2vFg5vB6q7lKNElCaSU41Nchn-nRgqo4oPWAld2Dh6Yj1qg-zUf2TdPb8PtPmrVuGbvZDcBWc_wgpUgr5tVsKwFbZyEUpjib3XhbtkC_e8UnUY3JCCmoABOvUFOe8GEbsTpxoHjpYOtAKEfIEQ434LwsDH3j6vjIyOAOE2ZjHYRA3iaP7fcJNKlbiEBIkG9drDbEcJyveff4E_x90vjcUWr2MHF50aSS4mM8uf7cbwvj0DRpMgT9xoihfBXTGjWuvc6q5cPJPu_34ZH72jOMsAOU8DWNKDcLczxFNDS-a6Ut_BWSDIp_j8NUFJzdt-A02qgJi43alAKtV1Iuf3bTVA_HG_K_9krwsy-gK1piDeEnXCHlXKalpHZnOM59cm7re65p-WZ8w5T-if2uJ6G7QnVIhHYHa1zwnC0GIBx_FKjbBX1mvZCGFohxYXIb4znuGcjAa7b-BuzukM2ZnHu5lkiKxbLrkqa6YoEhrNmt7oXQHTdaMtMdH3fRcSwy9FwD4LD1KvnHiLwwnXjIDUrUfqMF77GsY6Dh1ycaqGZ_ys8s_cGBL4oRv9q2rqZ1wO2V-P0LAArhyNOaEkgHltEwVkmFQSvDQT4zL1f95JywWeOuIWqld7jp7a3dp2kXy5ZZxk3d9EWuDGKj97sTWb7fIVOOZWNmHm_He4T-6V28q1yZxfCqwN5fRTi0WLiaRfV_IF-8SWZVlZJpbgoP311uLZpV5J7C3A" style="width: 100%;">
+                        <p class="caption">Decoder의 multi-head attention (3개의 head)</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Add & Layer Normalization</b></span>
+                        <br>Decoder의 'Add & Layer Normalization' 부분은 encoder의 'Add & Layer Normalization' 부분과 동일하므로 encoder 설명을 참고 바랍니다.
+                    </p>
+
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Encoder-Decoder Attention</b></span>
+                        <br>우리가 이때까지 봤던 attention은 encoder와 decoder의 self-attention이었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 transformer도 seq2seq 모델인데 source도 자기들끼리, target도 자기들끼리 self-attention을 하면 source와 target의 연관성을 알 수 없는 노릇이겠죠.
+                        뿐만 아니라 우리가 잘 알고 있듯이 seq2seq 모델이라 함은, encoder의 output을 decoder로 넘겨주어야 하는 과정이 있어야하는데 현재까지는 나오지 않았습니다.
+                        바로 이러한 과정이 transformer의 encoder-decoder attention에서 이루어집니다.</span>
+                        
+                        <br><br>따라서 self-attention의 Query, Key, Value가 이때까지 다 자기자신이었던 것과 다르게 encoder-decoder attention에서는 아래처럼 구성됩니다.
+                        <ul>
+                            <li>Query: Decoder 벡터</li>
+                            <li>Key: Encoder 벡터</li>
+                            <li>Value: Encoder 벡터</li>
+                        </ul>
+                        이는 곰곰이 생각해보면 당연합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">당연히 모델이 학습한 후 source를 바탕으로 inference 해야하는 것은 target입니다.
+                        따라서 모델 학습 시에는 target이 source와 어떤 연관성을 갖는지 찾는 것이 중요합니다.
+                        이에따라 Query는 decoder 벡터, Key는 encoder 벡터가 되는 것입니다. 그리고 이렇게 encoder 벡터에 대해 attention score를 얻었으니 당연히 encoder 벡터에 곱해주어야 하겠죠.
+                        따라서 Value도 encoder 벡터가 되는 것입니다.</span>
+
+                        <br><br>아래는 encoder-decoder attention을 나타낸 그림입니다.
+                        '[SOS] I am a student'의 target 문장이 Query, 'Je suis etudiant [EOS] [PAD]'의 source 문장이 Key, Value에 들어가는 것을 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 encoder-decoder attention의 Key는 encoder 벡터가 들어가므로, encoder의 self-attention의 [PAD] 토큰 마스크가 동일하게 씌워지는 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAutMAjH64xRipEJEjJIrwLQbrPCR5UUCEZ_0F2iAxIRVo7Qp6R5dbVDkz2xhHXBOyt1yChaaNOXG3dODGg4B3ePQaLMes6cF5FYp2X355lvC6t7R-uwoAqIc9Br6KQjV1Ytbl3TCvl6uNxoFvN5V2YDEhBshIBqz30XKQFkiN0P8qZsioPdNBYzB0AaObndS5jAzKFkBdp_fq-4_ia7tV-ziSf3snGjia_od9j7gZLIckt1Q24e_luDWXipkcqRdckW9E9eGx36JUC3Vzp2nQoRu8c833IATskzHGO91XV7PT612jBdpAzM8d6HluOxuh9786_OTXishJI7RE6Ia_6K4yF3ApAzHf9RNIjDueYS3jWDobc_ZAl3fTLZIshhjdD_BtJ2ANkiCJrcavd7gBqfVdrDtK_hfdZBEHLnESnTK7TN7xwiQh6yurCP93SFmhC9a97kwtq8MT41Ks4oTBfBWF4JhvwMPQldJn1ycqZrcc0U171-OR3Mj3AY_p6143R0xqeCVt_dvmkQOgMmhtvtca1HH2ftWTZkXsWZTJvJ-iTa8eOMFnkKiMRB5pxhDaTmkFRAO8PAg0azrW9qtx-C-77O5FtsmzJ8XC-bVw9rLVCWGWzuWAf8R4CA8JNx2kShHMYoo9C2_t960Ln4-AZERR03YqR27VzsmhWUVp2e2dK8s_kx07N31AEyKeVp-HpavuAVs09XrO2RkKLjzNjA-Z1SqgUxpGEOaduftaurKqNRAKK-CUAaauCGO4pvXr51j41_3tucFzdM_k4QTFdSAfxefOd9SY0txarqevxuvg5487zJXuqcySAyHgn8imI8jzQSgh2atGUfUV8AOxboXWGXpc1ERakLkXUZXig8ReI6WwiebIwaowzvsSfWvIM4fkveFnYOm02YJnPoIYsw4boM7WBQUEuIfTTM3INuAxSrvnBLZohxX-0_uMTeXfg74GSkhvReZRqlZADdCLHyLaO2Wr1qsu5xEG-Zc2DuhmQ9bGLZtVxma0si8Vvw1eF4snKVtoNIWnVWXxn8mUK2s-mxesjLfpPbJO4lASzFNghUVUvaBgZsx5UB3w64f7Ue4kVWv1d4r65zjVpm8xEbcSsIg4Pt0DmgkXKx11iX7fSVAhoS1AFgN7-c0Zdz7D74-Bxl44AW11LAZpPGHxHjshv4_VtlduMHlwSN70XIfC49BXudSfIbtvgJPAzwOdThy1u0M0YprOS-aScWCKa3JOeQHzSJ3i8tgfbVh_xcO3Z4ifDvMpfjZJgVMaKwv_1ijQMqwe_vCCBR2Yi3iqTFtC9lomlsmzMltPWm5IKHQhTcSmo0jaawz9fYMi0U-HoeQY5I6K_m6Eq0bfgB6EYO_4ddVXebLA6d7Z18ipoyoJbEdLi3mFpDJcUbHDP9x2qJy3VkmNrEwuih_YKUB6JLCBNtS2I4PveM1SV5RepbXQe7OCMru1K7delMa_2E_0AVaD2DcQQf8TAi1E" style="width: 100%;">
+                        <p class="caption">Decoder의 encoder-decoder attention</p>
+                    </div>
+                    <p>
+                        <br>그리고 여기서도 위에서 소개한 self-attention들과 마찬가지로 여러개의 head를 가지고 동일하게 multi-head attention을 수행합니다.
+                    </p>
+
+
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Position-Wise Feed Forward Network</b></span>
+                        <br>Decoder의 'Position-Wise Feed Forward Network' 부분은 encoder의 'Position-Wise Feed Forward Network' 부분과 동일하므로 encoder 설명을 참고 바랍니다.
+                    </p>
+                    
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Transformer의 의의</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>처리 속도와 성능 향상</b></span>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">기존 자연어 처리, 언어 모델링을 위해 사용되던 RNN 계열의 모델들은 순차적으로 다음 step을 예측하기 때문에 병렬처리에 한계가 있었습니다.
+                        이에따라 모델의 학습 속도도 느릴 수밖에 없었습니다.</span>
+                        하지만 transformer는 attention을 활용한 병렬처리 모델로써, 기존 RNN 계열의 모델보다 훨씬 빠른 속도를 보여줍니다.
+                        또한 transformer의 self-attention time complexity도 RNN보다 낮은 수치를 보여줍니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 학습된 모델을 바탕으로 inference 하기 위해서는 autoregressive 학습이 필수적인데, 이렇나 효과를 내기 위해서 decoder 부분에 causla mask를 적용하였습니다.</span>
+                        
+                        <br><br>그리고 기계 번역, 대화 생성 등 다양한 분야에서 검증 되었듯이 그 성능은 엄청납니다.
+                        논문이 맨 처음 나왔을 때 거의 모든 state of the art (SOTA)를 달성한 모델이기도 합니다.
+
+                        <br><br>즉 속도와 성능 두 마리의 토끼를 모두 잡은 모델입니다.
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>Long Sequence Dependency</b></span>
+                        <br>기존 RNN 모델은 문장이 길어질수록 초반에 들어왔던 input의 memory가 사라지고, gradient vanishing 문제가 있었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 이러한 문제를 해결하기 위해 등장한 모델이 바로 LSTM이죠. LSTM은 기억 게이트, 삭제 게이트 등 여러 게이트를 활용해서 long sequence dependency를 잘 학습할 수 있도록 개선하였습니다.
+                        그럼에도 불구하고 여전히 LSTM도 RNN과 동일한 문제를 겪습니다. 
+                        하지만 transformer의 attention 과정은 모든 토큰을 동시다발적으로 참고할 수 있고, 가중치를 계산합니다. 이러한 과정을 통해서 기존에 해결하기 어려웠던 long sequence dependency 문제를 해결합니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>Inductive Bias Free</b></span>
+                        <br>먼저 inductive bias는 무엇일까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Inductive bias는 모델이 주어진 task에 대해 일반화를 더 잘하고, 성능을 높이기 위해서 추가된 가정(additional assumtion)이라고 볼 수 있습니다.
+                        즉 훈련 시 보지 못했던 데이터에 대해서 좀 더 잘 대응할 수 있도록 하는 추가적인 가정인 것이지요.</span>
+                        <br><br>사실 inductive bias의 대표적 예로는 우리가 흔히 잘 알고 있는 CNN이 있습니다. CNN의 근본은 이미지 처리를 위한 모델입니다.
+                        이미지의 특정 픽셀의 주위 픽셀들은 연관성이 높을 것이라고 가정하고 locality 특성을 찾기 위해서 kernel이 움직이는 방식이지요. 이것 또한 inductive bias라고 볼 수 있습니다.
+                        이와 비슷하게 RNN 계열의 모델도 sequence 데이터를 가정하고 설계된 모델이기 때문에 inductive bias한 모델이라고 볼 수 있습니다.
+
+                        <br><br>이렇게 inductive bias는 모종의 가정이기 때문에 inductive bias가 강할수록 적은 데이터에 대해서 성능이 좋은 경향을 보입니다.
+                        하지만 inductive bias가 너무 강하게 되면 훈련 시 보지 못했던 데이터가 들어왔을 때 대응 성능이 좋지 않을 수 있습니다.
+                        다른말로 모종의 가정을 하고 학습을 했는데, 가정과 약간 어긋나는 데이터가 test 시 들어올 때 성능이 안좋다는 의미입니다.
+                        
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">Transformer가 이러한 inductive bias가 적은 모델입니다. 따라서 적은 데이터를 처리하는 데 성능 향상이 더딜 수 있지만, 빅데이터가 들어왔을 때 진가를 발휘하는 것이지요.</span>
+                        즉 성능 향상을 위해 transformer는 CNN 보다 많은 데이터 필요하며, global feature를 추출해야한다면 transformer와 같이 inductive bias가 적은 모델을 사용하면 됩니다.
+                        그리고 이러한 증거로 ViT는 적은 데이터에 대해 성능이 CNN보다 떨어지지만, 빅데이터로 학습 시켰을 때는 엄청난 성능을 내게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">결국 우리는 가진 데이터를 잘 고려하여 성능 향상과 global feature 학습 사이의 trade-off를 잘 조절 하는 것이 중요합니다.</span>
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>범용성</b></span>
+                        <br>Transformer는 등장하자마자 NLP에서 엄청난 성능을 보여주었습니다.
+                        따라서 transformer에서 파생된 아주 많은 모델들이 있으며(e.g. BERT, GPT, BART), 현재는 transformer 없이는 많은 연구가 불가능하다고 해도 과언이 아닙니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 요즘에는 NLP만 이러한 모델에 적용하는 것을 떠나 다양한 분야의 task를 BERT 등의 transformer 기반 모델에 적용하는 연구가 많이 이루어지고 있습니다.
+                        이러한 것이 가능한 이유는 inductive bias가 적기 때문에 범용적으로 많은 분야에 확장될 수 있는 것입니다.</span>
+                        이렇듯 transformer는 분야를 막론하고 좋은 성능을 내주는 모델입니다.
+                    </p>
+
+                    
+                    <p>
+                        <br><br><br>이 글을 통해 transformer의 구조에 대해 알게 되었으니, 첫 번째 그림인 논문에서 사용된 transformer의 구조 그림을 보면 이제 이해가 될 것입니다.
+                        그리고 transformer는 현재까지도 활발히 연구되고 있는 모델입니다. AI 분야에서 transformer가 등장한 후 연구의 trend가 많이 바뀌었고 아직까지도 영향을 주고 있다는 점이 정말 대단한 것 같습니다.
+                        다음에는 transformer를 바탕으로 기계 번역 모델을 학습해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#Transformer&emsp;#Self-Attention&emsp;#CausalMask
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Transformer 첫 게시물 입니다.\n\nThis is the first post of Transformer.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('transformer2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Transformer를 이용한 기계 번역</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
