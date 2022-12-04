@@ -538,22 +538,30 @@ lineMaking("code3", 44);
                         <br>그리고 아래는 예측한 몇 개의 샘플입니다.
                         <ul>
                             <li><b>Attention을 사용한 모델</b></li>
-                            # Sample 1
-                            <br>src&nbsp;&nbsp;: when i was your age , i had a girlfriend .
-                            <br>gt&nbsp;&nbsp;&nbsp;: lorsque j'avais votre age , j'avais une petite amie .
-                            <br>pred: lorsque j'avais votre age , j'avais une petite amie .
-                            
-                            <br><br># Sample 2
-                            <br>src&nbsp;&nbsp;: he gave me some money .
-                            <br>gt&nbsp;&nbsp;&nbsp;: il me donna un peu d'argent .
-                            <br>pred: il me donna un peu d'argent .                
-                            
-                            <br><br># Sample 3
-                            <br>src&nbsp;&nbsp;: please answer all the questions .
-                            <br>gt&nbsp;&nbsp;&nbsp;: repondez a toutes les questions , s'il vous plait .
-                            <br>pred: repondez a toutes les questions , s'il vous plait .
                         </ul>
                     </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+src : when i was your age , i had a girlfriend .
+gt  : lorsque j'avais votre age , j'avais une petite amie .
+pred: lorsque j'avais votre age , j'avais une petite amie .
+
+<span class="annot"># Sample 2</span>
+src : he gave me some money .
+gt  : il me donna un peu d'argent .
+pred: il me donna un peu d'argent .   
+
+<span class="annot"># Sample 3</span>
+src : please answer all the questions .
+gt  : repondez a toutes les questions , s'il vous plait .
+pred: repondez a toutes les questions , s'il vous plait .
+</pre>
+</div>
+</div>
+</pre>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAbDypCmuAP5jAYd86yGESAgkAmRF2oAGbFirzA7P2UqI72CbdQdpChl0sux4bRcqdAIxa1kbF1QPZGQi_8c64FwuGGuqe0xCSDOiUJThUr0QNl8FMSi_DDREQHWUbARqnX0njG6zVGWgHmi-Lb35K8IyomsAttzaH042q8nedrxK7cyAms6SpSid7sJMVS2J8SEWR3h2fCcfTND8W68s1d8KHsuoGVjxbzoXe0STbJJu7yKPtQPUmDk_flwYoHtU5Gis4sTc_QeSeKCZBnFC03jBjgOIxHKcT95aiwMER7qV9_mgas8idOymxY6My5LT5eDwjwilpRpd4IhWm_6IxoMYRzP9Z-R-0E5ULVt5yRP307LqfB6wyPYyfvMSkhbehlitFtHNXMh_nilVorPOrlLuqRYG23kUJpOIzlq0054lRJag5a-QhPmoBsAwJaRvxU_YlDedzwwZFtpbB5scFdLON-schjOi0hipKpWE7TUSshWkLpOaCchFaqUl9K4o6R2pVG-15Lxmd94aTryuHg9U2_7yqBrheG71ubyk4LL43BCBbjHTknzuB_mF1R4ck2KyZ6OdmWOYpn_z3eWnB6f-oERh-2fCUTKi3D1DwZKdcRxNVHCKaDEzdMeaRovhJbR6N5SNBWjLpCCS5I_SBDqsy24KtWhjDZMFJl6tSG186R6uQGQ9JGZr8Dg3xS6HSBLYRCeKysexyUJVcn7vI5_8iJ-pelAQ_gAhiU1U715EjbJCzYgwQbWl70Y7ktrGd1SdR76tkoJVeEtpWhKoJCcWdOKPU4AZvI-jgQWhxK48qJawLzT1f5X5FKIPDK6WonwfFrWZvj7kA76-9aTUl-imRQw-6rMRAx6Cu4yZ8Kop8vM9Bw4GWFKZEUel4d_YgdJ3-ji9kr3CEcBVx8q1Dzxp5ZW-XI1Ne--zNil-msoWrXKSEkmhD45aBh_dw4kvZ10J1KTaIzTv_5HBPKVFfUdEigNcmxg22C027rtWpoAzeXok3FJVQDZp9isBaT2BLoSBypD90A7vvD0Q6SPI9_HNGeyeQvtXmemzcj7dfE4CNLLJTtoGrp-en9xwaGrU1YBLyydl0R6gHeqWXOelBGbw1lDb-ZOLxjaiaAWw915bydW65V4FWvLl15PxukRloAxinRrKwQvHPvYrHOHE7uVDNgNnjILxcBnZCVedPxStFSCiJ4dXiXSoW8cS3lvbaJoSy7N2pGtgTfrEnkzDOrYGuZZTls42P0o_X_m6_iAvzzpfpW3izdktg14fEmwGTTrGwCEE_U" style="width: 100%;">
                         <p class="caption">Attention score</p>
@@ -563,22 +571,30 @@ lineMaking("code3", 44);
                         <br><br><br>
                         <ul>
                             <li><b>Scheduled sampling과 attention을 사용한 모델</b></li>
-                            # Sample 1
-                            <br>src&nbsp;&nbsp;: i'm in love with you and i want to marry you .
-                            <br>gt&nbsp;&nbsp;&nbsp;: je suis amoureuse de toi et je veux me marier avec toi .
-                            <br>pred: je vous amoureux de toi et je veux vous epouser . toi .
-
-                            <br><br># Sample 2
-                            <br>src&nbsp;&nbsp;: what's really going one here ?
-                            <br>gt&nbsp;&nbsp;&nbsp;: que se passe-t-il vraiment ici ?
-                            <br>pred: que se passe-t-il, ici ?
-
-                            <br><br># Sample 3
-                            <br>src&nbsp;&nbsp;: we do need your advice .
-                            <br>gt&nbsp;&nbsp;&nbsp;: il nous faut ecouter vos conseils .
-                            <br>pred: nous nous faut que tes conseils .
                         </ul>
                     </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+src : i'm in love with you and i want to marry you .
+gt  : je suis amoureuse de toi et je veux me marier avec toi .
+pred: je vous amoureux de toi et je veux vous epouser . toi .
+
+<span class="annot"># Sample 2</span>
+src : what's really going one here ?
+gt  : que se passe-t-il vraiment ici ?
+pred: que se passe-t-il, ici ?
+
+<span class="annot"># Sample 3</span>
+src : we do need your advice .
+gt  : il nous faut ecouter vos conseils .
+pred: nous nous faut que tes conseils .
+</pre>
+</div>
+</div>
+</pre>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AAbDypDUBURucX1RRdgJuqmA1RTFsDjoKqCdTlvK_-OzdQh7w27FUPudvKMFcvua-m8zeRCcV9Mt1qmrpht_CMqndZ-p8_JhNIj-8nKJp3iOg9r4B8QccEum09U-yznZPPPa1jP7uq29G501_Jasj_DPdzjbUpkwngi3NJE0W4muh78rrGgXhJgfX4iL0ntb6ZgTrmIW16d0FEjduSILcw4zpRva2-JJ4G-EFdmWkGTFIFOa7ijVVaHySncvSNDVWYAorYqGurtCHkwg5OF6h6ylIL5A3nQ4GVpoExV1mkH8Cqhrf8r_nDsd-0T7_tK_QoOvHJMOEdP5QrHzxKe4mMe3KOX5LAs5urCXVH5ppzRRYzCkI4W69zAzYUxAlEDdgsA1vB48tzPb5woT1KFvltw5E8YXPBYK3RSthWP_Cf_Ldz02fDjJP4wCLko0pA_I7VayGPMccPo-pcZtStYCT5sChii5c7uO5e3__b5Bm9YOsVZOgKL1PT0kX3-fA_tOinpkfD0PJjbRl1pFbrxMjvt2gyQAgk3S0j2hWw3muHOdQlcSZh3_ODc9WdVa_juVpCO7iyux-aL4H9llZ_ajmOpcBubZKwW9LffBLumfRl6l3HMbXe5z4yU6RfdIrJbQ71MM_yd9uLa3sWcpIgmgThTmgewse_c5oCaO502_WVONH2AmT7EL3ZDzSRb2QtXoUgDPPHrIWGjXigwT1SA20fHBROq59SoohKOPcJSjyMylKU5hx397aGfqNKNp7XzT-1nmiyJ1NnfnwiCpG77cx3BmhSX32edNXtHS2etWA9psOMng5XlS1kocrCisj2nAtpcWLi0yGB9CrzXBLr5bEconxXN7Pclyq8HM4WY595VNcHyCLqvbJ499fCfr09xafjUUod9Gd2olxyOs5I2blz5WiYXOatQdgNLnt1Jmj6fzktqw2M0BtCZrurSI4f-Qcq0iTGzNUkCv-Bq_035Uu7iLaPfQKrUrROrHdFyqS6p-nU0IMpdW2-jdWNZr_G4623U3NWR5CEp5kfty_hkmr5rpg-YZUssfFKvZ2bFJ8mUPSZPN3ASkrSUYh1qTINjX9eN4WruuRts0wW2kJdwaVvrTcDsnLQPUZDcJ1HDoSKnZI8h9KATkXLPWkRp0Okg2wyCbCI7YOxslbUcDjOlgj3o_YY6FBQFnd2DwDB6jBSSUXRibjw8T5MDtQnL4mv1l1xilNH6dEkde1uAKmTfDhcd7pfrYJBdtF4sYcN4BWActserpFEem7HTxa0HcA1pjzmrM6_5pJ6bAEE4v-FmZjt6kugcL-PymGI5hcSUCM-jUh_WaRVfWcanTaNKYaFjYqQIP3hXSF32ucoubmoakx7X5k9O7K0k8lqIp3nLyQt6gWcSoy-Wq0D1wGpugQdOEIblxeJGa01JM-TufgndQyiDx2O6r3NPvJvoihAIBERSMdd70xcNjoA" style="width: 100%;">
                         <p class="caption">Attention score</p>
@@ -588,41 +604,57 @@ lineMaking("code3", 44);
                         <br><br><br>
                         <ul>
                             <li><b>Attention을 사용하지 않은 모델</b></li>
-                            # Sample 1
-                            <br>src&nbsp;&nbsp;: tom asked mary for some help .
-                            <br>gt&nbsp;&nbsp;&nbsp;: tom a demande a mary de l'aider .
-                            <br>pred: tom demande demande a mary de l'aide .
-
-                            <br><br># Sample 2
-                            <br>src&nbsp;&nbsp;: you see what i mean ?
-                            <br>gt&nbsp;&nbsp;&nbsp;: tu vois ce que je veux dire ?
-                            <br>pred: tu vois ce que je veux dire ?
-
-                            <br><br># Sample 3
-                            <br>src&nbsp;&nbsp;: i haven't talked to you in a while .
-                            <br>gt&nbsp;&nbsp;&nbsp;: je ne t'ai pas parle depuis un bon moment .
-                            <br>pred: je n'ai vous pas parle pendant un moment moment .
                         </ul>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+src : tom asked mary for some help .
+gt  : tom a demande a mary de l'aider .
+pred: tom demande demande a mary de l'aide .
+
+<span class="annot"># Sample 2</span>
+src : you see what i mean ?
+gt  : tu vois ce que je veux dire ?
+pred: tu vois ce que je veux dire ?
+
+<span class="annot"># Sample 3</span>
+src : i haven't talked to you in a while .
+gt  : je ne t'ai pas parle depuis un bon moment .
+pred: je n'ai vous pas parle pendant un moment moment .
+</pre>
+</div>
+</div>
+</pre>
 
                         <br><br><br>
                         <ul>
                             <li><b>Scheduled sampling을 사용했지만 attention을 사용하지 않은 모델</b></li>
-                            # Sample 1
-                            <br>src&nbsp;&nbsp;: let's take a little break .
-                            <br>gt&nbsp;&nbsp;&nbsp;: faisons une petite pause .
-                            <br>pred: faisons une pause pause .
-
-                            <br><br># Sample 2
-                            <br>src&nbsp;&nbsp;: they live on the [UNK] floor of this [UNK] .
-                            <br>gt&nbsp;&nbsp;&nbsp;: ils vivent au [UNK] etage de ces [UNK] .
-                            <br>pred: ils vivent au sujet de de ce sujets .
-
-                            <br><br># Sample 3
-                            <br>src&nbsp;&nbsp;: tom doesn't understand why mary is so popular .
-                            <br>gt&nbsp;&nbsp;&nbsp;: tom ne comprend pas pourquoi marie est si populaire .
-                            <br>pred: tom ne comprend pas pourquoi mary est si populaire .
                         </ul>
                     </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+src : let's take a little break .
+gt  : faisons une petite pause .
+pred: faisons une pause pause .
+
+<span class="annot"># Sample 2</span>
+src : they live on the [UNK] floor of this [UNK] .
+gt  : ils vivent au [UNK] etage de ces [UNK] .
+pred: ils vivent au sujet de de ce sujets .
+
+<span class="annot"># Sample 3</span>
+src : tom doesn't understand why mary is so popular .
+gt  : tom ne comprend pas pourquoi marie est si populaire .
+pred: tom ne comprend pas pourquoi mary est si populaire .
+</pre>
+</div>
+</div>
+</pre>
 
                     <p>
                         <br><br><br>지금까지 GRU 통한 Tatoeba Project English-French 데이터를 이용하여 기계 번역 모델을 구현해보았습니다.
