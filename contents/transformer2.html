@@ -675,6 +675,7 @@ lineMaking("code7", 16);
                         이제 WMT'14, IWSLT'14 validation set의 BLEU-4 history와 validation set의 최대의 BLEU-4일 때 test set의 BLEU-4 결과를 살펴보겠습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그리고 test set의 결과를 낼 때는 NLTK뿐 아니라 많이 사용되는 multi_bleu.perl을 이용하여 계산한 결과도 보여줍니다.</span>
                         multi_bleu.perl을 사용하는 방법은 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하시기 바랍니다.
+                        그리고 각 데이터에 대해 번역한 ground truth (GT) 값과 예측값도 비교해보겠습니다.
                         
                         <br><br><span style="font-size: 20px;"><b>IWSLT'14 결과</b></span>
                     </p>
@@ -693,6 +694,27 @@ lineMaking("code7", 16);
                         <img src="https://lh3.googleusercontent.com/fife/AAbDypBdFskjMotDABwKzxOeYyHjRfno5XSH5O5R0VBAlw-M204OrWGspp8TNqCGziqDamwRv1g3gqb5pSQm4dc7iHdHmMMdgcZD4KuCLUeTFGVLzd3FDPqLtJ_U97hncVQQ_7V2JtUN36OTlr5agZEYFhWfvMg0jNiSKjSDg9_LOA6iLYVJY0f8lmHswsMzocEsiHw7FlJdHiKeCa1shxxc1TJEH4IM3eBwGS0P0UhCo7okugZFeailK6xgYmeIEsV0A7FBaUM_plGuYaTE9c0lLa2wp1tTaFD_xH-6VPDOqp0mkfnzL1biKudzszAuiP-8hIVI0glOX65cvYkoeoQ71WEI3AQt6QceG3ol0733pSm1p_nX9AhgIwsgR_1SAV0o1jWMEbcTiX20rhj2VPSwrIV1GxGqTIoPNvy4VmntbRmqJAIE5Ke12gjG0Q9_lv44m2SaSxgN3xokXFCZ_txAJCfWtIFIKkkxYiY4WtlBC6pRqrTvdtqPYx_j2lPwxQ8xQU9f-jRsni_HMC0c26PUdNA5DH8ADIptpGsDO-uubFmwdSfQLHl07lAfw2-NJTcr8s0NJnwphT1o-kkdYRjsIFIOdlpqUuJiB8ffZzKqRb_q2MZ2y0dQ3v8ImjaotdsdRcbLNRpEbb1yVH8FoWNurPd9U_tMcata_dQhlvpezuIX1oNt51md2GsdWI-1tOP3KEQCEuE5pJoByysdKVLnoGVFwckjM_rPPwRJp3cvRxxJDLcrMMzbmZNJkiie2_YO8-0zNlACutcen7t8oSGX75SflAJdWag0AvMoCEvofE925oz0Y1Unu41r5TbOFRbPjnEGrpuhjuS_qjWwy7Xu_1f5gLK8YlhMp1MNmKgQBg5NzsA9Y-Q8pM0fBJq81RoUFhLWCFmnKmlXVW5TWTUbfPJUD50WTu-G8wPFHobJOoFvYtjLr5bZEUniOOJKCQxO4kqYzw1AXvQwL0M__E2Z0-83mS-r7LiLtLWwIfV1DKUCNjCAr8iJy2oBtphesDUElqHrzB5ZkdcqkcToLYHm4CqTSndgodyQLfH4fwoxpKlyzJNCug6uYXkbOAKhmdRu0tJEzoSubHdsttvG7dA1hX6ncHAmFEiYMXBJmXI53Z8F3OGZcwtynjKo4XjfP3Ldx5_EQPEHFtn5MfchpSvrP9CV9wNEEXRiuMQiDomdFT9NnUFOwMkb3paufzhN1bEPBC3eyghfJMyGrhR9NZONQowhp39vNmV9dPBuwTRYZ1aXANJZSw-UHc0pZtYelRrpKyP7O-FxqW5_mTiMCRJrJdwPFZDbmTtKgwdwTW4QcBKIDYuHGBXn3aSwjMV2Oq7RZ7vgdMODsDk0czYPyF576eIhI9UTFcsKirTiHOYn3D5GVs7l-lAYjtX4NaqoL8mgU5Mf60N2vYkXK7f6xqkfKcvyQgz-cddzrTcoFPE9diIvyTxm9F6tEtXkKbd0YyYE3tukqRlBaWMKwhgNQNw" style="width: 100%;">
                         <p class="caption">IWSLT'14 NIST score</p>
                     </div>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+gt  : ein sehr konk ##rete ##r wunsch , dass wir diese technologie erfinden .
+pred: es ist ein sehr konk ##ret wunsch , dass wir diese technologie erfinden .
+
+
+<span class="annot"># Sample 2</span>
+gt  : wir durch ##laufen initi ##ations ##ri ##t ##ual ##e .
+pred: wir durch ##laufen den initi ##ations ##ri ##k .
+
+
+<span class="annot"># Sample 3</span>
+gt  : vac ##la ##v have ##l , der große ts ##che ##ch ##ische politiker , hat einmal gesagt :
+pred: v ##la ##v haben ##l den großen c ##ze ##ch - anfü ##hrer , darüber gesprochen .
+</pre>
+</div>
+</div>
+</pre>
                 
 
                     <p>
@@ -713,6 +735,28 @@ lineMaking("code7", 16);
                         <img src="https://lh3.googleusercontent.com/fife/AAbDypBIv4c80Z081-lJJZm0EAj3WTU4Lk0ZrnyLYzCmYQwBoG3vNB8Lho2Jny4b7G4OYjw3R10y3zL5Gd9j-W7LACVWvPgQMmiOTncTkS3Czq_SqZavBSVqeAfyd54fy6Q-bxnY4qbChCopAOCZ4b52slJWh7G57ORk7f5EeTm4RpB6mHzpRj8LTMcKV41tOeUixTfJHB9jv4Pqigo1n9pOfjuOc3H6Se31bbzO-NhzObgBly8XLLXyYOIQ47mG9BeotdhnJwx-7BauZIDWClz3wM4twXtfW6nEwUzPnuNDvetgisXh03pffJdZjEGjoo9lSvaMmA6eiz-NJCKtwu-hiLWFFKfA-zErsBZ8m6EEIYPChEXbrK2cNEHkotSrNYLZR9DdyT2kF-ub5WABOOSoug-KYVfHkULiw4hhrER1aiopGCmfN2kca-027AJ986YBA1cyfsnbBFLlMYIpxaXMuHnU2RLsJoUC6h-7cS3qH3E0gwUKG5HtgMOUJiJj48yhaWFW1Cso8IgMTDEcMIpkF5A8FC5z4k5WtYfvdRjuvFo_BznWgD66SIS3fW3v63qtJQdunIleXeuwk_wgfNoqabkqREZ_-MDiKo2daLoO3e2AmJadqqXwP0e5j8VwGrqodXVUskICooV8w3ubTNIvqX_xutHB1KerP1u8uubzZU5zVXwXC3fhQqbs3inBNZCt4Hgz1G0rpFXoYbxF2DDpRmhFxINuVTyrOiDRoaL5DtEVunodGT5L1I8UqwghSvUrlpouqJB6cfxTCqSASHecB2TYgSMborY8RTcQfN1-uy8R9IzdIYxwoIZBGNRKT4dk0IbNRD0L0sfklPXIojnwhXfDRYV7f8ci4Cc6JCcxiIe_uaNcQSm_BxvWNZi14BUwmC7HZNKGvxHuvStC9PlrAfJzEKO3koTk4wKyxhbV4hgub9WoySHv3H-Of4Q1QCjDjamnj_zyrPZS5xrjXW4fJ6OXtLcSMWZUPxJqWxL8iFf1rWhePA4bTVn9J513l2p76uYz11pfq8TtKzxdPE04Uta-4fbzHrcDCmotHGQsrVYzgrSLnU_cCYStgh65TfC4AxfB2E6vb-X4UJAA9Kj3uD7iH3hGfYrZbp7TC0h_0ugNzbtvt0isOoTDAZenOw32nVhl000SUv88X3grjJ-oCPc1aeggNzuejccNViUijOzp8W51lEZrwwhTMCjxeYB6inf_Oh68m45Qm6ZDLh0xcpG1M1TXO93E7dKW5gAdGLxzPiQvKFokF_9isMOha0FjkL_EtFHnHikkKfMn26n0gx5qPxw7evf3rIYgepRVH2wNppDJmskHsdExr4Q5R9MjXtP5o_d4EJY0PzrDBBtVlC5aYUAgQgqYClf2XMRSK-_xcP3F5bVdpZnaVO_OBQfWJ_V1M5cnZRi6tGatoDNuRUKuXuhl8OVWDkZ-m-CuGGrZTrQ7KDjKf9WBs4qT_kSzyH51hEE5nahVDJ6gtIg" style="width: 100%;">
                         <p class="caption">WMT'14 NIST score</p>
                     </div>
+                    
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+gt  : „ erwachsene sollten in der lage sein , eigene entscheidungen uber ihr rechtliche ##s geschlecht zu treffen “ , erklarte sie .
+pred: " erwachsene sollten in der lage sein , ihre eigenen entscheidungen uber das legal ##e geschlecht zu treffen " , sagte sie .
+
+<span class="annot"># Sample 2</span>
+gt  : insgesamt seien vier verkehrs ##schauen durchgefuhrt worden , auch ein kreis ##verkehr wurde ange ##dacht , allerdings wegen der enge in dem kreuzung ##s ##bereich sulz ##bach ##weg / kirchimportant .
+pred: insgesamt wurden vier sicherheits ##kontrollen im straßenverkehr durchgefuhrt , und auch ein kreis ##verkehr wurde berucksichtigt , jedoch wurde dieser gedanke aufgrund der engen linien abgelehnt .
+
+<span class="annot"># Sample 3</span>
+gt  : austral ##ische flug ##pass ##agi ##e ##re mussen auch weiterhin tablets und smartphones bei start und landung abschalten , trotz bemuhungen in den usa , die regelungen fur derartige gerate
+pred: flug ##gaste austral ##ischer fluggesellschaft mussen trotz der bemuhungen in den usa , die bestimmungen uber die flug ##pass ##agi ##e ##re zu locker ##n , ihre flug ##table ##tten
+</pre>
+</div>
+</div>
+</pre>
+                    
+                    
                                        
                     <p>
                         <br><br><br>지금까지 transformer를 통해 IWSLT'14 (En-De)와 대용량 모델 WMT'14 (En-De)를 바탕으로 기계 번역 모델을 학습해보았습니다. 
