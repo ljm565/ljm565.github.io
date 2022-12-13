@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Transformer를 이용한 WMT'14, IWSLT'14 (En-De) 기계 번역</title>
-        <meta name="description" content="Transformer를 이용해서 WMT'14, IWSLT'14 번역 모델을 학습합니다.">
+        <title>Transformer를 이용한 한국어 대화 챗봇</title>
+        <meta name="description" content="Transformer를 한국어 대화 챗봇을 학습합니다.">
         <meta charset="utf-8">
         <link rel="stylesheet" href="init/index.css">
         <link rel="stylesheet" href="init/contents.css">
@@ -42,11 +42,11 @@
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
         crossorigin="anonymous"></script>
 
-        <meta property="og:url" content="https://ljm565.github.io/contents/transformer2.html" />
-        <meta property="og:title" content="Transformer를 이용한 WMT'14, IWSLT'14 (En-De) 기계 번역" />
+        <meta property="og:url" content="https://ljm565.github.io/contents/transformer3.html" />
+        <meta property="og:title" content="Transformer를 이용한 한국어 대화 챗봇" />
         <meta property="og:type" content="website">
-        <meta property="og:description" content="Transformer를 이용해서 WMT'14, IWSLT'14 번역 모델을 학습합니다." />
-        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypCHcn_XtbVOzOAN7ag6FlhmuBEVKHq5-zcOgYJywsYA5_gQJjApeUMzeazGT7nQAkv2MSMbOa48SI0m5AgI3Og6h4oRzt-pnkA-8LbhJtiX9deS2IjToJ0KjBTJuDB7j0Q04svvdeA9aMq3Qak-8iGDKMi2i28Q7Xworyb68PS_lM9eS--51E8FE2bwgtZeKXhrGlwGUlD7saXzLw9v-b9T4zlBOo0NV1cOetnwVZ5ASuhnEpHnuDKQgJX35WcaY2rL103PR1tS-MBPnC-Wb9GnNmqYx6Xb06h9TaoxljBT40F2pYP3GI15F_3eYXWvfNQFwnr9I9Vl2gZPq3MAiYn9FliKPMIVJrS0xfsQg5Fv8yGi_x2gyIFEvvRrFzDZZrP2pytnOri5Mj2hFh5IswBixbdFkLxtdP8QNWV42dcJ7uNfuayX_hAmP9XdGOKnKoShiNuZ8RkYxbuTOAlCUEHk4MfCYQd4su63B-8cpqbJ1Yr2dv2Izj9uzNJEZfVfje-6bQShovnkG-kKeI80pl8u5qgsn9EawmJ2gRZLgesDqWrQfRzfjAdWyM4s0nltzvTZMIbfDbF1KtBsYG8EyRypHqrI-4nW-p52NJ5e_wNZJ2qGb9WAv5RJYuAH50TpINxNxNU6PJ2enF52HC12kArUOjFml0QBSB_6otZ58QP3yjd6q7ZUUmJwk4jbeZbifP3POkSaBhIzZ5-x-OlQZbWVCAWxPhkioYGJT7Nxp6e3Huj6j8RhJM31JCvnygsb6WKiXxvRkiJar0JUerllrucx5xpp1D6nCx0CGCO_gv0w6DNb54Ak5uK3irqq_vp-idPsH2mzXfiJzWIst269rT9vYghqQsGlTyshPtE8XC5-0mTLaSHockMrxfesh9Tl5fGaGrg6CySraZNcwOJ1mx6jaeOJaCgTS1aWn7rmLvUSItJj1LPmhEVPCZjdr7d2mv7VDklCElpKUbC7R1s6jvAtoRiyQDuJM5-uLbhfkgmryLtDSZFjFsT5O3flH0Fzu8dAqyQLnQRcbLizawLTqcLLeDeXQ5cKDhE8p6mqcsvUWN2oitJLaafxseMZcpTrGbaLY-fbR0APJyoyxgH6X0YdMJYeQeKbgJr5KeQm8_jrEz47IcWEXRd458EIY1M6vokJ4Hs7FbePyZu1V0rRWaG4fHmeRjjjs3ZHR2lK0NAGNA8n20zHpLiDB0PKHBmZgrYsmJgiMc3Pd6Ct90GnEoI4JzbyugQVXtM3t5XaHdxvLFfCsEnxsCnj-8hRxnHND2MLyaxnLiwCM8yvjnVLJXkqnGWjzxuO3bkm4tKMbPj9FqZiuhaF4v8kcYcszotQlSgX1rIbjGj8veK36nhodfSoYMhg0yN919WrmubfhuEiSIhEdWaYKdETw8FmcrtK8bzF_9OUPKtpMDV6p_YfCs0_zrPc12cvjWKSxze7J5BvXoJfQA2Uogo0tF9lMKeb-eFFafAGI1bJa3TG-LY" />
+        <meta property="og:description" content="Transformer를 한국어 대화 챗봇을 학습합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypA5zsB9i6SR8QKxHuwrK1Og7OVemXNC3T5elN2GfrbXVXNGseVfBpCoJGSNxsZUh1BTxHoC6jPPphbqTXtAZCraipXx5I_fVegZfp3EyifVYyHA6Z355VbGZ2julw3gnyvRshDg4W5uQI4Z9FtJG8k0l0bsNFS-0xSTxAl0gApOvxpk08Dm8Az3LsrtwPLmPVTO7Wxsm7g_tcYD3DwV7nED_T7lStN2R3kjz8KrJY6dfgILUuCi6bo4hA8834EWog6523ZM0N3Gc3FnviRROK18jvYtsPseDJftxowRQ3pZBxxY3Qowi5FVZTmvg_7Yui1nTMXrbmTGOLIRtaWEWCA1bD4IALljj9QnXKRhT9mqWE89n6dn0SKN1cBitmBtvf5w0T1KZJLXpLNhTWRpG2TBS5z97KgpEfxbA-pzNoltPZTFw5m7aSpFmI8k3nyGI0HMfGbUnkjcBripB2QHXx3hk2A2GpFB8P3CK__bw2apu3cKbV5yvr0RYgF5os98PAfQt_MJ5le7uBE2NK5QwRypqtzYRGZ6UFJbxj2GkUdwPB1cRzu2iSfkIxmVKZevbU2Ed-NVNU3dazY9yP7_fYyfv5YapBc14Em4TU0uOCjNN4tZKT4idRB8ZNKwXtkmX0SuutvvwSg1WT-KkNnaXIr_hmjdqZ5NGjaUzmKIAaATA2YXaQRH8ua5WODF4G_UcsKUk7JYflIjwTEohwmasPovNgY_WT89t0BlDBQxRHt5Iw3UVrPTIUtAz9sDZgEns9souGtCrFJhcsS0-DHLdUBogJ-ex9m395cFT4ORfEkgYvLF_TYhx1It3vAAdKeER539eDB-DQns3gg-AGxpE2ZvYa-5LcyrM2asJyxNvIp2XnWw8ESnmEhbnCjwQfjFkwakkx5YCOKPVqwi_zsDZMoxh557sFfLM7usS8KhSBb0RdU1df2vmZmEL-PLp-5IDHGi2jqZwRZv-BYVa_7tmS-8sq4TluDHInO7fksojga3IFk1-oBUqq7qJ2CDqW8_mxcw2bKusdySsWYZHjKMRZeQRlnWdllu78_Kly3Gn2AzTyOEk9ooAUIhf5LF_bOWxF0rXTKl2D1JGlI3_DCE8KUevs19HBckjNKbWq1m2YsW-7Q8fR9jQdgdWB4uEENBegqpi6KU5pPQYXZHT8Z__wG3ajRNdOVj4D2lDEzzMPtCESDvlJMbNkv56-qfd45yWbaFODQ6U3n-0qTSfagTPwS1La-R82RsYSpySFyQxI1C2MfKnRc_DKLmPGZ-xewE_3xikLkqWBWlVlr87d0tXRM4-mUfqmHL_HCfsFedSuhWDH8Tnqvb2pZHJOE0Fgkc1gk-EyGmSOcGEhf9Je7HLN9OYg38SueZBH2amwWFe--qwSl2CH5TLvWp917ZeVmzHpYreFQUZHb_MpYq68EqbHcWNLVWOMCyl8D7fLLupu7w96veKSEEXiobLT9ZZyLscPObYeq0gWG4eq9I1i8" />
     </head>   
     <body>
         <div id="modeButton">
@@ -64,18 +64,18 @@
                 </script>
                 <div id="mainHeadWrapper">
                     <div id="mainHead">
-                        <h1 class="contentHead">딥러닝 이야기 / Transformer / 2. Transformer를 이용한 WMT'14, IWSLT'14 (En-De) 기계 번역</h1>
+                        <h1 class="contentHead">딥러닝 이야기 / Transformer / 3. Transformer를 이용한 한국어 대화 챗봇</h1>
                     </div>
                 </div>
                 
-                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypCHcn_XtbVOzOAN7ag6FlhmuBEVKHq5-zcOgYJywsYA5_gQJjApeUMzeazGT7nQAkv2MSMbOa48SI0m5AgI3Og6h4oRzt-pnkA-8LbhJtiX9deS2IjToJ0KjBTJuDB7j0Q04svvdeA9aMq3Qak-8iGDKMi2i28Q7Xworyb68PS_lM9eS--51E8FE2bwgtZeKXhrGlwGUlD7saXzLw9v-b9T4zlBOo0NV1cOetnwVZ5ASuhnEpHnuDKQgJX35WcaY2rL103PR1tS-MBPnC-Wb9GnNmqYx6Xb06h9TaoxljBT40F2pYP3GI15F_3eYXWvfNQFwnr9I9Vl2gZPq3MAiYn9FliKPMIVJrS0xfsQg5Fv8yGi_x2gyIFEvvRrFzDZZrP2pytnOri5Mj2hFh5IswBixbdFkLxtdP8QNWV42dcJ7uNfuayX_hAmP9XdGOKnKoShiNuZ8RkYxbuTOAlCUEHk4MfCYQd4su63B-8cpqbJ1Yr2dv2Izj9uzNJEZfVfje-6bQShovnkG-kKeI80pl8u5qgsn9EawmJ2gRZLgesDqWrQfRzfjAdWyM4s0nltzvTZMIbfDbF1KtBsYG8EyRypHqrI-4nW-p52NJ5e_wNZJ2qGb9WAv5RJYuAH50TpINxNxNU6PJ2enF52HC12kArUOjFml0QBSB_6otZ58QP3yjd6q7ZUUmJwk4jbeZbifP3POkSaBhIzZ5-x-OlQZbWVCAWxPhkioYGJT7Nxp6e3Huj6j8RhJM31JCvnygsb6WKiXxvRkiJar0JUerllrucx5xpp1D6nCx0CGCO_gv0w6DNb54Ak5uK3irqq_vp-idPsH2mzXfiJzWIst269rT9vYghqQsGlTyshPtE8XC5-0mTLaSHockMrxfesh9Tl5fGaGrg6CySraZNcwOJ1mx6jaeOJaCgTS1aWn7rmLvUSItJj1LPmhEVPCZjdr7d2mv7VDklCElpKUbC7R1s6jvAtoRiyQDuJM5-uLbhfkgmryLtDSZFjFsT5O3flH0Fzu8dAqyQLnQRcbLizawLTqcLLeDeXQ5cKDhE8p6mqcsvUWN2oitJLaafxseMZcpTrGbaLY-fbR0APJyoyxgH6X0YdMJYeQeKbgJr5KeQm8_jrEz47IcWEXRd458EIY1M6vokJ4Hs7FbePyZu1V0rRWaG4fHmeRjjjs3ZHR2lK0NAGNA8n20zHpLiDB0PKHBmZgrYsmJgiMc3Pd6Ct90GnEoI4JzbyugQVXtM3t5XaHdxvLFfCsEnxsCnj-8hRxnHND2MLyaxnLiwCM8yvjnVLJXkqnGWjzxuO3bkm4tKMbPj9FqZiuhaF4v8kcYcszotQlSgX1rIbjGj8veK36nhodfSoYMhg0yN919WrmubfhuEiSIhEdWaYKdETw8FmcrtK8bzF_9OUPKtpMDV6p_YfCs0_zrPc12cvjWKSxze7J5BvXoJfQA2Uogo0tF9lMKeb-eFFafAGI1bJa3TG-LY);">
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypA5zsB9i6SR8QKxHuwrK1Og7OVemXNC3T5elN2GfrbXVXNGseVfBpCoJGSNxsZUh1BTxHoC6jPPphbqTXtAZCraipXx5I_fVegZfp3EyifVYyHA6Z355VbGZ2julw3gnyvRshDg4W5uQI4Z9FtJG8k0l0bsNFS-0xSTxAl0gApOvxpk08Dm8Az3LsrtwPLmPVTO7Wxsm7g_tcYD3DwV7nED_T7lStN2R3kjz8KrJY6dfgILUuCi6bo4hA8834EWog6523ZM0N3Gc3FnviRROK18jvYtsPseDJftxowRQ3pZBxxY3Qowi5FVZTmvg_7Yui1nTMXrbmTGOLIRtaWEWCA1bD4IALljj9QnXKRhT9mqWE89n6dn0SKN1cBitmBtvf5w0T1KZJLXpLNhTWRpG2TBS5z97KgpEfxbA-pzNoltPZTFw5m7aSpFmI8k3nyGI0HMfGbUnkjcBripB2QHXx3hk2A2GpFB8P3CK__bw2apu3cKbV5yvr0RYgF5os98PAfQt_MJ5le7uBE2NK5QwRypqtzYRGZ6UFJbxj2GkUdwPB1cRzu2iSfkIxmVKZevbU2Ed-NVNU3dazY9yP7_fYyfv5YapBc14Em4TU0uOCjNN4tZKT4idRB8ZNKwXtkmX0SuutvvwSg1WT-KkNnaXIr_hmjdqZ5NGjaUzmKIAaATA2YXaQRH8ua5WODF4G_UcsKUk7JYflIjwTEohwmasPovNgY_WT89t0BlDBQxRHt5Iw3UVrPTIUtAz9sDZgEns9souGtCrFJhcsS0-DHLdUBogJ-ex9m395cFT4ORfEkgYvLF_TYhx1It3vAAdKeER539eDB-DQns3gg-AGxpE2ZvYa-5LcyrM2asJyxNvIp2XnWw8ESnmEhbnCjwQfjFkwakkx5YCOKPVqwi_zsDZMoxh557sFfLM7usS8KhSBb0RdU1df2vmZmEL-PLp-5IDHGi2jqZwRZv-BYVa_7tmS-8sq4TluDHInO7fksojga3IFk1-oBUqq7qJ2CDqW8_mxcw2bKusdySsWYZHjKMRZeQRlnWdllu78_Kly3Gn2AzTyOEk9ooAUIhf5LF_bOWxF0rXTKl2D1JGlI3_DCE8KUevs19HBckjNKbWq1m2YsW-7Q8fR9jQdgdWB4uEENBegqpi6KU5pPQYXZHT8Z__wG3ajRNdOVj4D2lDEzzMPtCESDvlJMbNkv56-qfd45yWbaFODQ6U3n-0qTSfagTPwS1La-R82RsYSpySFyQxI1C2MfKnRc_DKLmPGZ-xewE_3xikLkqWBWlVlr87d0tXRM4-mUfqmHL_HCfsFedSuhWDH8Tnqvb2pZHJOE0Fgkc1gk-EyGmSOcGEhf9Je7HLN9OYg38SueZBH2amwWFe--qwSl2CH5TLvWp917ZeVmzHpYreFQUZHb_MpYq68EqbHcWNLVWOMCyl8D7fLLupu7w96veKSEEXiobLT9ZZyLscPObYeq0gWG4eq9I1i8);">
                     <div>
-                        <span class="mainTitle">Transformer를 이용한 WMT'14, IWSLT'14 (En-De) 기계 번역</span>
+                        <span class="mainTitle">Transformer를 이용한 한국어 대화 챗봇</span>
                         <br><br>
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.12.04</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.12.13</span>
                     </div>
                 </div>
 
@@ -83,17 +83,15 @@
                     <p>
                         시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
                         
-                        <br><br>이전글에서는 transformer에 대해 설명하였습니다. 이번글에서는 transformer를 이용하여 기계 번역 모델을 학습해보겠습니다.
+                        <br><br>이전글에서는 transformer를 이용하여 기계 번역 모델 학습 코드 대해 설명하였습니다. 이번글에서는 transformer를 이용하여 한국어 대화 챗봇 모델을 학습해보겠습니다.
                         본 글에서 설명하는 코드는 기본적으로 학습을 진행할 때 모델 저장의 지표로 사용되는 BLEU-4 계산을 NLTK를 사용합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">본 코드는 추가로 학습이 완료된 모델에 대해 번역 모델의 benchmark BLEU score 계산을 위해 많이 사용되는 multi_blue.perl을 이용하여 계산할 수 있는 방법도 제공합니다.</span>
 
-                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">학습에 사용한 데이터는 영어, 독일어 번역 데이터인 WMT'14, IWSLT'14 (En-De) 데이터를 사용하였으며, 구현은 python의 PyTorch를 이용하였습니다.</span>
+                        <br><br>학습에 사용한 데이터는 다음 카페 "<a href="https://cafe.daum.net/ilovedlove" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">사랑보다 아름다운 실연</span></a>" 데이터를 사용하여 <a href="https://github.com/songys/Chatbot_data" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">송영숙님</span></a>께서 만든 챗봇 데이터를 사용합니다. 
 
-                        <br><br>그리고 transformer에 대한 글은 <a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Transformer (Attention Is All You Need)</span></a>,
-                        LSTM을 이용하여 학습한 기계 번역에 관한 글은 <a onclick="pjaxPage('RNN4.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Seq2Seq 모델을 이용한 기계 번역</span></a>를 참고하시기 바랍니다.
-                        본 글에서 설명하는 transformer 학습 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에 데이터 전처리, 토크나이저 학습 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        <br><br>그리고 transformer에 대한 글은 <a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Transformer (Attention Is All You Need)</span></a>를 참고하시면 됩니다.
+                        본 글에서 설명하는 transformer 구현 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에 데이터 전처리, 토크나이저 학습 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
                         
-                        <br><br>오늘의 컨텐츠입니다.
+                        <br><br>오늘의 컨텐츠입니다. 오늘 사용하는 모델은 <a onclick="pjaxPage('transformer2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전 기계 번역 학습했던 transformer 모델</span></a>과 거의 동일합니다.
                         <ol>
                             <li>Transformer 구현</li>
                             <li>Transformer 학습</li>
@@ -101,7 +99,7 @@
                         </ol>
                     </p>
                     <div class="link">
-                        <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Transformer 기계 번역 모델 GitHub 코드</a>
+                        <a href="https://github.com/ljm565/chatbot-transformer" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Transformer 한국어 챗본 모델 GitHub 코드</a>
                     </div>
 
 
@@ -330,7 +328,7 @@ lineMaking("code3", 30);
                     </p>
                     <p>
                         <br><br><br>이제는 transformer의 encoder 부분입니다.
-                        아래 코드의 config.의 부분은 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        아래 코드의 config.의 부분은 <a href="https://github.com/ljm565/chatbot-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <br><br><span style="font-size: 20px;"><b>Encoder</b></span>
                     </p>
 
@@ -432,7 +430,7 @@ lineMaking("code4", 65);
                     </p>
                     <p>
                         <br><br><br>이제는 transformer의 decoder 부분입니다.
-                        아래 코드의 config.의 부분은 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        아래 코드의 config.의 부분은 <a href="https://github.com/ljm565/chatbot-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
                         <br><br><span style="font-size: 20px;"><b>Decoder</b></span>
                     </p>
 
@@ -557,22 +555,22 @@ lineMaking("code5", 72);
 <pre>
 <span class="annot"># transformer</span>
 <span class="reserved">class</span> <span class="clazz">Transformer</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
-    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var"><span class="var">tokenizer</span>s</span>, <span class="var">device</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
         <span class="clazz">super</span>(<span class="clazz">Transformer</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
-        <span class="var">self</span>.<span class="var"><span class="var">src</span>_tokenizer</span>, <span class="var">self</span>.<span class="var"><span class="var">trg</span>_tokenizer</span> = <span class="var"><span class="var">tokenizer</span>s</span>
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
         <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
         
         <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">self</span>.<span class="var">config</span>.<span class="var">hidden_dim</span>
 
-        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var"><span class="var">src</span>_tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
-        <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">Decoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var"><span class="var">trg</span>_tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
-        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var"><span class="var">trg</span>_tokenizer</span>.<span class="var">vocab_size</span>)
+        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">Decoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">vocab_size</span>)
 
 
     <span class="reserved">def</span> <span class="method">make_mask</span>(<span class="var">self</span>, <span class="var">src</span>, <span class="var">trg</span>):
-        <span class="var">enc_mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">src</span>==<span class="var">self</span>.<span class="var"><span class="var">src</span>_tokenizer</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>, <span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">2</span>)
-        <span class="var">dec_<span class="var">causal</span>_mask</span> = <span class="clazz">torch</span>.<span class="method">tril</span>(<span class="clazz">torch</span>.<span class="method">ones</span>(<span class="var">trg</span>.size(<span class="num">1</span>), <span class="var">trg</span>.size(<span class="num">1</span>))).<span class="method">unsqueeze</span>(<span class="num">0</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>) + <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">trg</span>==<span class="var">self</span>.<span class="var"><span class="var">trg</span>_tokenizesr</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>, <span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">2</span>)
+        <span class="var">enc_mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">src</span>==<span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>, <span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">2</span>)
+        <span class="var">dec_<span class="var">causal</span>_mask</span> = <span class="clazz">torch</span>.<span class="method">tril</span>(<span class="clazz">torch</span>.<span class="method">ones</span>(<span class="var">trg</span>.size(<span class="num">1</span>), <span class="var">trg</span>.size(<span class="num">1</span>))).<span class="method">unsqueeze</span>(<span class="num">0</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>) + <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">trg</span>==<span class="var">self</span>.<span class="var">tokenizesr</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>, <span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">2</span>)
         <span class="var">dec_<span class="var">causal</span>_mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">dec_<span class="var">causal</span>_mask</span> &lt; <span class="num">2</span>, <span class="num">0</span>, <span class="num">1</span>)
         <span class="var">enc_dec_mask</span> = <span class="var">enc_mask</span>
         <span class="return">return</span> <span class="var">enc_mask</span>, <span class="var">dec_<span class="var">causal</span>_mask</span>, <span class="var">enc_dec_mask</span>
@@ -613,7 +611,7 @@ lineMaking("code6", 29);
                         이제 기계 번역 모델 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
                         아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                         여기서는 무시해도 좋습니다.
-                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/chatbot-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
                     </p>
 
 
@@ -625,8 +623,8 @@ lineMaking("code6", 29);
 </div>
 <div class="code">
 <pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">Transformer</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var"><span class="var">tokenizer</span>s</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
-<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var"><span class="var">trg</span>_<span class="var">tokenizer</span></span>.<span class="var">pad_token_id</span>)
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">Transformer</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var"><span class="var">tokenizer</span></span>.<span class="var">pad_token_id</span>)
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
 <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
@@ -672,112 +670,65 @@ lineMaking("code7", 16);
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        이제 WMT'14, IWSLT'14 validation set의 BLEU-4 history와 validation set의 최대의 BLEU-4일 때 test set의 BLEU-4 결과를 살펴보겠습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 test set의 결과를 낼 때는 NLTK뿐 아니라 많이 사용되는 multi_bleu.perl을 이용하여 계산한 결과도 보여줍니다.</span>
-                        multi_bleu.perl을 사용하는 방법은 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하시기 바랍니다.
-                        그리고 각 데이터에 대해 번역한 ground truth (GT) 값과 예측값도 비교해보겠습니다.
-                        
-                        <br><br><span style="font-size: 20px;"><b>IWSLT'14 결과</b></span>
+                        이제 챗봇 데이터 중 validation set의 BLEU, NIST 점수의 history와 실제 문장을 입력했을 때 어떤 답을 내어주는지 살펴보겠습니다.
                     </p>
                     <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCHcn_XtbVOzOAN7ag6FlhmuBEVKHq5-zcOgYJywsYA5_gQJjApeUMzeazGT7nQAkv2MSMbOa48SI0m5AgI3Og6h4oRzt-pnkA-8LbhJtiX9deS2IjToJ0KjBTJuDB7j0Q04svvdeA9aMq3Qak-8iGDKMi2i28Q7Xworyb68PS_lM9eS--51E8FE2bwgtZeKXhrGlwGUlD7saXzLw9v-b9T4zlBOo0NV1cOetnwVZ5ASuhnEpHnuDKQgJX35WcaY2rL103PR1tS-MBPnC-Wb9GnNmqYx6Xb06h9TaoxljBT40F2pYP3GI15F_3eYXWvfNQFwnr9I9Vl2gZPq3MAiYn9FliKPMIVJrS0xfsQg5Fv8yGi_x2gyIFEvvRrFzDZZrP2pytnOri5Mj2hFh5IswBixbdFkLxtdP8QNWV42dcJ7uNfuayX_hAmP9XdGOKnKoShiNuZ8RkYxbuTOAlCUEHk4MfCYQd4su63B-8cpqbJ1Yr2dv2Izj9uzNJEZfVfje-6bQShovnkG-kKeI80pl8u5qgsn9EawmJ2gRZLgesDqWrQfRzfjAdWyM4s0nltzvTZMIbfDbF1KtBsYG8EyRypHqrI-4nW-p52NJ5e_wNZJ2qGb9WAv5RJYuAH50TpINxNxNU6PJ2enF52HC12kArUOjFml0QBSB_6otZ58QP3yjd6q7ZUUmJwk4jbeZbifP3POkSaBhIzZ5-x-OlQZbWVCAWxPhkioYGJT7Nxp6e3Huj6j8RhJM31JCvnygsb6WKiXxvRkiJar0JUerllrucx5xpp1D6nCx0CGCO_gv0w6DNb54Ak5uK3irqq_vp-idPsH2mzXfiJzWIst269rT9vYghqQsGlTyshPtE8XC5-0mTLaSHockMrxfesh9Tl5fGaGrg6CySraZNcwOJ1mx6jaeOJaCgTS1aWn7rmLvUSItJj1LPmhEVPCZjdr7d2mv7VDklCElpKUbC7R1s6jvAtoRiyQDuJM5-uLbhfkgmryLtDSZFjFsT5O3flH0Fzu8dAqyQLnQRcbLizawLTqcLLeDeXQ5cKDhE8p6mqcsvUWN2oitJLaafxseMZcpTrGbaLY-fbR0APJyoyxgH6X0YdMJYeQeKbgJr5KeQm8_jrEz47IcWEXRd458EIY1M6vokJ4Hs7FbePyZu1V0rRWaG4fHmeRjjjs3ZHR2lK0NAGNA8n20zHpLiDB0PKHBmZgrYsmJgiMc3Pd6Ct90GnEoI4JzbyugQVXtM3t5XaHdxvLFfCsEnxsCnj-8hRxnHND2MLyaxnLiwCM8yvjnVLJXkqnGWjzxuO3bkm4tKMbPj9FqZiuhaF4v8kcYcszotQlSgX1rIbjGj8veK36nhodfSoYMhg0yN919WrmubfhuEiSIhEdWaYKdETw8FmcrtK8bzF_9OUPKtpMDV6p_YfCs0_zrPc12cvjWKSxze7J5BvXoJfQA2Uogo0tF9lMKeb-eFFafAGI1bJa3TG-LY" style="width: 100%;">
-                        <p class="caption">IWSLT'14 BLEU score</p>
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA5zsB9i6SR8QKxHuwrK1Og7OVemXNC3T5elN2GfrbXVXNGseVfBpCoJGSNxsZUh1BTxHoC6jPPphbqTXtAZCraipXx5I_fVegZfp3EyifVYyHA6Z355VbGZ2julw3gnyvRshDg4W5uQI4Z9FtJG8k0l0bsNFS-0xSTxAl0gApOvxpk08Dm8Az3LsrtwPLmPVTO7Wxsm7g_tcYD3DwV7nED_T7lStN2R3kjz8KrJY6dfgILUuCi6bo4hA8834EWog6523ZM0N3Gc3FnviRROK18jvYtsPseDJftxowRQ3pZBxxY3Qowi5FVZTmvg_7Yui1nTMXrbmTGOLIRtaWEWCA1bD4IALljj9QnXKRhT9mqWE89n6dn0SKN1cBitmBtvf5w0T1KZJLXpLNhTWRpG2TBS5z97KgpEfxbA-pzNoltPZTFw5m7aSpFmI8k3nyGI0HMfGbUnkjcBripB2QHXx3hk2A2GpFB8P3CK__bw2apu3cKbV5yvr0RYgF5os98PAfQt_MJ5le7uBE2NK5QwRypqtzYRGZ6UFJbxj2GkUdwPB1cRzu2iSfkIxmVKZevbU2Ed-NVNU3dazY9yP7_fYyfv5YapBc14Em4TU0uOCjNN4tZKT4idRB8ZNKwXtkmX0SuutvvwSg1WT-KkNnaXIr_hmjdqZ5NGjaUzmKIAaATA2YXaQRH8ua5WODF4G_UcsKUk7JYflIjwTEohwmasPovNgY_WT89t0BlDBQxRHt5Iw3UVrPTIUtAz9sDZgEns9souGtCrFJhcsS0-DHLdUBogJ-ex9m395cFT4ORfEkgYvLF_TYhx1It3vAAdKeER539eDB-DQns3gg-AGxpE2ZvYa-5LcyrM2asJyxNvIp2XnWw8ESnmEhbnCjwQfjFkwakkx5YCOKPVqwi_zsDZMoxh557sFfLM7usS8KhSBb0RdU1df2vmZmEL-PLp-5IDHGi2jqZwRZv-BYVa_7tmS-8sq4TluDHInO7fksojga3IFk1-oBUqq7qJ2CDqW8_mxcw2bKusdySsWYZHjKMRZeQRlnWdllu78_Kly3Gn2AzTyOEk9ooAUIhf5LF_bOWxF0rXTKl2D1JGlI3_DCE8KUevs19HBckjNKbWq1m2YsW-7Q8fR9jQdgdWB4uEENBegqpi6KU5pPQYXZHT8Z__wG3ajRNdOVj4D2lDEzzMPtCESDvlJMbNkv56-qfd45yWbaFODQ6U3n-0qTSfagTPwS1La-R82RsYSpySFyQxI1C2MfKnRc_DKLmPGZ-xewE_3xikLkqWBWlVlr87d0tXRM4-mUfqmHL_HCfsFedSuhWDH8Tnqvb2pZHJOE0Fgkc1gk-EyGmSOcGEhf9Je7HLN9OYg38SueZBH2amwWFe--qwSl2CH5TLvWp917ZeVmzHpYreFQUZHb_MpYq68EqbHcWNLVWOMCyl8D7fLLupu7w96veKSEEXiobLT9ZZyLscPObYeq0gWG4eq9I1i8" style="width: 100%;">
+                        <p class="caption">BLEU score</p>
                     </div>
-                    <p>
-                        <ul>
-                            <li>Test set BLEU-4: 0.2579 (NLTK)</li>
-                            <li>Test set BLEU-4: 0.2580 (multi_bleu.perl)</li>
-                        </ul>
-                        <br><br>
-                    </p>
                     <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBdFskjMotDABwKzxOeYyHjRfno5XSH5O5R0VBAlw-M204OrWGspp8TNqCGziqDamwRv1g3gqb5pSQm4dc7iHdHmMMdgcZD4KuCLUeTFGVLzd3FDPqLtJ_U97hncVQQ_7V2JtUN36OTlr5agZEYFhWfvMg0jNiSKjSDg9_LOA6iLYVJY0f8lmHswsMzocEsiHw7FlJdHiKeCa1shxxc1TJEH4IM3eBwGS0P0UhCo7okugZFeailK6xgYmeIEsV0A7FBaUM_plGuYaTE9c0lLa2wp1tTaFD_xH-6VPDOqp0mkfnzL1biKudzszAuiP-8hIVI0glOX65cvYkoeoQ71WEI3AQt6QceG3ol0733pSm1p_nX9AhgIwsgR_1SAV0o1jWMEbcTiX20rhj2VPSwrIV1GxGqTIoPNvy4VmntbRmqJAIE5Ke12gjG0Q9_lv44m2SaSxgN3xokXFCZ_txAJCfWtIFIKkkxYiY4WtlBC6pRqrTvdtqPYx_j2lPwxQ8xQU9f-jRsni_HMC0c26PUdNA5DH8ADIptpGsDO-uubFmwdSfQLHl07lAfw2-NJTcr8s0NJnwphT1o-kkdYRjsIFIOdlpqUuJiB8ffZzKqRb_q2MZ2y0dQ3v8ImjaotdsdRcbLNRpEbb1yVH8FoWNurPd9U_tMcata_dQhlvpezuIX1oNt51md2GsdWI-1tOP3KEQCEuE5pJoByysdKVLnoGVFwckjM_rPPwRJp3cvRxxJDLcrMMzbmZNJkiie2_YO8-0zNlACutcen7t8oSGX75SflAJdWag0AvMoCEvofE925oz0Y1Unu41r5TbOFRbPjnEGrpuhjuS_qjWwy7Xu_1f5gLK8YlhMp1MNmKgQBg5NzsA9Y-Q8pM0fBJq81RoUFhLWCFmnKmlXVW5TWTUbfPJUD50WTu-G8wPFHobJOoFvYtjLr5bZEUniOOJKCQxO4kqYzw1AXvQwL0M__E2Z0-83mS-r7LiLtLWwIfV1DKUCNjCAr8iJy2oBtphesDUElqHrzB5ZkdcqkcToLYHm4CqTSndgodyQLfH4fwoxpKlyzJNCug6uYXkbOAKhmdRu0tJEzoSubHdsttvG7dA1hX6ncHAmFEiYMXBJmXI53Z8F3OGZcwtynjKo4XjfP3Ldx5_EQPEHFtn5MfchpSvrP9CV9wNEEXRiuMQiDomdFT9NnUFOwMkb3paufzhN1bEPBC3eyghfJMyGrhR9NZONQowhp39vNmV9dPBuwTRYZ1aXANJZSw-UHc0pZtYelRrpKyP7O-FxqW5_mTiMCRJrJdwPFZDbmTtKgwdwTW4QcBKIDYuHGBXn3aSwjMV2Oq7RZ7vgdMODsDk0czYPyF576eIhI9UTFcsKirTiHOYn3D5GVs7l-lAYjtX4NaqoL8mgU5Mf60N2vYkXK7f6xqkfKcvyQgz-cddzrTcoFPE9diIvyTxm9F6tEtXkKbd0YyYE3tukqRlBaWMKwhgNQNw" style="width: 100%;">
-                        <p class="caption">IWSLT'14 NIST score</p>
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC1C18KkbT2EL3NRzQ0ejp04jk-jP70ARXvnzuMUxa-nac1MOjj1rYmHHXTgJzW_dN6ydMcS3udctR5w8sev0DxTYhw8-sILZKDQYoCuyipWuVbn2Nrb5NsS8HjWyiKRK2MQVhc_XY7zXW8pwKYQ3G7YgVufUXkGGzBhAKfpeB1Ck0LBPdjVvoxDCkFbt2as3Jl11n1ZISB7dUBm8E917A3vrZrDdCVINBQc5ErIvsa-ZJZGa-bp5FzBMA7sehWDk16GB3fGy2dBx6ugQLGkzjrEM1IMoH2cRdTUMJz3TQ9Ok8SLeEhcjJp0LSyRSh2tk90ZQn1zu0oTOMqwuAZ9H06yx9Hd0wP8QWS_pKF2qQzYCseTBtmHWNOdsZWKd-nIwhlSKPNSh-epJXNGPbcG7oanVnIua2ocryoXGy_f-IXR7YrPO7ikNzajvWtZx1O10kdTuEbq0dsDw2g9tbKMis_g-LZoQDICbisNpeFf0uQ6YttGzxkUj_VOQZytXI2OGSEYtxHQpU4RxFkyYX85pEmyEs5OgEU9WA8Kr-A2SmPM7lh2sWJRWloiSVyp9y0WyFat1hsy-R0Gnn2pLhFTRD9zPo-noSbpl_Z8Iwqc5b44scfhYDiruzYQvkLb0AnThq0mjSXlhNs9CHHiHE_rkiIljh5RucYmpa4SA6332vyYNW1ROrAr1PJzE3d-tmGXkOMtKHBIiACyItadr_sD1sn7pdX5HbrIeGv9tCZeQcHAuXl-PI22lmcQy0bTXT8Pk9y4q8XKkELASXC1lR2tFatjWCx6gKjxM12bPxvNr0IAHPUedF6uc5X-rBH60qJfa4_M57TK1FUXH2GN7Unkz4gszPTsEwLwnSuqKnNl1pWnPsakumfjBtIJGpRFmzmynZ7Zq6bzNQ8IHO1o8WuNutRAPuBetFh_vL2F7TBHorZa_GVsAXLcQ4VjHF3d_ZZ9SAq0qL5YhEORIoT3Nf2oVB-EMHY4TRKMI9Fyc38iOPgpmq2S6t-QkQsG68AFrEpf9x2Lz9ViDDgFM4Sm1bA2AKHfqMG2h_q_hEUV2cGTTmuq2D3PQ-KbX471OirPXD8JW4AUSJO3guVtsObqCMmbm4ZoLr-BPezxHlTCPXMxiodX2Ww_4smQlNyuQB-5Pwc4T5bmI9X1Mgs-zpkMIHr18egbBaZE4e70H3c_ZnmLIpkVmQK_svFGTYisv4KxVyOztK6N9CgIOHyS6zgAJ1VUOYCo_Gdelo3md7PU89ZE_DYDHNuWbJvOXF_k5sJWFtwD3oueQitnxJzq_KqfcJ4gSGB0whcPcSIurdDdxWBBHGV_i-NzKbdkxKhNhI9nEdeErIvUuxjBczXnujM5zykXFcaz1Om5V_ckwUv_LrvBC9VXlkZjPxQ-upgSat2MlcexLgZyx4hFUpe2m1f5wslP-d8VlNDlv-w89PySXIiNZ1Dyz-zyPivmNQgIKFv2SyHHOPnkSxvMlzV7vZ41oI" style="width: 100%;">
+                        <p class="caption">NIST score</p>
                     </div>
 <pre>
 <div class="codeWrapper">
 <div class="code">
 <pre>
 <span class="annot"># Sample 1</span>
-gt  : ein sehr konk ##rete ##r wunsch , dass wir diese technologie erfinden .
-pred: es ist ein sehr konk ##ret wunsch , dass wir diese technologie erfinden .
+Q : 어디로 여행 가면 좋을까?
+A: 온 가족이 모두 마음에 드는 곳으로 가보세요.
 
 
 <span class="annot"># Sample 2</span>
-gt  : wir durch ##laufen initi ##ations ##ri ##t ##ual ##e .
-pred: wir durch ##laufen den initi ##ations ##ri ##k .
+Q: 나 좋아하는 남자가 생겼어
+A: 충분히 그럴 수 있어여.
 
 
 <span class="annot"># Sample 3</span>
-gt  : vac ##la ##v have ##l , der große ts ##che ##ch ##ische politiker , hat einmal gesagt :
-pred: v ##la ##v haben ##l den großen c ##ze ##ch - anfü ##hrer , darüber gesprochen .
+Q: 오늘 저녁 뭐 먹을까?
+A: 맛있는 거 드세요.
 </pre>
 </div>
 </div>
 </pre>
-                
-
-                    <p>
-                        <br><br><span style="font-size: 20px;"><b>WMT'14 결과</b></span>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDd5sYIlbxPZpGRxBP_zCynbHkTsMudEtCUZPiEQPFyiGw_31KkgmE0D1-5-fdDRpojrCLhC3V_VuBXGaNW2m0ujVyLJgtXsaLx9V519MW7WOeu8l_eLoVXXypCedvxjUg34hMKaLyh2mpiUCtYZFr1CNIaXPGWwOYJRRByiNoz186uLAwIwndyMz-YMUQAVDhod45qkx7wQwwbVFl248B6q3VbpewD-Q8j_sF2_98wsSjnApwpdgoENSkeGsDhuSRB16pdWs3aJqJQ6bx2qVB44ps-SgBT8E-wi1CRJp7-KV1z4w5K0jgOSo21yjckVZ0IKwsMYI-7_R6GFc0Itd_Mv7K5UNtPDV9vb54FHJGvW_OUtW6UOMcSIgdWJ0-e0mY1GMM-9EeycmWdNYPAYKn2nu4LN_ESpYuAtcVQHgZMXJPAKPWy7bY-hEpFwPxLxcA0RL_sAS-GRrLu81JaUIdJV0a0rCmC-a1RkkiPuPrv6MKDIvhTvVeuL7HOZDlwJgOpwkl6ZIpMdL35ycWo12M4MTUmIFHuIhJ81yekSJBzA1cvei4KxloYGh7z5vPJWcVaxdvE8ZbDOslw1CB03OwqC7hb24RyDUOH55DYKlS6tBC8B6UweMZ31H5apdOQZ7gRiFVMrZmjz4-BRWSZrOIjw0WmkLvASJKSc9wzXHNqfB4fSjhwLppo82ZMU8JCX9gUEXNqVZU321m6YPmsmvry1BGJlpdL7-4xp81G66g0BEqbyHX5wKK6-ROZMnP7EQIUrv6tkryG1Xaik-qkX82NaIs6XfIYt6e3tPtXEKMgvFnMT86yhvDWxMeza4E8HkRLxmnRO0r68mG4p9YxxJ7B0C0fIu-GBsA1-6ZPMimvQavPDHgHIrOuG25khRmfcUsLqO6f9_0vHitKBiZHf7kDpNjusf1bqpoSAHh9kH97cdGfrfpKX4C9Xr4kFyN7MymmULg3m2eLsXqXNQvg3iohZwMwjMHFIe9rS5_-E4BJlu6ebuxwjnTH0AsWD3TCxbcTVlKaukTSBzKD6KuNU4smHb1DwhRu_UdXlXG5g43x1knT_Qc5Givnr06YfmhtOsEu0hmVBNSjw0n0rtm0CpwIL8zd-CueiH1XDCFoWYoRD39OsfuwJ_exJ7ibve78eUCBnO5g_YoUU0ysWe0GUPFuBlsbmwY0_kGymoRDRcMapEFAEFXZxbbcIas2flJKpIVWx79s8Lssa5fVHMLjw6Lyqzsnvx8zk2jQ65udch2RxAHNLpR0YOy2l_6OfOcF1ryS3PFCCAriQveZGDAG46dDKsVP5PuyqzigpK53xYN62WUyr7ic65hRb8Zp0GiVN6opNcwr9UkuGZWaoyDwME8IRRybt0Gj6OgWNcrLDdeO5Gy_Y0JLvkX7THQVhnPYxRYRPcOOezxdwy_pD1Tfs1MIJpG91zxVcBHChJljY7NSBpsyz6S2c3OHuQj_Ep2qHv1zsaZ5aHjYUciyS28" style="width: 100%;">
-                        <p class="caption">WMT'14 BLEU score</p>
-                    </div>
-                    <p>
-                        <ul>
-                            <li>Test set BLEU-4: 0.2803 (NLTK)</li>
-                            <li>Test set BLEU-4: 0.2803 (multi_bleu.perl)</li>
-                        </ul>
-                        <br><br>
-                    </p>
-                    <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBIv4c80Z081-lJJZm0EAj3WTU4Lk0ZrnyLYzCmYQwBoG3vNB8Lho2Jny4b7G4OYjw3R10y3zL5Gd9j-W7LACVWvPgQMmiOTncTkS3Czq_SqZavBSVqeAfyd54fy6Q-bxnY4qbChCopAOCZ4b52slJWh7G57ORk7f5EeTm4RpB6mHzpRj8LTMcKV41tOeUixTfJHB9jv4Pqigo1n9pOfjuOc3H6Se31bbzO-NhzObgBly8XLLXyYOIQ47mG9BeotdhnJwx-7BauZIDWClz3wM4twXtfW6nEwUzPnuNDvetgisXh03pffJdZjEGjoo9lSvaMmA6eiz-NJCKtwu-hiLWFFKfA-zErsBZ8m6EEIYPChEXbrK2cNEHkotSrNYLZR9DdyT2kF-ub5WABOOSoug-KYVfHkULiw4hhrER1aiopGCmfN2kca-027AJ986YBA1cyfsnbBFLlMYIpxaXMuHnU2RLsJoUC6h-7cS3qH3E0gwUKG5HtgMOUJiJj48yhaWFW1Cso8IgMTDEcMIpkF5A8FC5z4k5WtYfvdRjuvFo_BznWgD66SIS3fW3v63qtJQdunIleXeuwk_wgfNoqabkqREZ_-MDiKo2daLoO3e2AmJadqqXwP0e5j8VwGrqodXVUskICooV8w3ubTNIvqX_xutHB1KerP1u8uubzZU5zVXwXC3fhQqbs3inBNZCt4Hgz1G0rpFXoYbxF2DDpRmhFxINuVTyrOiDRoaL5DtEVunodGT5L1I8UqwghSvUrlpouqJB6cfxTCqSASHecB2TYgSMborY8RTcQfN1-uy8R9IzdIYxwoIZBGNRKT4dk0IbNRD0L0sfklPXIojnwhXfDRYV7f8ci4Cc6JCcxiIe_uaNcQSm_BxvWNZi14BUwmC7HZNKGvxHuvStC9PlrAfJzEKO3koTk4wKyxhbV4hgub9WoySHv3H-Of4Q1QCjDjamnj_zyrPZS5xrjXW4fJ6OXtLcSMWZUPxJqWxL8iFf1rWhePA4bTVn9J513l2p76uYz11pfq8TtKzxdPE04Uta-4fbzHrcDCmotHGQsrVYzgrSLnU_cCYStgh65TfC4AxfB2E6vb-X4UJAA9Kj3uD7iH3hGfYrZbp7TC0h_0ugNzbtvt0isOoTDAZenOw32nVhl000SUv88X3grjJ-oCPc1aeggNzuejccNViUijOzp8W51lEZrwwhTMCjxeYB6inf_Oh68m45Qm6ZDLh0xcpG1M1TXO93E7dKW5gAdGLxzPiQvKFokF_9isMOha0FjkL_EtFHnHikkKfMn26n0gx5qPxw7evf3rIYgepRVH2wNppDJmskHsdExr4Q5R9MjXtP5o_d4EJY0PzrDBBtVlC5aYUAgQgqYClf2XMRSK-_xcP3F5bVdpZnaVO_OBQfWJ_V1M5cnZRi6tGatoDNuRUKuXuhl8OVWDkZ-m-CuGGrZTrQ7KDjKf9WBs4qT_kSzyH51hEE5nahVDJ6gtIg" style="width: 100%;">
-                        <p class="caption">WMT'14 NIST score</p>
-                    </div>
-                    
-<pre>
-<div class="codeWrapper">
-<div class="code">
-<pre>
-<span class="annot"># Sample 1</span>
-gt  : „ erwachsene sollten in der lage sein , eigene entscheidungen uber ihr rechtliche ##s geschlecht zu treffen “ , erklarte sie .
-pred: " erwachsene sollten in der lage sein , ihre eigenen entscheidungen uber das legal ##e geschlecht zu treffen " , sagte sie .
-
-<span class="annot"># Sample 2</span>
-gt  : insgesamt seien vier verkehrs ##schauen durchgefuhrt worden , auch ein kreis ##verkehr wurde ange ##dacht , allerdings wegen der enge in dem kreuzung ##s ##bereich sulz ##bach ##weg / kirchimportant .
-pred: insgesamt wurden vier sicherheits ##kontrollen im straßenverkehr durchgefuhrt , und auch ein kreis ##verkehr wurde berucksichtigt , jedoch wurde dieser gedanke aufgrund der engen linien abgelehnt .
-
-<span class="annot"># Sample 3</span>
-gt  : austral ##ische flug ##pass ##agi ##e ##re mussen auch weiterhin tablets und smartphones bei start und landung abschalten , trotz bemuhungen in den usa , die regelungen fur derartige gerate
-pred: flug ##gaste austral ##ischer fluggesellschaft mussen trotz der bemuhungen in den usa , die bestimmungen uber die flug ##pass ##agi ##e ##re zu locker ##n , ihre flug ##table ##tten
-</pre>
-</div>
-</div>
-</pre>
+            
                     
                     
                                        
                     <p>
-                        <br><br><br>지금까지 transformer를 통해 IWSLT'14 (En-De)와 대용량 모델 WMT'14 (En-De)를 바탕으로 기계 번역 모델을 학습해보았습니다. 
-                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/neural-machine-translator-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
-                        GitHub에는 IWSLT'14와 WMT'14의 sample 데이터가 있습니다. 전체 데이터를 받을 수 있는 링크도 GitHub에 나와있으니 참고하면 될 것 같습니다.
-                        <br><br>다음에는 transformer를 이용하여 chatbot 학습을 해보겠습니다.
+                        <br><br><br>지금까지 transformer를 통해 한국어 챗봇 모델을 학습해보았습니다.
+                        본 설명에서 사용한 데이터는 일반적인 딥러닝 모델 학습 데이터에 비해 많은 양이 아닙니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 만족할만한 성능을 가진 모델을 학습하기에 어려움이 있고, 연애 데이터라는 bias를 가지고 있기 때문에 open-domain 챗봇을 학습하기에는 무리가 있습니다.
+                        만약 open-domain 챗봇을 구현하고싶다면 AI Hub에 공개되어있는 많은 양의 소상공인, SNS 데이터를 섞어서 학습하는 것을 추천합니다.
+                        그리고 영어 챗봇같은 경우는 multi-turn으로 구성된 DailyDialog 데이터를 추천합니다.</span>
+
+                        <br><br>마지막으로 학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/chatbot-transformer" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        다음에는 transformer 기반의 아주 강력한 encoder 모델인 BERT에 대해 설명해보겠습니다.
                     </p>
 
                     
                 </div> 
                 <div class="tag">
-                    <b>태그</b>&emsp;#Transformer&emsp;#기계번역&emsp;#WMT'14&emsp;#IWSLT'14
+                    <b>태그</b>&emsp;#Transformer&emsp;한국어대화챗봇
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
-                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('transformer1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
-                        <br>Transformer (Attention Is All You Need)</span>
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('transformer2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Transformer를 이용한 WMT'14, IWSLT'14 (En-De) 기계 번역</span>
                     </div>
                     <div class="pageTurnerRight">
-                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('transformer3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
-                        <br>Transformer를 이용한 한국어 대화 챗봇</span>
+                        <span><a style="position: absolute; right: 0;" onclick="alert('Transformer 마지막 게시물 입니다.\n\nThis is the last post of Transformer.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
                     </div>
                 </div>
                 <span id="readNum"></span>
