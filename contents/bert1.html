@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bidirectional Encoder Representations from Transformers (BERT)</title>
+        <meta name="description" content="강력한 성능의 언어 모델 중 하나인 BERT에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/bert1.html" />
+        <meta property="og:title" content="Bidirectional Encoder Representations from Transformers (BERT)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="강력한 성능의 언어 모델 중 하나인 BERT에 대해 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypAS6q2hXMURxtOnjCRLJo0d0R1uOEfRA9-vkkolaikC2mQfALsXWSFQ3P_ETygkxPi5SHCo2hSXLySnCxu3YWPlkav6F2-mZVbtQFRAUii1jIDGkeqiFYmjP_MPsRFbkhMIrWRcfTDo2GDHe5uhUeMGThvE827AQM3ZcqAFHtjQPClUZ-RIw7s7FkreZf6G83OUqocPzDRnWYwji2J3UWBRs1rOrIG12S8zBviA5ZKK9r89WWHyyvZqItrjHAhhE9Mk-bsI-th2UzxNj1HEBShKho3OtTo0-2cu0ulg2KF1DGveyrujxbltGnEPDNciUjNbrUu4dhPNPWMZeivt87UHI2Kdf3GXYzZN-3tSHnWVD_Ylp-Xi1tbHwHWZP7c69V6SU4BHrRWCI6p85Mv9jVXZhdbp4KUDYwzVX2fzg7Bk7uSHiRkk-bbnu9rV-6KUasTgwPAMuksumbrm_koK6bInmt5H_X4wyoPxgeMwTwIDZZ5zz27ra53gqvybI2ui1W6N0JpesyX3KZANNPw_9XV1oPdtoFX0KYB7fudwHBqwqsGO73wQ3lIwGgT-uV79EvMshlhEhZ0lDDcrNtIOvqPNmgre6CKWH737sFTsah4UalGEOSlgqrx9UEuzouzpVLyUYbNw0Ioq5IiZBTqjplFBkObGQ5GsuLsojSGFvlMxHprMpiF4iezvEzxP6DbgsuY5BzcRAsktI75Nr9uEbTHdaVRZE50WYA4cIRwRjqHSPjKxSav2NIp7BDg5lBOagErUYJXcoVEf-1K6PxmS2ziYPDySYW5-RZkD54dPXNcGtf5OJr8VHkVTs61nbkk07-2qcDS7dbCnxrlcIS4Xd5A5WRoZ3xDKmCu5XWtaNgk1r9UvCR3aXqEbeEjRZ6D2ve8cXQhb_tex4JKE6rDCUt0nQgjAgqd617LvQMedLCxMM9BFz8BWlCRWKGpZYfB8iOmi6QAwQF__HNIR5AhtHrvLNtA8auLRZLSs-7gyDo6JzfYxdduXzFBAOTFg8i2J_gopGEXNrLcPz0K0ldbfexMQoGJAFviywEKK25t1H1mOFkAZjkanw2MjJu6UF8_AD0NDrjvMu0jKkx5bSbOOa0ulu-2DR8QhhuTi_neXD3M_1NUXEywLk-SUhVbDgZrUD5tW6_0mnk_bYZEEVq4ODDyHQdYcz1qtQshNWP9glZsuHCo5tk5V_yRSVWuEaTccLN0kAhfQdbzuZkS0aIiIG-E-uloV_HXKyyNk4YZ1lsu-r05CYfEDPnavGspl0UFk5midHE5fTUUAqN3azLKiaJdleCg_O-rtZiIszDyxsjocDWw0GZQ_VqCab1yRt9_OiGqTmai_MWLRq3fshdbBb7i_cYUHwHGdH-P-QvCIdVYWDHn6h78JgQGypYdpgXgGJExztzzV9Yb2Xb236gDkGqH0dJr2pBqd8LYLiaSBoEu-Tkbr-IhnQqf6Odluu99EfBwD1nJiTQiy4P-SMZI" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Bidirectional Encoder Representations from Transformers (BERT) / 1. Bidirectional Encoder Representations from Transformers (BERT)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypAS6q2hXMURxtOnjCRLJo0d0R1uOEfRA9-vkkolaikC2mQfALsXWSFQ3P_ETygkxPi5SHCo2hSXLySnCxu3YWPlkav6F2-mZVbtQFRAUii1jIDGkeqiFYmjP_MPsRFbkhMIrWRcfTDo2GDHe5uhUeMGThvE827AQM3ZcqAFHtjQPClUZ-RIw7s7FkreZf6G83OUqocPzDRnWYwji2J3UWBRs1rOrIG12S8zBviA5ZKK9r89WWHyyvZqItrjHAhhE9Mk-bsI-th2UzxNj1HEBShKho3OtTo0-2cu0ulg2KF1DGveyrujxbltGnEPDNciUjNbrUu4dhPNPWMZeivt87UHI2Kdf3GXYzZN-3tSHnWVD_Ylp-Xi1tbHwHWZP7c69V6SU4BHrRWCI6p85Mv9jVXZhdbp4KUDYwzVX2fzg7Bk7uSHiRkk-bbnu9rV-6KUasTgwPAMuksumbrm_koK6bInmt5H_X4wyoPxgeMwTwIDZZ5zz27ra53gqvybI2ui1W6N0JpesyX3KZANNPw_9XV1oPdtoFX0KYB7fudwHBqwqsGO73wQ3lIwGgT-uV79EvMshlhEhZ0lDDcrNtIOvqPNmgre6CKWH737sFTsah4UalGEOSlgqrx9UEuzouzpVLyUYbNw0Ioq5IiZBTqjplFBkObGQ5GsuLsojSGFvlMxHprMpiF4iezvEzxP6DbgsuY5BzcRAsktI75Nr9uEbTHdaVRZE50WYA4cIRwRjqHSPjKxSav2NIp7BDg5lBOagErUYJXcoVEf-1K6PxmS2ziYPDySYW5-RZkD54dPXNcGtf5OJr8VHkVTs61nbkk07-2qcDS7dbCnxrlcIS4Xd5A5WRoZ3xDKmCu5XWtaNgk1r9UvCR3aXqEbeEjRZ6D2ve8cXQhb_tex4JKE6rDCUt0nQgjAgqd617LvQMedLCxMM9BFz8BWlCRWKGpZYfB8iOmi6QAwQF__HNIR5AhtHrvLNtA8auLRZLSs-7gyDo6JzfYxdduXzFBAOTFg8i2J_gopGEXNrLcPz0K0ldbfexMQoGJAFviywEKK25t1H1mOFkAZjkanw2MjJu6UF8_AD0NDrjvMu0jKkx5bSbOOa0ulu-2DR8QhhuTi_neXD3M_1NUXEywLk-SUhVbDgZrUD5tW6_0mnk_bYZEEVq4ODDyHQdYcz1qtQshNWP9glZsuHCo5tk5V_yRSVWuEaTccLN0kAhfQdbzuZkS0aIiIG-E-uloV_HXKyyNk4YZ1lsu-r05CYfEDPnavGspl0UFk5midHE5fTUUAqN3azLKiaJdleCg_O-rtZiIszDyxsjocDWw0GZQ_VqCab1yRt9_OiGqTmai_MWLRq3fshdbBb7i_cYUHwHGdH-P-QvCIdVYWDHn6h78JgQGypYdpgXgGJExztzzV9Yb2Xb236gDkGqH0dJr2pBqd8LYLiaSBoEu-Tkbr-IhnQqf6Odluu99EfBwD1nJiTQiy4P-SMZI);">
+                    <div>
+                        <span class="mainTitle">Bidirectional Encoder Representations from Transformers (BERT)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.12.20</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 바로 NAACL 소개되었던 Bidirectional Encoder Representations from Transformers (BERT) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">현시점으로 무려 6만회 가까이 인용되었습니다
+                        과언이 아니라 BERT같은 경우 현재 연구하는 데 있어서 없으면 안될 모델이며, BERT는 summaraiztion, 기계 번역, 감성 분류 등 현재까지도 다양한 연구를 위해 transfer learning하여 많이 사용되고 있습니다.</span>
+
+                        <br><br>BERT는 pre-training 후, fine-tuning을 통해 NLP task의 성능 향상을 위해 대량의 언어 데이터를 통해 인간의 언어가 가지고 있는 특성을 학습한 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 text가 가지고 있는 정보와 특성을 잘 파악하는 방향으로 학습하기 위해 저자는 Next Sentence Prediction (NSP), Maksed Language Modeling (MLM) 기법을 소개하였습니다.</span>
+
+                        <br><br>아래는 BERT 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1810.04805.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BERT 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>BERT가 나오게 된 계기</li>
+                            <ul>
+                                <li>ELMo</li>
+                                <li>GPT-1</li>
+                            </ul>
+                            <li>BERT 구조</li>
+                            <ul>
+                                <li>Encoder 구조</li>
+                                <li>Embeddings</li>
+                            </ul>
+                            <li>BERT 학습</li>
+                            <ul>
+                                <li>Tokenizer</li>
+                                <li>Input 데이터 형식</li>
+                                <li>Next Sentence Prediction (NSP)</li>
+                                <li>Masked Language Modeling (MLM)</li>
+                            </ul>
+                            <li>BERT 성능 및 Fine-tuning</li>
+                            <ul>
+                                <li>General Language Understanding Evaluation (GLUE)</li>
+                                <li>The Stanford Question Answering Dataset (SQuAD)</li>
+                                <li>The Situations With Adversarial Generations (SWAG)</li>
+                                <li>Named Entity Recognition (NER)</li>
+                            </ul>
+                            <li>BERT Ablation Study</li>
+                            <ul>
+                                <li>NSP와 MLM의 성능</li>
+                                <li>모델 크기</li>
+                            </ul>
+                            
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">BERT</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>BERT가 나오게 된 계기</span><br>
+                        <span>Motivation of BERT</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        BERT가 나올 당시 유명한 언어 모델이 있었습니다.
+                        <ul>
+                            <li><a href="https://arxiv.org/pdf/1802.05365.pdf" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">Embeddings from Language Models (ELMo)</span></a></li>
+                            <li><a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">Generative Pre-trained Transformer 1 (GPT-1)</span></a></li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBcCCfDaYCflSeqtzTNUUMSbmpBKNvomqOR2044ahGQhjqntKO6XLqjMe5lOsYSX-waAOImIUZDGsT5zsAf8tIhnhq5HYt49NWHRShZSwa9w7RTtALjRd6hZewWK3fY8F6nlD-CIYzfHhvzGAHyFkVBGOPdKx3X8PvD06vVI2Bccd2trn5TaN3ks1SahVrXwmGgRiEOk2_04FWAlassA4DXTD41dSgn9YfoiAm5sNDjoeDY_-a0AAqUdSGKlHlJqa1s7XFW_c-APrHzddQJTrku3iJ1Kw2AzrkrZlgbRuPN6bxMKK3OG9t8o5573SojlYbZfGhXQOeUAEWX9APHW7HwfiZBIONsyXT_UUuro9O9xOE_0mLvwB3e4c0beIiGTWhkJmCd0YN0n-P_OIEmhOwOC3GvsQhSyT0QVi0wSGnD-K59Y5fJ4xSS5sAZtn0hNt1hrM-FeYpWZSR2vJfFRBwcps0dUqhf-vum-VFggggedkx5xw-lbo572pBGX-SHY7ApVHbgnGZbKSyKlZEpbQ0YQRsqxudjv-ihkuyb9L2Qod90M2oTxWCpAfygtidNVhFNQtAB6vUM_PIqk2AkTkImbd8EdfyhIaoB4hd0h7DPNP0wMLqFvBYFjAsbKxmo1lYTOjh7tL40rT8B-a4CrPJwRIgQMyE1lOrXwsxQMmkn4LFsb0cylpzhiIdUI4XeUxuBY__r9dHbM7j4F9GVKqGz2cBOCBwAmQzcd9rpcfN9CWzPRFowR6NY96ux_nTDHv7Iff_tdjLSywzo4BtdTxSeKlimgJFD-QiKRRC3N6dNnVSUIASAi01spVT8r9lN0Y49MvN0EE8un8qnENYVTcVr1lFoTnfZc5F3uKabYXT_IiwHV5fJjVeMmIYJfjzfLFokhUunoOI58-P4sUFE7y3HVuYtTLt_DOjk_rABHAO78xXnAj8wPVeCctihBfVFG6VEBTXLVsW0zlA3ng0D8wO2ExTX6nn252KKB8-w5JaS2QpaN68_nDx-kmJXawSBNiqWjSVZExGX2W3R-MrmMcBAIyc9brvrwVTCDQNg3H0hm_of3ObFFEJjFsdiHhii-2sETZNP8ZqI1hX86H4c-pkSMtfQV6mf4me6CAZ-47azJ7c0cH9wi_SsG0GpM-BdNlfEBuo_to1-zAxV8vSyB4-Xa3koOwPUu9aejpNxhewgEnSz-Lp9ktXJUQZmLTXjq4bJC-6v89MygflwCL5Vr_M7cragFx8KzeCAEmSANlvJqnoml9lPdEdzsk_AbyfYtp6sv6etPaRnJpbW-cNFLbjXyTynzX-i92i0MEx2yHHgfYlMyw_9B3cezSVmIchX2X1oNwCSgFrX1W6w7KpFWZH_wTPdZfPgCQO6LGwNGnLZOjf1EGkkUzyR-TvE2c0c3M2kdrNAFjn3cNsdzViWlFuGTuDMyD0wgB73uUKr3Q2E76LOued7WJMMrvhx9GoDznFmziwFtcSjXq1Ocow" style="width: 100%;">
+                        <p class="caption">ELMo와 GPT-1 구조, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>1. ELMo</b></span>
+                        <br>ELMo는 bi-LSTM을 바탕으로 텍스트를 학습하고, 학습이 끝난 후 파라미터를 고정하여 input 문장에 대해 representation하는 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">쉽게 말해서 input 문장의 토큰을 임베딩해주는 레이어라고 생각하면 됩니다.</span>
+                        따라서 NLP task를 수행하기 위해 pre-trained ELMo의 파라미터를 고정하여 문장을 임베딩하는 데 사용하거나 fine-tuning을 진행하여 사용합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 ELMo는 단점이 있는데, downstream task를 진행하기 위해 무조건 ELMo 모델 위에 task를 위한 모델을 하나 더 붙어야한다는 점입니다.</span>
+                        즉 NLP task를 위해 ELMo를 포함하여 총 2개의 모델이 필요한 것이죠.
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">따라서 BERT 논문에서는 ELMo를 feature-based approach라고 설명합니다.</span>
+                        더 자세한 내용은 <a onclick="pjaxPage('elmo1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>2. GPT-1</b></span>
+                        <br>GPT-1은 앞의 토큰이 미래 토큰, 즉 이후 토큰을 참조할 수 없도록 학습한 언어 모델입니다.
+                        즉 일반적인 decoder와 left-to-right로 학습이 진행되는 unidirectional 구조를 가진 모델이죠.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이러한 방식을 BERT 논문에서는 fine-tuning approach라고 설명합니다.</span>
+                        더 자세한 내용은 <a onclick="pjaxPage('gpt1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        
+                        
+                        
+                        <br><br><br>특히 BERT는 위의 언어 모델의 단점을 언급합니다.
+                        <ol>
+                            <li>ELMo는 downstream task 시, 추가 모델을 붙여야함.</li>
+                            <li>위 두 모델 모두 pre-training을 진행할 때 일반적인 언어 모델 학습 방법인 단 방향의 unidirectional한 방법으로 수행한다(<span class="highlight" style="color: rgb(0, 3, 206);">ELMo는 bidirectional LSTM이긴 하지만 학습 loss function은 결국 left-to-right, rigth-to-left의 단일 방향의 loss를 합하여 수행</span>).</li>
+                            <li>이러한 unidirectional한 구조 및 학습 방법은 언어 모델의 성능을 제한한다.</li>
+                        </ol>
+                        
+                        <br>따라서 BERT는 <span class="highlight" style="color: rgb(0, 3, 206);">downstream task를 용이하게 하기 위한점도 고려하면서</span>, 위의 문제점을 해결하기 위해 <span class="highlight" style="color: rgb(0, 3, 206);">ELMo의 장점인 양방향성, GPT-1의 장점인 transformer</span>를 가져와서 새로운 방식으로 언어 모델을 학습하게 됩니다.
+
+                    </p>
+                    
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 구조</span><br>
+                        <span>BERT Architecture</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. Encoder 구조</b></span>
+                        <br>BERT 구조는 transformer의 encoder를 사용합니다.
+                        Transformer의 encoder는 decoder와 다르게 input token을 attention을 통해 모두 참조할 수 있습니다.
+                        따라서 양방향(bidirectional)으로 input text를 볼 수 있다는 것이지요(Transformer 설명은 <a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a> 참고).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 encoder를 사용해서 text의 bidirectional을 다 살펴보고, 각 토큰이 다른 모든 토큰을 참조하면서 모델이 text representation을 더 잘 할 수 있다고 생각하고 저자는 encoder 구조를 선택한 것입니다.</span>
+                        그리고 encoder를 사용함으로써 bidirectional LSTM보다 연산 속도가 빠르고 깊게 쌓아도 성능이 좋아진다는 장점도 있습니다.
+                        아래는 BERT의 구조입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAS6q2hXMURxtOnjCRLJo0d0R1uOEfRA9-vkkolaikC2mQfALsXWSFQ3P_ETygkxPi5SHCo2hSXLySnCxu3YWPlkav6F2-mZVbtQFRAUii1jIDGkeqiFYmjP_MPsRFbkhMIrWRcfTDo2GDHe5uhUeMGThvE827AQM3ZcqAFHtjQPClUZ-RIw7s7FkreZf6G83OUqocPzDRnWYwji2J3UWBRs1rOrIG12S8zBviA5ZKK9r89WWHyyvZqItrjHAhhE9Mk-bsI-th2UzxNj1HEBShKho3OtTo0-2cu0ulg2KF1DGveyrujxbltGnEPDNciUjNbrUu4dhPNPWMZeivt87UHI2Kdf3GXYzZN-3tSHnWVD_Ylp-Xi1tbHwHWZP7c69V6SU4BHrRWCI6p85Mv9jVXZhdbp4KUDYwzVX2fzg7Bk7uSHiRkk-bbnu9rV-6KUasTgwPAMuksumbrm_koK6bInmt5H_X4wyoPxgeMwTwIDZZ5zz27ra53gqvybI2ui1W6N0JpesyX3KZANNPw_9XV1oPdtoFX0KYB7fudwHBqwqsGO73wQ3lIwGgT-uV79EvMshlhEhZ0lDDcrNtIOvqPNmgre6CKWH737sFTsah4UalGEOSlgqrx9UEuzouzpVLyUYbNw0Ioq5IiZBTqjplFBkObGQ5GsuLsojSGFvlMxHprMpiF4iezvEzxP6DbgsuY5BzcRAsktI75Nr9uEbTHdaVRZE50WYA4cIRwRjqHSPjKxSav2NIp7BDg5lBOagErUYJXcoVEf-1K6PxmS2ziYPDySYW5-RZkD54dPXNcGtf5OJr8VHkVTs61nbkk07-2qcDS7dbCnxrlcIS4Xd5A5WRoZ3xDKmCu5XWtaNgk1r9UvCR3aXqEbeEjRZ6D2ve8cXQhb_tex4JKE6rDCUt0nQgjAgqd617LvQMedLCxMM9BFz8BWlCRWKGpZYfB8iOmi6QAwQF__HNIR5AhtHrvLNtA8auLRZLSs-7gyDo6JzfYxdduXzFBAOTFg8i2J_gopGEXNrLcPz0K0ldbfexMQoGJAFviywEKK25t1H1mOFkAZjkanw2MjJu6UF8_AD0NDrjvMu0jKkx5bSbOOa0ulu-2DR8QhhuTi_neXD3M_1NUXEywLk-SUhVbDgZrUD5tW6_0mnk_bYZEEVq4ODDyHQdYcz1qtQshNWP9glZsuHCo5tk5V_yRSVWuEaTccLN0kAhfQdbzuZkS0aIiIG-E-uloV_HXKyyNk4YZ1lsu-r05CYfEDPnavGspl0UFk5midHE5fTUUAqN3azLKiaJdleCg_O-rtZiIszDyxsjocDWw0GZQ_VqCab1yRt9_OiGqTmai_MWLRq3fshdbBb7i_cYUHwHGdH-P-QvCIdVYWDHn6h78JgQGypYdpgXgGJExztzzV9Yb2Xb236gDkGqH0dJr2pBqd8LYLiaSBoEu-Tkbr-IhnQqf6Odluu99EfBwD1nJiTQiy4P-SMZI" style="width: 100%;">
+                        <p class="caption">BERT의 구조</p>
+                    </div>
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>2. Embeddings</b></span>
+                        <br>이제 BERT가 왜 encoder 구조를 사용하였는지 알아봤으니, 위 그림에서 embedding 부분을 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 embedding을 살펴보기 전, BERT는 대량의 text를 pre-training하기 위해 두 문장을 한 쌍으로하는 데이터가 들어가는 것을 염두하여야합니다.
+                        그 이유는 아래 BERT의 학습 부분에서 설명하고 있으며, 여기서는 두 문장이 들어가는 것만 염두하시기 바랍니다.</span>
+
+                        <br><br>먼저 BERT의 embedding은 3가지 종류가 있습니다.
+                        <ul>
+                            <li>Token Embedding</li>
+                            <li>Segment Embedding</li>
+                            <li>Positional Embedding</li>
+                        </ul>
+                        먼저 아래 그림에 보면 두 가지 문장이 들어갑니다(현재는 [CLS], [SEP] 토큰은 무시하고 보면 됩니다).
+                        그리고 세 가지의 임베딩을 거쳐서 최종 임베딩 된 값을 사용합니다.
+
+                        <br><br><b>Token embedding</b>은 말 그대로 각 토큰에 대해 임베딩을 하는 것입니다. 즉 임베딩 lookup table이 vocab size 만큼 있는 것이지요.
+
+                        <br><br><b>Positional embedding</b>은 말 그대로 위치에 대해 임베딩을 하는 것입니다. 즉 임베딩 lookup table이 max length 만큼 있는 것이지요.
+                        예를 들어 input max length가 16이라고 하면 0, 1, ..., 15의 임베딩 값이 존재하는 것이지요.
+
+                        <br><br><b>Segment embedding</b>은 이전에 BERT의 input은 두 문장이 들어간다고 했는데, 문장을 식별하기 위해 각 문장에 할당해주는 임베딩 값입니다.
+                        아래 그림을 보면 \(E_{A}\)와 \(E_{B}\) 두 종류가 있는 것을 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 임베딩 lookup table에 0, 1의 임베딩 값이 존재하며 첫 번째 문장에는 0 임베딩 값을, 두 번째는 1의 임베딩 값을 거쳐서 더해주는 것입니다.</span>
+                        또한 위 처럼 2가지 임베딩이 아닌 3가지의 임베딩을 사용하기도 하는데, 0은 padding, 1은 첫 번째 문장, 2는 두 번째 문장의 임베딩을 의미하도록 하여 사용할 수도 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDaA4XwzS_43d4KOR8T8OstWbIGkt-udBqz1mcUF-Q77Q2eTaG9IZMGujIlZuxdHv0Pe4bbfqUOmspyUm-XhLFJnnPnIXEZCy2GSTez_USYLI9B2mimERfddpU0vC0KUAnPjF175Zv1oXCHdLo0o6G7m0ZAYxprIbsd9XlET-s2loOtOFURkbpRb22rH2iV_2cgJNOkqQsezhFArXFjdh_e_VTj93FKnncq4E2Domhqa8i3bpbSBhD1o76H5yVkHiGda57ekTAJfxwWrqCQJepbOF8_Xd4S_M_GXrieQxrcw-hpoyFwBYrOwn9zB7wdWHAin2-f6fU6KwzikTVBWvqRsKQWB8-eBkzUTDIkoj5-YD2zmnYBUYnUNpf_inxPj9CTjyG_jkaiG9e04n4VLdxGNex-4YuEAQi_6vb1cEdi6RTi-kbdzpV4MJlxeSJOKainXPKpzrSAyJkdu1KewpwA7Swlwa2QAxy7GVeNfFpGcsbwaGv-eTDfAmtCoYgD_LcBj_fc6aQ0fkmLXzRhHd_8cUcSRo45kb9dGbpp7LhzCyE0Zk_1BzosjcrhLrcMuCjGfbERIyTTz1SMEQWSNEHlnQCcAQreWqshpcB2p7pQuc-oa70RAqMDjMD3Gdk1a7SoZwO3fVIb01RrU-NDsRmT4917P44598gd8r4Gpvao_DnIAyZbb30T0kuobX4G-G-C6neHlgkHRLWs27EtWXXqUGVEJBW7W_rV9LoVuCiPLml96-jRrTBu9fNDC4tcJqggyGGYfsFmhBZN_brcvQbGyiPSSN81EhNzY-bNXSjaLo0zFoBMdyA2RmZrWO5UpXCt3JtSCvotz4hoMGY6OxaJN9y1kRrB0nmB4w4FRHhRpqoC1zR3LRvXSCzdIt6k0wrYSvoBBnl3sXhVZSEX3z0xd5JQbofqua1X2ba0Lh6VxBhu3e9t5cIuxTEBN1CkhMywoJlxJSXMc8V3rlq3kLG1Ay0xcy-qyWq9LBXehqwZT6sXljl2cpGJMhL-0MP00v_FaLjR2HI0rt993KyCGeCyJ3A1QmrT6P4u0siKzpJJoGlmOV8yNDuwLrCObtvXWUNHpNK1H2S02s__bpRLQMT2kHeadxwADR-exlgpAD85DycveovAtCoJHIzcmDBaAJpldG8ZfhiTu69gJz6t3IFn-7GAGp4xfyDLwTcqSNIjwrhh2ImU5TsM-gPTk1jzCNZSFl8YGu2xBaSfCwOtjeLsAUIskJw9p6aEejVm-_Zp8x-qXLeS_nBq46clid25yNgtrFQSvfQpobLDZcj_dgCTOvYRCVJpSNGyEY0Wk5Ttm8it84amL2525endujOhGLZDX_HBCrtBPvh8epkveP017ieNst47HCa29iM9cmeBv7nDZPlRuWX1VjmWwXxBvE31Qnl_uJPns3DOBuktygW0eZoskHEoviI6PHgEQ5fD_dt_OBbtMmy-TbJ3th_zY4gXW6QURcnnr7uv32E" style="width: 100%;">
+                        <p class="caption">BERT Embeddings, 출처: BERT 논문</p>
+                    </div>
+                    
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 학습</span><br>
+                        <span>BERT Training</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>         
+                        <span style="font-size: 20px;"><b>1. Tokenizer</b></span>
+                        <br>먼저 BERT는 likelihood 기반으로 BPE를 진행한 subword tokenizer인 <span class="highlight" style="color: rgb(0, 3, 206);">Wordpiece tokenizer</span>를 사용합니다.
+                        BPE 기법과 Wordpiece tokenizer의 설명은 <a onclick="pjaxPage('word2vec1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>2. Input 데이터 형식</b></span>
+                        <br>위의 embedding을 설명할 때 잠깐 input으로 두 문장이 한 쌍으로 들어간다고 언급했습니다.
+                        이는 아래 설명할 BERT의 학습 방법인 NSP와 MLM을 학습하기 위함이고, <span class="highlight" style="color: rgb(0, 3, 206);">단순히 토큰화 된 두 문장이 들어가는 것이 아니라 거기에 [CLS], [SEP] special token이 추가</span>됩니다.
+                        
+                        <br><br>다시 한 번 아래 그림의 문장을 자세히 보겠습니다.
+                        아래 input 데이터는 "my dog is cute", "he likes playing"이라는 두 문장이 들어갑니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때, 첫 번째 문장의 맨 앞에는 [CLS], 각 문장의 마지막에는 [SEP] 토큰이 들어가는 것을 확인할 수 있습니다(그리고 보통 input 길이를 max lenght로 맞춰주기 위해 [SEP] 토큰 뒤에 [PAD] 토큰을 넣어줍니다).</span>
+                        [CLS]는 아래에서 설명할 NSP를 수행할 때 사용하는 classification을 위한 토큰이며, [SEP] 토큰은 문장의 끝에 들어가 문장을 분리하는 separation 토큰입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDaA4XwzS_43d4KOR8T8OstWbIGkt-udBqz1mcUF-Q77Q2eTaG9IZMGujIlZuxdHv0Pe4bbfqUOmspyUm-XhLFJnnPnIXEZCy2GSTez_USYLI9B2mimERfddpU0vC0KUAnPjF175Zv1oXCHdLo0o6G7m0ZAYxprIbsd9XlET-s2loOtOFURkbpRb22rH2iV_2cgJNOkqQsezhFArXFjdh_e_VTj93FKnncq4E2Domhqa8i3bpbSBhD1o76H5yVkHiGda57ekTAJfxwWrqCQJepbOF8_Xd4S_M_GXrieQxrcw-hpoyFwBYrOwn9zB7wdWHAin2-f6fU6KwzikTVBWvqRsKQWB8-eBkzUTDIkoj5-YD2zmnYBUYnUNpf_inxPj9CTjyG_jkaiG9e04n4VLdxGNex-4YuEAQi_6vb1cEdi6RTi-kbdzpV4MJlxeSJOKainXPKpzrSAyJkdu1KewpwA7Swlwa2QAxy7GVeNfFpGcsbwaGv-eTDfAmtCoYgD_LcBj_fc6aQ0fkmLXzRhHd_8cUcSRo45kb9dGbpp7LhzCyE0Zk_1BzosjcrhLrcMuCjGfbERIyTTz1SMEQWSNEHlnQCcAQreWqshpcB2p7pQuc-oa70RAqMDjMD3Gdk1a7SoZwO3fVIb01RrU-NDsRmT4917P44598gd8r4Gpvao_DnIAyZbb30T0kuobX4G-G-C6neHlgkHRLWs27EtWXXqUGVEJBW7W_rV9LoVuCiPLml96-jRrTBu9fNDC4tcJqggyGGYfsFmhBZN_brcvQbGyiPSSN81EhNzY-bNXSjaLo0zFoBMdyA2RmZrWO5UpXCt3JtSCvotz4hoMGY6OxaJN9y1kRrB0nmB4w4FRHhRpqoC1zR3LRvXSCzdIt6k0wrYSvoBBnl3sXhVZSEX3z0xd5JQbofqua1X2ba0Lh6VxBhu3e9t5cIuxTEBN1CkhMywoJlxJSXMc8V3rlq3kLG1Ay0xcy-qyWq9LBXehqwZT6sXljl2cpGJMhL-0MP00v_FaLjR2HI0rt993KyCGeCyJ3A1QmrT6P4u0siKzpJJoGlmOV8yNDuwLrCObtvXWUNHpNK1H2S02s__bpRLQMT2kHeadxwADR-exlgpAD85DycveovAtCoJHIzcmDBaAJpldG8ZfhiTu69gJz6t3IFn-7GAGp4xfyDLwTcqSNIjwrhh2ImU5TsM-gPTk1jzCNZSFl8YGu2xBaSfCwOtjeLsAUIskJw9p6aEejVm-_Zp8x-qXLeS_nBq46clid25yNgtrFQSvfQpobLDZcj_dgCTOvYRCVJpSNGyEY0Wk5Ttm8it84amL2525endujOhGLZDX_HBCrtBPvh8epkveP017ieNst47HCa29iM9cmeBv7nDZPlRuWX1VjmWwXxBvE31Qnl_uJPns3DOBuktygW0eZoskHEoviI6PHgEQ5fD_dt_OBbtMmy-TbJ3th_zY4gXW6QURcnnr7uv32E" style="width: 100%;">
+                        <p class="caption">BERT Input 데이터 형식</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>3. Next Sentence Prediction (NSP)</b></span>
+                        <br>이제 BERT의 구조와 input data 형식을 알았으니 모델을 학습해야합니다.
+                        저자들은 모델이 text의 문맥과 함축하고 있는 의미를 잘 파악할 수 있도록 두 가지 학습 방법을 제안하는데 그중 하나가 바로 NSP입니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 보면 두 문장이 들어간 후, 맨 앞의 [CLS] 토큰의 output을 바탕으로 두 문장이 이어지는 문장인지 아닌지 예측을 하도록 훈련합니다.</span>
+                        예를 들어 아래 예시와 같이 "I love girl friend", "And she is pretty"인 경우 연속된 두 문장이므로 1로 예측,  "I love girl friend", "My car is broken" 처럼 연속적인 문장이 아닌 경우 0으로 예측하게끔 하는 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 sigmoid를 사용하여 0 ~ 1 사이의 score로 예측하기보다 0, 1의 2개의 label 예측하기 위한 cross entropy loss를 많이 사용합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDzbLEN87HY7VIh8Y0eGoIe_ydi_mPseq0ooLyy0RCRxm3SyZzitTwjYwlXaFvPwF4tq7JQpOX03kvXgsUMyxNIUoXUTxb5OcffYVUWVBWEyOyCspqZU7NfjABDeLgQjnKLTUzZ3wAfDxHBL5_SbhMXCdsswK7qJURpjLiysRAJG9a6S3gUVZilreilgNdPlv0XLiBkdL9RJhIHmH5zdiJku2cA1LpObcBRHR9OpqOD-cNYMbnYVAL7ilA2qpGGZkur_oNtWxL3zvD2SI3aGtm8j-xKhTepc0zeJxxiyyHF7YqX0HfCzb1n_xKuXn2KctluMN7pkUzpVlEOfF8OW719XbwDZtu0KqlbtRaV5Juz64KJMYd75J1YLAgRjgkclqWW3XTTQ2jBOhPC1NN8W8MzTdMSGOtL5TbKBmi0nyA_ISsXKyJJk5NKbnzu9567HbQIdKMY1MSdEeCtS8xveabEGYHTAoZW_o2fIKIM9J5zlCcLJIJn6dGy_9SLu5bq5neG4T0ChETO_9oFucIw7JQ1aihHiOBifZNIAqWu6V_ctDsyOnA-wuuS0Akc55nTFYUD2v03SpNLbz5V3H2Kg5VCPi519ZhRirKG-XkBEgfuTM3QAuTXSAQE-C_A0u352rRT5hlho7knGVxCmUQx92b7_48saZPxj333TnpK7NcPfFAWkBg6983pZgUKk8FQeMzVVsA08yyWCcLnnXYLEKBZMlEz_Qh-BAViZkq-tAFphJm1MGnedxGmafHIJzilG2MhRtLb8dj3UNDxYJ6lqDDEziu9xiAGhSTgIMcSrkld0b9M_MlF4xLNMESbeXh5hYUwSIE8kjOpDNg7xM7TKwrwg8hTmnegX3KQgyZdRb4OoT7w3LYMa5SYXYz9Zc58DwZ4CO_tMURoiMrLckWoCXk6_TcFFlMUxq1FPxHAuKPEJD7W9JFYuiRMjrySCVs8gp1AOcAw6ORvN7R9m-RXlaHyjQbdu2fwjcb10lxW7QmJzkZBhDXj6RyusT3LfiaHzZ8lrmWJH3MeM_34TL8TDMCkHw7j5Injj7g5AS_ujAzHy3U_n0juqfCUXtPyVWAWQ2KbNWSuwMsAuxFg2Ju4aEEjI-iTTjIHRmPVdPBb51ojpfj7t9Ts0xQErvIYtV7T_DO8wRIOdSBmfEIxAa1ayUnEOQSDqvCEpMX3xywxTzaN8jc2gQDYhaek2FUiBXvIsr5r8vtWWKWccrLbhfU6WjlMaWioyW6LkYBMBLz91WCdqVz1GguQ1hmyWkQjk6XL9vE8IjEvvW29WjzaxNxq__ILd369woQ8OzQDuKPEXGIwz6mkgUJQblPkGtvUBpMOXKIvXNJaETL5PXr0ODUOsWnmizCWTP5SwMoIIPwcaOG-oRtx9WWl0qYg0ScDEnm_oDgnHGWbJMfWyNzmITHLDaQj_CzZOpj6eHrHqLqrvjXpJ9kpz-nbcxucbz7Ia9rbEtgp7sazgaddBGnLuMY" style="width: 80%;">
+                        <p class="caption">BERT의 NSP</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>4. Masked Language Modeling (MLM)</b></span>
+                        <br>BERT 학습 방법 중 마지막 방법이 바로 MLM입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">MLM은 input 토큰 몇 개를 random하게 마스킹 후, 나온 결과를 통해 올바른 토큰으로 예측하도록 학습하는 방법입니다.
+                        Input 길이의 15%에 해당하는 토큰을 무작위로 바꾸게 됩니다. 예를 들어 [CLS], [SEP], [PAD]의 special 토큰을 제외한 첫 번째, 두 번째 문장의 길이가 100이라고 가정하면 총 15개의 토큰을 무작위로 마스킹 합니다.</span>
+                        이때 마스킹 하는 방법은 총 3가지가 있습니다.
+                        <ol>
+                            <li>15%에 해당하는 토큰 중 80%를 [MASK] 토큰으로 변경.</li>
+                            <li>15%에 해당하는 토큰 중 10%를 랜덤 토큰으로 변경.</li>
+                            <li>15%에 해당하는 토큰 중 10%를 변경하지 않음.</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위와 같은 방법으로 마스킹을 진행하며, 1, 2번 케이스를 포함하여 3번의 변경하지 않는 케이스의 경우도 모델이 자기 자신 토큰을 예측 해야합니다.</span>
+                        아래는 위 3가지 경우를 모두 적용한 예시의 그림입니다.
+                        <br><br>첫 번째는 1번의 케이스로 바뀐 모습이고, 두 번째도 friend라는 토큰에서 juice라는 랜덤 토큰으로 바뀐 모습입니다.
+                        마지막으로 is 토큰은 그대로 유지 되는 것을 볼 수 있지만 MLM layer의 마지막 결과를 통해 자기 자신을 그대로 예측 해야하는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDpapMotQZEFFAGgSk0Wt2SV3LvLeIYh3cw4U0oixEa9QeqmXiot2f7Lfn94I78wNtAR2vLXet4jJ-03ZA3fuJsEdUVs_6S1p-qKMP5vf1A0_5uaS2Q_sMSgPnyF_Ey4mZOgzYNviqG0dRFCWNr0t7Zne3QXDTe5JW4u0mHgUmBBCE0PLgDalmT-g_Ih5z43nIyywuAAqkJ9Vyvc5fFnaKrdYz_Y9F1Gg5bjXuk4GyAOwW9rmGQcBObjqs_jCOo5dHuVs8rSI4c7QHG-mCBiarihREzRHAXB_xnx9VJG-W80YCd2c_3PYf_QC7FWxdnxkqW7aei_B7W_n3obseBlX09fljv8TEYY4Lw9qsHioNdGoGMx1DWMF1_j-41icYPBTX92CZRqL2aWovnbkA_Mb1oVEuDxLLbCd6AwUtCBr8hdGlmZqqSD3UamH1QJnlNgbzis6P0qEr9WKAkr3LNllgYhs6vZNEHCGStqF5gEGRIH1HM9ih53muw8Uaf8TVxw5C_tFBfsZHtcBFuFr_d8Xg9SNWY4LsIuTc295FBzA0CakNkQAWEOKjRb_2PnEruyqi5HlJmVnlFOFCgsMPP0cRfJL9Rg4aZY5pW0d4Q2vPc7a0YoMHs0ws9frgJGqtnpgSlnKQ-WCTxGpkUyEQK_Ee2jNa42pJbQcdeXn5qlhtC3doXqIA_DMYoQMrHve4ZhJqFAcVSwQ6TQZHNigQt5whVbtAtwvW42oLVV2ji2poxsnjAaTz_YM1d0ryD2G-Y3fFuotrX18LwTvDep7Itf66blhOjvLISsx4il5R2d4DOEnOqmcpWJ3rkLgzUt0zPKlSAOERJgiqR4jshsk5k7dkp21YXspl4zpCWaoav5Uqy474U34R3utKkGTVS7i0DXQJ0iiXwSu9kvvWNfVyv-ggFoBFz98MRxxV3_wUkOOP1D4J2nDSJiMLVDl-lTCMffOktSxr49R7Dcl64OQt03CGYTtCAYndzg9KYSvs6O9PwNKI3GfvU_6VOoRJDhHQs5Z1WlWrTYhCJW9pwmnvMW4bIU_UHugv58aeHx4aRlYMiflErxERKFc5UxGO612PuDubCOI9xsysMAEYgIdk0-lQAL4VcbebiQRWatpsJh3hShKePcLHSuxJGtE-RxHFc9LtyxtJAKbxetA4ohH20Ku-zbbnoKn2eKIsvw-qNQw7XQ7AU963ibyJWxE1iC4C2anoCK71voTtMbnw_vkSbGKik1DDuhsp38Ovpe4IJp1k2OGYp3dQBTAp0c3P5ShFIlf9TxIOMBex3WioWGnyanmLqa4ZL5cT2uZwqkjQFPXCvOssfs_4OZN4bgPEajG4xGkmgLu0FZDhddMryTyldXbMLisopH-pfguQWTyjwW9DQRjmzjyXWFWldeFlj-bc1G3zLmr7m4GMqwRHJxlYNcVFIOKY7lOJmKuZCZIM8qmc7_diUZTuwohT6R1QXKqfiS2CTYOAoWk-8T9Hvs8Q" style="width: 80%;">
+                        <p class="caption">BERT의 MLM</p>
+                    </div>
+                    <p>
+                        <br>이제 NSP와 MLM을 종합해보자면 MLM은 토큰 길이의 15% 중 위의 3가지 방법으로 마스킹을 진행하고, <span class="highlight" style="color: rgb(0, 3, 206);">이는 두 문장이 연속이냐 아니냐와 상관 없이 진행됩니다</span>.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 두 문장이 이어지는 문장이 아니더라도 마스킹을 진행하는 것이지요.</span> 그리고 동시에 [CLS] 토큰을 바탕으로 두 문장이 연속인지 아닌지 학습하게 됩니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 추가적으로 2번째 MLM 케이스처럼 잘못 된 토큰으로 마스킹을 하고 모델에 넣게 되면 모델의 학습이 제대로 이루어지지 않을 것이라고 의문을 품게 됩니다.
+                        하지만 저자들은 1.5%라는 적은 토큰만 랜덤으로 다른 토큰으로 마스킹하기 때문에 BERT 학습에 피해가 없다고 주장합니다.</span>
+                        저는 오히려 모델 input을 perturb 함으로써 모델이 robust하게 학습이 가능하다고 생각합니다.
+
+                        <br><br>마지막으로 위에서 소개한 방식으로 BERT는 25억 단어의 Wikipedia, 8억 단어의 BookCorpus 데이터로 pre-training을 진행하였습니다.
+                    </p>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 성능 및 Fine-tuning</span><br>
+                        <span>Performance and Fine-tuning of BERT</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. General Language Understanding Evaluation (GLUE)</b></span>
+                        <br>모델이 자연어를 잘 이해하는지 평가하기 위한 benchmark 중 가장 유명한 것이 바로 GLUE입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">GLUE에는 감성 분석 (SST-2), 언어적 수용성 (CoLA), 질의 응답 (QNLI) 등 9가지의 task가 있는데 BERT는 이 모든 분야에서 state-of-the-art (SOTA)를 달성하게 됩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAWVcubC5OfuFc2cRlsgOlWJzxvyuw3vYymg9uddiKXdK5AmxPQJ_S-BuQlDmAvyiM7Arn-ygRrKFm7Vm54FctB-8rTOUiw1sCsuAWYCClPNdSU3oBpRrZ4hDFyzUB4cxdY3t-V5lssYONDY9fdonsFihLVu7-m4b7jiCuTGZn_XhN-BXVpTx5X3OF32QMTxqAq96FrC0jmnRbTRhCG1OiYHE0sPgXCuBK30X6ud5-jV_mhOMsArIYBPGq6DxGZMDbFBd6pUluu5jugq8g0iX5cqiK6aTp36HkNarMCqaToPZWIUhcoM8fI_pxQcgpcjFAMLKNr_-Z6--sLSTnA7uvK3bcKJT6Gys6BXq1wf20QRC9HbJ7iI7-Q3TkRXWCEG_Bd1LDpbMTrZO6O8V6Q3-wcuwZzbVYPWxUZA6yOp_1UDhJFX1aFlBaZ5xnAGUQ4_yGftpgf1R3r-SZHt9Ms1Q3zOWMjcPblyEy4ziBsJ970qdoqaVtBNhFllsPegAtGA89LAwttdPu_Kkf9R9Wjm1WwrjeaiROK2DoPL2DKYpFKEr_wXBy5ZYo8CCd-x9SJL74NCxy4q_PPkGw0KQp9wrep7qtaM21ykudinTVKeF37SZHjPh5e_CMEQJpfgyGIbMuDsB77Wdsq9Qy4JRMIOVAofJ-tdip-f-A8nzmaUV9RI8fVr13ja42cMWuWjJ9MfEtNvUEqf64RCFlCWnE5NSM9uL-4Vv4YDZzr3HH0XMMgXEMPoR8EN395o4mTl-qUv09SezhpFFa7MmmAr-LWkMs00swPw33pmAYrHFwX8qfxtMpSxTjq21PXoJQDmjGB-dMb4zlv5YIxoUFnvsz3Y5Cdokb5gm7-CXhvAZi7QJ-RE9QwNiAllwXsX2TeZuK46b5vVmBSd-XYdEVkYRBHnfVcXFv3qyUJ8erTDMaeUqA2XMLYvTp3PIdK9bGfTpt-cf8vqv5jqZlvkPKAX4RShOG7sPPi-kXzPbjZ6Q50DnCyPhRzubPk4Xq2gx_Vnfcg_v137Kd48uN2OCiXmWndlYLqr2QL1iFknzCT7swdWrm9887KO-xpvicHrrV6Nw8hovPbOhycif-Yr4fh8mGVQcAjlpSTRXT-lD3ViOdrsZeIjAoH7uMifcMnIo1fvrmWAi12eesdkwLkfb4Xh9u9EO4cZOUL_CaJdIVWqIstVhNErKSLKsFjzx8UHclFjJ2U6iKAkYDFJ6w4329sfi3ZzT3U66bqE4IZ3k5aVIHu2yJUSP6Hx80R_SgHu7-bb5pVufQ1l_BXSCy7V7HDb_fxovGX236KvWOandKaX9_2rZHuSlRlpIn6pm8stvEngtGZIapwzHqxCDTPkAQeOU4_Ea-DjvD2SxTm6WnP_NQ8zVAnYnReh5hocOlNRl8dPM_Ryi5NRR91EcsDvaszyLwOuJACl2cnDQFTnGp3asqKLt_I35VkAyY0gGouEiYxU6ZxViz6Vdw_Y9GCfTnIFJI" style="width: 100%;">
+                        <p class="caption">BERT의 GLUE 결과, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>2. The Standford Question Answering Dataset (SQuAD)</b></span>
+                        <br>GLUE뿐만 아니라 저자들은 BERT를 Question Answering task를 위해 SQuAD 데이터에 대해 fine-tuning을 수행했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 질문을 첫 번째 문장, 그리고 정답이 중간에 섞여있는 지문을 두 번째 문장으로 하여 BERT에 넣습니다.
+                        이때 두 번째 문장에서 첫 번째 문장 질문의 답에 해당되는 첫 번째와 끝 위치를 찾는 task로 변환하여 fine-tuning을 실시합니다.</span> 
+                        즉 질문에 대한 답의 시작과 끝 위치를 찾는 것이지요.
+
+                        <br><br>BERT는 이러한 SQuAD 데이터에 대해서도 SOTA를 달성하게 됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypD6Vt9GgSGoH_GtZ8IUfgXvb6EvYF-IUL_NPJkCgjYmIjhW_8z5MzgTvSHH515ojSRFugJjyjNkFxaSBI0kRVcSFDaTECu_7-hEDbG8poFhCUvmcrFt3d1cyfZLTSfVM8YMqROOyuOrpLAfQjOU7JM00FSa7ELNx2OYs0Q96d2IvIZ4zNTur_ast30T22Q7COnVii9TAbN1GzUsnXvkNiFmjd2jZgLbxrS-UKqrHhXViBn8hkLyCog3d7J9lye1oSm130mg5hipqzER1k9ror2gw4-wZRoqcXvp_1ZcJoP7J7YhTshTr1Gjr956c3O68r61UkKeLWNYlkN18bBFBdABtp6BY4DfrX6E_a8Lkh6Ged_kG1X4QkgTSpkBYBmuRHMkIvGANvBeCCoxT8ruo9rcfOhiQnQLA4U6yBdq7ZxnPgcPqbMDFjgsT4dxafmtoWbp_LfanGI46yiMrEvgPkKv5AluOpBSc9_cJpFWaV5K8frwFcim6-LO2sTkBnJy0tYs54FpeLiOYb7XE4CneTFpcg8n-HvICyffyeg2QXVffVjb9VpiwHcpmpRPAFPyhKuiiqPTH8FpNFfJRNppqwy3g00jg-D0LUhtxYJRqFBieSBfIUIbyRRLwl8zz9lL4evSHbnLZloayydHQV4BcZjOT2WR09nxoe2H81MAufIG-GyDGxAcKC0UOVpHblqAb1voQjkHzgngxODkthYTQC1wTIGe0L8ISsva5vZ4PFegYq3w0-gzKG4aVmNz5XF9t8cLqVP-xIJ8s99Crs-bu4SKQBoByYy_O1Ud64OFLd0A6zZsWwmfeAdv3Gqjk_KBAYyBE9FXJhv2lIJUa7Pw1rfVh_4j9HBIQl8NAH_gu-rONJILNU-sfApFoxdIwvRGQ9DxwShunjhZYNc-6VSZXg9T9adXGTDIfZm8cKtfEUYEIeP-Q0yE4I96PmOYuWSYhvgZwwIYBUe_RRscmcj_NYiUHwLgspCbQoazKi_-q7nxdZRPf4S2LpiBQ5Nx5lpzQjdtDgkwb0GCCaHjHPy_Vn88qkOxf_eyiWMut-xtrR-jA77RWTN-5k5y5p0JjaRih-ir7fyaS0NXZDer-d6QRp2TXwY8YkPHzYTmdkBBiVlXjRIkdYBZXUVTi6rufMbMSGoe-bQSzDsWTUEyDa9GQmwnx22jPDefeJ2eTNQokfIu2KzfyPHVKwaUi8Eyu1-p0ixTpTwNZEP9T1pEtRl5-u88U4pSyhUmlQHc_HoO3RMjSHZIcT4Qjx0cAP-8VE6jr3k7D6OnsMKoRJWSlqvNs51_Ov5t6QZhy6dOCrY6VOoeW0ceTKHGf_jOWALLAs8TDLO2eHEJGKwiBWcvBk66Jorc7nWlyAviR7YGmCuZ-1d66DpNxtQmFnZeHz3QnrGRyPpQ_hVPRF6GDRYIurIKheSHAdQdQePeWnox21foJ605FjJSV8aSGqRnrn-xdNpkwQDu0F428Br5_Ts6WUk" style="width: 80%;">
+                        <p class="caption">BERT의 Question Answering 방법, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>3. The Situations With Adversarial Generations (SWAG)</b></span>
+                        <br>SWAG 데이터는 주어진 문장에 대해 보기 문장 중 가장 적절한 문장을 추론하는 task입니다.
+                        보기는 총 4종류의 문장이 있으며, 주어진 문장에 대해 4종류 보기 중 가장 적절한 문장을 고르는 것이죠.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 주어진 문장에 대해 4종류의 보기를 모두 concatenate 한 후 BERT에 넣고 fine-tuning을 실시합니다. 그리고 [CLS] 토큰으로 나온 결과에 softmax를 적용하여 점수를 계산하고 정답을 유추합니다.</span>
+                        이때 BERT는 SOTA를 달성하였으며, 사람보다 더 좋은 성능을 내었습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBM8dEwvpYGo7_M_HmTiDDV7kTvnKyvSL-IfhngajRRmKau8eoibfZMXdIzszNyWbGOi0VlOGnORfozrYSCjERS95-HH0I-D-28dLA8y2nTeHPFSsXkayaw4wDCR2g7oBwcHmrmIj8RoXmr9PWjKbP2W1_7IeiBqt5s1nsM_XHWZEpvpRj3e4rBqZ5v3MEhmf210Jngs1Qw8jW6kWDe6nImV6dbF-qrIgm2ygdy_d75nM-D5BZQXS3axfMhXrO5y2nIzL681bhJWi1GOCTGGOl0JyhX-P1vlNMj8CPcF9qYC3e7nt96553Y-6qYHLKU_Ugdguy3puzfZz9w3K--gQfhpYyWAM2tSNzqTsZ0os9uS2IeYPpPc48yz2zsGSD2-QlCOhL_2DuoDZxS8S63jjhGmRxggE_qeiV3VYnHSXlrU9eA2_6j1NW1AScwpuK9xI1tA1T8ALbbDDBv4VjckS4BA8YHOQBGMU0R50mjBJGELdlHz_Rkbp64jjs2usTDnNKdWETFhJHwXZh1gHTJCOV_aHjBftPpe1wubnQ9waXM3DgwsEHt5vACOXfFms2NnlE0-XE9g1BEoe4kmLqUvVOwl2DIL6tYuXtsHKcPsMIBX-eDPX4__iqFg-9S8pcUmA6WnpkR3YAZTl16krkasfsgp25dnHs9WqKVjqaw-iQ4I5MEQmDKbR9OZVYokCONy-M-q1LlrT6tjVYxMZaSGsXOvRHUtcKKoxjaphhdP56iD-v0PjZCzLlalDF8pDoeuJpBnTT0lZQa0nhtOAu2R0jlNMt9UWLz4c9Dr5CCx5kKZkHHgPitYw1TsInr5eA0Sl6pB-zNkBW2VhkrRhVA_dwxKopLR5DByH8UiCZb7lz8T26edBwQtm9GBJTCSUv5-5c7I2ioDb3-aclOTmJ4nmWc2WohxEB71-pcAXkS5-jS38gEo23D2nRb7kVvIXqS6BjZl8gl0hzk6otcEFKETu6H7BSnBrOMD1vA-RCDDce172Dz56xMhkQyPZvFuE8pLfXu4JaYlDFQqlupUsWeByK5BVbAUEB51eqx6Fh9TYTWsGMnz9qzpQqyLNuZsFrQmD8H_9WfVM1-0Nkq37wM7EwBfU2CjTaSH3iA2lhr9Be9b7e441nzRuwIzKGFmSVSRv2KIf_65__Jmrltodt3tDt9-YLmsUe2UOZKOVaP_JsKskXYASGJGckdMH3OhiDqAW4Xi3kXQx8f1Sx_I-iJSetkMh-QTTIQ2zKrrvqCh7pO-rouhGoE5x_6ms4E48homq9rYHQQNaQvBcMHVgVDFkFEyQNOpQ2cY4iWd--9J3y4ZFgmZiy0i-a5W3cpDWqZ3DihvScxjLn3SBzqS4QPOWDxWokGf7xWN2o0Sb_xJssosK5sJrwCBo53ByRBVLNs0ZLACQohdLE4kcm27PwfglwGJhyYHLPBKcrQjzvEEpBJAYK8f2l_tokq6zGYka-IPxXNyzKIWSHzVGOZzlk" style="width: 80%;">
+                        <p class="caption">BERT의 SWAG Fine-tuning 방법, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>4. Named Entity Recognition (NER)</b></span>
+                        <br>원래 개체명 인식 부분은 논문의 ablation study에 등장합니다. 하지만 제가 생각하기에 이 챕터에서 다루는게 적절하다고 생각하여 소개합니다.
+                        먼저 개체명 인식을 위해 저자들은 CoNLL-2003 데이터를 사용하며 각 토큰에 classification layer를 부착하여 fine-tuning 합니다.
+                        이때 BERT-large가 96.6의 F1-score를 달성합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAk6VeKdhmocMFtTazbL09S5O5tlpWctl3HDmQR3wApYufd4V6gilZWI3LpeS5mXlQsvG5RUue6t6n5Fzvq_MrX2rF__DaFzhBfTTTjGcjI7_vDNfv99O5AUvH_v6EulxZPFf73EBIrCPcHoYe1VLJmHqt3_Or77-srPay-wJ2mLzGpaiYTQHPDiXmCIuKug90OpwLJ9K4aNO-V6fiOD0ar6QZ1KUW_3afCc6FeTBEriAyIr9unJZHwcmOsxLhyaeALi0JodUQ0Sjz5a8nE0m8eRWFqe8i9Jl_8wePLCWDPVnUeIFt8hFQ5_-okyiPCbZRd8kTstnDGkLN-x-kHW1LHELP2BHT8dnqU9XqAoEdXlgA9N3MJM9J8dugUmE6iM_7Q54G1Ne9QSg0Lph3eDPCiovTylsN0xAqZR73owgm8dIE9EBqyoUtP2cZvS0HBlrHHxu298VQGFuOqMUBLTL-opOtATg1c_YcxwtWM7uq2zMjdi209KgYG2VhVNtjIhjeEjyKlJw5EQVLg7PcppPv043M7uA8WJB3Y4DndNH65Renx0-XgKs1cMQNyeKcUGBC9GQ7_1w9pZ5X5XuIeamnwBz80KjNvNxNnFhQtFwSf8uwZVaFITBF9qC2_U5mVdHedCfbX5vbi8sU4rLwwu4OSF8Bb6iHYM47A7Z9aEGUC8cIZZnWQfpIKZQaCtcBsekeEO3b0f5lbu8M8VrEWPE6LJls_uZ4MzpP81AGAvHJouwVzHssVy29YzIM-xhC_qEbeCOvO4UPt9wsCZj9Ukftfq3N-gmkgzDpZNCCm5Iff_N_ftW5m1n2X4jAlDoFoChNPwsqkKJRuOMwYYjzRZz-3VvycB4gPZAImv3dmIEv_k75SqfA_ITxsu1b3HC3H_S1clXZm14QGCSZXEw-0gzGWpjenlC5JO9s_EEB3fts52UATyCczfwG9MY-UQRE_HVcNIf23SKWOq2iycA0ANmwAy3WWoZJnACnbvBTNp4Gpqj9amzs7MzFx54KgLKsHURDlFQA-PUXzqpo52CjVaZ1SzPivVaI_NuM3DQx7vpsx-8tt-UpcLM9M1ow5yVNnhmK0gdC-VO6u0iAWsCtK8ZRGA2syw15QtVSF0Uue4V1ZOWYdxeQlAoqUI4tn-56yqbYCfpz29tTD2HvDgaTCqiAtHnNPPp4PzNjn_tbbBAPVaio2n_1rjvHh2rPajGKiGGnnunrzLB1HYrmjPupi1_MyC9rIdb9RYuXJ-c6ybmaytLvnBsovM-fLs9n4Kf7-KBmTcaZnR4XiNBSJ7SCwpqDs3LgPVPTaMT3iK1dlyEN7tpXD0P1UhqlFvmovBJUseXQD-_6kurBcVP4CEblAzBWJRf4aNWHbbW2cioyICkOD6RwRoZ0QDXfRcU4EhNaRMpCmSujG9pz2SHzlcqr5CGE0VasAgZi_79m4GjxZhGncJSM2aCnflaiD-y9f5xqLLvTwq2C-FX9kO06JxiQ" style="width: 80%;">
+                        <p class="caption">BERT의 NER Fine-tuning 방법, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br>원래 NER 부분의 내용은 ELMo 처럼 파라미터를 고정하고 feature-based approach와 fine-tuning의 성능을 비교하는 ablation study에 등장합니다.
+                        Fine-tuning에 비해 feature-based approach의 성능이 조금 더 떨어지긴 하지만 <span class="highlight" style="color: rgb(0, 3, 206);">computational cost의 이점, BERT로 불가능한 NLP task를 위한 embedding으로써의 활용할 수 있다는 장점을 고려했을 때 feature-based approach도 절대 나쁜 성능을 보이는 것이 아닙니다.</span>
+                        즉 저자들은 fine-tuning 뿐 아니라 feature-based 방법에도 BERT가 좋은 성능을 보인다고 주장하는 것이지요.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBxOsQPU0AfhS0QYMTIFNShr7KcnC5fC1Fag7Qt3KWeUU_p9TFGekHq3Dv7XVo-ifoXZv4JP6uR3XT56Xkck2fNxRKYnm8_w4Xghp2-VeB3phIicSfHM3Wd448H1wb374PBSDWTTBXMlxehVtF0kt87I3o34XEudXWPiAYJnp1pltW4FaldN95NC_zX0OdoFjxsWs2iyYhpj71c3XmswxuOIwV_QmN1dsCiIuJkyw4e8FQ6QuAxCjiT3UJod1403sB-eyyr_WGCXkOnhMmyqLKeMEgZ7pyEQANrWh1Cmcfd-SqpHhbEPHf0IjDf3lfPIeTP49wkz3phcTL1SZp5ebifrMyl40xAtVftu-G_6UWeF92q2-buA3ntz1Qcx9lrft1N5fk5xgm_kByie4_WoQV5eZDlZMwkNSphoHXBe5KMP7JValahHF_wJQCwLgMAsox7K7Nad_eWigokLmBY_BEBwf5rA5dQIra3SC4fM4czqPscSWxGoNrZsyWZ8f3wUyyF41LY4NbBkcSXPelxrAajDvkHWyMZDGfWMWnPB24OyMUlhfMdzwh_d4N01-YtpyQ96BGSsy2AAOid44uWWUHp31IMLRj5v_Z1XIOM_Ic4xozS67VyVCdydLc_nPOiyZ1O85dh0JwDxQnegitSb-kskU2E19aGiDHs-rZ2bBsUjkhXmXCy5H0R9Fc313r8cF6vZdK9cm3ie8_0Rhppvp5a13HVes2dqcJfa1J3wFuQBjzG0gn-i-7L72u2724JIcEoKHhay3O6LXyS3MelU_IVxrP6IMW--3odKfZKXMwAwI1_FRWQRHYxdGeObgyRiTdu-8hsFFc4IkJ9mUTPe7XHLDKqpi8TFSHoiG3CefNOyN8G4U2YHQUvBiRNXAVgbi1YQbNQVTYjwztNnIj8-HdNpQyy-V2wx6BTn_UMZUpKaL3--QQt3QRRu4LNYgDYG4_mXQ6LwWOcrFl2FEX3-HJePmzybFF-v3bRK4TYfBG3cHz8FLBcSThPuNAH7vYZLnKVyuZm4Te58U-XItJss0DCIiyNldGF6LYcODNaQVQC7S9O8VDjQ6pnOjq7lC4ocQWWdBFwR4sDkDzyvL0_j4fMULohGD3ue6kNADoxNna3KQu0qUf_4k2HjU2Xp4PyhmhnypXlRFtI-IEHiZtAe1BORch_VYFvZRrEz43uzzJdzSt6KIdMmWnShAYOELsKaJQGRxxEqAIK-NmSIJhfdc1EghmVOAnOpFYAvRX63jrNRFSJBfS2bzkWAlULeFSN4BYisLnX0ApLZosCAspNy16xcp1OPxsj0tQG85W9rNdwe1w1ByMNQWG4LqzLmS0DfpcLhPVXw21oy63AsQFTwt3fIjQ-E9i3padjRwMubU8nG4AWHV5qBLer6-_bvKAsCQSaqKzp5kDmWBUQaFNSNtuEQy8Of_oOIjkTZDe4rOlfOgANv9rYMsgBRBU298Y_aI44JqWoJEdot-55r_8" style="width: 80%;">
+                        <p class="caption">BERT의 NER fine-tuning과 feature-based 방법의 성능, 출처: BERT 논문</p>
+                    </div>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT Ablation Study</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. NSP와 MLM의 성능</b></span>
+                        <br>저자들은 NSP와 MLM의 성능을 측정하기 위해 아래 두 가지 케이스에 대해 실험을 진행하였습니다.
+                        <ol>
+                            <li>No NSP</li>
+                            <li>No NSP & left-to-right language modeling</li>
+                        </ol>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 보면 NSP가 없을 때 Natural Language Inference (NLI) 관련된 성능이 많이 하락하는 것을 볼 수 있습니다. 이를 통해 NSP가 문장을 이해하는 데 많은 역할을 하는 것을 알 수 있죠.</span>
+                        
+                        <br><br>뿐만아니라 MLM도 NSP 못지 않게 중요한 이유가, 기존 일반적인 unidirectional language modeling에 비해 MLM 방법을 채택한 것이 더 좋은 결과를 보입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이는 MLM이 bidirectional한 특징을 잘 유지하는 것이라고 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBvAgf_X_e8GnSruVJbGXkbo0934HNcghk_ytIsrqFV_jBibBIjMzLh1QdaYTBQOHOE55gtlAZ1kBVURvpLfdGsZkHSC1bq5i_8fF8_ZFeJKelBOonLg87njTKhUTSOlkmTMJHHo8mF-kGIS0Mk_Jml61GPcMQwyAjuFPW-C2-KHqAa3ulBXEW2CZbMm-F--9xXo-zBn3UNPHBH6AlEIuwgH_GYv5UMYSdw0atAyggYQVaPAhEiFnrg5yvfPueZWnl-rtoLdQ4JWsSE-TcLXD42Oyl4YXTYxUdhc2KWhkBYirZerhNJtqRVl_UgZybDcIEyRvH11t26y_djOPFYfCMEg6E1eRhfBVaEe7sErD6CBRCzwNqD5hu0CnXYNA-BDYN4NThehFd9Ln8GsnHNhgdAPj-k---etiSVT4T42WXzT-Si05GfFTUDv8sNC6ktG_6fpQdTRnx4iU9u3dq_ggy0Tgoy2gYKz-wClqqXTX_YwEBzPodCzOxZuI434HtYDZyD6dnnwLsFKS9m7Er5fEd5AVlDvV8LnJ7wNYMKDkvfDQxycsTo3hTK_8Q8OXX1RtfCndeMGXqyTrYWPJ0-B08qkakgkf0hyn52vVKUPUsIsoW6GqFgCHeHWeCMmTLWcGPrjYVLuCo_tglvnCwHzFkhEtZanI61hqYZHdjHA6PdQ9wjqqB0hsulm0PT6CkMwZdMKn01LmhzTIcGA2o09eSjRQmXSg-jpRRQg1-0RZ2M1ZjMGnBH4CfpYuGr2afwCyaeRVxCuSoNbNKCKdNqsb5zg9PbIiZ59-opj6h5BMnfta6mkL3tdNv6ETnrsBMPDd77w2-UkiYceYIYKzjYTixh5GKcq6lFI8wB-X3KD_rnWLEyLaoYMrLe2XkcDyfkIyFswAgfKC6dckB0tfG-xejQ_V3zh8LYebYOcWSyM5Bn-wLcHUIzLVlgcS9NsOAofSg0lh-vLLCeE-yqHgWo_8AnwBfm_b7zcjIcm7EpylrtVlCl-cC3vFrGWXk5AW3T0hrs9dFdIWW3US4rdzsTz8-X5ALODxaWIHoZKumCgmL_pX7u2xgUioXYx67AcdVKN3N8Y6dNeoVRzFSPbY9qWB9-w4X4uhULWPH1T46zdyswI7Vw6K-EnNQeEdywR1pfWSBP6xm-8pG9fx8Kt_1pFBotSJV1GORwEyQlxS3cteF7oRk1vqdwvNvOgtpXiUDIG8wswfq-JkMCAMCi3foOWvubnujm4QY69BOVyzxI8DO2LDxZ01OcQZIZZQiTuOwRCNQe2U_SKxFjk8ARbCQNHS2GSQJ28An9OyAiEexN_m1Of99NcaZAIRN3qwkdHZT_k0cssVGXnr56LvaL12hJQH4-eLl0cqa8IDcdft4BxqEqdJ7GzrHFBYJU5aCBWrZiC956qCkGXEJYcFLFGaKk_xIReXzzS7tYd7AAb5hk2eDOcvgUfKVy4xyoh3OuF17ph0DC_kJEig6Y69gcmFU" style="width: 80%;">
+                        <p class="caption">NSP, MLM의 Ablation Study, 출처: BERT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>2. 모델 크기</b></span>
+                        <br>위에서 소개한 SQuAD, SWAG의 결과가 BERT-base 보다 BERT-large의 성능이 더 좋은 것을 봤었습니다.
+                        뿐만아니라 아래의 결과에서 봤을 때도 모델이 커질수록 benchmark에 대해 결과가 더 좋아지는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDX43KmcrdFNFdOlivpA14Xg_5e_ulop1eOy7OVFjoacfLuPpxt265l4f8SGkNcZL3dDoT5dBwLfmAHhdVhWzAqefQp4QytZl1UcB61d5rN-l-xXV8oitL4r2JRnOtMMm7x68g_5NvTIaDQVRJC6dSm0lXP3gZc4d_7U1GNlYMqFYrfIuklDZWQbmWCCW3Ea3LeovFXejTYY_FyB0Ng9Kgtd9j75pUMtH3trz_kquq_epQXn5XUROejw8F-qZTo87LmrcbreQjFVBRuqdiNLq8uCLJWwc7uJO04U3LVv8iRdx6C9Pm784lHQrJhxkVKiIRI8A7zpgOSZ2TOqso9RPDf35scTaOhGPD8e13jFnsjU_Z3J9SRyAhaQM36HbxlaTuq7_85z1eiUMnrXoq8YZ1utrvNBfI0dUjJni6nh4sKSg3AzbAtPqhhZPJkOf_2YFGkGoou-TQrlHrN7zJSOhd1uFH8lXYLWbe6og1nGsp0K2twZXR3roD9UdL-hEfbf5tluozzm60r1g3jol1HYjxRLPGWt5voROF_Ao2jeW6eJ5k1xl8c3RAB0yy0Q_935AHblk-d8iL31tV-p7iGiGocZMDqIMivA2zY-61NCva1DX2PtgIPN4KApmkybb3x1L3YiNdqFAww-fOU55aAbrVVePtBZE24WuIYA2NXAFstZvHLOKE-3N_sKGGxI9epkkxoAnHbG8UuoI--LdEwPasb7IM1XRq6O4AneLf3KMemPS1iBeUSUtMN7W3FWMKG--9JNpfn_pCtthEicrnkwdCNNGhbuoLJul6WSZWbaHWZOfrT3Z_RsSmeKGIuLuUlFUxt9ikh9xY4a8v-Nm2mKZ7TPRzDBFAX9A2bEexc5uvPD9LqRMqU70DUF8OvnC_yypev6fCsYz9QqfBe5tWHoGEYFnWaK2JcIiWI5wPTPsCbWt_82QxN-2o6MBi8HgLn5oUHqu-Vj1IntD5sDyjB5lw-z8XBTOEvjDeClW0PGMugCwfGaIytFgbqv-nl-cDZCIPlD0OTMpmCXyfhlqGyUXhfrQ7w9S4xf3DFiIGEOjn_SLvmvMK4E_hFpGiccdIsE-HZaCMQno_MC2AknFwajNaXFSSUVH_aUw-3YrRIRKeeRfywgRmSSOUtIqqi0jDsHm6HnGaczDOBvbsjzN3C9zUnboZlkcr0htiu3nagLoqrILgVSqavxnSL-j9y82ymApZKwAh04Mpydv2xeSUhWfCs4XwRyZxBx4Mt8NMw5mOC5yJPohvORkpQIYw6_Yrra4c3tCTsvD2uVvL2TPrX_8SEERTT9ruIVDiB2g_-E3nAPq-0hhsH79JRkX9UvOCQZCwg7b6LtMiHZY_ndM7I_tdsr-o4t7nHt-V0VOXGDlF2PUO3nWGRFB7_rmhlLYAdkT0P7rqplO2TyYTKxI9mA_4-g1wTHrDoztB2FRFLkdOPCm_iGJi23nEdoNzAh8nO_4IlNDDgXO7egtfycqU" style="width: 80%;">
+                        <p class="caption">BERT 모델 크기에 따른 성능, 출처: BERT 논문</p>
+                    </div>
+
+
+                    
+                    <p>
+                        <br><br><br>BERT는 등장당시 엄청난 성능을 보여주며 모든 NLP task의 SOTA를 갈아엎은 모델이었습니다.
+                        많은 데이터로 학습한 영향도 있겠지만, NSP와 MLM을 제안하면서 보여준 ablation study에서 이 2가지의 학습 방법의 효과를 입증하기도 했습니다.
+                        다음에는 실제로 BERT 모델을 pre-training 해보는 코드를 소개하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#BERT&emsp;#NSP&emsp;#MLM
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('BERT 첫 게시물 입니다.\n\nThis is the first post of BERT.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('bert2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>WikiSplit을 이용한 BERT Pre-training</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
