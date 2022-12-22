@@ -565,7 +565,7 @@ lineMaking("code5", 72);
 
         <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
         <span class="var">self</span>.<span class="var">decoder</span> = <span class="clazz">Decoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
-        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">vocab_size</span>)
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">tokenizer</span>.vocab_size)
 
 
     <span class="reserved">def</span> <span class="method">make_mask</span>(<span class="var">self</span>, <span class="var">src</span>, <span class="var">trg</span>):
