@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WikiSplit을 이용한 BERT Pre-training</title>
+        <meta name="description" content="WikiSplit 데이터를 이용하여 BERT를 pre-training 해봅니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/bert2.html" />
+        <meta property="og:title" content="WikiSplit을 이용한 BERT Pre-training" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="WikiSplit 데이터를 이용하여 BERT를 pre-training 해봅니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypBM8dEwvpYGo7_M_HmTiDDV7kTvnKyvSL-IfhngajRRmKau8eoibfZMXdIzszNyWbGOi0VlOGnORfozrYSCjERS95-HH0I-D-28dLA8y2nTeHPFSsXkayaw4wDCR2g7oBwcHmrmIj8RoXmr9PWjKbP2W1_7IeiBqt5s1nsM_XHWZEpvpRj3e4rBqZ5v3MEhmf210Jngs1Qw8jW6kWDe6nImV6dbF-qrIgm2ygdy_d75nM-D5BZQXS3axfMhXrO5y2nIzL681bhJWi1GOCTGGOl0JyhX-P1vlNMj8CPcF9qYC3e7nt96553Y-6qYHLKU_Ugdguy3puzfZz9w3K--gQfhpYyWAM2tSNzqTsZ0os9uS2IeYPpPc48yz2zsGSD2-QlCOhL_2DuoDZxS8S63jjhGmRxggE_qeiV3VYnHSXlrU9eA2_6j1NW1AScwpuK9xI1tA1T8ALbbDDBv4VjckS4BA8YHOQBGMU0R50mjBJGELdlHz_Rkbp64jjs2usTDnNKdWETFhJHwXZh1gHTJCOV_aHjBftPpe1wubnQ9waXM3DgwsEHt5vACOXfFms2NnlE0-XE9g1BEoe4kmLqUvVOwl2DIL6tYuXtsHKcPsMIBX-eDPX4__iqFg-9S8pcUmA6WnpkR3YAZTl16krkasfsgp25dnHs9WqKVjqaw-iQ4I5MEQmDKbR9OZVYokCONy-M-q1LlrT6tjVYxMZaSGsXOvRHUtcKKoxjaphhdP56iD-v0PjZCzLlalDF8pDoeuJpBnTT0lZQa0nhtOAu2R0jlNMt9UWLz4c9Dr5CCx5kKZkHHgPitYw1TsInr5eA0Sl6pB-zNkBW2VhkrRhVA_dwxKopLR5DByH8UiCZb7lz8T26edBwQtm9GBJTCSUv5-5c7I2ioDb3-aclOTmJ4nmWc2WohxEB71-pcAXkS5-jS38gEo23D2nRb7kVvIXqS6BjZl8gl0hzk6otcEFKETu6H7BSnBrOMD1vA-RCDDce172Dz56xMhkQyPZvFuE8pLfXu4JaYlDFQqlupUsWeByK5BVbAUEB51eqx6Fh9TYTWsGMnz9qzpQqyLNuZsFrQmD8H_9WfVM1-0Nkq37wM7EwBfU2CjTaSH3iA2lhr9Be9b7e441nzRuwIzKGFmSVSRv2KIf_65__Jmrltodt3tDt9-YLmsUe2UOZKOVaP_JsKskXYASGJGckdMH3OhiDqAW4Xi3kXQx8f1Sx_I-iJSetkMh-QTTIQ2zKrrvqCh7pO-rouhGoE5x_6ms4E48homq9rYHQQNaQvBcMHVgVDFkFEyQNOpQ2cY4iWd--9J3y4ZFgmZiy0i-a5W3cpDWqZ3DihvScxjLn3SBzqS4QPOWDxWokGf7xWN2o0Sb_xJssosK5sJrwCBo53ByRBVLNs0ZLACQohdLE4kcm27PwfglwGJhyYHLPBKcrQjzvEEpBJAYK8f2l_tokq6zGYka-IPxXNyzKIWSHzVGOZzlk" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Bidirectional Encoder Representations from Transformers (BERT) / 2. WikiSplit을 이용한 BERT Pre-training</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypBM8dEwvpYGo7_M_HmTiDDV7kTvnKyvSL-IfhngajRRmKau8eoibfZMXdIzszNyWbGOi0VlOGnORfozrYSCjERS95-HH0I-D-28dLA8y2nTeHPFSsXkayaw4wDCR2g7oBwcHmrmIj8RoXmr9PWjKbP2W1_7IeiBqt5s1nsM_XHWZEpvpRj3e4rBqZ5v3MEhmf210Jngs1Qw8jW6kWDe6nImV6dbF-qrIgm2ygdy_d75nM-D5BZQXS3axfMhXrO5y2nIzL681bhJWi1GOCTGGOl0JyhX-P1vlNMj8CPcF9qYC3e7nt96553Y-6qYHLKU_Ugdguy3puzfZz9w3K--gQfhpYyWAM2tSNzqTsZ0os9uS2IeYPpPc48yz2zsGSD2-QlCOhL_2DuoDZxS8S63jjhGmRxggE_qeiV3VYnHSXlrU9eA2_6j1NW1AScwpuK9xI1tA1T8ALbbDDBv4VjckS4BA8YHOQBGMU0R50mjBJGELdlHz_Rkbp64jjs2usTDnNKdWETFhJHwXZh1gHTJCOV_aHjBftPpe1wubnQ9waXM3DgwsEHt5vACOXfFms2NnlE0-XE9g1BEoe4kmLqUvVOwl2DIL6tYuXtsHKcPsMIBX-eDPX4__iqFg-9S8pcUmA6WnpkR3YAZTl16krkasfsgp25dnHs9WqKVjqaw-iQ4I5MEQmDKbR9OZVYokCONy-M-q1LlrT6tjVYxMZaSGsXOvRHUtcKKoxjaphhdP56iD-v0PjZCzLlalDF8pDoeuJpBnTT0lZQa0nhtOAu2R0jlNMt9UWLz4c9Dr5CCx5kKZkHHgPitYw1TsInr5eA0Sl6pB-zNkBW2VhkrRhVA_dwxKopLR5DByH8UiCZb7lz8T26edBwQtm9GBJTCSUv5-5c7I2ioDb3-aclOTmJ4nmWc2WohxEB71-pcAXkS5-jS38gEo23D2nRb7kVvIXqS6BjZl8gl0hzk6otcEFKETu6H7BSnBrOMD1vA-RCDDce172Dz56xMhkQyPZvFuE8pLfXu4JaYlDFQqlupUsWeByK5BVbAUEB51eqx6Fh9TYTWsGMnz9qzpQqyLNuZsFrQmD8H_9WfVM1-0Nkq37wM7EwBfU2CjTaSH3iA2lhr9Be9b7e441nzRuwIzKGFmSVSRv2KIf_65__Jmrltodt3tDt9-YLmsUe2UOZKOVaP_JsKskXYASGJGckdMH3OhiDqAW4Xi3kXQx8f1Sx_I-iJSetkMh-QTTIQ2zKrrvqCh7pO-rouhGoE5x_6ms4E48homq9rYHQQNaQvBcMHVgVDFkFEyQNOpQ2cY4iWd--9J3y4ZFgmZiy0i-a5W3cpDWqZ3DihvScxjLn3SBzqS4QPOWDxWokGf7xWN2o0Sb_xJssosK5sJrwCBo53ByRBVLNs0ZLACQohdLE4kcm27PwfglwGJhyYHLPBKcrQjzvEEpBJAYK8f2l_tokq6zGYka-IPxXNyzKIWSHzVGOZzlk);">
+                    <div>
+                        <span class="mainTitle">WikiSplit을 이용한 BERT Pre-training</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.12.27</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 BERT에 대해 설명하였습니다. BERT는 transformer의 encoder 부분을 이용하여 만든 언어 모델입니다.
+                        Transformer에 대한 설명은<a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Transformer (Attention Is All You Need)</span></a> 글을 참고하시기 바랍니다.
+                        그리고 BERT에 대한 설명은 <a onclick="pjaxPage('bert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 WikiSplit의 문장 쌍 데이터를 바탕으로 NSP, MLM 방법을 통해 BERT를 pre-training 합니다.
+                        그리고 코드의 구현은 python의 PyTorch를 이용하였습니다.</span>
+
+                        <br><br>본 글에서 설명하는 BERT pre-training 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에 데이터 전처리, 토크나이저 학습 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>BERT 학습 데이터 구성 코드</li>
+                            <li>BERT 구현</li>
+                            <li>BERT 학습</li>
+                            <li>BERT 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/pretraining-BERT" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BERT pre-training GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">BERT Pre-training</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>BERT 학습 데이터 구성 코드</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        BERT를 학습 시키기 위해서는 문장 pair를 구성하여 모델에 넣어야함과 동시에, <span class="highlight" style="color: rgb(0, 3, 206);">NSP, MLM을 학습도 고려해야합니다.</span>
+                        따라서 아래에서는 BERT를 학습하기 위한 데이터 구성 방법에 대한 코드를 살펴보겠습니다.
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code0">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>):
+        <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
+        <span class="var">self</span>.<span class="var">max_len</span> = <span class="var">config</span>.max_len
+        <span class="var">self</span>.<span class="var">len_per_s</span> = <span class="var">self</span>.<span class="var">max_len</span> // <span class="num">2</span>
+
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">cls_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token_id
+        <span class="var">self</span>.<span class="var">sep_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token_id
+        <span class="var">self</span>.<span class="var">unk_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.unk_token_id
+        <span class="var">self</span>.<span class="var">msk_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.msk_token_id
+        <span class="var">self</span>.<span class="var">special_token_ids</span> = [<span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="var">self</span>.<span class="var">cls_token_id</span>, <span class="var">self</span>.<span class="var">sep_token_id</span>, <span class="var">self</span>.<span class="var">unk_token_id</span>, <span class="var">self</span>.<span class="var">msk_token_id</span>]
+        <span class="var">self</span>.<span class="var">vocab_set</span> = <span class="clazz">set</span>(<span class="clazz">list</span>(<span class="clazz">range</span>(<span class="var">self</span>.<span class="var">tokenizer</span>.vocab_size))) - <span class="clazz">set</span>(<span class="var">self</span>.<span class="var">special_token_ids</span>)
+
+        <span class="var">self</span>.<span class="var">length</span> = <span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>)
+
+
+    <span class="reserved">def</span> <span class="method">random_nsp</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="var">s1</span>, <span class="var">s2</span> = <span class="var">self</span>.<span class="var">data</span>[<span class="var">idx</span>]
+        <span class="return">if</span> <span class="clazz">random</span>.<span class="var">random</span>() &gt; <span class="num">0.5</span>:    
+            <span class="return">return</span> <span class="var">s1</span>, <span class="var">s2</span>, <span class="num">1</span>
+        <span class="return">return</span> <span class="var">s1</span>, <span class="var">self</span>.<span class="method">get_new_s2</span>(<span class="var">idx</span>), <span class="num">0</span>
+
+    
+    <span class="reserved">def</span> <span class="method">random_mlm</span>(<span class="var">self</span>, <span class="var">s1</span>, <span class="var">s2</span>):
+        <span class="annot"># s1 and s2 are sliced from back and front, respectively.</span>
+        <span class="var">s1</span>, <span class="var">s2</span> = [<span class="var">self</span>.<span class="var">cls_token_id</span>] + <span class="var">self</span>.<span class="var">tokenizer</span>.encode(<span class="var">s1</span>)[-<span class="var">self</span>.<span class="var">len_per_s</span>+<span class="num">2</span>:] + [<span class="var">self</span>.<span class="var">sep_token_id</span>], <span class="var">self</span>.<span class="var">tokenizer</span>.encode(<span class="var">s2</span>)[:<span class="var">self</span>.<span class="var">len_per_s</span>-<span class="num">1</span>] + [<span class="var">self</span>.<span class="var">sep_token_id</span>]
+        
+        <span class="annot"># make segments ids</span>
+        <span class="var">segment</span> = [<span class="num">1</span>] * <span class="method">len</span>(<span class="var">s1</span>) + [<span class="num">2</span>] * <span class="method">len</span>(<span class="var">s2</span>)
+
+        <span class="annot"># do MLM for 15% tokens</span>
+        <span class="var">total_s</span> = <span class="var">s1</span> + <span class="var">s2</span>
+        <span class="var">s_len</span> = <span class="method">len</span>(<span class="var">total_s</span>)
+        <span class="var">mlm_len</span> = <span class="clazz">int</span>((<span class="var">s_len</span> - <span class="num">3</span>) * <span class="num">0.15</span>)
+        <span class="var">mlm_label</span> = [<span class="var">self</span>.<span class="var">pad_token_id</span>] * <span class="var">s_len</span>
+        
+        <span class="annot"># select MLM position except for special tokens</span>
+        <span class="var">mlm_idx</span> = <span class="clazz">set</span>()
+        <span class="return">while</span> <span class="method">len</span>(<span class="var">mlm_idx</span>) != <span class="var">mlm_len</span>:
+            <span class="var">tmp_idx</span> = <span class="clazz">random</span>.<span class="var">randrange</span>(<span class="var">s_len</span>)
+            <span class="return">if</span> <span class="var">total_s</span>[<span class="var">tmp_idx</span>] <span class="reserved">not in</span> <span class="var">self</span>.<span class="var">special_token_ids</span>:
+                <span class="var">mlm_idx</span>.<span class="method">add</span>(<span class="var">tmp_idx</span>)
+
+        <span class="annot"># do MLM</span>
+        <span class="return">for</span> <span class="var">id</span> <span class="return">in</span> <span class="clazz">list</span>(<span class="var">mlm_idx</span>):
+            <span class="var">prob</span> = <span class="clazz">random</span>.<span class="var">random</span>()
+
+            <span class="annot"># change token to [MSK]</span>
+            <span class="return">if</span> <span class="var">prob</span> &lt; <span class="num">0.8</span>:
+                <span class="var">mlm_label</span>[<span class="var">id</span>] = <span class="var">total_s</span>[<span class="var">id</span>]
+                <span class="var">total_s</span>[<span class="var">id</span>] = <span class="var">self</span>.<span class="var">msk_token_id</span>
+
+            <span class="annot"># change token to random token</span>
+            <span class="return">elif</span> <span class="var">prob</span> &lt; <span class="num">0.9</span>:
+                <span class="var">new_id</span> = <span class="clazz">random</span>.<span class="var">choice</span>(<span class="clazz">list</span>(<span class="var">self</span>.<span class="var">vocab_set</span> - {<span class="var">total_s</span>[<span class="var">id</span>]}))
+                <span class="var">mlm_label</span>[<span class="var">id</span>] = <span class="var">total_s</span>[<span class="var">id</span>]
+                <span class="var">total_s</span>[<span class="var">id</span>] = <span class="var">new_id</span>
+
+            <span class="annot"># remain 10% of tokens</span>
+            <span class="return">else</span>:
+                <span class="var">mlm_label</span>[<span class="var">id</span>] = <span class="var">total_s</span>[<span class="var">id</span>]
+        
+        <span class="return">assert</span> <span class="method">len</span>(<span class="var">mlm_label</span>) == <span class="method">len</span>(<span class="var">total_s</span>) == <span class="method">len</span>(<span class="var">segment</span>) == <span class="var">s_len</span>
+
+        <span class="annot"># padding</span>
+        <span class="var">pad_len</span> = <span class="var">self</span>.<span class="var">max_len</span> - <span class="var">s_len</span>
+        <span class="var">total_s</span> = <span class="var">total_s</span> + [<span class="var">self</span>.<span class="var">pad_token_id</span>] * <span class="var">pad_len</span>
+        <span class="var">mlm_label</span> = <span class="var">mlm_label</span> + [<span class="var">self</span>.<span class="var">pad_token_id</span>] * <span class="var">pad_len</span>
+        <span class="var">segment</span> = <span class="var">segment</span> + [<span class="var">self</span>.<span class="var">pad_token_id</span>] * <span class="var">pad_len</span>
+        <span class="return">return</span> <span class="var">total_s</span>, <span class="var">mlm_label</span>, <span class="var">segment</span>
+
+
+    <span class="reserved">def</span> <span class="method">get_new_s2</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="return">while</span> <span class="num">1</span>:
+            <span class="var">new_idx</span> = <span class="clazz">random</span>.<span class="var">randrange</span>(<span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>))
+            <span class="return">if</span> <span class="var">new_idx</span> != <span class="var">self</span>:
+                <span class="return">return</span> <span class="var">self</span>.<span class="var">data</span>[<span class="var">new_idx</span>][<span class="num">1</span>]
+
+
+    <span class="reserved">def</span> <span class="method">__getitem__</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="var">s1</span>, <span class="var">s2</span>, <span class="var">nsp_label</span> = <span class="var">self</span>.<span class="method">random_nsp</span>(<span class="var">idx</span>)
+        <span class="var">x</span>, <span class="var">mlm_label</span>, <span class="var">segment</span> = <span class="var">self</span>.<span class="method">random_mlm</span>(<span class="var">s1</span>, <span class="var">s2</span>)
+        <span class="return">return</span> <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>(<span class="var">x</span>), <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>(<span class="var">segment</span>), <span class="clazz">torch</span>.<span class="method">tensor</span>(<span class="var">nsp_label</span>), <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>(<span class="var">mlm_label</span>)
+
+    
+    <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code0", 89);
+</script>
+                    <p>
+                        <ul>
+                            <li>3 ~ 16번째 줄: BERT 학습 데이터를 만들기 위해 필요한 데이터들 사전 정의.</li>
+                            <li>3번째 줄: [(s1, s2), (s1, s2), ... , (s1, s2)] 형식으로 구성 되어있음.</li>
+                            <li>19 ~ 23번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">NSP 학습을 위해 50%의 확률로 올바른 순서 문장의 pair, 50%의 확률로 틀린 순서 문장의 pair 제작(83번째 줄에서 사용).</span></li>
+                            <li>23번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">81 ~ 85번째 함수를 이용하여 틀린 순서의 두 번째 문장을 랜덤으로 추출하여 틀린 순서 문장 pair 제작.</span></li>
+                            <li>26 ~ 72번째 줄: NSP를 위한 문장 순서 쌍을 구성한 후, MLM을 위한 데이터와 segment 데이터를 만드는 부분(84번째 줄에서 사용).</li>
+                            <li>28번째 줄: 두 문장의 쌍을 토큰화.</li>
+                            <li>31번째 줄: Segment data 제작.</li>
+                            <li>34 ~ 37번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">두 문장의 토큰화 된 길이의 15% 토큰이 MLM에 사용되므로 15%에 해당하는 토큰 개수 및 mlm_label을 pad_token_id로 초기화.</span></li>
+                            <li>40 ~ 63번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">15%에 해당하는 토큰 중 80%는 [MLM]으로 변환, 10%는 랜덤 토큰으로 변환, 10%는 그대로 유지(단, 그대로 유지하는 경우에도 자기 자신 토큰을 예측 해야함).</span></li>
+                            <li>68 ~ 71번째 줄: max length로 padding.</li>
+                            <li>75 ~ 79번째 줄: 19 ~ 23번째 줄의 NSP 데이터 제작 함수에 사용.</li>
+                            <li>82 ~ 86번째 줄: 최종적으로 데이터를 내보내는 함수.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 BERT 구현 코드를 살펴보겠습니다.
+                        BERT는 transformer의 encoder로만 구성됩니다.
+                        먼저 encoder를 살펴보기 전에 embedding layer 코드부터 확인해보겠습니다.
+                        한 줄씩 자세한 설명은 아래를 참고하시기 바랍니다.
+                        <br><br><span style="font-size: 20px;"><b>Token, Positional, and Segment Embeddings</b></span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># word embedding layer</span>    
+<span class="reserved">class</span> <span class="clazz">TokenEmbedding</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">vocab_size</span>, <span class="var">hidden_dim</span>, <span class="var">pad_token_id</span>):
+        <span class="clazz">super</span>(<span class="clazz">TokenEmbedding</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">vocab_size</span>
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">emb_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">emb_layer</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">output</span>
+
+
+
+<span class="annot"># positional embedding layer</span>
+<span class="reserved">class</span> <span class="clazz">PositionalEmbedding</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">max_len</span>, <span class="var">hidden_dim</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">PositionalEmbedding</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">max_len</span> = <span class="var">max_len</span>
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+
+        <span class="var">self</span>.<span class="var">pos</span> = <span class="clazz">torch</span>.<span class="method">arange</span>(<span class="num">0</span>, <span class="var">self</span>.<span class="var">max_len</span>)
+        <span class="var">self</span>.<span class="var">emb_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="var">self</span>.<span class="var">max_len</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">emb_layer</span>(<span class="var">self</span>.<span class="var">pos</span>.<span class="method">unsqueeze</span>(<span class="num">0</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>))[:, :<span class="var">x</span>.size(<span class="num">1</span>)]
+
+
+
+<span class="annot"># segment embedding layer</span>    
+<span class="reserved">class</span> <span class="clazz">SegmentEmbedding</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">pad_token_id</span>):
+        <span class="clazz">super</span>(<span class="clazz">SegmentEmbedding</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">emb_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>(<span class="num">3</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">padding_idx</span>=<span class="var">self</span>.<span class="var">pad_token_id</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">emb_layer</span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 45);
+</script>
+                    <p>
+                        <ul>
+                            <li>5 ~ 8번째 줄: Token embbeding을 위해 필요한 파라미터 정의.</li>
+                            <li>11 ~ 13번째 줄: Token embedding을 지나는 부분.</li>
+                            <li>21 ~ 26번째 줄: Positional embedding 위해 필요한 파라미터 정의.</li>
+                            <li>29 ~ 30번째 줄: Positional embedding을 거치는 부분.</li>
+                            <li>38 ~ 40번째 줄: Segment embedding을 정의 (<span class="highlight" style="color: rgb(0, 3, 206);">0: pad_token_id, [PAD] 토큰 부분, 1: 첫 번째 문장, 2: 두 번째 문장</span>).</li>
+                            <li>43 ~ 45번째 줄: Segment embedding을 거치는 부분.</li>
+                        </ul>
+                    </p>
+                    <p>
+                        <br><br><br>이제는 multi-head attention 부분입니다.
+                        <br><br><span style="font-size: 20px;"><b>Multi-head Attention</b></span>
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># mulithead attention</span>
+<span class="reserved">class</span> <span class="clazz">MultiHeadAttention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">num_head</span>, <span class="var">bias</span>, <span class="var">self_attn</span>, <span class="var">causal</span>):
+        <span class="clazz">super</span>(<span class="clazz">MultiHeadAttention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">num_head</span> = <span class="var">num_head</span>
+        <span class="var">self</span>.<span class="var">bias</span> = <span class="var">bias</span>
+        <span class="var">self</span>.<span class="var">self_attn</span> = <span class="var">self_attn</span>
+        <span class="var">self</span>.<span class="var">causal</span> = <span class="var">causal</span>
+        <span class="var">self</span>.<span class="var">head_dim</span> = <span class="var">self</span>.<span class="var">hidden_dim</span> // <span class="var">self</span>.<span class="var">num_head</span>
+        <span class="return">assert</span> <span class="var">self</span>.<span class="var">hidden_dim</span> == <span class="var">self</span>.<span class="var">num_head</span> * <span class="var">self</span>.<span class="var">head_dim</span>
+
+        <span class="var">self</span>.<span class="var">q_proj</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>)
+        <span class="var">self</span>.<span class="var">k_proj</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>)
+        <span class="var">self</span>.<span class="var">v_proj</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>)
+        <span class="var">self</span>.<span class="var">attn_proj</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>)
+
+
+    <span class="reserved">def</span> <span class="method">head_split</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">self</span>.<span class="var">batch_size</span>, <span class="num">-<span class="num">1</span></span>, <span class="var">self</span>.<span class="var">num_head</span>, <span class="var">self</span>.<span class="var">head_dim</span>)
+        <span class="var">x</span> = <span class="var">x</span>.<span class="method">permute</span>(<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>, <span class="num">3</span>)
+        <span class="return">return</span> <span class="var">x</span>
+
+
+    <span class="reserved">def</span> <span class="method">scaled_dot_product</span>(<span class="var">self</span>, <span class="var">q</span>, <span class="var">k</span>, <span class="var">v</span>, <span class="var">mask</span>):
+        <span class="var">attn_wts</span> = <span class="clazz">torch</span>.<span class="method">matmul</span>(<span class="var">q</span>, <span class="clazz">torch</span>.<span class="method">transpose</span>(<span class="var">k</span>, <span class="num">2</span>, <span class="num">3</span>))/(<span class="var">self</span>.<span class="var">head_dim</span> ** <span class="num"><span class="num">0</span>.5</span>)
+        <span class="return">if</span> <span class="reserved">not</span> <span class="var">mask</span> == <span class="reserved">None</span>:
+            <span class="var">attn_wts</span> = <span class="var">attn_wts</span>.masked_fill(<span class="var">mask</span>==<span class="num">0</span>, <span class="clazz">float</span>(<span class="str">'-inf'</span>))
+        <span class="var">attn_wts</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">attn_wts</span>, <span class="var">dim</span>=<span class="num">-<span class="num">1</span></span>)
+        <span class="var">attn_out</span> = <span class="clazz">torch</span>.<span class="method">matmul</span>(<span class="var">attn_wts</span>, <span class="var">v</span>)
+        <span class="return">return</span> <span class="var">attn_wts</span>, <span class="var">attn_out</span>
+
+
+    <span class="reserved">def</span> <span class="method">reshaping</span>(<span class="var">self</span>, <span class="var">attn_out</span>):
+        <span class="var">attn_out</span> = <span class="var">attn_out</span>.<span class="method">permute</span>(<span class="num">0</span>, <span class="num">2</span>, <span class="num">1</span>, <span class="num">3</span>).contiguous()
+        <span class="var">attn_out</span> = <span class="var">attn_out</span>.view(<span class="var">self</span>.<span class="var">batch_size</span>, <span class="num">-<span class="num">1</span></span>, <span class="var">self</span>.<span class="var">hidden_dim</span>)
+        <span class="return">return</span> <span class="var">attn_out</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">query</span>, <span class="var">key</span>, <span class="var">value</span>, <span class="var">mask</span>):
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">self_attn</span>:
+            <span class="return">assert</span> (<span class="var">query</span> == <span class="var">key</span>).all() and (<span class="var">key</span>==<span class="var">value</span>).all()
+
+        <span class="var">self</span>.<span class="var">batch_size</span> = <span class="var">query</span>.size(<span class="num">0</span>)
+        <span class="var">q</span> = <span class="var">self</span>.<span class="method">head_split</span>(<span class="var">self</span>.<span class="var">q_proj</span>(<span class="var">query</span>))
+        <span class="var">k</span> = <span class="var">self</span>.<span class="method">head_split</span>(<span class="var">self</span>.<span class="var">k_proj</span>(<span class="var">key</span>))
+        <span class="var">v</span> = <span class="var">self</span>.<span class="method">head_split</span>(<span class="var">self</span>.<span class="var">v_proj</span>(<span class="var">value</span>))
+
+        <span class="var">attn_wts</span>, <span class="var">attn_out</span> = <span class="var">self</span>.<span class="method">scaled_dot_product</span>(<span class="var">q</span>, <span class="var">k</span>, <span class="var">v</span>, <span class="var">mask</span>)
+        <span class="var">attn_out</span> = <span class="var">self</span>.<span class="var">attn_proj</span>(<span class="var">self</span>.<span class="method">reshaping</span>(<span class="var">attn_out</span>))
+
+        <span class="return">return</span> <span class="var">attn_wts</span>, <span class="var">attn_out</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 52);
+</script>
+                    <p>
+                        <ul>
+                            <li>5 ~ 10번째 줄: Attention을 위해 필요한 파라미터 정의.</li>
+                            <li>11번째 줄: num_head에 따른 head dimension sanity check.</li>
+                            <li>13 ~ 16번째 줄: Query, key, value 및 attention 결과를 각각 mapping하는 linear layer.</li>
+                            <li>19 ~ 22번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Multi-head attention을 위해 행렬 차원 바꿔주는 부분(B x L x hidden_dim &rarr; B x num_head x L x head_dim)</span>.</li>
+                            <li>25 ~ 31번째 줄: Scaled dot product를 하는 부분. BERT는 encoder로 구성되기 때문에 pad mask가 들어옴.</li>
+                            <li>34 ~ 37번째 줄: Multi-head attention 때문에 바뀌었던 행렬을 차원을 복구하는 부분(B x num_head x L x head_dim &rarr; B x L x hidden_dim).</li>
+                            <li>40 ~ 52번째 줄: Multi-head attention을 수행하는 부분.</li>
+                        </ul>
+
+                    </p>
+                    <p>
+                        <br><br><br>이제는 postion wise feed forward network 부분입니다.
+                        <br><br><span style="font-size: 20px;"><b>Postion Wise Feed Forward Network</b></span>
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># postion wise feed forward</span>
+<span class="reserved">class</span> <span class="clazz">PositionWiseFeedForward</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">ffn_dim</span>, <span class="var">dropout</span>, <span class="var">bias</span>):
+        <span class="clazz">super</span>(<span class="clazz">PositionWiseFeedForward</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">ffn_dim</span> = <span class="var">ffn_dim</span>
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">dropout</span>
+        <span class="var">self</span>.<span class="var">bias</span> = <span class="var">bias</span>
+
+        <span class="var">self</span>.<span class="var">FFN1</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">ffn_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>),
+            <span class="clazz">nn</span>.<span class="clazz">GELU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+        )
+        <span class="var">self</span>.<span class="var">FFN2</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">ffn_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="var">self</span>.<span class="var">bias</span>),
+        )
+        <span class="var">self</span>.<span class="method">init_weights</span>()
+
+
+    <span class="reserved">def</span> <span class="method">init_weights</span>(<span class="var">self</span>):
+        <span class="return">for</span> <span class="var">_</span>, <span class="var">param</span> <span class="return">in</span> <span class="var">self</span>.<span class="method">named_parameters</span>():
+            <span class="return">if</span> <span class="var">param</span>.<span class="var">requires_grad</span>:
+                <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">normal</span>_(<span class="var">param</span>.<span class="var">data</span>, <span class="var">mean</span>=<span class="num">0</span>, <span class="var">std</span>=<span class="num"><span class="num">0</span>.5</span>)
+
+    
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">FFN1</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">FFN2</span>(<span class="var">output</span>)
+        <span class="return">return</span> <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 30);
+</script>
+                    <p>
+                        <ul>
+                            <li>5 ~ 8번째 줄: Feed forward network를 위해 필요한 파라미터 정의.</li>
+                            <li>10 ~ 17번째 줄: 첫 번째, 두 번째 linear layer 정의.</li>
+                            <li>18 ~ 24번째 줄: Feed forward network 가중치 초기화.</li>
+                            <li>27 ~ 30번째 줄: Feed forward network 거치는 부분.</li>
+                        </ul>
+
+                    </p>
+                    <p>
+                        <br><br><br>이제는 BERT의 encoder 부분입니다.
+                        아래 코드의 config.의 부분은 <a href="https://github.com/ljm565/pretraining-BERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
+                        <br><br><span style="font-size: 20px;"><b>Encoder</b></span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code4">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># a single encoder layer</span>
+<span class="reserved">class</span> <span class="clazz"><span class="clazz">Encoder</span>Layer</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">ffn_dim</span>, <span class="var">num_head</span>, <span class="var">bias</span>, <span class="var">dropout</span>, <span class="var">layernorm_eps</span>):
+        <span class="clazz">super</span>(<span class="clazz"><span class="clazz">Encoder</span>Layer</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">ffn_dim</span> = <span class="var">ffn_dim</span>
+        <span class="var">self</span>.<span class="var">num_head</span> = <span class="var">num_head</span>
+        <span class="var">self</span>.<span class="var">bias</span> = <span class="var">bias</span>
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">dropout</span>
+        <span class="var">self</span>.<span class="var">layernorm_eps</span> = <span class="var">layernorm_eps</span>
+        <span class="var">self</span>.<span class="var"><span class="var">dropout</span>_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+        <span class="var">self</span>.<span class="var">layer_norm</span> = <span class="clazz">nn</span>.<span class="clazz">LayerNorm</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">eps</span>=<span class="var">self</span>.<span class="var">layernorm_eps</span>)
+
+        <span class="var">self</span>.<span class="var">self_attention</span> = <span class="clazz">MultiHeadAttention</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">num_head</span>, <span class="var">self</span>.<span class="var">bias</span>, <span class="var">self_attn</span>=<span class="reserved">True</span>, <span class="var">causal</span>=<span class="reserved">False</span>)
+        <span class="var">self</span>.<span class="var">positionWiseFeedForward</span> = <span class="clazz">PositionWiseFeedForward</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">ffn_dim</span>, <span class="var">self</span>.<span class="var">dropout</span>, <span class="var">self</span>.<span class="var">bias</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">mask</span>):
+        <span class="var">attn_wts</span>, <span class="var">output</span> = <span class="var">self</span>.<span class="var">self_attention</span>(<span class="var">query</span>=<span class="var">x</span>, <span class="var">key</span>=<span class="var">x</span>, <span class="var">value</span>=<span class="var">x</span>, <span class="var">mask</span>=<span class="var">mask</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var"><span class="var">dropout</span>_layer</span>(<span class="var">output</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">layer_norm</span>(<span class="var">x</span> + <span class="var">output</span>)
+
+        <span class="var">x</span> = <span class="var">output</span>
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">positionWiseFeedForward</span>(<span class="var">output</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var"><span class="var">dropout</span>_layer</span>(<span class="var">output</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">layer_norm</span>(<span class="var">x</span> + <span class="var">output</span>)
+
+        <span class="return">return</span> <span class="var">attn_wts</span>, <span class="var">output</span>
+
+
+
+<span class="annot"># all encoders</span>
+<span class="reserved">class</span> <span class="clazz">Encoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">Encoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">tokenizer</span>.<span class="var">vocab_size</span>
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.<span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+
+        <span class="var">self</span>.<span class="var">num_layers</span> = <span class="var">config</span>.num_layers
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
+        <span class="var">self</span>.<span class="var">ffn_dim</span> = <span class="var">config</span>.ffn_dim
+        <span class="var">self</span>.<span class="var">num_head</span> = <span class="var">config</span>.num_head
+        <span class="var">self</span>.<span class="var">max_len</span> = <span class="var">config</span>.max_len
+        <span class="var">self</span>.<span class="var">bias</span> = <span class="clazz">bool</span>(<span class="var">config</span>.bias)
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.dropout
+        <span class="var">self</span>.<span class="var">layernorm_eps</span> = <span class="var">config</span>.layernorm_eps
+        
+        <span class="var">self</span>.<span class="var"><span class="var">dropout</span>_layer</span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+        <span class="var">self</span>.<span class="var">tok_emb</span> = <span class="clazz">TokenEmbedding</span>(<span class="var">self</span>.<span class="var">vocab_size</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var">pos_emb</span> = <span class="clazz">PositionalEmbedding</span>(<span class="var">self</span>.<span class="var">max_len</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">self</span>.<span class="var">seg_emb</span> = <span class="clazz">SegmentEmbedding</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">self</span>.<span class="var"><span class="var">encoder</span>s</span> = <span class="clazz">nn</span>.<span class="clazz"><span class="clazz">Module</span>List</span>([<span class="clazz"><span class="clazz">Encoder</span>Layer</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">ffn_dim</span>, <span class="var">self</span>.<span class="var">num_head</span>, <span class="var">self</span>.<span class="var">bias</span>, <span class="var">self</span>.<span class="var">dropout</span>, <span class="var">self</span>.<span class="var">layernorm_eps</span>) <span class="return">for</span> <span class="var">_</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">num_layers</span>)])
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">mask</span>=<span class="reserved">None</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">tok_emb</span>(<span class="var">x</span>) + <span class="var">self</span>.<span class="var">pos_emb</span>(<span class="var">x</span>) + <span class="var">self</span>.<span class="var">seg_emb</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var"><span class="var">dropout</span>_layer</span>(<span class="var">output</span>)
+
+        <span class="var">all_<span class="var">attn_wts</span></span> = []
+        <span class="return">for</span> <span class="var">encoder</span> <span class="return">in</span> <span class="var">self</span>.<span class="var"><span class="var">encoder</span>s</span>:
+            <span class="var">attn_wts</span>, <span class="var">output</span> = <span class="var">encoder</span>(<span class="var">output</span>, <span class="var">mask</span>)
+            <span class="var">all_<span class="var">attn_wts</span></span>.<span class="method">append</span>(<span class="var">attn_wts</span>.detach().cpu())
+        
+        <span class="return">return</span> <span class="var">all_<span class="var">attn_wts</span></span>, <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code4", 65);
+</script>
+                    <p>
+                        <ul>
+                            <li>2 ~ 28번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">하나의 encoder block을 정의하는 코드</span>.</li>
+                            <li>33 ~ 65번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Encoder block을 레이어 개수만큼 쌓아 전체 encoder를 정의하는 코드</span>.</li>
+                            <li>5 ~ 12번째 줄: Encoder block을 제작할 때 필요한 파라미터 정의.</li>
+                            <li>14번째 줄: Self attention 정의.</li>
+                            <li>15번째 줄: Feed forward network 정의.</li>
+                            <li>18 ~ 28번째 줄: Encoder block을 거치는 부분.</li>
+                            <li>21, 26번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Residual connection 부분</span>.</li>
+                            <li>36 ~ 47번째 줄: 전체 encoder를 제작하기 위한 파라미터 정의.</li>
+                            <li>50 ~ 52번째 줄: Encoder의 embedding 레이어 정의.</li>
+                            <li>53번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Encoder의 레이어 개수만큼 encoder block을 쌓아 정의하는 부분</span>.</li>
+                            <li>56 ~ 65번째 줄: Encoder(모든 encoder block)를 거치는 부분.</li>
+                        </ul>
+
+                    </p>
+                    <p>
+                        <br><br><br>이제는 encoder를 이용하여 BERT를 구성하는 부분입니다.
+                        <br><br><span style="font-size: 20px;"><b>BERT</b></span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code6">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># BERT</span>
+<span class="reserved">class</span> <span class="clazz">BERT</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">BERT</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+        
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">self</span>.<span class="var">config</span>.hidden_dim
+
+        <span class="var">self</span>.<span class="var">encoder</span> = <span class="clazz">Encoder</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">self</span>.<span class="var">nsp_fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="num">2</span>)
+        <span class="var">self</span>.<span class="var">mlm_fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">tokenizer</span>.vocab_size)
+
+
+    <span class="reserved">def</span> <span class="method">make_mask</span>(<span class="var">self</span>, <span class="var">input</span>):
+        <span class="var">enc_mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">input</span>==<span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id, <span class="num">0</span>, <span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">1</span>).<span class="method">unsqueeze</span>(<span class="num">2</span>)
+        <span class="return">return</span> <span class="var">enc_mask</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">segment</span>):
+        <span class="var">enc_mask</span> = <span class="var">self</span>.<span class="method">make_mask</span>(<span class="var">x</span>)
+        <span class="var">all_<span class="var">attn_wts</span></span>, <span class="var">x</span> = <span class="var">self</span>.<span class="var">encoder</span>(<span class="var">x</span>, <span class="var">segment</span>, <span class="var">enc_mask</span>)
+
+        <span class="var">nsp_output</span> = <span class="var">self</span>.<span class="var">nsp_fc</span>(<span class="var">x</span>[:, <span class="num">0</span>])
+        <span class="var">mlm_output</span> = <span class="var">self</span>.<span class="var">mlm_fc</span>(<span class="var">x</span>)
+
+        <span class="return">return</span> <span class="var">all_<span class="var">cross_<span class="var">attn_wts</span></span></span>, (<span class="var">nsp_output</span>, <span class="var">mlm_output</span>)
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code6", 28);
+</script>
+
+                    <p>
+                        <ul>
+                            <li>5 ~ 13번째 줄: Encoder, NSP fully-connected 레이어, MLM fully-connected 레이어 등을 정의하는 부분.</li>
+                            <li>16 ~ 18번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">pad mask를 제작하는 부분</span>.</li>
+                            <li>21 ~ 28번째 줄: Encoder를 거치는 전체 BERT 부분.</li>
+                            <li>25번째 줄: NSP를 위한 레이어를 거치는 부분.</li>
+                            <li>26번째 줄: MLM을 위한 레이어를 거치는 부분.</li>
+                        </ul>
+
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 기계 번역 모델 학습 코드를 통해 어떻게 학습이 이루어지는지 살펴보겠습니다.
+                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
+                        여기서는 무시해도 좋습니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/pretraining-BERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code7">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BERT</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">nsp_criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
+<span class="var">self</span>.<span class="var">mlm_criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var"><span class="var">tokenizer</span></span>.<span class="var">pad_token_id</span>)
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>, <span class="var">betas</span>=(<span class="num">0.9</span>, <span class="num">0.999</span>))
+
+<span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+
+<span class="return">for</span> <span class="var">i</span>, (<span class="var">x</span>, <span class="var">segment</span>, <span class="var">nsp_label</span>, <span class="var">mlm_label</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="str">'train'</span>]):
+    <span class="var">x</span>, <span class="var">segment</span>, <span class="var">nsp_label</span>, <span class="var">mlm_label</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">segment</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">nsp_label</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">mlm_label</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+    <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+        <span class="var">_</span>, (<span class="var">nsp_output</span>, <span class="var">mlm_output</span>) = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>, <span class="var">segment</span>)
+        <span class="var">nsp_loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">nsp_output</span>, <span class="var">nsp_label</span>)
+        <span class="var">mlm_loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">mlm_output</span>.reshape(<span class="num">-<span class="num">1</span></span>, <span class="var">mlm_output</span>.size(<span class="num">-<span class="num">1</span></span>)), <span class="var">mlm_label</span>.reshape(<span class="num">-<span class="num">1</span></span>))
+        <span class="var">loss</span> = <span class="var">nsp_loss</span> + <span class="var">mlm_loss</span>
+        <span class="var">loss</span>.backward()
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code7", 18);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 4번째 줄: NSP와 MLM loss function, BERT 모델 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>모델 학습</b></span>
+                        <ul>
+                            <li>6 ~ 16번째 줄: Cross entropy loss를 이용하여 모델 학습하는 부분.</li>
+                            <li>17 ~ 18번째 줄: Loss를 계산하고 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래 결과는 validation set의 가장 낮은 loss를 달성했을 때 모델의 test set 결과입니다.
+                        <ul>
+                            <li>NSP Accuracy: 0.9064</li>
+                            <li>MLM Loss: 3.3678</li>
+                        </ul>
+                    </p>
+                    
+                                       
+                    <p>
+                        <br><br><br>지금까지 NSP, MLM을 바탕으로 BERT를 pre-training하는 방법을 살펴보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/pretraining-BERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        <br><br>다음에는 Hugging Face의 pre-trained BERT를 fine-tuning하여 감성 분류 하는 코드를 살펴보겠습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#BERT&emsp;#NSP&emsp;#MLM&emsp;#WikiSplit
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('bert1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Bidirectional Encoder Representations from Transformers (BERT)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('bert3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Pre-trained BERT Fine-tuning을 통한 Google Play Store Apps 리뷰 감성 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
