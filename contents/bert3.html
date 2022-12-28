@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pre-trained BERT Fine-tuning을 통한 Google Play Store Apps 리뷰 감성 분류</title>
+        <meta name="description" content="Hugging Face pre-trained BERT를 fine-tuning하여 감성 분류 모델을 학습합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/bert3.html" />
+        <meta property="og:title" content="Pre-trained BERT Fine-tuning을 통한 Google Play Store Apps 리뷰 감성 분류" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Hugging Face pre-trained BERT를 fine-tuning하여 감성 분류 모델을 학습합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Bidirectional Encoder Representations from Transformers (BERT) / 3. Pre-trained BERT Fine-tuning을 통한 Google Play Store Apps 리뷰 감성 분류</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">Pre-trained BERT Fine-tuning을 통한 Google Play Store Apps 리뷰 감성 분류</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.12.28</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 BERT를 pre-training 하는 코드에 대해 설명하였습니다. <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 간편하게 Hugging Face API를 이용하여 pre-trained BERT를 가져오는 코드와 이 모델을 fine-tuning 하는 방법을 알아보겠습니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">본 글에서는 Googe Play Store Apps 리뷰 데이터를 바탕으로 pre-trained BERT를 fine-tuning하여 감성 분류 모델을 학습합니다.
+                        코드의 구현은 python의 PyTorch를 이용하였습니다.</span>
+                        
+                        <br><br>그리고 BERT에 대한 설명은 <a onclick="pjaxPage('bert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        본 글에서 설명하는 BERT fine-tuning 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 Hugging Face API 사용과 모델의 fine-tuning에 초점을 맞추고 있기 때문에 사용 데이터, 데이터 전처리, 토크나이저 학습 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Pre-trained BERT 가져오기</li>
+                            <li>BERT Fine-tuning</li>
+                            <li>BERT 감성 분류 모델 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/sentiment-classification-BERT" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BERT 감성 분류를 위한 fine-tuning GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">감성 분류를 위한 Pre-trained BERT Fine-tuning</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Pre-trained BERT 가져오기</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 Hugging Face를 이용하여 pre-trained BERT를 가져오는 코드를 살펴보겠습니다.
+                        먼저 Hugging Face를 사용하기 위해서는 아래 코드를 실행해서 transformers 모듈을 설치해야합니다.
+                </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"> # terminal</span>
+pip install transformers
+</pre>
+</div>
+</div>
+</pre>
+                    <p>
+                        <br><br>이제는 Hugging Face API를 통해 pre-trained BERT를 가져오는 코드입니다.
+                        <br><br><span style="font-size: 20px;"><b>Pre-trained BERT</b></span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code6">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">import</span> <span class="clazz">torch</span>
+<span class="return">import</span> <span class="clazz">torch</span>.<span class="clazz">nn</span> <span class="return">as</span> <span class="clazz">nn</span>
+<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">BertModel</span>
+
+
+<span class="annot"># BERT</span>
+<span class="reserved">class</span> <span class="clazz">BERT</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">BERT</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pretrained_model</span> = <span class="var">config</span>.pretrained_model
+        <span class="var">self</span>.<span class="var">n_class</span> = <span class="var">config</span>.n_class
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+        
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BertModel</span>.<span class="method">from_pretrained</span>(<span class="var">self</span>.<span class="var">pretrained_model</span>)
+        <span class="var">self</span>.<span class="var">fc</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">model</span>.config.hidden_size, <span class="var">self</span>.<span class="var">n_class</span>)
+        <span class="var">self</span>.<span class="var">pos_ids</span> = <span class="clazz">torch</span>.<span class="method">arange</span>(<span class="var">config</span>.max_len).<span class="method">to</span>(<span class="var">device</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">attn_mask</span>):
+        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
+        <span class="var">pos_ids</span> = <span class="var">self</span>.<span class="var">pos_ids</span>.<span class="method">expand</span>(<span class="var">batch_size</span>, -<span class="num">1</span>)
+
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">input_ids</span>=<span class="var">x</span>, <span class="var">attention_mask</span>=<span class="var">attn_mask</span>, <span class="var">position_ids</span>=<span class="var">pos_ids</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">output</span>[<span class="str">'pooler_output'</span>])
+
+        <span class="return">return</span> <span class="var">output</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code6", 26);
+</script>
+
+                    <p>
+                        <ul>
+                            <li>10번째 줄: Hugging Face에서 pre-trained BERT를 불러올 모델의 종류(e.g. bert-base-uncased, bert-base-cased).</li>
+                            <li>11번째 줄: 감성 분류 label 개수. 본 코드에서는 부정, 중립, 긍정의 3개.</li>
+                            <li>14번째 줄: Hugging Face의 pre-trained BERT 불러오는 부분.</li>
+                            <li>15번째 줄: 감성 분류를 위한 fully-connected layer.</li>
+                            <li>16, 21번째 줄: Positional embedding을 위해 position 값을 1 x max_len &rarr; batch_size x max_len으로 변환.</li>
+                            <li>23 ~ 24번째 줄: 리뷰 데이터가 모델에 들어간 후, 감성 분류를 위해 fully-connected layer를 거치는 부분.</li>
+                        </ul>
+
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT Fine-tuning</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 pre-trained BERT를 fine-tuning하는 코드를 살펴보겠습니다.
+                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
+                        여기서는 무시해도 좋습니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/sentiment-classification-BERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code7">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BERT</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+
+<span class="return">for</span> <span class="var">i</span>, (<span class="var">x</span>, <span class="var">label</span>, <span class="var">attn_mask</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="str">'train'</span>]):
+    <span class="var">x</span>, <span class="var">label</span>, <span class="var">attn_mask</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">label</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">attn_mask</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+    <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>, <span class="var">attn_mask</span>)
+        <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>, <span class="var">label</span>)
+        <span class="var">loss</span>.backward()
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code7", 15);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, BERT 모델 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>모델 학습</b></span>
+                        <ul>
+                            <li>5 ~ 13번째 줄: Cross entropy loss를 이용하여 모델 학습하는 부분(label: 0, 1, 2).</li>
+                            <li>14 ~ 15번째 줄: Loss를 계산하고 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BERT 감성 분류 모델 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 train/validation set의 loss 및 accuracy history와 validation set의 최대의 accuracy일 때 모델의 선정해 test set의 accuracy 결과를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기에 더하여 accuracy보다 더 자세하게 test set의 각각의 label에 대해 precision, recall 등의 결과도 추가로 살펴보겠습니다.</span>
+                        마지막으로 test set 리뷰 샘플에 대해 긍정/중립/부정을 어떻게 예측하는지 ground truth label과 비교해보겠습니다.
+                        
+                        <br><br><span style="font-size: 20px;"><b>Train/validation Set Loss History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypA-IOv5TE2DpPgjX3RZuTdOGHW25hOjEZ6DARM0Ms8T6zf5GY2shMIky9skrh5GfwaGOXfyL8L7VZ91ZO3V3nPNjvm-3v27JNHv4fpoGVY51ye1_PEvcY-YNYFU-SdIcPMynQZZxxi3DItHioLoyQmxVmqn3-VR0PQNnxx2G0fRPnfJgYtQ2rhc1M6nfEfEatnN1gtiVSJMDOrzuQ6pGpJhV8acxfTtvvmDvdsq49aTOSylpurKb9WjzH2L0tfR_yVJeVC5O92q1XMNCzVQDqr_SaX7QiifgSPmMyWfoEJFK3FwIw6uEY34e0mIjiqgI1GR87bCOz2OUJA0M3-p7AdSKPEkk9ILotf-UEH1Zu955UIaS6OvnUCXsWyX34AED2YNk6mOeaSEzTHbztZZ5Z6yCOPiUgUm21EXiMco-rOU5GOa5nOlTwbFwGTra29hVJV3-bVD4T-KIGIN12wit6-Z-Qa1HhScxlCuNmDxP_Ap0TTdoeIKHPUpMZed8hGgJ2XR9M9iEmpqWYZ5G9KDWHkSqNH95c-qfPYo_t3JLI1YzPoRYMLeVYv8kIBkI-P46uWj2V8z0m278UPsnpSbI2YoPJJlAQenCHeyPoDlcFPem9ziLPsbzqRH8NJn0q5FgRxz22zjcqKWJjXJRN7Wtq6me1NV63Tl3mFPaK5ffrvrck4AngEHwlAexv6ISjccX6eUmGO04ryT-K4k5PrGb1VKBMzE2wFtc7bL9hOcsY0oUMq_Ug1p4vPAFbkFGijMvs5h8slNhfsoUz0mzzesZ-LyBXJfa3Sy2xsPqWFfsFGutONY_wNUVFz_YBsU94zCYXjAs5vWXtiY4RLe55bALlJoF2A-ZlOAXhT0wAeMD8O-aZPPcSHAt8MAu7TsReKFh6EKOgDAu_G7ScOSTq0ZZ_dDRNklKfhCD4Kl3sek2gZ28RQHl8PLr1pt-D4yU4CSr8_SUYK0SB6w_G5HXLaNfqQb7esUO8YbZkOPPbVJ0tedQSHzPljMo3EPsShmysHvvlYCRJpAtW0j3ZCkoUzYmsEfPbGo-Zp0dbL-fbm38HZrI1fOwOscvZ3XgtjhMCv4FKtDO5g6rDM5NvvWL-M1Re1kIkB7iUOQmWf1vjEMU0Q0kCmhgZaiQzkCMMlOy618d3fClsHIGdakNV-tdqSp996tiW6OZ5ikeRZgeOaiYd164lAKYOhZ5hAP_SFqNtzZWcvwGybY2bashb5eK0QjNMnRlbqTFGCgNCl0o-b6qbs9YCy68XD5HF8iIv1gEUmTz2MaJqrQkcNtdyRVnQelR5RQpCno-9t278LqfFOiwBGz9bAKPAugqFPY9iZ8GhX8SVSWGifKR-hR6YtS86_Kvc87g4nYhcJfiDmdqyv6h-cf3z3YkaxXtrvnrmN8Er46UorDjO6SMPRPIClso6pJ5mnZvAnd-linYATnhbGKnwQNwTdb25DZNsmZH0yRHAZdnUrNS_QirKnxWZPJuhU" style="width: 100%;">
+                        <p class="caption">Loss history</p>
+                    </div>
+                    
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Train/validation Set Accuracy History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBLgTrtQ4Zh0wUUuENSAIBCcB_w6sjuyXlXE8N7VBOTBsqmC7VDlYekZIGG8YIHMj1u5L6ER5xHfGSrJRL01HOxyQ1SPMrJx8th-bOicr--xXUwiYUbFWa8WCRMgfhxgCzpqtQmuv3jvePnX0SCwuZNjGXSE71qItqFxuqHiuSEn70yPxMaY3j0f-eybf00KRIbPotp8mWx8f5-lxsupln5tLIi99tw1hiAqIGzRQ97xjLz7dO4KdIcvR5aAMgMWBX89Nm4FGtEJbB6TpA5oXhL-Dxx2YMSvKd8OY3pyXWo8xbbatYfj0k_gRgMx7eNqqDOmHzM_4xnao67mfb7Qk92W8A86jITZYeMbf3AZcDl7rOt2-Hn3O5FF0nofC7gJQ4wkFfdTZJJECglV_44l2CFTAZHmJU8wQ-tbpSpOLWns48vgQwgcAwe6OySORt0SbB7GRsrZyPw9fAG7MRGtk7xS4eogSY2QCpy7mwJJNkeqyYhXv5ZtImB1HaKKfSX53cjiB2y8BF9aRBwjiW5xHz2KEjTyjcC5pgE1cUbFy4z2YvTMSOsRc3sKQ_AdZxZrKGgDrNJii_eJV3apUNTcbqxOF7j9wkWWWhZQLYPEZ9YkESVZOsGliCxMG_bUWeHVnn2oy7oPqKpqIpCoT17DB2av2HvmoBxcLNezN93dd73w29UNDhLqhn7eanw9NoQ6HiHwZxcz7_XanCyfh9vRt2IuDURpmrQ0xy11TttUSsO2QyA_oPI2Olpi3hi1ehUA_v9COEQeYjuXC-6Z8QRpTOZhjgGl8nNXsvz28bCd0Lo5wK3GnX_TgJnU9uxqt_Q9sn71buLBy4jyyi-k538Hr3LwFu6ePGnZ_5mvANZm7JoxNj6nVG2753eb2JUlk_MQIMnGqsjd9Dl4Am1t7dGyWDHXVkqsP9k6W445chyDJ-oOjlyVr9fEYIR15_LYYVitzc4ajGb9f2DigZzLoE0PWb1jTm0V7r11WAWdnbfovD7VCFPvpTQsBaA_mUKbYe8mqVRLLZ9uMwdtm5t7jBgetXEgsJxOndnS2LzP0Nz36M3k8Bd9Jr5l36NiMLgB081FX0CKPcMgKqF8THLza4OF8nAoCqCqhm3gbqA31ayO1KkmMDFo6EyqiG9TSALHyueri1agHbFfwqZ2ZSYQP6EQ5Zp8E4ihjuMHmxzckU7LIvgLoHozekfq888Q7mGL2wO2jUdkkYZcsozxUDSUPzNHgxS_Dy4sU00Pd3DcG_54_6e01bOkkb6Dk-NBuptsg28c75s1aT3jBI7x--30GJwEowkUrQbdROh_rO6xi3xLAlITFPFAyWDknu844oFgJBR5Pb1zu-z6NAAsNwdmbIB2BBN_PEBeWU_RM3h4P7edtMjKd566mkrc3jkQnTSH7q5nAI8sEtqDVIJgNlGTJ2Nl4uxcF7AVhfbQsX7-itE29b7RnxCQSKNYjUkH4dtFX_0w8haN6bdA_nby_kpE3E" style="width: 100%;">
+                        <p class="caption">Accuracy history</p>
+                    </div>
+                    <p>
+                        <br>Validation set accuracy가 가장 높았던 11 epoch 모델을 test set에 적용한 결과
+                        <ul>
+                            <li>Test set accuracy: 0.86</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>Test Set Result Statistics</b></span>
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+                  precision    recall  f1-score   support
+
+        negative       0.84      0.92      0.88       514
+        mediocre       0.84      0.77      0.81       529
+        positive       0.91      0.90      0.90       533
+
+        accuracy                           0.86      1576
+       macro avg       0.86      0.86      0.86      1576
+    weighted avg       0.86      0.86      0.86      1576
+</pre>
+</div>
+</div>
+</pre>              
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAQIjRNtChxehjkIoaiQIKJn6aG6FFElpEV5Pnxp4QWJl-2AUGY-zAVoAVJzdWV1t7WFpUQowRRqyMH0KiHXMfFP9K4-j_VOYCKzNcdlFQfjd5nybYM-E4yyhbIQPoMeg1ddbmg7Cdpk8dna2gXq_OUbiZpM9SeTG081NPUBjaVO03hP5oldDFtGzQ6key384nGef0Y9DwCuOeDRrVRu9x8p00e7AA1CleS_TYq5qxWOwGMJaOXYh00j5z_yXOfmBxoDdewbPDjKI8Gzh7RcaZkeknvr7_qpvp3iOiX6FGnNa72OuQOYbiFJR1Sxqs_2A7xZEx2Zze-IBWPY0lcTGWBQ-ciWYT0S2wYj0wg_qCZyoMb01HTdoV2Z3SM3V7KnAcNYbm-0OyeI5oxXHXXx5jp_Uu89AslXIuKb4rGw4tlcDHQSmnZSVA8YhxkPxvBhJqdXxkE8z9YFYgNkixOrickxOLgYGrdJNleqksViF6pJo165PAkMnoL13qf_9rUKihfANagRBmyzzWG73-sOS3Kd0IbF-U3ifbSfAJQFajEenaaJFoQUYYAFRiu2bOmElykYtDwdtrzcnzBJqCrCeErcZMEAKjrY1meVhbIu05FW54k3aG9xp_vmiwDCCYQe0WOGynjELXOnPn-n0HBN9kGSAR0O2kiwINOpU93f4MNIJO5eIkF93TeIwQ6HYCoPpcZmxEektJa9xYv89KWEW_FqdkxSOlZ2ZvUc5PBMVAtm5lD59lZA4HOJZOPJv51zZ203EATFqjAoFxMJ4RBkOXICKzsLk7ei0vY1_zDzSFzSyxtOtXBV2xjrTUL2XPbba7J1wnsVK1NHN5ZMp5CecowDO0ya9iDlmYVT-TxYZgh8DAp0dPgpA-qJd6fGrEZpOfbdVLesXaW2b_-YZr6OTHO72SWzpP5W-L1K3kWebjbBrP92xFIlV1ubqRw4BA0A-ZDov9uZw-mNciaSBSoKHxndzbjyHlH7kEK281BjzpNRiobAxyY5ugC4wkuhRomTH8xrkCLCgjkxHNR14HXMNUdy63AqH5WlSPqDp9q8V2J8jFEUo6tJPMoPFhL4tnFdr0sP7V42280ZjVoAZDWAFwDmW5K46MbYt7j_nAIboUySxgJO5buCPlMtz3PQbbjg64dec-mpCiF6rx3hw6lZNnRf60y9dEvz9aifETQdVE7RMTLFzc3iS01W9Rp-Op_TCqb4VVc1dyadSQkCjWj6KmwDtlFLQUloiiDt6YWjUvxf84zsh9RHXJO58dxiLww-O1Lj1cGcbV1vswQVQAeQczi6n0UV1JDVdYVAsnNgdbfGx0iL4c_vNFILVTL8wBDbe4qjrMCRSQVg957KBayIUx4nUxqRoXsy7ILXt12r9fSv5Kvnu1w0mAx4frVg-jDGuw2uPjRYq3ihWMUCxh6eSnzkFGuK7E-PorFpErNkpnuCjZCDDAXwL-V-QB8wmxAAY78pYsk8OrbPKzxBBg" style="width: 100%;">
+                        <p class="caption">Test set 통계 시각화 결과</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Test Set 감성 분류 결과 샘플</b></span>
+                    </p>
+
+
+
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"># Sample 1</span>
+review: [CLS] i had paid once for this app and had login to it. now i have another mobile and want to use my acount on this device, but this app asket to pay first before login. should i pay each time i change my device? [SEP]
+gt    : negative
+pred  : negative
+
+
+<span class="annot"># Sample 2</span>
+review: [CLS] i got this app to track my medication and it's perfect! i can set up how i want to take each medicine ( yes / no or quantity ), see the start date and adherence in the summary view, and even track side effects and effectiveness each day then see them in a chronological list in the sunmary. and the best part is that it's not tied to some medical database! added bonus : i can track real to - dos as well. overall, love this app! [SEP]
+gt    : positive
+pred  : positive
+
+
+<span class="annot"># Sample 3</span>
+review: [CLS] great app [SEP]
+gt    : positive
+pred  : positive
+</pre>
+</div>
+</div>
+</pre>
+                
+
+                   
+                    
+                    
+                                       
+                    <p>
+                        <br><br><br>지금까지 Hugging Face API를 통해 pre-treined BERT를 불러와서 Google Play Store Apps 리뷰 감성 데이터를 바탕으로 fine-tuning하여 감성 분류 모델을 학습해보았습니다.
+                        학습 과정에 대한 전체 코드와 학습에 필요한 데이터는 <a href="https://github.com/ljm565/sentiment-classification-BERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        <br><br>다음에는 BERT 뿐 아니라 transformer 기반의 다른 언어 모델을 소개하겠습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#BERT&emsp;#감성분류&emsp;#HuggingFace&emsp;#fine-tuning
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('bert2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>WikiSplit을 이용한 BERT Pre-training</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('BERT 마지막 게시물 입니다.\n\nThis is the last post of BERT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
