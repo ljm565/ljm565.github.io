@@ -627,7 +627,7 @@ lineMaking("code6", 29);
 <pre>
 <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">Transformer</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var"><span class="var">tokenizer</span>s</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var"><span class="var">trg</span>_<span class="var">tokenizer</span></span>.<span class="var">pad_token_id</span>)
-<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
 <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
 
