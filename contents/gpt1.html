@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GPT-1, GPT-2, GPT-3</title>
+        <meta name="description" content="디코더 기반의 GPT 모델을 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/gpt1.html" />
+        <meta property="og:title" content="GPT-1, GPT-2, GPT-3" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="디코더 기반의 GPT 모델을 소개합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypDPYGG1B5ehRfT7E_OLALD9Hk8QzdGA8j-Lrl4GQDIv3xpDTPMQRwklk7cEW9-GqSz02SuqrqN62_RUIfyHUmMZVulHD-4P-G3jp_hqMZjEZOT_xJaduGBiZok4M_ugJ7L1n0fhe3e9tgXFkmUGC0xNzn9C7uA1Njt9kE8Du9Kk40y4yv6ndAVeiwacyylJcGk9T914B3XL9kfCojNl66031htmHk8q1MQ04rImZ_HVICjo1BTjI3rsK0U_XhAEUK54VdDfTLwozJQBaDsZcLgS4rPsJ8TY5TNROMOO3_tZTPZZ87mTNfU4Yh52jQI0lNcFNsJesC3FjvVlImBF23aKl8WHhpLa0EgyEBYjiWVF_5lLp5prHxjBSadAEe19AhHkEqNaX2D4qPV6ye0mFczdcBHWOH0fMiXD2IR6flPN7QCMdd4GqRw3OCjQVe3-xPGoa3nJBKu8kaf9C2c4WB3I9k2s8ymhnPH6WUN3A75vYRUQZvqTs24cI2ksA8aLBF9qcT9K9JW4h8Lcs-6JQGDYY8cx-DFE-nNQ_i9Wia6vOovXa9jFxF6o_Vfo2rdn4hSZv2ZMlu4X5-d_GFwitV_sl99uL64LM4LW3vK9oL-GpYwb6HDqmZX3Zob-FZjzRqxY619rvcZNBs4WGIsSIuFAZgZYtL9RFa8lm4yxTO5E5zMnI0t_dVhxrQQEnTDOlk1ckW9pxZOWYCCm7lwoMsA_RutBAPhLFYyQ0aGFVfhtfAkxe9Bkhr7g_enplMcopgi7liZkh4494SiL42kPKd94r7wggvlchcFIaOakHNZGU1ACJONKKJHtgDj7dLxhcy41BQoJ2xS6bEVS_8c6iLQ7Q16w5qVkWK42gGsKEBNFrs4lwBTQSAmzo2152T0CAwn7jt7L55iCjajPAO6QzJ80g_1HEIz5i93VqYD_ZkSP0a-wPplUiOQUfLbJyxwmBhWeEG6jfxHgxAfogzoZOxJdJASJMIWgb5pZdYf0dy5oJOTzAbSASXk59xr1TdrKjyH32JpDNk-WOh98BhPCrYsrNQWJlqay8ZjaHqmCohehybUVrmRQU-R6g8kRI1-Fhr20DlLtq9DVMqOOquYqEfUUruMDarxnQJBmttO4gWu2AqCkVeELNaHy1pdThMgp0RjMEEl-rYxoTyJ6Z8bbPaFG8m3o1i_m5EnhuaijZgIioRDZ1384B3zHR6xzCN10WL3sWa0XByMXmvT7r8sbnZm-beT-ysa_E6WgezxQIIQbTYxZDOJacwCNjQH_FhadKTaNTLfzPEYvzi8odyQkSJybzzbYw7Ra7lWS_nmCv7c7LShuSb8P2C6VwUGTd_sfwtH6V3WUsV-RmKR0wA6I9UqWT1_v6_xRKa76ZAMPwRI_GXtOBN7n2NbK5V0DOY6CQvoTTPGLRZAXnMnSaHrcBOLtflWTElUlIAlMwnw95TwxYnQ_FijnkFOJUpItZdfuhTVq45wdj7KuYOijtXk" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Generative Pre-Training Transformer (GPT) / 1. GPT-1, GPT-2, GPT-3</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypDPYGG1B5ehRfT7E_OLALD9Hk8QzdGA8j-Lrl4GQDIv3xpDTPMQRwklk7cEW9-GqSz02SuqrqN62_RUIfyHUmMZVulHD-4P-G3jp_hqMZjEZOT_xJaduGBiZok4M_ugJ7L1n0fhe3e9tgXFkmUGC0xNzn9C7uA1Njt9kE8Du9Kk40y4yv6ndAVeiwacyylJcGk9T914B3XL9kfCojNl66031htmHk8q1MQ04rImZ_HVICjo1BTjI3rsK0U_XhAEUK54VdDfTLwozJQBaDsZcLgS4rPsJ8TY5TNROMOO3_tZTPZZ87mTNfU4Yh52jQI0lNcFNsJesC3FjvVlImBF23aKl8WHhpLa0EgyEBYjiWVF_5lLp5prHxjBSadAEe19AhHkEqNaX2D4qPV6ye0mFczdcBHWOH0fMiXD2IR6flPN7QCMdd4GqRw3OCjQVe3-xPGoa3nJBKu8kaf9C2c4WB3I9k2s8ymhnPH6WUN3A75vYRUQZvqTs24cI2ksA8aLBF9qcT9K9JW4h8Lcs-6JQGDYY8cx-DFE-nNQ_i9Wia6vOovXa9jFxF6o_Vfo2rdn4hSZv2ZMlu4X5-d_GFwitV_sl99uL64LM4LW3vK9oL-GpYwb6HDqmZX3Zob-FZjzRqxY619rvcZNBs4WGIsSIuFAZgZYtL9RFa8lm4yxTO5E5zMnI0t_dVhxrQQEnTDOlk1ckW9pxZOWYCCm7lwoMsA_RutBAPhLFYyQ0aGFVfhtfAkxe9Bkhr7g_enplMcopgi7liZkh4494SiL42kPKd94r7wggvlchcFIaOakHNZGU1ACJONKKJHtgDj7dLxhcy41BQoJ2xS6bEVS_8c6iLQ7Q16w5qVkWK42gGsKEBNFrs4lwBTQSAmzo2152T0CAwn7jt7L55iCjajPAO6QzJ80g_1HEIz5i93VqYD_ZkSP0a-wPplUiOQUfLbJyxwmBhWeEG6jfxHgxAfogzoZOxJdJASJMIWgb5pZdYf0dy5oJOTzAbSASXk59xr1TdrKjyH32JpDNk-WOh98BhPCrYsrNQWJlqay8ZjaHqmCohehybUVrmRQU-R6g8kRI1-Fhr20DlLtq9DVMqOOquYqEfUUruMDarxnQJBmttO4gWu2AqCkVeELNaHy1pdThMgp0RjMEEl-rYxoTyJ6Z8bbPaFG8m3o1i_m5EnhuaijZgIioRDZ1384B3zHR6xzCN10WL3sWa0XByMXmvT7r8sbnZm-beT-ysa_E6WgezxQIIQbTYxZDOJacwCNjQH_FhadKTaNTLfzPEYvzi8odyQkSJybzzbYw7Ra7lWS_nmCv7c7LShuSb8P2C6VwUGTd_sfwtH6V3WUsV-RmKR0wA6I9UqWT1_v6_xRKa76ZAMPwRI_GXtOBN7n2NbK5V0DOY6CQvoTTPGLRZAXnMnSaHrcBOLtflWTElUlIAlMwnw95TwxYnQ_FijnkFOJUpItZdfuhTVq45wdj7KuYOijtXk);">
+                    <div>
+                        <span class="mainTitle">GPT-1, GPT-2, GPT-3</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.01.07</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 모델은 바로 OpenAI의 Generative Pre-Training Transformer (GPT) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이름에서부터 알 수 있듯이 이 모델은 transformer의 decoder를 기반으로 하는 모델입니다.</span>
+                        그중에서 GPT-1, GPT-2, GPT-3을 소개하겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">GPT 모델 또한 강력한 언어 모델 중 하나이며, 현재는 ChatGPT 까지 엄청난 성능을 보여주고 있습니다.</span>
+                        GPT도 많은 종류가 있는데 그중 GPT-1, GPT-2, GPT-3를 소개할 예정입니다.
+                        
+                        <br><br>사실 GPT-3부터는 모델이 엄청 커서 일반적인 상황에서 사용하는 데 어려움이 있습니다.
+                        그리고 최근에 등장한 ChatGPT 또한 GPT-3.5를 기반으로 하는데 이 모델도 일반적인 상황에서 사용하기 어려울뿐더러 fine-tuning 하기에도 벅찬 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위의 모델은 공개 되지도 않아서 우리가 불러와서 사용하기도 불가능하지만 GPT-1,2는 비교적 모델이 가볍고 Hugging Face의 API에서도 불러와 사용가능한 모델입니다. </span>
+
+                        <br><br>아래는 GPT 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GPT-1 논문</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GPT-2 논문</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2005.14165.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GPT-3 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>GPT-1</li>   
+                            <ul>
+                                <li>등장 배경</li>
+                                <li>장점</li>
+                                <li>모델 구조</li>
+                                <li>Pre-training</li>
+                                <li>여러 Task 결과</li>
+                            </ul> 
+                            <li>GPT-2</li>   
+                            <ul>
+                                <li>등장 배경</li>
+                                <li>장점</li>
+                                <li>모델 구조</li>
+                                <li>Pre-training</li>
+                                <li>여러 Task 결과</li>
+                            </ul>             
+                            <li>GPT-3</li>   
+                            <ul>
+                                <li>등장 배경</li>
+                                <li>모델 구조</li>
+                                <li>Pre-training 및 모델 평가 방법</li>
+                                <li>여러 Task 결과</li>
+                                <li>한계</li>
+                            </ul>             
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">GPT</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>GPT-1</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        GPT-1은 BERT가 나오기 전에 OpenAI의 기술 리포트에서 처음 공개되었습니다(BERT 설명은 <a onclick="pjaxPage('bert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고).
+                        GPT-1은 transformer decoder의 encoder-decoder attention을 제외한 모델입니다(transformer 설명은 <a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고).
+                        그럼 먼저 GPT-1이 나오게 된 간단한 등장 배경을 살펴보겠습니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>등장 배경</b></span>
+                        <br>먼저 텍스트는 인터넷상에 많은 데이터가 있습니다. 하지만 그중에서 특정 학습을 위해 label이 된 데이터는 많지 않습니다.
+                        즉 label이 되지 않은 데이터는 많은데 label 된 데이터가 적다는 사실에서 시작합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이에 따라 GPT-1의 목표는 label이 없는 텍스트를 이용하여 unsupervised pre-training을 한 후, label 된 텍스트 데이터를 통해 목적에 맞게 fine-tuning 할 수 있는 모델이 되자는 것입니다.</span>
+                        
+                        <br><br><br><span style="font-size: 20px;"><b>장점</b></span>
+                        <br>위에서 설명한 방식을 사용함으로써 GPT-1의 장점이 하나 더 등장하게 되는데, <span class="highlight" style="color: rgb(0, 3, 206);">GPT-1의 모델은 특정 task를 위한 모델 구조를 가지는 것이 아니라, pre-trained 된 모델의 가장 끝에 하나의 linear layer만 붙여놓고 여러 목적에 맞는 task fine-tuning이 가능하다는 것입니다.</span>
+                        지금에야 pre-trained 모델을 가져와서 fine-tuning하는 방식을 많이 사용하지만, 이때는 아주 획기적인 아이디어였습니다.
+                        Pre-trained 모델에 linear layer만 하나만 붙여서 fine-tuning 하는 대신에, 여러 task를 위해서 각각의 목적에 맞게만 input을 변화시켜 사용할 수 있다는 장점인 것이지요.
+                        그 여러가지 사용 예시가 아래 그림과 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDPYGG1B5ehRfT7E_OLALD9Hk8QzdGA8j-Lrl4GQDIv3xpDTPMQRwklk7cEW9-GqSz02SuqrqN62_RUIfyHUmMZVulHD-4P-G3jp_hqMZjEZOT_xJaduGBiZok4M_ugJ7L1n0fhe3e9tgXFkmUGC0xNzn9C7uA1Njt9kE8Du9Kk40y4yv6ndAVeiwacyylJcGk9T914B3XL9kfCojNl66031htmHk8q1MQ04rImZ_HVICjo1BTjI3rsK0U_XhAEUK54VdDfTLwozJQBaDsZcLgS4rPsJ8TY5TNROMOO3_tZTPZZ87mTNfU4Yh52jQI0lNcFNsJesC3FjvVlImBF23aKl8WHhpLa0EgyEBYjiWVF_5lLp5prHxjBSadAEe19AhHkEqNaX2D4qPV6ye0mFczdcBHWOH0fMiXD2IR6flPN7QCMdd4GqRw3OCjQVe3-xPGoa3nJBKu8kaf9C2c4WB3I9k2s8ymhnPH6WUN3A75vYRUQZvqTs24cI2ksA8aLBF9qcT9K9JW4h8Lcs-6JQGDYY8cx-DFE-nNQ_i9Wia6vOovXa9jFxF6o_Vfo2rdn4hSZv2ZMlu4X5-d_GFwitV_sl99uL64LM4LW3vK9oL-GpYwb6HDqmZX3Zob-FZjzRqxY619rvcZNBs4WGIsSIuFAZgZYtL9RFa8lm4yxTO5E5zMnI0t_dVhxrQQEnTDOlk1ckW9pxZOWYCCm7lwoMsA_RutBAPhLFYyQ0aGFVfhtfAkxe9Bkhr7g_enplMcopgi7liZkh4494SiL42kPKd94r7wggvlchcFIaOakHNZGU1ACJONKKJHtgDj7dLxhcy41BQoJ2xS6bEVS_8c6iLQ7Q16w5qVkWK42gGsKEBNFrs4lwBTQSAmzo2152T0CAwn7jt7L55iCjajPAO6QzJ80g_1HEIz5i93VqYD_ZkSP0a-wPplUiOQUfLbJyxwmBhWeEG6jfxHgxAfogzoZOxJdJASJMIWgb5pZdYf0dy5oJOTzAbSASXk59xr1TdrKjyH32JpDNk-WOh98BhPCrYsrNQWJlqay8ZjaHqmCohehybUVrmRQU-R6g8kRI1-Fhr20DlLtq9DVMqOOquYqEfUUruMDarxnQJBmttO4gWu2AqCkVeELNaHy1pdThMgp0RjMEEl-rYxoTyJ6Z8bbPaFG8m3o1i_m5EnhuaijZgIioRDZ1384B3zHR6xzCN10WL3sWa0XByMXmvT7r8sbnZm-beT-ysa_E6WgezxQIIQbTYxZDOJacwCNjQH_FhadKTaNTLfzPEYvzi8odyQkSJybzzbYw7Ra7lWS_nmCv7c7LShuSb8P2C6VwUGTd_sfwtH6V3WUsV-RmKR0wA6I9UqWT1_v6_xRKa76ZAMPwRI_GXtOBN7n2NbK5V0DOY6CQvoTTPGLRZAXnMnSaHrcBOLtflWTElUlIAlMwnw95TwxYnQ_FijnkFOJUpItZdfuhTVq45wdj7KuYOijtXk" style="width: 100%;">
+                        <p class="caption">GPT-1 구조 및 여러 task 적용 방법, 출처: GPT-1 논문</p>
+                    </div>
+                    
+                    <p>
+                        <br>위 그림을 보게 되면 classification은 단순히 하나의 문장을 넣고, entailment같은 경우 두 문장을 이어붙여 넣습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 단순히 linear layer 하나만을 사용하는데, 이렇게 input만 바꾸고 fine-tuning 하자는 것이 바로 GPT-1의 주장입니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>모델 구조</b></span>
+                        <br>이제 GPT-1은 어떠한 구조를 가지는지 살펴보면, GPT-1은 단순히 transformer decoder 구조를 사용합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 encoder가 없기 때문에 causal mask가 적용된 decoder self attention만 존재하고 encoder-decoder attention은 없는게 특징입니다.</span>
+                        아래 그림을 보면 transformer decoder의 encoder-decoder attention이 없는 것을 확인할 수 있죠.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBi9VAN32iaHDmE-alEP4Ve_PhUwF64ZNS49WBw5470qW2fsHfG6IHMN6WSf2cwN6UWGitP3axYATGAshiO0n4eXGyljWi-K3u2hU6vUYlWBHOBXfyt7lkhY8bsm-6lKwAXeQR1eGQbSpGPcS8hv8MhHpIrbUPot0p-Ftdo0DAOOD9m1rhAYpgpO5TJ_nt0OgKP1Fd5XI7oB8ILNKanYhfMRPgYjfc3ljuHLimeGCDeO2LGAYLC9b0jBEME8KsuulDLA-Vck12pPfMTHRtJ0zzMJeAlovNAVzLs__16nKQQjp8Li0idYF-qmneKjjjzIm1973RhEo76eQNGkCLR7t9S15p3MhcZHirnY8TFFYZ6E0qXbeCmFo0hvbm57IrsHgZJB0GWrhXZYdPTe8Z7prb3fA4HXfsDXvHNmNqom6U6VALqH_82TMIqT84VrUqbu27awH6HOqkgcx8g192LRRtytjYJ7R3lzDIwJpHX03XhE1ULp4zt_JQQr0DRhO834A5VcLKUFE8npp3ziVyv-vNtNW_zy1yrjR6dTGSTYxU3MpZurgWPBtjtcJrU2e0kmn9gwTEDPT15vucr0TW5mWxuZ-EITM05iMNuWvAsOfbhVx7ByPIaUv82oKgrSIHwmmE3vBiKSIeSs811o1VjBWNuigdTRZl6axiHJbvHKYoDKNDVhofPP1oqLQE0G42uBBKhsBIR-5NCWaMaaM4A9xGJosLgNq6vZG1GDd2GYs4-q0t2GThpK74-b9whuLEiKtq9S-P8_y-hODYs1CIKOBBXtHC3DP134GeMddUf3W3b888y_NRnLHsAI1oS7GyctFKCCgh1J4um_Cwr4Vd1JKEOETjSe1Xo9gXl6Q2fH8IhtpJ3fzkqqQQqD49QNmuwh36RB8LJ8CZCZj3jjd5Pte2RxmqcAgVWdmQhI2L1mTw9wpQ-SOGKX6OF5PRgVQe9856H30i3bjAbEagMNnnIPgeRAfotWJHeUcMeQu9HadXeyMXCwwJOwOrsFHIXBvfA4d6pHZo2ztl0wzm02Tb40-9Cdui6xbgft9N6qjSM_c7miiTjC_1mk7w4S9pRLB9vtgyFy4Mg6f9nV0cNTa4h5UYZMoxpb6eucIg1MhWaDcpWcFaVNVgcR1G_jep6te1WBAcX7wIB2Qg1QpGm2YMgC0SAEPmpF3DXY2iVYz_pqSwO3dCJDySqwqsTd8U8GbcveVN67xn_jNU43kpU6FmbggsAvc0mEFbFErMVSuNTJAPs1ynas0jI55JM96K5OqQQDyB8HbG1QHTZ4cEXsKAU2SFtG4OkunUKYhEzoiBV-wL4qhDv0pF7L-661lPdEFiLX5alJ1OXva5zDVfGyvM8knvjyi95izQ4HWgb09cd2cJk-RwluQWW1EYJOAq8aQLMTFceSpEdn2cJFQVESvmuLPk005sz4WShmk_ZRV9LJZd0-I6Y15vB_keoBeyGquUyBR7ZwOkhGra8cIfN5IU" style="width: 100%;">
+                        <p class="caption">Transformer decoder 와 GPT-1 구조</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Pre-training</b></span>
+                        <br>이때까지 GPT-1의 목표는 pre-training이 잘 이루어진 모델을 바탕으로 fine-tuning 하는 것이라고 이야기 했습니다.
+                        그렇다면 어떠한 pre-training 방법을 사용할까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">바로 우리가 잘 아는 일반적인 언어 모델을 학습하는 방법인 autoregressive한 방법을 사용합니다.</span>
+                        즉 다음 토큰을 잘 예측하도록 cross-entropy loss를 사용하여 학습을 하는 것입니다.
+                        이 방법은 번역, 캡셔닝 등 decoder가 있는 모델에서 흔히 사용하는 방법이라 잘 아실 것이라 생각합니다.
+                        이러한 방식으로 7,000개의 책 데이터, 1B Word Benchmark 데이터로 학습을 진행 했습니다.
+
+                        <br><br><br><span style="font-size: 20px;"><b>여러 Task 결과</b></span>
+                        <br>GPT-1은 이러한 방식으로 pre-training을 한 후, fine-tuning으로 다양한 task에서 state-of-the-art (SOTA)를 달성합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypAOKAQMLw7U7P0yUMq6RZ7mI9VxVa6NBETwW2JgsOS0jOLNX5hY31KURk4YXgAD-ngWr_HLdMWSwOgphTmsWroXNoXk_wo1KECI23xWZQoH8v9Zn9mG7XkvScUm-PdJ0tpo8TZ1dtsIhB9JdjxJ_IljCdGgYX707qN5ZsSlW7dPZW-Din7ZD5lrxfeCMfDACGxTnCPVh7D-65qqpPfkqX0zHKRcbv4bR10plf0fpGaCUD6xxiXkEhVtZNM0JuYTOi4tkOt7ub3_ug0gMpIQTivis1dDzHsT5tgm9DS1SGL7SM28WDheqv7g_HE_xR7slLPCHy8iHLezGcEQCiBuG37piZYwbQ8nrN1J402GO7XY8lfJzEiY_fZYg5JuvmQFaYH3RHdxD_CGViBMIORuBLmeQte2tHn8I3qDG6smyOPICsTBq8m-e1kvDNuWaxwMgMP-OUUCUNGstE72IOGVVGUI1UX0bhksRkLL4cMX3F-7RYH2d9cdvOj1iXNEIqXVlmyklj9kU7qbdv1xq6l0TgUm3JFhg93rtvD4t7SwHMw9ojUWOUBVAeCoaU_mmx5asUMIuIbH5wTcrg0uir4byQ7xhcqKgrGgwqUj3YftyyDciZ1YOypCtR9ICHwAeoFcIti3j6cSAazVXZZWBvCnG8KAV2CQN_qC80ApMsYYcypNVB8MOP8ViU7b9bsXNj3X0ixt8IvtrCUtxPmKv82MsWox17wZCZIM13brTAuZVTGdOgK8H7Jis0eFuwg-1zMIx1VxN797kuXd6cicefZt0a9SB1irFl2vEHJ9W_yFrLqipTXBHxeHQlat1MGh8iblP1-sFX2kbCSYAu9j4QhZ61K7Oh30lxZAJDftDeUMU-L88vu6tMlmXJY7H8hzDWPrXTytcvDMfiQSvc7_spC-6IYcrQOM2lh_iRf-96YSqPCrqYMcPLTOEySb1zVTFGkApTPYUK78hQY-whIOSMJP7hdjuplGV8ofj9X3t_sERMPD9udY_QZMb4mQ2uEhVRb3UE-QXAvivECGJgApJzZOOkHA5SDUt8_giVNHXoJHoBVJ2E-A7Nx_704tzRPN_Y3aLug9jdAiqLzHzAMAmIPHaceR_NWVejMNZ27TXRzITlDUXWlot17GqE0VmcwSXOaILqDltwXREG4It-FGZg1h6VVK6pXia078yRDag4_s7YWiNBZm7OXVJWtlKSFG2M5tzMjHvyxp5Krhzrk18BGykhEu7s0lCws-wFfnj2l_Kwd2ZnqOTejtFQ3Joo4oU6lMeaE20GJUnTVh181j1Xu0wMcPj1JnyIYUyekAa4ihW4Od9vJ_Me6G1ovvXvru65zDxmCFVl-bDXxsz2kBpwf4XXJuNnhmAxJT0BO2B-h8Ve1WZHAjogWHMHtai5VTjtfsIQlx2pnGj1CD4Xt9YG4vJZDUXKeWBYuI93HKwQksaQ60fa_8OBeyb7Hxqfvp7PjxUxqufBgNDgh5_rFtKBg" style="width: 100%;">
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBK1Sx96tLsobLwYapwOSAifnB8fWe8qcgjYsHtPolvdh0stGEuVMpAIcpKq7YoQlaT2b7yaLZ5i2CcJJBD0wLw-k5yKAXfXJRxG_pQijf2Qw8S5ZfHXtQZGyTdvdf0AxyDVhYI6iONyuNzHGsVMGY_KxEzYrPGxhToqAvwkThljTt0hbh-HaXgrFz9jTYIBGMG70lsVc7BnkWfUpe7B1l5Va9zzk0Ii0wxZBhpkBDMsxIBM_ILv26evLMZ6BAavx2sor1574mEgBHSld9xSWlWyReX896gSgl-Zp9xOG4xCfyXHhO472MBF1tda6PJ0u6xnEm9Hfpw61EQ2SfCNlP_fJ8G4mZ4J83x_u65EWuy2p22TJBs3C7LxptQlF53CzTDCO0P-MOcXP3cmvki7h-THTVXhm2wTIbjU0rOn0XvTDUP4ddFILHolYYvsOTUf0Gqf9Qw2rpXtCh556fzmk52Cz1InYoJ1K-49E1Zju9GjSAEKan8Jz84UUxZtGjavB4Tza_XpSvDIuvsqZRZ1B6N3Hz7Ib27VxFPnBT83xFGsUL-JOrxY7DfBVlkMptI6rqTQinJL9K68h2om7TLudTcEuoEBi0DwZwLwabgP00qXKV2erpABupYrfjsMo-iPbV_BjeOnubFo_29pEg09JEEEgGs5xCKdei9d5w--wgiQavirDG3J-UHY2QBrkVg7VKwTss-aD0AnLhtS7QrX0axJ6JfCunXM-3J6PnpVMDCo_OTUC1V58iJ_LlLMg2QQNZ82jO4DCOtPgguZbHBToLhPAgOlRzDbAxhv2BylFb8HiCSTi3WZxvBoDjeYnpqovqKrwTlzz3Y3MX1wtvi19FIhikzLMzl8yNw2iDWtFdWVB93dGpcOZ_-OqoFv785NHoNAkZRjGY3Wp0hmCPNoRgLwuTfeOX-fsNOpE2E1aqomBGE6FdQ2fp89vlkcTU5KbdFQoedVafZ7qkrX3oyVYj_o_ksBHxv0kQqvn1d5FyAiUPdQF_HeMvGlsvm_UlNhGPZydGNu1Teu6A1vpqzKgTlXQwb1o1pouUy-L1PKBIEIbbuZHGrjNvu4_V4CkZqYPK2qDQyK3ulaVzFLAlZN2hFjXMkylGSK6v0jGRaSer1JQAyzy4_OjMOO8u6Iin5GL4Z3Qv8kU8S9BCB4N_j1vK3be2-URU6YPMu8evYIO5pZ0Hb6NrLHLyLMUdoIcbDlmuJD-v7D46TEHmEUopI-ic0RngByahbwixDjH9o2ALkMaPwUj249xvPSZ-sabsNd2XtKcP7b1v6ZxbIEa-jCGlX-E-iBI5w7V-FGfWNE5TFOW0p1ZgRvd7D-nIBZd1iGDwfn85cveB71P2xauAioF4Uw6GfbRChJYiHnozVHvCpl67cxH9iE8SvKWp6unC0R62CXggzFe8j_pXaSxjaqpmcxiWP4AyRncoYQ0wv1nkanUxb4ZdiRxoBgBlTm8zkQzv6ZrxGU90OIPiJdoM" style="width: 100%;">
+                    </div>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBakfNdYZyw5BL-rnJdRe9m1QQkatsN853XeyhjzRNUHvAdO8jxR47qkgrfZvnZKPqrxyB8ItYwxBgdg49BN4X8bqXz4bKqFZMdrDyRBtfJo4vk9gfWCQywi7ECgueMG9Z015mtDVvKsdsQ6TtNlxf8zir7wg8df2vR_zBZ21NVeMeX2qosSerob4BTxEJ3aAq6y6LaMdx1ORFq6zDwspGLZpvXcs2xpfMR2Ej8s_TQYAb7JCIgoAJrRO1XafluL75LzG8R1qjGxbiK5LLPAnD2OdjbCsK9xuKqxJFT7tC6fFKRNZgCGNQCfI-ipHZxf0iD0dYX61xMMik35O5mfotbEPW0RDmaPCN-BBPt_H49j1hpTsv5mnxefEM_aboVn-XcFW0_e08oJ8UCjsKsG9Kyf9TdJfn65IdeRE25RdZrZKbdAHXe8VUtnriKEh0_M4VoTNwoLUGy_UgQdEKyalAJkC0vl0gIyPClFwF97msrjQAVKTe_BlGK-3ueU-vMQxwJ7pbDTlu8EkLdeRvwAEY6TS115fWwVIwGISpD5kBlMekdrHLovzF27henlgkDorGcNAyWxg2h1iNW6auc08BNutlHdK9Hh3YCwLFpNo2G21b7WwFI6O3yIHWxJaoE_yGTP9eQWplRN_tva79IGOc5jZOoPDDPp6GhAAU2uIbRsn0o7b-drgoxlVssaeINyCNVSpH4w4blP9vkk5Gn5SoVar0V35MZEAkMZ8oJeMZIj98FABu-l7HHFM1g8MPdUVXUQP_TZgstx2794kApL6wqBzXOE3WdBUiO0jqDG0M6t_XDsYNQy0248cKbTgNkO7iW56Mj_-HZFPh9GyippJbZznPxekU6-evKiQETLsolfA0ngNfb0AQlTaNOCx2S-a-qdRUJtsfu8vwHfhVd4wCLz92svONZNyjwVuG-eSVXe1RnL583D2sJaWvXboREBt6-vBHwesSLAoWpjgZnCy7kuXizxSES0aN-rM1Ofb8v3ZT6PDaXJbS2DJbO07_UhV5ZghbG8OQmnVHVxVUH0v2JCj1xmQLPyldlk9i2YgJzJ8_jPqYz31u0oqG3cG9RlfkT5w69ppuBwckkilxjUthigEXsWaGcAJikg5XLL_2n88flbxa-n1bjDQsVTc02wRJpL6zYm5cZaBzJMq0XpYnSyeebRLNr4UKbNZD7zqaRRNQsMbwB7foyRnOAyXqtTWYfkVxg8n0LpBWvz_PTiDUI9VYA_kF78mD5vlE_p9rwZZVDPCRQqMdMRsQZIK_l7RdsjA4H65IkHtgdH_-4uL4oamNJr-tnqywgz1Htk8weaZ24ZJzD861JOSWHwW_S_uDeLZ3q3MJAMHRu551hf1C2uouIv18IU1ZWz4w5hCtUlLzY7Sn-_3Ccsms_2IR1hMcczD9Qk6P7X2_sEWYInFmS2bFbXLy1reo8KcewweuPUf3j2Y1e5qpOAUm36O2I92npuqiyKgi-6ndRUtE" style="width: 100%;">
+                        <p class="caption">GPT-1 여러 실험 결과</p>
+                    </div>
+
+
+
+
+                    
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GPT-2</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>등장 배경</b></span>
+                        <br>GPT-1은 좋은 pre-trained 모델을 바탕으로 task에 맞게 fine-tuning 하는 데 초점을 맞추고 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">반면 GPT-2는 언어 모델을 잘 학습하여 fine-tuning 없이 zero-shot으로 바로 적용할 수 있는 범용적인 모델, 즉 일반화가 잘 된 모델을 학습하는 것이 목적입니다.</span>
+                    
+                        <br><br><br><span style="font-size: 20px;"><b>장점</b></span>
+                        <br>먼저 저자들은 빅 데이터로 거대한 모델을 학습하는 것은 task에 있어서 강점을 보이지만, 데이터의 분포가 조금만 달라지면 모델의 성능이 낮아진다고 언급합니다.
+                        이러한 모델을 저자들은 <span class="highlight" style="color: rgb(0, 3, 206);">"Narrow Expert"</span>라고 표현합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저자는 이렇게 민감한 모델 대신 일반화가 잘되는 GPT-2 모델을 학습하는 것을 목표로 하며, 이에따라 GPT-2는 원하는 task에 대해 training dataset을 구축할 필요가 없다는 장점이 있습니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>모델 구조</b></span>
+                        <br>모델 구조는 GPT-1과 흡사하지만, layer normalization의 위치가 달라집니다.
+                        실제로 제가 Hugging Face GPT-2 구현된 모델을 확인했을 때 아래 그림과 일치하는 것을 확인했습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCo2WN-wFzmduWeWt7tPiqUjnRIeM_txLEwRxHnfPp6HxfXdXhJvlMOcfqTys__ZsvIYFC2xNhTP80bgexnBorAzRK-iEYQOKX-S0JL_kayepIHVFaEAkfifvO3CZJ32mZsNsPl8PyifsTUBYC7TfHt8ZAlGVQrxBifVTwY6nedZfOT7umjrLwE6CN2KG3Sq1VA9XvpDMvSyzzU33qTwlC0C2c-XwCLtVfrCe6c2NmzoPvd3-Uslok35BFs2BddH_Nw01hM-KNIPB3_2HYH4AqH9RVzLFG3F_Q0f_JL_MftgOteGoTSF8M_HKQXLt_4-_Ff2k_1M9UwU2FWGLVTR03CvpaAIKv-H48IOqT9yeasyS97a6iCZy_3Uw99BKXZkDPQSJFONJsNqcGhxs1I_csGoBZsBFAmfKuliGXZptdpILX6zihtXpkgCnEJQ1sSj3R43kNIYpm1KfQREum7b9ciUHwrogsVzCwwa_Vqi7qEGclCLtf-rZMZCFi3Qr4LLkQp9TtI1Ht1pIQqZP2JG8Mlxdrar98JXo9lR1JbMvD0cCtzqApSTrZqIi4bH9u2vmWYJfWG7-zWQPUw2jbQOAcn_e05DYDZc6-dricIe9xEMB6nRcyueCX_192Uo9dn3wAlV9Uwoe0-fYxYLYeytcBJNYEKlO7uVoWfLLbhYWXHdTIkQ5tOhaqqlfPbmrNFdwdxRYpl3SDq2mNTM1owVqKWURCkVp8h868eZCrab7kdGtexeM3FktmaxjIgS1uFsdj0_GZkHAvhkQpFTZ9Vx970KurDP7NWKq8BQdK6wNxYuo4JX95cikpVPd9ii0RycTmuRaJm1mJN3sDJbcHLRaJEQch4Pif5STmxJiGDvuzFuRhq-u73ldmXB972s-xtGaGXL-ZeRkJcBGlJqWu_TualPbino7cUtDs1XzkSJZdakvPBduYmupg7lnXE-yBJvo_58aOk9MHFwSZl58eqj5MB7cpGHU9B27KxZz-WTl6CSx3Ri6v64XmJ9rw_-XKr2mw78xe27MAgh1P9epLiom1FRfCUWeKkMQu5049jJ8toVLyv6a_mw_uzIo25wojrmkDy5ZM8MVcIxtCdxOejtmgRBB-x-8tlknpGKjuF7U21GdfkW3RgmuDaumr960IqR-XpzKI-h3vKPqJhPP7AqkP6j8jXIQZ9HPhLu60flsYyZr41-u4Lny_LXgyYlpm-qrlo6Jhgqo1y5XPHDZMl-q3pg6ZOhRpyH0VqIltB6n9_iLqNL3tfid_osO4QrM17r5CmsF3NnfD3w1UIjNZAwYtkSrnWQhv_bx8RxydbN7LvGKo2qLh6uomWahzwtaMzHSLAd84-7rJVPh3U0fC_6ubICG8SvX_1tC4iL93QcMAtxqQtucyKWTLgGtEoOu5u1J8OaF1FU7iXpHYBAzWNv2xFj7zJwYptOwCHFbq3zqCb98ifsDuWtI9eStduKlFK52FGIotx9Rd2ea9p16c" style="width: 60%;">
+                        <p class="caption">GPT-1, GPT-2 구조</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Pre-training</b></span>
+                        <br>GPT-2 모델도 여느 language modeling과 동일하게 autoregressive 방법으로 학습합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다만 일반화된 모델 학습을 위해 다양한 주제에 대해 GPT-1 학습보다 더 많은 데이터를 사용합니다.</span>
+                        기존에 사용되는 텍스트 데이터는 wikipedia 등 단일 domain에서 수집된 텍스트가 많다고 판단하여 다양성을 위해 인터넷, 특히 Reddit에서 모은 글을 포함하여 40GB가 넘는 텍스트를 직접 수집하여 학습합니다.
+                        또한 기존에 있던 인터넷 crawling 데이터는 품질이 나쁘다고 판단하여, 사람들이 직접 수집하여 중복 제거 등 필터링을 하고 검증과정을 거쳐 40GB나 되는 WebText 데이터셋을 구성한 후 학습을 한 것 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 사람이 직접 검수하고 다양성을 고려한 대용량의 데이터로 학습한 것입니다.</span>
+                        
+
+                        <br><br><br><span style="font-size: 20px;"><b>여러 Task 결과</b></span>
+                        <br>GPT-2는 BPE 토크나이저를 사용해서 텍스트에 상관없이 전처리를 하지 않고도 바로 적용할 수 있다는 장점이 있습니다.
+                        실제로 unknown 토큰이 400억 byte 중 26개밖에 나타나지 않는다고 합니다.
+
+                        <br><br>그리고 아래는 zero-shot으로 여러개의 데이터에 대해 적용해본 결과입니다.
+                        놀랍게도 fine-tuning을 하지 않았음에도 불구하고 마지막 1BW (One Billion Word) 데이터를 제외하고는 모두 SOTA를 달성하였습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypDI0jX-ZhkALsVK4sq9IPGHUF2rYc5phPb8DDJh_-nv_yZQSJxhkslufQC-NplSS7coP-mgtlAP8gs7S7j6JmzSeZ6gHCiimXllh0PukFC4qNqAi3izLLLZ_hrni47mLneMptoR8zoCDdeYXFfrB84yluK-8sFE2HEueeBMEeS7-4d6wKwmdghjuUxYvLeoThRaLDS_z64D0AQ-XBk33UVL8Odw2MkSs7CED7R9LDFJ3x5RlOLoasyHD250i8pCUiKR8Xb5ECsnmjbqzSWbeTdtoHiCjcW__s50N6-QnkTevBX7wwEJxUAaRlth_-yfE1CAmccEGUCJFoxbXuCmydS_3VJdZu89TMIFukzkIww_gufzRJrWzPvrZS8-V43zhqO1LDobmon__aFiBPvthg6jZG_TKWQuf3IaCZL0pYYtgWTOQA2wJH0yTsun30fTnxkw27tfjsNUbYl6-WGGLAzWmfYlaxZdx9ZDmsalh8J9EVEmKLI3zf3iOQDMnWOks8WW_wIrY_KFmW06hMpDqjBLM0mG7jN66G1Y6IawUmHQkqV5NR_0Dm5ZJkkkM1TuUUhJ6lM_3DpMIghc9mWyh9INe5XuqEFDq8zUbAP-l62NXikppMBKarghUV59fJ6VEygrlTeSoqAtMxZQh8A7TMk9NnZ0r-orRcfxcm_aGCXBiAipvorlbbVF6PrO3U_MtZyOdAnQEBRV9egV06O5Y64eI04I9RxZBxM2F0ZW8XUe69SUefZPit4kBBafv5_gt8R3WdJAIaYRKe9_ZcWIzfF-rBoLzpwH6xxUNwUzd_UWDt13svANUI-3dg35eLvPG3Khf2o86zCX-GVVEulT0Cfdas3JuVC0tkMcqS5wQK3ShwRYdxirQCHcNFu_kpnWmfdWaFQIyQzN5FjfCi-rYlo_gUmLUsVl6jM18t0d2lBeQ0r-GumyDZUj2tVIiHuNJblPlKOUkO1kzlngpicMP1a-a5XttFj1pN8Va9PSQd3QPdKl0PdHt7m_As7c-CQqe-WMu4NxohrjZZpyudskjalZzCl64tqHZr8pvpptT_Yk6RX1sIMILc_9RNjTN2vUvUVxNvn8eAJNI20fgpsn4jnesbzOUSY6eFKSdwjhBV6QhpI50u4zhOqZLQkqnRR2et1IcEKRJlRXz0f3iNliz7vYhzo8gER88Fqms9Mtr57FsleEUPSd3SGNZDVhDYSz7CFVXbbXPJvNlP1GFFbU9jX3L-UADW-kIl0zEXxNQKbW8OX0b9h65A92BFsJMYaNFGOAHLHmDWqwLkELjmZKXzBEKtvScWx0mwvCnsuNN4-PUz3KEoOtJZK-85eFeZmUsYx5rg5XAW8-Cg22HxBS9OwRLcAuuT-WbfY2PPVp3e192h7s4OTnNP25YqVvMxGZZsiY5dq08yta9336SCD1NQ_6Ttr_1h6XcN3nMj4Tofu7i3NwmrllTy57ucYt_etdw7gxzKjy5IkAz9AFXDg" style="width: 100%;">
+                        <p class="caption">GPT-2 zero-shot 결과</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">이외에도 Children's Book Test, Winograd Schema Challenge (text ambiguity 해석 능력 판단) 데이터셋에 대해서도 우월한 성능으로 SOTA를 내어줬습니다.</span>
+                        물론 모든 task에 좋은 결과를 내어준 것은 아닙니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Summarization은 이전 task보다 좋지는 않지만 준수한 성능을 보였고, 기계 번역의 결과(Fr&rarr;En: BLEU=11.5, En&rarr;Fr: BLEU=11.5)는 상대적으로 다른 task들에 비해 낮은 성능을 보여주었습니다.</span>                        
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCUy2QMBYtCwubbuWOzBk_AJLYPbvIJDXM2fZoWT2od8QL-BeEh0W2QYLM6FWQyciDHF2Kr-59XRF1ktISyswwps3WsiNMKktCOY3A880LHDcyhFOfzkT0VwldjrWE23ZvaEhAzltbGCeMiIi8je5XQAQLwJCQVza2y-HepX4QxDuWLClypKfFW5onZdgejD-6HrL0-jPUj4Hat11mLBYl16jKuL1Lgtwuw6R5irTO86C_kamvBuxdqTejBv-2iPu4dcBCFpmPNheA4wdPCjhvjahYd5g4N5rldjhq0ZUiaqkYpr5JrfFsJe9htls9DwAawrDZ9XvfKOlrTa21S-_LRW2hdni3rh9pcX9MAwxNkffl0qcH5Jty5oAMIp0j0Vlom5YgKtGCwJKjkfA0d2z29nKKtqgnrgKXw4r1n8M1xtoQGLinQ516nR2KYRFyHlmkf3hRCvCWM9YpIGcMawaRcML4r2FT4dYyyNxcaYcl4XQT5w9LqkOLb1BcoOn89sWkwadPhPCvoUCVG27y1i_mEyRiNIv9Wq1OhcctGGnaXo44cajDslOw9xpBQXHsuixQ9yN2gwntb3v9Qv9p0LvQK0fbmR5eoLFwSSJznhM8FP8Oob_b8-Vud-Wc0MGxNRypd_67Y5cwrJsQQ8X7U6jtSbLfa73D-nEhy14SUT6R1w4AKRVkV-W8XYhKqjW6xng-WLw3m_TiQun9J5zxer9uicP42buOan4Fa9-Va9hwLIbxcDDhAQsHdks4dPEKR2bbqUbL0ExFPv-NpL9Iv10D3ulT83c4_fWLhpQGr0qMTxnWY5eJ0-mcOZxUg8fQUcJJNdZZ1Da2rUpxu4IWUZgPAhZrlfQzl9irsX6aowh14XgIyIIl2d7UbY3OB548Oii28PA19hQN12hrE58LL-k7KgPrqEal43MThHXFZZ4EO2pTFgEcs0P2_pyWV1gArWD3FH7zpFMcyPPaFalbwcVeTiejfCL2VGrlkcWVL9AiyKOZExZ5_V5F5yEMqOJe6plqnpkEdF1bxTD5dRpuUPYC4PuWZaql1JpIxR36pGSjD50Xo0GYAvKWe3DEHH3yUNyrvyBrrUG4cWC0LBi_BjHgPeWzRTj2noPQH_XTHZX3PYfxXj0Kt5BtQo_lG9tFdkPnCZBqQ8vls8XWngTCCcmXFHji7hswG1xsdLPoz8-7lSLy4M5D9t3VgRMkL4W8lHFBK4bA-xaGMFE6UQZ2NsO7HKYDGuh4BG8sL_XmhhZSVsggRWIg-btAqVHke0C1jBsVHC6SFQcdtHaUI3TVrU-2lDV8Xs5RrXe4XEBkMd97jrIBP1oZxpq0ygm_rbxISgiJtsMlsmzWr3Cw3MpnSJrPCAPlhHOg_hZC-I9eDB9Gq1F649t0D4ouJCLyeQPaZ4unOpjK4P3PruewVlDW2D493EErdl1UCM0Kp8y2cbWlzAZmJQqCvg6jMeMo4qmfKwkzl9s2otr3gx8Xsx8k" style="width: 70%;">
+                        <p class="caption">GPT-2 summarization 결과 결과</p>
+                    </div>
+                    <p>
+                        <br>저자들은 마지막으로 사용한 training set과 test set의 겹치는 비율을 정량화 하였습니다. 예를들어 CIFAR10 같은 경우는 train/test set이 3.3%가 겹친다고 합니다.
+                        이는 data memorization을 유발하여 모델의 일반화 성능이 떨어지고, 성능 평가가 객관적이지 않을 수 있기 때문입니다. 
+                        따라서 저자는 8-gram bloom 필터를 만들어서 이때까지 성능 평가에 사용되었던 test set과 본인들이 구축한 WebText training setrhk overlapping 비율을 계산하였습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그 결과 저자들이 구축한 WebText는 겹치는 비율이 기존 데이터셋에 비해 많이 겹치지 않는 모습을 보이며, WebText 데이터로 학습했을 때 높은 성능을 보이는 것을 다시 한 번 놀라게 합니다.</span>
+                        그와 동시에 이러한 데이터 중복 제거를 위해 필터를 사용할 것을 권장합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCqfeYVTw2aaqPvRFyN9TDYD_6SYDvFvimWGmzRz_hG8zNUl2owuDKSI1x_MWK1CFsO0I26B4e9qV4ln4dkiTM00W_NIcsqGweP6sLBXWYjJftjOaL9CyipHe8DH6ZJNc_p6U6NFYS4XqYlzPq2RFfB2fgw4zJuEk-6DneCfKcuHJNlrQgGSQ4upVXuodyBbHVn7giiRB_tvRvzQ7wIm8RKQ-RV11T7nOjRB_YqkPDohC_pbObxm5ZF4qGBuzCRWNoNx3EAEX0CtdAE6Py7y5E7vOXhK9DH967A23uS7MChfyGFxi330JYdJj3khet1eTawEprfqtrFyUio0AKjxzc9-7-onlEmuC2wVyp3bHK3VfF14fP48jIJ81Yy3bIMGVjYWrdjKB11addD1D49kVIyv36w6hAA2fPiQ_m1oAvgTo-BtK1vAjcqbCqeBlD3Y-FmfPAz8WC8NA-psjf0IIFiZYF7aMjie4keD3IwHAo3ApRH2MeoMcBsljZsc6I5KRlkONhJr5SuE7lXti9RB7dsKvRePrya7QoBVBN7bfg0_vABx_NE4CAcNF2ovxeyAPJ_hNHbQTElKfPVSuCXrc_c_3ITBkqkB56rgEfW2xteVWwN4N8BDUlLxc-4bbtP_6JjQirl36j17YJG6-mEzQa5lgMuSsTwHxUYLvZNvYTrLshfESCATArfud7zBApM2telW3XDJOTRrPHpvS-sclFl1zt1bp--hy3CqXnyY78bujfHFJfcyHuo-FzgggPLEH7nSizNsHCc_8G9Zkly5OrDQKF4vCcVsswku7lBGlUMQK58K0n9-FSCe2CSRLCSNlvbGR2iVfRsrZO_9G6eowvFJ35NoCyEc3iT0tzBhxMwhiH1e2Vf38yErs9bkBkJEOX_MNyDitmXZigxPylPBNT0CBnRVaTrh1NMWCPdbr3iAfrSILfeEcUDjgGX66z5DgjzfyyBHR0p9-kYfvcXgrl_8PqZ7duWNyKENmOICq_BvpAYF_K94d1RWZyaC_DvoUurpfJsIxfg9Gi0gpEpTsCzQqmyLDq--k3h7Zz0TyvCPn1VoPHkf-I-sha3qO9uQYi23ZcRSADrp_-c1nkTV93X3MD1-n0XMzJb4xaU8in6q8qvtUutXft5Zc-wJZjpSo6TtmwW87h5E2GvxyLg5xbbS7xLePJ2epDDDKgdpKhroVVn_VMSkAq-4svlN-GkKO81qwt_GVkwzodPRf8vM-ztSEexF7NOZwCP5XYCQw4z8TFGhQ9bBsXxuidkzH-akZC-jjrmLWOwEcSMJ8jUTKqpVkoui3M9mGwTTPnNinlGmv57Pv00rSAVZu5wWkVWdwRgzlX3MMcjdpn0uyQc7xbgGtlPojIA_rxP3NsOqDmotsmf7FlppBn4Jm3mtbVIgjyJXrbcmWmwkXI8h_X31i7bnnOjMi3SWb9BXrUJbJKm_D3T5BQE5EWElvQdIkSk01Vy9r4C3qHT9OcUXC0" style="width: 100%;">
+                        <p class="caption">Dataset overlapping 비율</p>
+                    </div>
+                    <p> 
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 저자들은 모델이 커질수록 GPT-2가 WebText 데이터셋에 대해 loss가 낮아지는 것을 보아 underfitting이 되었고, data memorization은 일어나지 않는다고 주장합니다.</span>
+                        
+                        <br><br>GPT-2는 random 모델보다 떨어지는 성능도 있고 번역같은 경우 좋은 성능을 내지는 못했지만, zero-shot을 위한 언어 모델을 연구했다는 점과, 성능이 좋았던 task도 많았기에 더 깊은 의의가 있는 연구인 것 같습니다.
+                    </p>
+                    
+                    
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GPT-3</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>         
+                        <span style="font-size: 20px;"><b>등장 배경</b></span>
+                        <br>언어 모델의 추세는 task-agnostic (task에 상관 없이 범용적인)한 모델을 pre-training 하여 만들어놓고 downstream task로 활용하는 것입니다.
+                        이렇게 downstream task에 적용하여 fine-tuning하는 방법은 효과적이고 성능이 좋다는 장점이 있지만 여전히 아래와같은 문제점이 존재합니다.
+                        <ol>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Fine-tuning을 위해서는 여전히 labeling 된 데이터가 필요하며 이는 비효율적이다.</span></li>
+                            <li>빅 데이터를 통해 거대 모델을 pre-training 후 작은 데이터로 fine-tuning을 한다면, <span class="highlight" style="color: rgb(0, 3, 206);">매우 좁은 분포의 데이터를 학습하게 되며 이는 거짓 상관관계를 학습하게 될 수 있고 이에따라 일반화 성능이 떨어질 수 있다.</span></li>
+                            <li>사람은 특정 task를 학습하는 데 많은 데이터가 필요로하지 않다. <span class="highlight" style="color: rgb(0, 3, 206);">몇가지 지시사항 혹은 사람의 능력에 의해 새로운 task를 수행하는 것이 가능하다.</span></li>
+                        </ol>
+                        위의 문제점을 해결할 수 있는 방법이 바로 <span class="highlight" style="color: rgb(0, 3, 206);">meta-learning</span>입니다.
+                        Meta-learning은 labeling 된 데이터를 학습하는 것이 아닌, <span class="highlight" style="color: rgb(0, 3, 206);">패턴의 차이 및 문맥을 파악할 수 있도록 학습하여 원하는 task에 적용을 빠르게 할 수 있도록 하는 것입니다.</span>
+                        즉 다른 말로 인지 학습이라고 표현하기도 합니다.
+
+                        <br><br>실제로 GPT-2는 이러한 meta-learning 기법 중 하나인 방법으로 학습되었다고 하며, 그들은 이러한 방법을 <span class="highlight" style="color: rgb(0, 3, 206);">"in-context learning"</span>이란 용어를 사용합니다.
+                        아래 그림을 보면 첫 번째 문맥은 계산, 두 번째 문맥은 오타 교정, 세 번째 문맥은 번역임을 알 수있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCbkX68gu7IgMuYPdZqVQuKp38AEiywCaSRW_M85ElVOfwLj3UFmdX3UHMbvU7arqgXH5fO18qEhNSFnB3N4pnhJkC-x-m4RZSXzTu-Ur0M1Ba5FcB8wMdm7HTQh1Znfp2KyEo590IB4ky5fg5e3dqlxZQIYN44-YgI_bw4C9MwwOz85rjStGvao0AE17pRRFfVXM04lrdTVsz2LATTIkUqmTZUL9u-f74DuiXNa9RYn5_ETQUCMSXf7FVJNYzhBbGxQ1GOO5K_Q7c4RU6CqWyCZx0XaEjqsmpjPTM4UJCqbIFc63BKqszq61azpn3Ad3V_9T1ZF_qIl7YzqFf_h-Yh93FN-1j5KNa6IbMGKvtJdiEdFdxl7KfXGHuLNWzUpYn59RAWFo4VtYgPBbMgi_ALQGYH_GdXdqkXM5mZNaQ42X5lBPCODmYh0-KfVBpcmGAM2WgbQ0yH1IPFybTcz-1tWox_n1iLFvS6d3b7lzHZeqEReQOfOSQTdpQ-8PsOG2m159l2Yp1IIxAW6gNYdzoBK3UsDJHHFfskrUwDIPqpgpLOS1dm5Qqw-jx9Ve2spRp3WDHWr1K099NBhQDKqkKUJpzh-rfwHVe63U99eXp3W46zT9O8PJMnl99eUE1GWDdyXOu7HJfKuNgjwRE7zTZp3Vk1HepNArV5OP17RpSsrBIOL9tk7LF7IXWeju_1wcPZyf3CY2jjhbGWBVxzdbnl6uykmBG32hGVVm_r3WM4pfvw-uXdLH9mzf_ESOMrW5M3LMUjXzKCkr67IjPEXNA7EXo1_tU_FCDjrbkSbSRf3Qx8B55THpiWKUNLATW30So8PMQ_OXMjsZrj4Aig99fMXcym5e6Pod9RMJ-nI7j5rEv0AwsWrPKokcNZJhveGUTQciHudsmuH887ycv_X4RbA5OjNT2fgN1I04Byp-Oe6lIcUx9kNRT8BSoGyWjhB8rfu744GVUWcIHobKMrEuriRJ9A0jsWjWn0UTaHmiC_RFzM-h4LONGVOsFtooSYA4tOJwNgRi-xWa0flwURbebDX9qOULB1AMqdDhS-VdTBC-SqL4SILFWSf7ndG_swXPXWFB7rSSpZBkfNF3Bm-FsT2w9Bnsoh0G1Zn2VC6BCKamf6oa66IGrrK5fVn0c96_V4lfCLnTw7mf029sRj4TCB35uwcT4uCA19yS2_YGP6pTcJJB7aOIBv9hWhph_fjNRp-6b3q_c7_S1LBXtzDqQYA5ojCxUcxZ9D72ObMLqCDgmMlP1e9DxuMg8KiGMKe5qSrjHplbLif5_7x6F3GMgDqKtR_MiXhIZEwa4IsqKmU1CS8XfavqLIrYT8RSpjTS2aEJ2ZWcTAymA5yW-vWHw22V2F82EBOBZONfw9LYi2p2zAw2f3V8vszuNGmcQZrcJnjBS_2OxW2pT-_VuyAiYvo2FTmy-972GK3F_xg367MUPUF2zES91MOwhAas7UDEWxjMQOczjYhnIBUd0" style="width: 100%;">
+                        <p class="caption">Meta-learning 기법 중 in-context learning, 출처: GPT-3 논문</p>
+                    </div>
+                    <p>
+                        <br>하지만 GPT-2를 학습할 때도 이러한 방법으로 학습을 하였지만 GPT-2 부분에서 설명 했듯이 모든 결과에서 성능이 좋지 못했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 저자는 BERT &lt; GPT-2 &lt; Megatron-lm &lt; T5 &lt; Project Turing 순서로 파라미터수가 커지는데 이들이 파라미터가 커질수록 성능이 향상되고 loss가 줄어드는 경향을 보아 모델을 더 키우면 되겠다고 생각한 것입니다.</span>
+                        이렇게 하여 15억개의 parameter를 가지는 GPT-2의 100배가 넘는 1,750억개의 parameter를 가지는 초거대 언어 모델 GPT-3가 등장한 것입니다.
+                        그리고 실제로 아래 그림처럼 모델이 커질수록 더 좋은 성능을 냈다고 합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCNFrDFksY6x5upVMy5lot3E9XlLvA8KdwcjBaeqEZ6AxkwS-veufjrZkQI8X0atnSmqSMqhZMA5-qkCakkQicERAooJrOj1VR7OMzFWUFT-D64g15VlrqRn8G2ZStw7blmQThxjuktlyQ1RL88Me8K-aHbp1kMagMxRlRrrpsT6EANhCTH95zQO8MsrFfdMPes2BTSlcWbivsy6rSOAM99tbV6dId6r95eryUDzI3Rqg1J9WDeFGsW2jUTnKpfVThhm4mNvdic7TxeBy71xMUGIlS51-PJaciRVMcD6cTT3geX62CsftyoH3M7QK4aY5cf_k19R5-5TE1T4KxPpviQwm-02soCA0aCOKwD9lbN12MsgqgswBlXvaML-H9vK7fXN3nOq79-v_49vWxYl88HmPKGVOyrKRTp8AMH67O9Scpm2R9qXzWAlkHsC-pmy4BvSRE2cM0P37Pa5eMsoNztbz-ktp_lALatkOdfD-ECWdSk8M8LjP-LFqaP1UZ_ASy8HUvl61cIij5vY9KJYAmzoT5kbUELFL_x4EzoYkiu1nqgyBd8B1Kk4d2UoRHrbzKzua_H2pLG3ipZVXh-KLFKETSXotJJIg5fLyEE5kT_O0CiM6S8WZ7TzNkl3jMFwzJgNOVvm4cGNM08g1_n9AtyKzjN2htXqpmBSm1-yC0WtaD0I3HQMY9wzUNayw6hNFsjqNCESzPCcXhKD65XbIaSM6FNIH5DTCfm3eaNoe9KJH9V0FQ7n3218W2ehhQN6erLCVg7bxL30-e_KDLZw-XOjQ-Mn5frGcZzrsnB4g_6HozSh4Sst9ZMI6bmG51t1p5LhUOmTleI7Fijn6d24PXlyh9sXhn13MKuNsudMwsvlUSX5objo-h6PJ5kpvma1ELDRjPAPlG9uICbJ-nQ_V43tJnHpGVGcDi9kXhRRtk85cYBowGO08wH-uLU4Sm73oZ3hROQukV1bc0zSGDFEZ0c5MyAPibaCYj4XtvEH0KR-q3q38-vc1m-7wVAagAFu7oj2PycUEyJUHN8A3EfzTqEXYuF4TB0JzouTI-r5ifPEKYyBtPf6XkndGeX5O0b3edT0tmKXhFzFnmV5O1v3m6sneq3dqrrRc5ByunPXKqJ425CF0-uvmN6EDUF_Z8Jh6On5YidLEA0N1N-6irysF78MQ3eYXHmhr3MrDsKnAontTO7A34KO7Pxk9ui4hUc3Db6UcdOzVs5-KhBXCotfwvMpkcZMdcfofhzvhXeZ0znTDIhQEZHeJqhVndn53mq8zPDY0EDVfRnEhuGc4nKuP542L_7L-QLs7RUj8c2D9Yo-_8ydC6KEpjdSWBBjDspp3iivmHGrvxbmooiU5xCfQMjKAdiZjZRXBmhIr_VgsPeaaMzIT3RBwJsvxFdAHgKfJKgvIX2n2beM_hpa-cQhJMz3pgrrOFDB3w3-2XbRkcexRzA3uuS8Ldo8Mk9EdCxIpTqeoyIQRKYLazDV1M" style="width: 100%;">
+                        <p class="caption">GPT-3 모델 크기에 따른 성능, 출처: GPT-3 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>모델 구조</b></span>
+                        <br>모델 구조는 GPT-2와 동일하다고 합니다. 다만 GPT-2에서 더 많은 양의 데이터를 더 큰 모델로 학습한 것이지요.
+                        다만 attention 패턴을 메모리 사용량을 줄이기 위해 제안됐던 sparse transforemer에 사용한 패턴을 사용했다고 합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC5Q9tv-RcBjp_DXHhu3L3G01HBSmpqx0r4FZFEMclHrpwurMaWy3uMom0FVLz0AhWGjQx4BvEkK3CmAhjNKdI1an-3YkZ_n9UaIRsaHL4TTp4EOLYBv_ZsycpPy1CBrK2B3Q5haLOvAsPTZG_pTTw5crXsM88RH8LqziEUSUiGcbDJq976__ScKsKnQlk9zmLRoaJx0r5tKoHUm1cRvx6_8fs0C0vcwimx4NGZB43e-ITIWLAFqrJoUFkuJCfOtT4nDCJk-uF5asb3sFH6-q-wsgneF8oZ0pTAxBZRjbYddDyjMzamIWrcaDtJ9pPIYdKN-IDNg-10sy5rbvD7zpf5rcfi_uh7hp6DmGHw0m5WB2LeBA4fUdLgUtuAYfVlun2u99ZCZOnd9Rdo-3-8mqxCgZ9yCHbBjHlEINnd0N2cx7u1aAwnj5yGDJWHcwCUNfKmMN2LbK-jFlngZKwIVyBNN1Bl6o4j1_SaJXoiMP61zuwxvD56cFeCeh7XZ8dWmaIhMtjf5lpNIaDrPlbwH2oEwiDcbDvvNVcS5JT6jwdG2VxyU_mgat3irSNtbLDFzuV54jboUOQwWsAR3h4Oeacj5dqertLKAGLlI4pqY95tt0OiVR7vhQEodb5acUnujFf9HV6ymXyoAzLBEzog05xjpVMwlTvq-vlcX3L6H2Yg7B3tJ2qNB6SHul3-gr6IUDkNtybhALP5qB_rjzSemUFhOre-aPxF9AVXEQtwRWhjutWNf311TJj2yjQuSg09V2_gRMBuGy_8CxRf_1J6QqMGu_2c6IEdKdvmgOEiw4xoJ4auSBh-iR7ilY3Lb547PIFvTPEv9NfAecj34u5Q2DJ-kneqztNrbNywF192aORcd0vuXgCIb6kjPa23BS_6o-zm_sqdwBTKXdB_o7HYPy0Z1fGjQBhx2c4-uj7MzsULEsrL67L29Qr0SPiGLLKJGe_xUPEkmpTAAnbw-oIWrRGa0-ky6ShSHkXykAvO-GfhKuSLxXQAZwWprgGlUvAss9jValenOW1_o5spzbyTdd_iM9VoW0ww87dsMakyyeqffn_E6_HpkRmmUmkPNWx9g2Ucf1W4fL81yE_LaomtnAlubjYxUiacq33JoFVgg-BujbjJV3cXJypwuZCJkRimGS5iy8uBahwO2vH2kh-OGSM7GXx0eche6eGzaIvgb9FGOs7Z853FKMFZ63vR8upoqpJOV0sOTLPUaiTtPqKSPVPPM936XS1R-NioO8M2576Iwe4yarPGzEuJmJI4egUJZCrcFQ_XY0Y3xcDzcX6g187SCHZkwIcaAp4pI1noVebw8a3b0WiOq9WQxzoWxhzuiWVC8gGTcc5GPAuBf3J4e8N_J_207vaAGZFQgthy6qH-smUsL-_vlZcNGJtgINg4yLwfNqHjbxAzMWPK4AFZbx7ZV7rXKrfZw4C7yPHBHwd_t9MCADUHhX4ycNZdkXrZBqClmiwq-aSpA1tc-Sg" style="width: 100%;">
+                        <p class="caption">Sparse transformer attention 패턴, 출처: Sparse transformer 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Pre-training 및 모델 평가 방법</b></span>
+                        <br>모델, 데이터, pre-training은 기본적으로 GPT-2와 같다고 합니다
+                        다만 다른 점은 더 커진 모델과 데이터의 양 그리고 데이터의 다양성 및 학습 시간을 늘렸다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">In-context learning으로 pre-training 한 부분도 GPT-2와 동일하지만, 다만 다른점은 평가 방법을 다르게 했다고 합니다.</span>
+                        그리고 동시에 저자는 4가지의 평가 방법을 소개합니다.
+                        <ol>
+                            <li>Fine-tuning (GPT-3는 task-agnostic 모델 학습을 목표로 하기 때문에 평가할 때 사용하지 않음)</li>
+                            <li>Zero-shot</li>
+                            <li>One-shot</li>
+                            <li>Few-shot</li>
+                        </ol>
+                        먼저 fine-tuning 기법은 우리가 아주 많이 사용하는 평가 기법입니다.
+                        보통 pre-trained 모델을 가져와서 학습을 한 후 성능을 비교하니까요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 저자들은 일반화가 잘 된 모델 제작을 목표로 하기 때문에 fine-tuning 방법으로 GPT-3를 평가하지 않았습니다.</span>
+                        대신에 zero-shot, one-shot, few-shot으로 모델을 평가하였습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypCSHEUbcR4WXplDmzBkyEGNkXIyXqD3Ho_09X0vvQJ5LhCmkSrTcFjoWlrMVch2mLc02xlqcRashbP0uXGw2FXLSX3pp2iwKQuYNAPx-n9BTOdwPoHtvULpLpT7RwyQa2r1HL3oLXNXCIYxVVmSxvDELqTaYJkz92KiiqI-Mx8CzCx55PKj_bvzFeXkG0nFEa2Qf0eMy5WRKKiq_N8rudFO863GShSwxE88HMMLMoAHl7hNjreq_qrjxL7wY7MggwJ4MBKd0Y2bxrWgRLbnwYNZCrbB2FUZw4bOUppIW-PsQbG2Lkcyr3ZB8iTCcbi9E3cqeqPonvt0fddtATwwj8oo9eu6gzEygLcJai1sqHpBCo0qzy_cjLNoMZ4TaeKWEUC3Rr2AMGS0V-w7_71S8aNRZtF13YF__Z3_xnyBo74VssPgr0EejusQgI84H2El7A-pviq-l0fWLeghrCGQO6CMVE0aHEUesoXub_AMf8AE_6QsN7JX67DxE7fvukrsR1TdLyqt-g4SI89zC4MmrhQyXaLm0eQFGVbLMcubxhXW50q5wFselx8tBq8Oe4rg9mPi8JJoYpYBoDz0mLp1Xqe1o4DigBsIjnxliiusrEBJ5ugC7ojSU961vm92Jx7iyFsOZaDDpcTVs6DYgpA_9oP_4TDFnoX5idRpzRzIENFhJbMZjRfwqUpDrBFKemXf5NMajk0WlqNauEJQYIxzBsnglf9tf7JRJj0ZvR-XyHdf-qDWIRwYyQ9Skbrocfp4ibKP3l9ePYDgJW4ebhymmzgANUMQqCbw-0guaD8pEl4jKPc1Nfa3UqP6rTg_7n5smt--UiwomVfXfNpP9WrvfPvh20fJ-N4NrzKeA1_uk7MOC3ubdT8hu7GEw9UooP4pB9PKQSdOFu0DpDUldJzEIobQBt_pxsIob9l9o_RGdkvgNyFzkCweRZ1NnfWz0sbAk6gg7qJi9j_vqFhXhgEZ1ccJNLSXOx2XZXxwX5tK5jfrMzVmQpGTD0KHdfxvGDhSM2K3Wi8p96s-rw9UZY3SKF19kby6ZuTgCpRlZqan6FqtcoqrVU2LMnNc8usyRCN_OSuK6VsxPjXaDp9TbgT82aE7sGpLUqWNXrjs9uq-pH3TnPqYQo-pc5tFqG_EQcpWNs_rVV8ddoF14qlmlX_khW4pGf94-3RbvqoybBJwqTfawH05X6hM7lUI4MvQ5L6-ujCRyb55mh7ArXUTmGL7TH7UbJBJvrd8ykA3nn8hGH9jJTtr5V6fshm4q9SJVNR8hT0SviUpj8WFhU72VX1tkg0-6lzGPl7ETYMJFEDE1JgZN4VeLxZeSa6V4gn9Xje4dR5NlQCWDvQSC3GnFftBhIo1m6-MoR69lsaLGMY_N6-rJK6O16c1oro9Nn21-o9nb8Bbt0JDy5ITwPyN3kEfHEbhsElRyLQuSNNZzDUgvD3Axw_a2W2gmjGcCmf17pCYPLfQ2SCDdd-6unOWqxg" style="width: 100%;">
+                        <p class="caption">모델 성능 평가 4가지 방법, 출처: GPT-3 논문</p>
+                    </div>
+                    <p>
+                        <br>위에 그림에서 zero-shot인 경우, task를 설명하는 문구만 넣어주고 나온 대답으로 평가합니다.
+                        One-shot은 task를 설명하는 문구와 더불어 그에 해당하는 예시 하나를 넣어주고 나온 대답으로 평가합니다.
+                        Few-shot은 task를 설명하는 문구와 더불어 그에 해당하는 예시 몇가지를 넣어주고 나온 대답으로 평가합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">단 위의 경우에서 해당하는 예시에 대해 fine-tuning을 하지 않는 것이 핵심입니다.</span>
+
+                        <br><br><br><span style="font-size: 20px;"><b>여러 Task 결과</b></span>
+                        <br>저자들은 24개 이상의 NLP 데이터셋에서 GPT-3을 평가합니다.
+                        결과는 너무 많기 때문에 논문에서 직접 참고하시면 될 것 같습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다만 놀라운점은 GPT-3는 few-shot 평가의 경우 일부 SOTA에 필적하거나 SOTA를 달성한 경우도 있었습니다.
+                        뿐만 아니라 zero-, one-, few-shot의 순서로 평가 성능이 좋아지는 경향도 있었습니다.</span>
+
+                        <br><span style="font-size: 20px;"><b>한계</b></span>
+                        <br>한계를 간단히 정리해보겠습니다.
+                        <ol>
+                            <li>GPT-2와 비슷하게 몇가지의 task에 대해 한계가 존재(일반 상식, 독해 등).</li>
+                            <li>GPT-3는 transformer decoder를 이용하여 autoregressive학 학습하기 때문에 bi-directional한 부분 파악의 한계가 존재.</li>
+                            <li>Loss function으로 모델을 학습하는 것은 실제 세상과 상호작용이 아닌 task에 집중 되기 때문에 근본적인 한계가 존재.</li>
+                            <li>GPT-3는 한 명의 사람이 평생 보는 것 이상의 텍스트를 보고 학습을 해도 사람의 능력을 뛰어넘지 못함.</li>
+                            <li>Few-shot의 성능 평가 방법이 학습 했던 task를 기억하고 내어주는 것인지, 스스로 문제를 인식하고 답을 내어주는 것인지 판별이 안됨.</li>
+                            <li>학습 중간에 오류가 발견되어도 학습을 중단할 수 없었던 것처럼 한 번 학습 하는 데 엄청난 비용과 자원 소모가 이루어짐.</li>
+                            <li>학습이 black box 모델이며, 데이터의 편향을 스스로 없애지 못하고 그대로 유지 됨.</li>
+                            <li>악용, 성차별, 성편견, 공정성 등 ethical issue 문제가 나올 수 있음.</li>
+                        </ol>
+                    </p>
+
+
+
+        
+                    <p>
+                        <br><br><br>지금까지 GPT-1, GPT-2, GPT-3에 대해 살펴보았습니다.
+                        GPT-2까지는 실생활에 적용이가능하지만, GPT-3부터는 공개 되지도 않았지미ㅏㄴ 1,750억개의 parameter를 가지기 때문에 일반적으로 가져와서 사용하기에 한계가 있습니다.
+                        다만 GPT-3는 언어 모델의 엄청난 성능을 보여주고, 이 논문은 앞으로 나아가야할 방향을 제시해준 논문입니다.
+                        현재 GPT-3.5와 GPT-3.5를 활용하여 나온 ChatGPT도 엄청난 화제가 되고 있습니다.
+                        실제로 GPT-3.5를 사용해본 결과 오류가 몇가지 보긴 했지만 미적분의 복잡한 수식 풀이, 번역, 서울 지하철 4호선 역 개수 등 알기 힘든 정보를 물어보았을 때 역 개수 같은 것은 틀리긴 했지만 대부분의 task에 정확한 답을 알려주었습니다.
+                        이를 통해 앞으로의 언어 모델 발전이 기대가 됩니다.
+                        
+                        <br><br>다음에는 GPT-2를 이용하여 multi-turn 챗봇 model 학습을 해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GPT-1&emsp;#GPT-2&emsp;#GPT-3
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('GPT 첫 게시물 입니다.\n\nThis is the first post of GPT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('gpt2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>GPT-2와 DailyDialog를 이용한 Multi-turn 챗봇 구현</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>

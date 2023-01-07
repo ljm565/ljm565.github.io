@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>GPT-2와 DailyDialog를 이용한 Multi-turn 챗봇 구현</title>
+        <meta name="description" content="GPT-2를 이용하여 multi-turn 대화형 챗봇을 학습합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/gpt2.html" />
+        <meta property="og:title" content="GPT-2와 DailyDialog를 이용한 Multi-turn 챗봇 구현" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="GPT-2를 이용하여 multi-turn 대화형 챗봇을 학습합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypD1767MfPib6s61dcQrwSEvFNER56P4ZbLJYHxRCw4MU1zXCaZfq437xGdx4K7Litimmxi4mxgc9vKdnnhlr2qRhQtE-sSOoP5jDcRPqL-LXne1i1FfmxpN-rH73FtGC7xkE2H_5pn6oX0urpgJwMzIQsd7k-vQxD7v0ojBe8BE19UFw8MKdz8lReYc78TuhVMMBcWRDmbbE0FEILGvEaXlKiYXca1f72ftDMJ_nyXkPGhk0QPT5HJvMtcIc0sNCyvm5URGdR9KGNhQqsUQ3L1zC_R3N_dDM_yIyEpb02T1XlxUUC16PySoWxJmRreH0kyOYT5bABVt06_I6K3ojdwyz9hK8LlFldNVsjuldii1EMVnTGxeUrecsnkp-xHuz6sDTFbcSZexrzo9J-KP26nvK3hx9HFFOBodPhyu6t0NVYZKwV7SXzqXm-lVXtP9sbpnpzdYUsqEeYUBZR5j63geL_DkiVhEfa_OZM6Bvm_0xw-oTAZbxuH50JR1WuajQIAOCXK1_cCD9nJ5uCpa1Fm590pZ1wxVjbaj51quuBSyWB8vFZ9-u4R81_oKp3eGwoopgte2gtbhupUj7Z_HtiD-YDVxzSztaxEtAeqSCRBqi9zxx27ErgDx1JhUDG-AFLhhYJjzwZXNmtzCexaQeHOl6nckmG-B2QRza1p9niFnDORjPRpgfc2nYJMQbFrGVXZLy6Dc_wo3s7zjClDZor_yUimppCo-06yNkSvdQ7aXOb9ChG5fkFWEYMxH66yCBwmqbvHGyF4MpWuTUsq2e-4Q-97yySx-4iKSsJEgQMgDQ3zcC1s-I95huEKwpsQsTz0KClFIJ9pJ6Yvukda07FCKD7QBrc5vx3LDRCjtZTbd6nrrBT3kyZoWCoypShanOSxOiEz7_jrkhTHeMC0d57zHPycUIJm1Rg4ocscPN-IX7Gq_8Lu2H6jaWe5ymx_hloTnHOJNzNs_jewDLjRW9DdYVe2yKjtKDauYIAJJdx-jMZ4U_csE_F54LyXm9jl_2-iS1vewYddlIzGKbytyJ29poVxP-Bxi9_vWqg1z5nZeL5erfG9ofngDR3xzx-Fyq4Y4l_yW6UaxKu7iRW7J17vXhyNcinakp1x8xFzdk8QH09uau5J3vIBqozMVT6h0tUN19ubxiyB0IbVDp8dcJB9QY18YnGOAIRWLBrzrG558lJXMcG069Rm0_CFC-jDAgYhbuT2-ti72QEazk9fJAWF0dQ9n-T4GuqT8ncXmp_w0d0QJE_IsfuA9_UMm8Ze_qBpjBcgm1gpQv-T2D8uTJbmb0_CxAUy4hxnvQZcg0PwJtRHKZZ_6bcfMrmTCsfeTE-X3wM1E2THfd1lS4Umxn1YgfKPfdii1v6JAOvKc5kcoshJn20-KdQY2l38_2bFsEtoCnH_-uaO1wD3gKE-PaMXRUj4qHYPZ7U-HPTVVjEsMX9VWFXGROPObJ7czXWK8KUqz_FQmEYGfIhCxugQ" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Generative Pre-Training Transformer (GPT) / 2. GPT-2와 DailyDialog를 이용한 Multi-turn 챗봇 구현</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypD1767MfPib6s61dcQrwSEvFNER56P4ZbLJYHxRCw4MU1zXCaZfq437xGdx4K7Litimmxi4mxgc9vKdnnhlr2qRhQtE-sSOoP5jDcRPqL-LXne1i1FfmxpN-rH73FtGC7xkE2H_5pn6oX0urpgJwMzIQsd7k-vQxD7v0ojBe8BE19UFw8MKdz8lReYc78TuhVMMBcWRDmbbE0FEILGvEaXlKiYXca1f72ftDMJ_nyXkPGhk0QPT5HJvMtcIc0sNCyvm5URGdR9KGNhQqsUQ3L1zC_R3N_dDM_yIyEpb02T1XlxUUC16PySoWxJmRreH0kyOYT5bABVt06_I6K3ojdwyz9hK8LlFldNVsjuldii1EMVnTGxeUrecsnkp-xHuz6sDTFbcSZexrzo9J-KP26nvK3hx9HFFOBodPhyu6t0NVYZKwV7SXzqXm-lVXtP9sbpnpzdYUsqEeYUBZR5j63geL_DkiVhEfa_OZM6Bvm_0xw-oTAZbxuH50JR1WuajQIAOCXK1_cCD9nJ5uCpa1Fm590pZ1wxVjbaj51quuBSyWB8vFZ9-u4R81_oKp3eGwoopgte2gtbhupUj7Z_HtiD-YDVxzSztaxEtAeqSCRBqi9zxx27ErgDx1JhUDG-AFLhhYJjzwZXNmtzCexaQeHOl6nckmG-B2QRza1p9niFnDORjPRpgfc2nYJMQbFrGVXZLy6Dc_wo3s7zjClDZor_yUimppCo-06yNkSvdQ7aXOb9ChG5fkFWEYMxH66yCBwmqbvHGyF4MpWuTUsq2e-4Q-97yySx-4iKSsJEgQMgDQ3zcC1s-I95huEKwpsQsTz0KClFIJ9pJ6Yvukda07FCKD7QBrc5vx3LDRCjtZTbd6nrrBT3kyZoWCoypShanOSxOiEz7_jrkhTHeMC0d57zHPycUIJm1Rg4ocscPN-IX7Gq_8Lu2H6jaWe5ymx_hloTnHOJNzNs_jewDLjRW9DdYVe2yKjtKDauYIAJJdx-jMZ4U_csE_F54LyXm9jl_2-iS1vewYddlIzGKbytyJ29poVxP-Bxi9_vWqg1z5nZeL5erfG9ofngDR3xzx-Fyq4Y4l_yW6UaxKu7iRW7J17vXhyNcinakp1x8xFzdk8QH09uau5J3vIBqozMVT6h0tUN19ubxiyB0IbVDp8dcJB9QY18YnGOAIRWLBrzrG558lJXMcG069Rm0_CFC-jDAgYhbuT2-ti72QEazk9fJAWF0dQ9n-T4GuqT8ncXmp_w0d0QJE_IsfuA9_UMm8Ze_qBpjBcgm1gpQv-T2D8uTJbmb0_CxAUy4hxnvQZcg0PwJtRHKZZ_6bcfMrmTCsfeTE-X3wM1E2THfd1lS4Umxn1YgfKPfdii1v6JAOvKc5kcoshJn20-KdQY2l38_2bFsEtoCnH_-uaO1wD3gKE-PaMXRUj4qHYPZ7U-HPTVVjEsMX9VWFXGROPObJ7czXWK8KUqz_FQmEYGfIhCxugQ);">
+                    <div>
+                        <span class="mainTitle">GPT-2와 DailyDialog를 이용한 Multi-turn 챗봇 구현</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.01.07</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 GPT 모델들에 대해 살펴보았습니다. 
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 모델의 크기가 많이 크지 않아서 우리가 비교적 사용하기 용이하며, 성능도 좋은 GPT-2를 이용하여 multi-turn 대화형 챗봇을 구현해보겠습니다.
+                        그리고 pre-trained GPT-2를 사용하기때문에 Hugging Face API를 통해 가져옵니다.</span>
+                        본 글에서 설명하는 코드는 기본적으로 학습을 진행할 때 모델 저장의 지표로 사용되는 BLEU-4 계산은 NLTK를 사용합니다.
+                        그리고 코드의 구현은 python의 PyTorch를 이용하였습니다. 
+
+                        <br><br>학습에 사용한 데이터는 DailyDialog 데이터를 사용하였습니다.
+
+                        <br><br>그리고 GPT 대한 글은 <a onclick="pjaxPage('gpt1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GPT-1, GPT-2, GPT-3</span></a>를 참고하면 됩니다.
+                        본 글에서 설명하는 GPT-2 multi-turn 챗봇 구현 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 Hugging Face API 사용에 초점을 맞추고 있기 때문에 데이터 전처리 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Multi-turn 학습을 위한 데이터 구성</li>
+                            <li>Pre-trained 토크나이저 가져오기</li>
+                            <li>Pre-trained GPT-2 가져오기</li>
+                            <li>Multi-turn 챗봇 학습</li>
+                            <li>Multi-turn 챗봇 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/multi-turn-chatbot-GPT2" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GPT-2 Multi-turn 챗봇 모델 GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">GPT-2 Multi-turn 챗봇</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Multi-turn 학습을 위한 데이터 구성</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 multi-turn 챗봇 학습을 위해 어떻게 데이터를 구성하는지 알아보겠습니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code0">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>):
+        <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">cls_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token_id
+        <span class="var">self</span>.<span class="var">sep_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token_id
+        <span class="var">self</span>.<span class="var">max_len</span> = <span class="var">config</span>.max_len
+        <span class="var">self</span>.<span class="var">length</span> = <span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>)
+
+
+    <span class="reserved">def</span> <span class="method">make_data</span>(<span class="var">self</span>, <span class="var">data_list</span>):
+        <span class="var">total_s</span> = [<span class="var">self</span>.<span class="var">cls_token_id</span>]
+        <span class="return">for</span> <span class="var">s</span> <span class="return">in</span> <span class="var">data_list</span>:
+            <span class="var">tmp_s</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.encode(<span class="var">s</span>) + [<span class="var">self</span>.<span class="var">sep_token_id</span>]
+            <span class="return">if</span> <span class="method">len</span>(<span class="var">total_s</span>) + <span class="method">len</span>(<span class="var">tmp_s</span>) &gt; <span class="var">self</span>.<span class="var">max_len</span>
+                <span class="return">break</span>
+            <span class="var">total_s</span> += <span class="var">tmp_s</span>
+        <span class="var">total_s</span> += [<span class="var">self</span>.<span class="var">pad_token_id</span>] * (<span class="var">self</span>.<span class="var">max_len</span> - <span class="method">len</span>(<span class="var">total_s</span>))
+        <span class="return">return</span> <span class="var">total_s</span>
+
+
+    <span class="reserved">def</span> <span class="method">__getitem__</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="var">s</span> = <span class="var">self</span>.<span class="method">make_data</span>(<span class="var">self</span>.<span class="var">data</span>[<span class="var">idx</span>])
+        <span class="return">return</span> <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>(<span class="var">s</span>)
+
+    
+    <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code0", 29);
+</script>
+                    <p>
+                        <ul>
+                            <li>3 ~ 9번째 줄: Multi-turn 챗봇 학습 데이터를 만들기 위해 필요한 데이터들 사전 정의.</li>
+                            <li>3번째 줄: [(s1, s2, ..., sn), (s1, s2, ..., sn), ... , (s1, s2, ..., sn)] 형식으로 구성 되어있음.</li>
+                            <li>12 ~ 20번째 줄: Multi-turn 챗봇 학습을 위해 <span class="highlight" style="color: rgb(0, 3, 206);">"[CLS] s1 [SEP] s2 [SEP]..."</span> 형식으로 데이터 구성.</li>
+                            <li>23 ~ 25번째 줄: 최종적으로 데이터를 내보내는 함수.</li>
+                            <li>24번째 줄: 12 ~ 20번째 함수 적용.</li>
+                        </ul>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Pre-trained 토크나이저 가져오기</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기서는 Hugging Face를 이용하여 pre-trained 토크나이저를 가져오는 코드를 살펴보겠습니다.</span>
+                        먼저 Hugging Face를 사용하기 위해서는 아래 코드를 실행해서 transformers 모듈을 설치해야합니다.
+                </p>
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+<span class="annot"> # terminal</span>
+pip install transformers
+</pre>
+</div>
+</div>
+</pre>
+                    <p>
+                        <br>이제는 pre-trained 토크나이저를 가져오는 코드입니다.
+                        <br><br><span style="font-size: 20px;"><b>Pre-trained 토크나이저</b></span>
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code5">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">GPT2Tokenizer</span>
+
+
+<span class="reserved">class</span> <span class="clazz">Tokenizer</span>:
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>):
+        <span class="var">self</span>.<span class="var">pretrained_model</span> = <span class="var">config</span>.pretrained_model        
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GPT2Tokenizer</span>.<span class="method">from_pretrained</span>(<span class="var">self</span>.<span class="var">pretrained_model</span>)
+        <span class="var">self</span>.<span class="var">tokenizer</span>.add_special_tokens({<span class="str">'cls_token'</span>: <span class="str">'[CLS]'</span>, <span class="str">'sep_token'</span>: <span class="str">'[SEP]'</span>, <span class="str">'pad_token'</span>: <span class="str">'[PAD]'</span>})
+
+        <span class="var">self</span>.<span class="var">pad_token</span>, <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.pad_token, <span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">cls_token</span>, <span class="var">self</span>.<span class="var">cls_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token, <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token_id
+        <span class="var">self</span>.<span class="var">sep_token</span>, <span class="var">self</span>.<span class="var">sep_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token, <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token_id
+        <span class="var">self</span>.<span class="var">unk_token</span>, <span class="var">self</span>.<span class="var">unk_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.unk_token, <span class="var">self</span>.<span class="var">tokenizer</span>.unk_token_id
+        
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="method">len</span>(<span class="var">self</span>.<span class="var">tokenizer</span>)
+
+
+    <span class="reserved">def</span> <span class="method">tokenize</span>(<span class="var">self</span>, <span class="var">s</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">tokenizer</span>.tokenize(<span class="var">s</span>)
+
+
+    <span class="reserved">def</span> <span class="method">encode</span>(<span class="var">self</span>, <span class="var">s</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">tokenizer</span>.encode(<span class="var">s</span>)
+    
+    
+    <span class="reserved">def</span> <span class="method">decode</span>(<span class="var">self</span>, <span class="var">tok</span>):
+        <span class="return">try</span>:
+            <span class="var">tok</span> = <span class="var">tok</span>[:(<span class="method">len</span>(<span class="var">tok</span>) - <span class="clazz">list</span>(<span class="clazz">reversed</span>(<span class="var">tok</span>)).<span class="method">index</span>(<span class="var">self</span>.<span class="var">sep_token_id</span>))]
+        <span class="return">except</span> <span class="clazz">ValueError</span>:
+            <span class="return">try</span>:
+                <span class="var">tok</span> = <span class="var">tok</span>[:<span class="var">tok</span>.index(<span class="var">self</span>.<span class="var">pad_token_id</span>)]
+            <span class="return">except</span>:
+                <span class="return">pass</span>
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">tokenizer</span>.decode(<span class="var">tok</span>)
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code5", 34);
+</script>
+
+                    <p>
+                        <ul>
+                            <li>6번째 줄: Hugging Face에서 pre-trained 토크나이저를 불러올 모델의 종류(e.g. gpt2, gpt-large).</li>
+                            <li>7번째 줄: Hugging Face의 pre-trained 토크나이저 불러오는 부분.</li>
+                            <li>8번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Hugging Face의 pre-trained 토크나이저에 사용자 지정 토큰 추가하는 부분.</span></li>
+                            <li>15번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">추가한 토큰을 포함한 최종 vocabulary size.</span></li>
+                            <li>18 ~ 19번째 줄: 들어온 문장을 tokenize 하는 함수.</li>
+                            <li>22 ~ 23번째 줄: 들어온 문장을 encoding 하는 함수.</li>
+                            <li>26 ~ 34번째 줄: 들어온 문장을 decoding 하는 함수.</li>
+                            <li>28번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">들어온 토큰 중 맨 마지막 sep_token_id를 찾아 거기 위치까지만 decoding 하는 부분(이후 pad_token_id를 제외하기 위함).</span></li>
+                        </ul>
+
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Pre-trained GPT-2 가져오기</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    
+                    <p>
+                        이제는 Hugging Face API를 통해 pre-trained GPT-2를 가져오는 코드입니다.
+                        <br><br><span style="font-size: 20px;"><b>Pre-trained GPT-2</b></span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code6">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">import</span> <span class="clazz">torch</span>
+<span class="return">import</span> <span class="clazz">torch</span>.<span class="clazz">nn</span> <span class="return">as</span> <span class="clazz">nn</span>
+<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">GPT2LMHeadModel</span>
+
+
+<span class="reserved">class</span> <span class="clazz">GPTChatbot</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">GPTChatbot</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pretrained_model</span> = <span class="var">config</span>.pretrained_model        
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GPT2LMHeadModel</span>.<span class="method">from_pretrained</span>(<span class="var">self</span>.<span class="var">pretrained_model</span>)
+        <span class="var">self</span>.<span class="var">model</span>.resize_token_embeddings(<span class="var">config</span>.vocab_size)
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pad_token_id
+
+
+    <span class="reserved">def</span> <span class="method">make_mask</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">x</span>==<span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>, <span class="num">1</span>)
+        <span class="return">return</span> <span class="var">pad_mask</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="var">pad_mask</span> = <span class="var">self</span>.<span class="method">make_mask</span>(<span class="var">x</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">input_ids</span>=<span class="var">x</span>, <span class="var">attention_mask</span>=<span class="var">pad_mask</span>)
+        <span class="return">return</span> <span class="var">output</span>.logits
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code6", 23);
+</script>
+
+                    <p>
+                        <ul>
+                            <li>9번째 줄: Hugging Face에서 pre-trained GPT-2를 불러올 모델의 종류(e.g. gpt2, gpt-large).</li>
+                            <li>10번째 줄: Hugging Face의 pre-trained GPT-2 불러오는 부분.</li>
+                            <li>11번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">이전에 추가한 vocab 때문에 모델의 임베딩 및 fully-connected layer 크기 조정.</span></li>
+                            <li>15 ~ 17번째 줄: Pad mask 만드는 함수.</li>
+                            <li>20 ~ 23번째 줄: Multi-turn 데이터가 모델에 들어간 후, fully-connected layer를 거치는 부분.</li>
+                        </ul>
+
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Multi-turn 챗봇 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 pre-trained GPT-2를 이용해 multi-turn 챗봇 학습하는 방법입니다.
+                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
+                        여기서는 무시해도 좋습니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/multi-turn-chatbot-GPT2" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code7">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GPTChatbot</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">pad_token_id</span>)
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+
+<span class="return">for</span> <span class="var">i</span>, <span class="var">x</span> <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="str">'train'</span>]):
+    <span class="var">x</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+    <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
+        <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>[:, :<span class="num">-1</span>, :].<span class="method">reshape</span>(<span class="num">-1</span>, <span class="var">output</span>.size(<span class="num">-1</span>)), <span class="var">x</span>[:, <span class="num">1</span>:].<span class="method">reshape</span>(<span class="num">-1</span>))
+        <span class="var">loss</span>.backward()
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code7", 15);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, 모델 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>모델 학습</b></span>
+                        <ul>
+                            <li>5 ~ 13번째 줄: Cross entropy loss를 이용하여 모델 학습하는 부분.</li>
+                            <li>14 ~ 15번째 줄: Loss를 계산하고 모델을 업데이트 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Multi-turn 챗봇 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 train/validation set의 BLEU, NIST score history와 validation set에서 최대 BLEU-4를 달성한 모델에 대해 test set의 score도 살펴보겠습니다.
+                        마지막으로 multi-turn 챗봇 대화를 살펴보겠습니다.
+                        
+                        <br><br><span style="font-size: 20px;"><b>Validation Set BLEU History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypBDjQ19QOY6ON713IBupVWPwF4n74ysaT729wLP2rKF4qgTIw_1UP7HMchhUe1uDGDibwN3lQKvBqdIO512MV3lpEYZOTRqnPowkovcX-4xQbPWYY2gEKI-IQgrWIMHPO5sGeuVz_o9nc-J953u9EPRLTs_pC26b5mjGwo6x573v-goiUgtUQ37MMV3H9fXSelBUX5xDtgRthUV4hz29Qq5EL9rAb7PlB0cobuHFrbPSIpog-ZULpSLXjd2S8D9b8DAg5OkFZGX6jfzVqNCWrB8zoAB0egSgcBw93hEJnzkSh9eDfjKL4-WJoySRGa4xumi4ktEb7pxm-KwSnGSNk9Uah627CVl0-fGnU4fKaBmiBmQjqefbzExmNXqGq6C7KFsTtperznh8khAkT-1t4sBGeY2Y6ogd3uOGE0EyporqI4MbKnG3CQtd245CC9hWDtkbw9aSp4J-SGOKLihIzl8ImM3rdUkFQWt-9mU2e1c5cQlF5lqBnuko0s_goYQaaEv2-D9Bnm9CNPlJiSZQfLsjttchB1NrnBQn3l81swfXUIKTjPa4jmh9eNsuPhQH8FOKxmHLW3YfymmzJ3vDONzLXpUf_2BDj1x13u-IAH2xpcMeEXsAmvwhU95VezP9klw7DxXAJOZMFpUkwoJTlOm-DllF3rT_icCG8UyaFFZpchYrwYElyYTUJjv8Pp-zmko44BfbcfvJ4u4McB5yNPqSDvNsGXjONnLNvyccMILQW5UcFUCrRPqMPsHQmGdivVmNR8ot67_A8cjVpKk8-HBnIw56ZOwxcHDIhJRy73yfUUCEy0htcWP5NJEocWJSM3Ygnb94-fKS5XWGa2xy3w4JXvxcXb6mTdoawELjrXqUAhEIZLkVPeNHjPVDrTAIHN4qnfYbkQW6fpNJHEVmx8_9WLB7xqM4VRE-mEOrwc_inD3eCn33QpCTsIanTb7YxjqMUtVMGaCw2Phfq9ZWH10Vlpl_ILBRokUGLXL2o2WNz6uS-7g00ZaUt9pUaf4QVRXpUAYYglZkea-yEfb1Wz65c5IgL6vgWYP7K-6wZg-48hQmBHMrxRXqWgSao2Cn9Zp_QADi0ZYXeCdgUH3NDpVkBEitNgCYQHTTsQKiYYxkrM4IAabs7fFxxlSjPdmQSHvbSmz-6bolynh955pikqn4MFB8p4w-6vgTbriIaAL0xbKCPDQHYlkP4B28B4YhROb-a15B6t4d_DECqvTMqwgeeof-aaB0SlWaMr0PHEpPcXH0A2fFJkOOX4hFvyV9iOEMA2Hfej_KTeyHx9uwc5Dw_kXqOI2JGIL0uh4V1LON7yZLegY9PvzEKPEiexyIhYHNQA3elBiYpIxT3OPRKg8tHGrA3WjRiwsL8T6h-b_PKaiHKIEwGFC4nSZxKxzAcKq1RAmONT3pRUKRbfQpHOQeaKQcA1e1VCtpFfI7Ol8N3WGwGCfWCxNAPUMjKeajm1aABlb4przvtmkJIw" style="width: 100%;">
+                        <p class="caption">BLEU history</p>
+                    </div>
+                    
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Validation Set NIST History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypD1767MfPib6s61dcQrwSEvFNER56P4ZbLJYHxRCw4MU1zXCaZfq437xGdx4K7Litimmxi4mxgc9vKdnnhlr2qRhQtE-sSOoP5jDcRPqL-LXne1i1FfmxpN-rH73FtGC7xkE2H_5pn6oX0urpgJwMzIQsd7k-vQxD7v0ojBe8BE19UFw8MKdz8lReYc78TuhVMMBcWRDmbbE0FEILGvEaXlKiYXca1f72ftDMJ_nyXkPGhk0QPT5HJvMtcIc0sNCyvm5URGdR9KGNhQqsUQ3L1zC_R3N_dDM_yIyEpb02T1XlxUUC16PySoWxJmRreH0kyOYT5bABVt06_I6K3ojdwyz9hK8LlFldNVsjuldii1EMVnTGxeUrecsnkp-xHuz6sDTFbcSZexrzo9J-KP26nvK3hx9HFFOBodPhyu6t0NVYZKwV7SXzqXm-lVXtP9sbpnpzdYUsqEeYUBZR5j63geL_DkiVhEfa_OZM6Bvm_0xw-oTAZbxuH50JR1WuajQIAOCXK1_cCD9nJ5uCpa1Fm590pZ1wxVjbaj51quuBSyWB8vFZ9-u4R81_oKp3eGwoopgte2gtbhupUj7Z_HtiD-YDVxzSztaxEtAeqSCRBqi9zxx27ErgDx1JhUDG-AFLhhYJjzwZXNmtzCexaQeHOl6nckmG-B2QRza1p9niFnDORjPRpgfc2nYJMQbFrGVXZLy6Dc_wo3s7zjClDZor_yUimppCo-06yNkSvdQ7aXOb9ChG5fkFWEYMxH66yCBwmqbvHGyF4MpWuTUsq2e-4Q-97yySx-4iKSsJEgQMgDQ3zcC1s-I95huEKwpsQsTz0KClFIJ9pJ6Yvukda07FCKD7QBrc5vx3LDRCjtZTbd6nrrBT3kyZoWCoypShanOSxOiEz7_jrkhTHeMC0d57zHPycUIJm1Rg4ocscPN-IX7Gq_8Lu2H6jaWe5ymx_hloTnHOJNzNs_jewDLjRW9DdYVe2yKjtKDauYIAJJdx-jMZ4U_csE_F54LyXm9jl_2-iS1vewYddlIzGKbytyJ29poVxP-Bxi9_vWqg1z5nZeL5erfG9ofngDR3xzx-Fyq4Y4l_yW6UaxKu7iRW7J17vXhyNcinakp1x8xFzdk8QH09uau5J3vIBqozMVT6h0tUN19ubxiyB0IbVDp8dcJB9QY18YnGOAIRWLBrzrG558lJXMcG069Rm0_CFC-jDAgYhbuT2-ti72QEazk9fJAWF0dQ9n-T4GuqT8ncXmp_w0d0QJE_IsfuA9_UMm8Ze_qBpjBcgm1gpQv-T2D8uTJbmb0_CxAUy4hxnvQZcg0PwJtRHKZZ_6bcfMrmTCsfeTE-X3wM1E2THfd1lS4Umxn1YgfKPfdii1v6JAOvKc5kcoshJn20-KdQY2l38_2bFsEtoCnH_-uaO1wD3gKE-PaMXRUj4qHYPZ7U-HPTVVjEsMX9VWFXGROPObJ7czXWK8KUqz_FQmEYGfIhCxugQ" style="width: 100%;">
+                        <p class="caption">NIST history</p>
+                    </div>
+                    
+                    <p>
+                        <br>아래 결과는 validation set의 가장 높은 BLEU-4를 달성했을 때 모델의 test set 결과입니다.
+                        <ul>
+                            <li>BLEU-2: 0.4052</li>
+                            <li>BLEU-4: 0.2268</li>
+                            <li>NIST-2: 5.1797</li>
+                            <li>NIST-4: 5.5162</li>
+                        </ul>
+                    </p>             
+                    
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Multi-turn 대화 샘플</b></span>
+                    </p>
+
+
+
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+Chatbot starts..
+If you want to chat new topic, enter the "new()"..
+If you want to exit, enter the "exit()"..
+
+Please enter the 3 multi-turn dialogues..
+
+Q1: I saw her yesterday.
+A2: What did she doing?
+Q3: She tried to fix her car.
+A4: I'm sure she's going to do it again.
+Q5: Why do you think so?
+A6: I think she's trying to get donations.
+Q7: You mean, the car?
+A8: Yes, it's the one she used to drive.It's broken now.
+Q9: Oh I didn't know about that.
+A10: I'm sorry, she's driving again.She'll pay for it.It's her birthday today.Donations for sure.Thanks a lot.
+Q11: okay.
+A12: I'll call her.
+Q13: please stop
+A14: 
+Q15: new()
+Please enter new 3 multi-turn dialogues..
+
+Q1: Do you know Kane?
+A2: Yes of course. He is one of my best friends.
+Q3: Does he like playing soccer?                        
+A4: Yes.But he is not good at it.
+Q5: But he was a soccer player, wasn't he?
+A6: Yes.But he is a very good player.
+Q7: Why?
+A8: Kane is a very good player.He is a very creative player.He can dribble, he can dribble, he can make free throws.
+Q9: Okay.
+A10: But he is not good at shooting.
+Q11: exit()
+Chatbot ends..
+</pre>
+</div>
+</div>
+</pre>
+                
+
+                   
+                    
+                    
+                                       
+                    <p>
+                        <br><br><br>지금까지 Hugging Face API를 통해 pre-treined GPT-2를 불러와서 DailyDialog 데이터셋을 이용하여 multi-turn 챗봇을 학습해보았습니다.
+                        학습 과정에 대한 전체 코드와 학습에 필요한 데이터는 <a href="https://github.com/ljm565/multi-turn-chatbot-GPT2" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GPT-2&emsp;#DailyDialog&emsp;#Multi-turn&emsp;#챗봇
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('gpt1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>GPT-1, GPT-2, GPT-3</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('GPT 마지막 게시물 입니다.\n\nThis is the last post of GPT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
