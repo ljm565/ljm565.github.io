@@ -193,11 +193,11 @@ pre .annot{
     width:100%; 
     /* overflow: scroll; */
     overflow-x: scroll;
-    -ms-overflow-style: none;
+    /* -ms-overflow-style: none; */
 }
-.equation::-webkit-scrollbar{
+/* .equation::-webkit-scrollbar{
     display: none;
-}
+} */
 
 #disqus_thread{
     /* margin: 8% 20%; */
