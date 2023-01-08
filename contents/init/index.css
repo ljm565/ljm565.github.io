@@ -16,9 +16,9 @@ a{
     overflow: hidden;
 } */
 
-/* article{
-    overflow: scroll;
-} */
+article{
+    overflow: hidden;
+}
 
 
 #mainHeadWrapper{
