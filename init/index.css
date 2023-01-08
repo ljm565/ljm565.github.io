@@ -162,7 +162,7 @@ article{
     height: 100vh;
     background-color: rgb(233, 233, 233);
     font-size: 14px;
-    overflow-y: scroll;
+    overflow: auto;
     z-index: 5;
 }
 #menuRelated .menu .profileImg{
