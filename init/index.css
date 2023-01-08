@@ -11,13 +11,10 @@ a{
     cursor: pointer;
 }
 
-.preventScroll{
+/* .preventScroll{
     height: 100vh;
     overflow: hidden;
-    /* touch-action:none; */
-    /* overflow: hidden !important;
-    touch-action:none; */
-}
+} */
 
 article{
     overflow: scroll;
