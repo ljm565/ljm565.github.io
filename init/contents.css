@@ -191,7 +191,12 @@ pre .annot{
 
 .equation{
     width:100%; 
-    overflow: scroll;
+    /* overflow: scroll; */
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+}
+.equation::-webkit-scrollbar{
+    display: none;
 }
 
 #disqus_thread{
