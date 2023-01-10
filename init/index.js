@@ -33,6 +33,8 @@ function darkMode(self){
         self.value = 'light';
         document.getElementById('modeState').innerHTML = '라이트 모드로 보기';
         document.getElementById('menuImg').src = 'init/index_img/menu_white.png';
+        document.getElementById('menuExtension').src = 'init/index_img/menu_white.png';
+        document.getElementById('menuCompression').src = 'init/index_img/menu_white.png';
         $('body').css('color', 'white');
         $('body').css('background-color', 'rgb(50, 50, 50)');
         $('#mainHead h1').css('color', 'rgb(200, 200, 200)');
@@ -40,6 +42,7 @@ function darkMode(self){
         $('#mainHead h1').css('background-color', 'rgb(50, 50, 50)');
         $('.controller span').css('color', 'white');
         $('#menuRelated .menu').css('background-color', 'rgb(22, 22, 22)');
+        $('#menuRelated .bigMenu').css('background-color', 'rgb(22, 22, 22)');
         $('a').css('color', 'white');
         $('.highlight').css('color', 'rgb(159, 204, 255)');
         hoveringOn(self);
@@ -51,6 +54,8 @@ function darkMode(self){
         self.value = 'dark'
         document.getElementById('modeState').innerHTML = '다크 모드로 보기';
         document.getElementById('menuImg').src = 'init/index_img/menu_black.png';
+        document.getElementById('menuExtension').src = 'init/index_img/menu_black.png';
+        document.getElementById('menuCompression').src = 'init/index_img/menu_black.png';
         $('body').css('color', 'black');
         $('body').css('background-color', 'white');
         $('#mainHead h1').css('color', 'rgb(82, 82, 82)');
@@ -58,6 +63,7 @@ function darkMode(self){
         $('#mainHead h1').css('background-color', 'white');
         $('.controller span').css('color', 'black');
         $('#menuRelated .menu').css('background-color', 'rgb(233, 233, 233)');
+        $('#menuRelated .bigMenu').css('background-color', 'rgb(233, 233, 233)');
         $('a').css('color', 'black');
         $('.highlight').css('color', 'rgb(0, 3, 206)');
         hoveringOn(self);
@@ -97,6 +103,9 @@ function openMenu(self){
     $('#menuRelated .menu').animate({
         'left': 0
     }, 300);
+    $('#menuRelated .bigMenu').animate({
+        'left': 0
+    }, 300);
     $('#container').css('opacity', 0.5);
 
     // // for preventing contents scroll
@@ -108,10 +117,23 @@ function openMenu(self){
     // });
 }
 
+function extendMenu(self){
+    $('#menuRelated .bigMenu').css('display', 'block');
+    $('#menuRelated .menu').css('display', 'none');
+}
+
+function compressMenu(self){
+    $('#menuRelated .menu').css('display', 'block');
+    $('#menuRelated .bigMenu').css('display', 'none');
+}
+
 function reload(){
     $("#menuRelated").val('menuClosed');
     $('#menuRelated .menu').animate({
         left: '-19rem'
+    }, 300);
+    $('#menuRelated .bigMenu').animate({
+        left: '-38rem'
     }, 300);
     $('#container').css('opacity', 1);
     $('#mainHead h1').fadeIn(150); 
@@ -203,8 +225,10 @@ function headHighlightColorChanger(){
 }
 
 function pushFunc(){
-    fetchPage('init/profile.html', '.profile');
-    fetchPage('init/menu.html', '.tree');
+    fetchPage('init/profile.html', '.menu .profile');
+    fetchPage('init/menu.html', '.menu .tree');
+    fetchPage('init/profile.html', '.bigMenu .profile');
+    fetchPage('init/bigMenu.html', '.bigMenu .tree');
     window.onpopstate = function(event){
         $('iframe').not('iframe.map').remove(); // for disqus 
         reload();

@@ -159,6 +159,20 @@ article{
     padding: 20px;
     z-index: 3;
 }
+#menuExtension{
+    position: absolute;
+    cursor: pointer;
+    height: 20px;
+    right: 10px;
+    top: 15px;
+}
+#menuCompression{
+    position: absolute;
+    cursor: pointer;
+    height: 20px;
+    right: 10px;
+    top: 15px;
+}
 #menuRelated .menu{
     position: fixed;
     top: 0;
@@ -169,6 +183,18 @@ article{
     font-size: 14px;
     overflow: auto;
     z-index: 5;
+}
+#menuRelated .bigMenu{
+    position: fixed;
+    top: 0;
+    width: 38rem;
+    left: -38rem;
+    height: 100vh;
+    background-color: rgb(233, 233, 233);
+    font-size: 14px;
+    overflow: auto;
+    z-index: 6;
+    display: none;
 }
 #menuRelated .menu .profileImg{
     top: 5%;
@@ -252,6 +278,89 @@ article{
     word-break: keep-all;
 }
 #menuRelated .menu .copyrights{
+    font-size: 12px;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+
+#menuRelated .bigMenu .profileImg{
+    top: 5%;
+    width: 30%;
+}
+#menuRelated .bigMenu .profile{
+    margin-bottom: 0;
+}
+#menuRelated .bigMenu .nickname{
+    font-size: 16px;
+}
+#menuRelated .bigMenu .bio{
+    margin-top: 12px;
+    padding-bottom: 25px;
+    margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: keep-all;
+    border-bottom: solid rgb(199, 199, 199) 1.5px;
+    /* float: left; */
+    width: 40%;
+}
+#menuRelated .bigMenu .contact{
+    margin-top: 10px;
+    padding-bottom: 25px;
+    margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: keep-all;
+    border-bottom: solid rgb(199, 199, 199) 1.5px;
+    text-align: center;
+}
+
+#menuRelated .bigMenu .tree{
+    padding-left: 20px;
+    padding-right: 20px;
+    list-style: none;
+    margin-bottom: 100px;
+}
+#menuRelated .bigMenu .tree label{
+    cursor: pointer;
+}
+#menuRelated .bigMenu .tree ol{
+    padding-left: 30px;
+}
+#menuRelated .bigMenu .tree ul{
+    padding-left: 10px;
+    list-style: none;
+}
+#menuRelated .bigMenu .tree input[type="checkbox"]{
+    display: none;
+}
+#menuRelated .bigMenu .tree label:before{
+    content: '\e802';
+    font-family: fontello;
+    display: inline-block;
+    width: 13px;
+}
+#menuRelated .bigMenu .tree input[type="checkbox"]:checked~ul{
+    display: none;
+}
+#menuRelated .bigMenu .tree input[type="checkbox"]:checked~ol{
+    display: none;
+}
+#menuRelated .bigMenu .tree input[type="checkbox"]:checked+label:before{
+    content: '\e803';
+    font-family: fontello;
+    display: inline-block;
+    width: 13px;
+}
+#menuRelated .bigMenu li{
+    width:100%;
+    margin-top: 20px;
+    word-break: keep-all;
+}
+#menuRelated .bigMenu .copyrights{
     font-size: 12px;
     text-align: center;
     padding-left: 20px;
