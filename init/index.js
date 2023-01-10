@@ -99,6 +99,9 @@ function hoveringOff(self){
 
 function openMenu(self){
     // $(self).fadeOut(100);
+    if (window.innerWidth < 750){
+        compressMenu(self);
+    }
     $("#menuRelated").val('menuOpening');
     $('#menuRelated .menu').animate({
         'left': 0
@@ -118,8 +121,12 @@ function openMenu(self){
 }
 
 function extendMenu(self){
-    $('#menuRelated .bigMenu').css('display', 'block');
-    $('#menuRelated .menu').css('display', 'none');
+    if (window.innerWidth < 750){
+        alert("창이 너무 작습니다..");
+    } else{
+        $('#menuRelated .bigMenu').css('display', 'block');
+        $('#menuRelated .menu').css('display', 'none');
+    }
 }
 
 function compressMenu(self){
