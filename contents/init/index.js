@@ -122,7 +122,7 @@ function openMenu(self){
 
 function extendMenu(self){
     if (window.innerWidth < 750){
-        alert("창이 너무 작습니다..");
+        alert("화면이 너무 작습니다..");
     } else{
         $('#menuRelated .bigMenu').css('display', 'block');
         $('#menuRelated .menu').css('display', 'none');
