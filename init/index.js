@@ -33,8 +33,8 @@ function darkMode(self){
         self.value = 'light';
         document.getElementById('modeState').innerHTML = '라이트 모드로 보기';
         document.getElementById('menuImg').src = 'init/index_img/menu_white.png';
-        document.getElementById('menuExtension').src = 'init/index_img/menu_white.png';
-        document.getElementById('menuCompression').src = 'init/index_img/menu_white.png';
+        document.getElementById('menuExtension').src = 'init/index_img/extension_white.png';
+        document.getElementById('menuCompression').src = 'init/index_img/compression_white.png';
         $('body').css('color', 'white');
         $('body').css('background-color', 'rgb(50, 50, 50)');
         $('#mainHead h1').css('color', 'rgb(200, 200, 200)');
@@ -54,8 +54,8 @@ function darkMode(self){
         self.value = 'dark'
         document.getElementById('modeState').innerHTML = '다크 모드로 보기';
         document.getElementById('menuImg').src = 'init/index_img/menu_black.png';
-        document.getElementById('menuExtension').src = 'init/index_img/menu_black.png';
-        document.getElementById('menuCompression').src = 'init/index_img/menu_black.png';
+        document.getElementById('menuExtension').src = 'init/index_img/extension_black.png';
+        document.getElementById('menuCompression').src = 'init/index_img/compression_black.png';
         $('body').css('color', 'black');
         $('body').css('background-color', 'white');
         $('#mainHead h1').css('color', 'rgb(82, 82, 82)');

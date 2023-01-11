@@ -162,14 +162,14 @@ article{
 #menuExtension{
     position: absolute;
     cursor: pointer;
-    height: 20px;
+    height: 30px;
     right: 10px;
     top: 15px;
 }
 #menuCompression{
     position: absolute;
     cursor: pointer;
-    height: 20px;
+    height: 30px;
     right: 10px;
     top: 15px;
 }
