@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DialogBERT</title>
+        <meta name="description" content="Multi-turn 대화를 위한 모델 DialogBERT를 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/dialogbert1.html" />
+        <meta property="og:title" content="DialogBERT" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Multi-turn 대화를 위한 모델 DialogBERT를 소개합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypB0kCWsL0AhGN4aJfluND2upYi05vIoqizfC4bQDhcHaL_zgQaMOCZbtGjEIY7PVzuqMtF_OMti68X41uSKyF3c1XMTV34O5C-UBrtplwKH0HcGnNZPl32N7KOoIVf1NTVZ_Gvmb33R8I-ESdbrMr66J-vVz5K4j2bBJuEHWkz2s5M_nBaUuXVYL7l5iSTZnDFN5WfNWXL16lIyhEXshe6phM7mXjX5uYzUCO0NQPhY_62-vQq_7xLnVmAw6y6zXG_LhlK9uMUhhKGDRHrCx4IdRjHDFPZ7ksTSSbs9FH2CyHv2jWGboOJ9Jas0lblKFF3eYWyWcxxUtIFV1DdHR41ZtB6p3bSNXFU_kBLgLmJFhqZor9XBSMCvkqgc2Msrl92W_Za43RlH3EUJzIyr4bBdMlFesyZIK2OMrn0MBwswCBm5bJK4B93Dzwpk8LZ4ZsoLhhUA-4kEbEerSsI02Cs-zbCnFuMg1DKv6qtuHjtLT5pCztawAcHJcBw5EQuSMtv_giDuGTOGdAbeaN2crqyQ-glhohHn8rMceqWYtrP6cfr-l09VuZYWQMJYrrTxB-zvpKCp82oSk_3kJWTOJY4kiDTZkP9xAZlmipmGhOIZYSKkAR8mzwKBiiDdQXaGdAS9CVUA-RZ2LZ-CUtaJnyf7WEwq_D_hIfFMqwxJvLx3zmDjdn_tGGKGYWTZqjZAB7Vkmo6qLq7p2vkw4xXCE_utR4VmJ4Bge6oIEk3DUQEL5bTFhLbw6Er1FKl8IcyIgU_R7PHyRvYyrrJ-6xHYWfK3H1nhOMIk8mH_IjObhEIrUMQ8HWwd6WsJSM6l89lKSBswB2vyp8bFi6BeRFy2UchxG51qM7MHh4J7AuAbFb67gh9JOf-SwGOZ69kZ6A87j3E_rp8x8X7uBA8ST4gvaywIgc73Idfs1QATxl63pxtuXF7wB_ZOMcJQW-txd6OnPAy5N_yGcQ-eLvfHwHM3ABFpBpPtBHRMUCqRLATOvzQaVn4IknBUKV1d6VG2uljLc5A0AcI99ag8pYuJXk3Y3NK9aRC621PfALmkHlFZy1HB7XiLCNxTxNqbx1hKzVA4vr-WJAEIU7bbRPAC-F1I71yrJhu9vCiHX_u2cEpR69UGBvOBDWXX5LGpKD3jq3-qUEhrXL4l-CkpGPMYSyWfZPS0YiflnkKa882ZlAHl9RZFxOmp1VrtlQU8nS1aQVZWDeOkPYYXQfOqTBDg-WfGG2w7bPnFe4QpoOCsPtEFtyFIY3QaaPXMe_nlm-BrHRnWR4OBAQ932iQsj7mRzjrwYxfWc51fBs9ODtyjl_mvKaVrn10qb9g7IlGMFEM-GK8PjXcl35wYvNWhWUHPYwiFTkwDvhasNpItm57Y3AOw9lrAZYMaw7hv-oASkSBdlUb6-QGAq-F64-Jmq3nngtRRUhOF9F5ttkhgaL5XbBuPK7esR0Pyvul9KDYV_tElM1ktlMsaZyrEMWfLk01P0sU" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / DialogBERT / 1. DialogBERT</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypB0kCWsL0AhGN4aJfluND2upYi05vIoqizfC4bQDhcHaL_zgQaMOCZbtGjEIY7PVzuqMtF_OMti68X41uSKyF3c1XMTV34O5C-UBrtplwKH0HcGnNZPl32N7KOoIVf1NTVZ_Gvmb33R8I-ESdbrMr66J-vVz5K4j2bBJuEHWkz2s5M_nBaUuXVYL7l5iSTZnDFN5WfNWXL16lIyhEXshe6phM7mXjX5uYzUCO0NQPhY_62-vQq_7xLnVmAw6y6zXG_LhlK9uMUhhKGDRHrCx4IdRjHDFPZ7ksTSSbs9FH2CyHv2jWGboOJ9Jas0lblKFF3eYWyWcxxUtIFV1DdHR41ZtB6p3bSNXFU_kBLgLmJFhqZor9XBSMCvkqgc2Msrl92W_Za43RlH3EUJzIyr4bBdMlFesyZIK2OMrn0MBwswCBm5bJK4B93Dzwpk8LZ4ZsoLhhUA-4kEbEerSsI02Cs-zbCnFuMg1DKv6qtuHjtLT5pCztawAcHJcBw5EQuSMtv_giDuGTOGdAbeaN2crqyQ-glhohHn8rMceqWYtrP6cfr-l09VuZYWQMJYrrTxB-zvpKCp82oSk_3kJWTOJY4kiDTZkP9xAZlmipmGhOIZYSKkAR8mzwKBiiDdQXaGdAS9CVUA-RZ2LZ-CUtaJnyf7WEwq_D_hIfFMqwxJvLx3zmDjdn_tGGKGYWTZqjZAB7Vkmo6qLq7p2vkw4xXCE_utR4VmJ4Bge6oIEk3DUQEL5bTFhLbw6Er1FKl8IcyIgU_R7PHyRvYyrrJ-6xHYWfK3H1nhOMIk8mH_IjObhEIrUMQ8HWwd6WsJSM6l89lKSBswB2vyp8bFi6BeRFy2UchxG51qM7MHh4J7AuAbFb67gh9JOf-SwGOZ69kZ6A87j3E_rp8x8X7uBA8ST4gvaywIgc73Idfs1QATxl63pxtuXF7wB_ZOMcJQW-txd6OnPAy5N_yGcQ-eLvfHwHM3ABFpBpPtBHRMUCqRLATOvzQaVn4IknBUKV1d6VG2uljLc5A0AcI99ag8pYuJXk3Y3NK9aRC621PfALmkHlFZy1HB7XiLCNxTxNqbx1hKzVA4vr-WJAEIU7bbRPAC-F1I71yrJhu9vCiHX_u2cEpR69UGBvOBDWXX5LGpKD3jq3-qUEhrXL4l-CkpGPMYSyWfZPS0YiflnkKa882ZlAHl9RZFxOmp1VrtlQU8nS1aQVZWDeOkPYYXQfOqTBDg-WfGG2w7bPnFe4QpoOCsPtEFtyFIY3QaaPXMe_nlm-BrHRnWR4OBAQ932iQsj7mRzjrwYxfWc51fBs9ODtyjl_mvKaVrn10qb9g7IlGMFEM-GK8PjXcl35wYvNWhWUHPYwiFTkwDvhasNpItm57Y3AOw9lrAZYMaw7hv-oASkSBdlUb6-QGAq-F64-Jmq3nngtRRUhOF9F5ttkhgaL5XbBuPK7esR0Pyvul9KDYV_tElM1ktlMsaZyrEMWfLk01P0sU);">
+                    <div>
+                        <span class="mainTitle">DialogBERT</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.01.16</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 multi-turn 대화형 챗봇 구현을 위해 여러 모델을 리서치 해보다가 발견했던 DialogBERT 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저자의 원본 코드는 논문을 위한 실험을 해야했기 때문에 불필요한 코드가 많아 다시 제 코드로 고쳐서 구현을 했을 때 reporduce 되지 않았습니다.
+                        그래서 잘못 구현했나 싶어 저자의 코드를 clone하여 돌렸을 때도 논문의 결과가 reproduce 되지 않았습니다.
+                        그래서 저자의 코드 issue 부분에 들어가보니, 저와 비슷하게 reproduce가 안된다는 이슈가 많이 있었습니다.</span>
+                        왜 reproduce가 안되며, 저자는 어떻게 논문을 쓸 수 있었는지에 대한 더 자세한 고찰은 <a onclick="pjaxPage('dialogbert2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">다음글</span></a>에서 다루어보도록 하겠습니다.
+
+                        <br><br>비록 reproduce가 안되기는 하지만, 아이디어 자체는 좋아보여 소개하려합니다.
+                        그리고 논문에는 나와있지 않은 디테일한 부분은 코드를 구현하면서 확인하였기 때문에 이러한 부분도 이야기를 해보겠습니다.
+
+                        <br><br>아래는 DialogBERT 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2012.01775.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DialogBERT 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Auxiliary Tasks</li>
+                            <ul>
+                                <li>Next Utterance Generation (NUG)</li>
+                                <li>Masked Utterance Regression (MUR)</li>
+                                <li>Distributed Utterance Order Ranking (DUOR)</li>
+                            </ul>    
+                            <li>NUG, MUR, DUOR 동시 학습 방법</li>                                      
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">DialogBERT</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Auxiliary Tasks</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. Next Utterance Generation (NUG)</b></span>
+                        <br>먼저 DialogBERT는 multi-turn 학습을 위해 모델에게 3가지 auxiliary task (보조 task)를 수행하게 합니다.
+                        그중 하나가 바로 NUG인데, 이는 여느 language modeling과 동일합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">바로 source를 바탕으로 target 문장을 생성하게 하는 것입니다.</span>
+                        그리고 아래 그림에서 생략되었지만 각 문장 끝에 [CLS], [SEP] 토큰이 들어가며, 각 문장의 max length를 맞추기 위해 남은 부분은 [PAD]토큰을 추가해줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC_pkKyTm94-VPk_BaTEHF2cb9kZmoieSY-gEQsIPmzQl5zc0_tWAMaPg7Sj91dgnDWMffIT2UXyHrldMBinh5u12NnFTlJaXs065PDXDngZQr1b2G8mXIyHMwSmh3-5JaNqiTPEwTuQ5SKoHyrLXxDcPVl1_74d0Lrh98qKNveJ46-u9KripUl3kub7qEhwlpIHQFtEQiTXpnXeohFZY-fhc2Nk0--xO4rVJEk7JN-uwReDt2xAxndUPgYI4JjWq2fQ1nY1aN1wdpyDF2Vxh7AcVk6whaSyavumqRjgC-hNE0XpTBWYk5BcqsLIgobmd43zbr034PhGGnpR8w9AsVi4rwKzyf7LMEBNn6xTaVvotLwgpKCOuvIXodi7-Ts68wDMlUuswGgU9oITTFNAklN_KeRwWT6ctN-B81YoWR2jWN9DQHEpuuOu4idy72rMMMAoAkQ86vDapwO3zM56Rne5QRP5hHYTSRx7TKNJF93yOQl599H2jB8dbZyEvDTZJ86ZL7X9qOtmbRPxyhhB58b4J1o8dmEwaRtXgRiTuYTXiOvxakVGzYUOSH78qpYzbFROFND-75ZbaJsPH-l3Ao_PnJpvfh9kPyM1QjxzU-VJ4A9NCxF8cjp789gSrCopCj3y6OpjTPOz36uyPNLog7D5ItG7yrTsDeBy4RQSV81uKY5VRywSSvyUrY24BAO04h7bPL70jUm0eP1NZm2ocsA4RRgrX7HQCW4IBwUEtdux7zW-InyHWeyjas0FrMHncvHcmjD7eEfG0jZyU6VxgQu6a-PtJMPQYod62sqgijiqyQJjX6fxNzHmAZiiy-056oxErg6MgH0UAMgepGcwtK8b2oeoBzwBgPjl9ZoI23sQ3MSWVRjTDwPqOe9pMKarfnfPAc2IcvM3O9lcr9WY0fg2qRnLqyDs4aHEvzzDlgpY1J5jvR4e6qzsAD-1UTgAUotToyBkj_bTQWNaUYa0NWwpxe4YdGege0atI3MGfddL2mYQy8v_xSoanIkg-aMnvTRHAtRstaptp5vDzYvL4JlJBdzs98uNrNdZyCjG4iFS8VbRCVPO-vMTxvaO9bttQfUf6xgZYeUJk3qgjwXgoXkbGNUyu7lqMSN2ZS4iaeHxTs10gNNkZ9bNp4faauzI_GqDm2HoQkaxkIF5EV5djRCUDfM-sPrzJngOrYguv2MxHjYnsQaSS91j783ig1e2diDnI4ZA9zWmzcS5aBU5SO9cqagD9tqZYPhimwpfxXCvilkkLIHl2CbCvKatl2OXucc-H-LVSviToIPPzdVowujEtgT601ZZQfnU8_z9DwNxbYtHHOH4XldCdMUCpeVzblC_FR2mnuG2N1rE3jgRGyzSfqq3WEo_86ToZjGQnHWp1ByjaY16kwZBMv-WrD-EW18RT4vDNcKDX9q3xa-5DCe0allfATYDL7BNIYtNlLjnuceT5x_5DtjejwiAF9G9zHwarTo6Q_ZiGUArg8" style="width: 80%;">
+                        <p class="caption">Next Utterance Generation (NUG), 출처: DialogBERT 논문</p>
+                    </div>
+                    <p>
+                        <br>대신 DialogBERT는 모델의 target 문장을 생성하기위해 앞의 multi-turn 문장을 representation 하기 위해 BERT를 사용합니다(BERT 설명은 <a onclick="pjaxPage('bert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a> 참고).
+                        각각의 multi-turn 문장을 BERT에 넣은 후, [CLS] 토큰들을 모아 다음 BERT에 넣습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 multi-turn 문장을 input으로 받는 BERT는 utternacne encoder, utterence encoder의 [CLS] 결과를 input으로 받는 BERT는 context encoder라고 부릅니다.</span>
+
+                        <br><br>그리고 마지막 context encoder로 나온 결과, <span class="highlight" style="color: rgb(0, 3, 206);">즉 multi-turn의 의미를 함축하고 있는 결과는 transformer decoder처럼 encoder output feature로 사용됩니다.</span>
+                        그리고 target 문장과 함께 decoder로 들어가서 encoder-decoder attention을 수행하면서 target 문장을 학습하는 것입니다.
+                        
+                        <br><br><br><br><span style="font-size: 20px;"><b>2. Masked Utterance Regression (MUR)</b></span>
+                        <br>두 번째 task는 바로 MUR이라고 하는 task입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이는 BERT의 MLM과 비슷하지만, 토큰을 masking하는 것이 아니라 multi-turn 문장 중 하나를 masking하여 예측하게 합니다.</span>
+                        이때 MUR을 적용하는 조건이 3개 문장 이상의 multi-turn일 경우만 하는 등의 논문에 나와있지 않은 여러 조건이 있긴 하지만, 이러한 상세한 부분은 <a onclick="pjaxPage('dialogbert2.html');"><span class="highlight" style="color: rgb(0, 3, 206);">다음글</span></a>에서 코드와 같이 보도록 하겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypC9G9yFrmSErAEa8OdTnXq_nwBRmkfu3zthfCPkBDL7hkQq5K-YBVFuhXSKxNlUuyOK_exBf3Sifid9KiHEs8IjOC1WiWpUDXe5WtlY3Krn9-lqHfXs8c8hLLCR420otus8-YO6euB-q6npPra4gA-DHGROvXjPvJhNyv7G9ERGrBwp9X9Xd90-ZyisIPg7bgj_bJWckg-CaEk-GCk7ciX1CQgj5Sg3QRSTa26HJGjt_hv8TcxxzRN6c2Pbz_aI_OTwXVsSdvtKQQrSPSQ3J3tbn2AJIb43QehjyYZMIhjcOm1LFrh1u3fNZ0saMHEDql57eOE7p9JGaPd4yGIS85dcq3xui3JZr1_5xVslhxkl174Nae1LoY2cUAU0hnJk6PzrCD9txLZVrCbatTi4izQewpTdTqV8UlrtRQ9ULuQujEPsCTZ2k83V4Ui_C2R5uYb9LOwttnYEbLxaofrW9ew-U3Jpx_W3GAlDQ3xruF-wdL3hPJ0ylczCQq9W9YyB9DOBTiv2sBC_Cl-5o2LcsmLU3CGvzZ5CDQ42swCxmIT7XFqRxeMYpHBSc4y33ljVbVTtNYXIVOkZmk2OSHehHbyAA0wauMzpDX8qOJpat6cJcxvquSTQkk87bSkIJRs2TjhctTiRKcdoy_5rHJbyK2R2AM-RVpSrp7ejzMs3UrGnmBoINpYz1-FL27tZRnXUGugSZsjQx41EfSMBfOfEmWaakZU2tANkCtusJmAeX_Lq-nRbqQG9Sj_fMQSGLME8a3kvOaAEo3xOLkShtl1npBLVK4rHuPEk1CWHGm8m-a4h6IeJLoICfsJteujrFOTVZKxG_zipgn50guW--sB8g9umwNMtDtwR_l_GHGx0QlmUONH3M1BATh_XMlUx1nYsUr9MdT98nTudGp2X9bDb6mggwckEBQMzTEbf-6kioc-fEh1Jb2A7D2-UwaTMR48m8mCw8RPxFsQ7hfLidgl_krL8n0UpiYevO5ibLSYWSytrW1wsra5swbuzEmb0PDjYgnCCQuKp_sDFqErwF6iRabyeGt-Nom6h4Swrm-zK1fWg3WR7RcpGs_8AK_JIboNh57b4wl494jaAMJIutkrZmoWWxp0o5KUR_Sm2JqhF6jSOifAsKi3zcCT6wOO1nvCCoDEstp2Y8f7mwhBpyarZdh1JHJ90y9HxOfLysdIzqF3ITcmHuokby4veMgkjVp2NiWfjFM-pYGPuCHt-cTrk6CdrW-wd637GK2p-kT8epW_IXZu5Kfoo-tSI1N55JGOtk4XBIvWtNgV7R_Cmk2kScXyV0CZID2vcJ-jIdQ1dhAAdi4UWp0uTRBVGIoBbh2qDuPwEN2iW1nLvlIDRtEvjvvProbK7Tslrwgvlb8jF3jnUDZgY8E3we6EOHbA5VGOhc_JPfntxIJh7vJvLCC-tlCkB2RtcyFUE0Ggtzi2Os7dg59R5o3OsbtIOXZ_JpG-e0mdlTmPHkAvJDxyQ_oI" style="width: 80%;">
+                        <p class="caption">Masked Utterance Regression (MUR), 출처: DialogBERT</p>
+                    </div>
+                    <p>
+                        <br>그렇다면 MUR을 하는 방법에 대해 알아보겠습니다.
+                        <ol>
+                            <li>Multi-turn 문장 중 하나를 80% 확률로 [MASK] 토큰으로 마스킹.</li>
+                            <li>Multi-turn 문장 중 하나를 10% 확률로 다른 문장으로 대체.</li>
+                            <li>Multi-turn 문장 중 하나를 10% 확률로 그대로 유지.</li>
+                        </ol>
+                        위와 같은 조건을 하나의 문장에 적용하고, 적용한 문장에 대해 loss를 구합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위의 조건이 적용된 문장의 context encoder BERT 모델에서 나온 hidden state를 linear layer (Encoding Converter)를 하나 더 거쳐 나온 결과와, 원래의 문장을 utterance encoder BERT 모델에 넣어 나온 결과와 MSE loss를 구합니다.</span>
+                        이렇게 나온 loss를 줄이는 것이 바로 MUR입니다.
+                        
+                        <br><br><br><br><span style="font-size: 20px;"><b>3. Distributed Utterance Order Ranking (DUOR)</b></span>
+                        <br>마지막은 DUOR입니다.
+                        DUOR은 아래 그림 처럼 multi-turn 문장을 섞은 후, 각각의 섞인 순서를 예측하는 방법입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AAbDypB0kCWsL0AhGN4aJfluND2upYi05vIoqizfC4bQDhcHaL_zgQaMOCZbtGjEIY7PVzuqMtF_OMti68X41uSKyF3c1XMTV34O5C-UBrtplwKH0HcGnNZPl32N7KOoIVf1NTVZ_Gvmb33R8I-ESdbrMr66J-vVz5K4j2bBJuEHWkz2s5M_nBaUuXVYL7l5iSTZnDFN5WfNWXL16lIyhEXshe6phM7mXjX5uYzUCO0NQPhY_62-vQq_7xLnVmAw6y6zXG_LhlK9uMUhhKGDRHrCx4IdRjHDFPZ7ksTSSbs9FH2CyHv2jWGboOJ9Jas0lblKFF3eYWyWcxxUtIFV1DdHR41ZtB6p3bSNXFU_kBLgLmJFhqZor9XBSMCvkqgc2Msrl92W_Za43RlH3EUJzIyr4bBdMlFesyZIK2OMrn0MBwswCBm5bJK4B93Dzwpk8LZ4ZsoLhhUA-4kEbEerSsI02Cs-zbCnFuMg1DKv6qtuHjtLT5pCztawAcHJcBw5EQuSMtv_giDuGTOGdAbeaN2crqyQ-glhohHn8rMceqWYtrP6cfr-l09VuZYWQMJYrrTxB-zvpKCp82oSk_3kJWTOJY4kiDTZkP9xAZlmipmGhOIZYSKkAR8mzwKBiiDdQXaGdAS9CVUA-RZ2LZ-CUtaJnyf7WEwq_D_hIfFMqwxJvLx3zmDjdn_tGGKGYWTZqjZAB7Vkmo6qLq7p2vkw4xXCE_utR4VmJ4Bge6oIEk3DUQEL5bTFhLbw6Er1FKl8IcyIgU_R7PHyRvYyrrJ-6xHYWfK3H1nhOMIk8mH_IjObhEIrUMQ8HWwd6WsJSM6l89lKSBswB2vyp8bFi6BeRFy2UchxG51qM7MHh4J7AuAbFb67gh9JOf-SwGOZ69kZ6A87j3E_rp8x8X7uBA8ST4gvaywIgc73Idfs1QATxl63pxtuXF7wB_ZOMcJQW-txd6OnPAy5N_yGcQ-eLvfHwHM3ABFpBpPtBHRMUCqRLATOvzQaVn4IknBUKV1d6VG2uljLc5A0AcI99ag8pYuJXk3Y3NK9aRC621PfALmkHlFZy1HB7XiLCNxTxNqbx1hKzVA4vr-WJAEIU7bbRPAC-F1I71yrJhu9vCiHX_u2cEpR69UGBvOBDWXX5LGpKD3jq3-qUEhrXL4l-CkpGPMYSyWfZPS0YiflnkKa882ZlAHl9RZFxOmp1VrtlQU8nS1aQVZWDeOkPYYXQfOqTBDg-WfGG2w7bPnFe4QpoOCsPtEFtyFIY3QaaPXMe_nlm-BrHRnWR4OBAQ932iQsj7mRzjrwYxfWc51fBs9ODtyjl_mvKaVrn10qb9g7IlGMFEM-GK8PjXcl35wYvNWhWUHPYwiFTkwDvhasNpItm57Y3AOw9lrAZYMaw7hv-oASkSBdlUb6-QGAq-F64-Jmq3nngtRRUhOF9F5ttkhgaL5XbBuPK7esR0Pyvul9KDYV_tElM1ktlMsaZyrEMWfLk01P0sU" style="width: 80%;">
+                        <p class="caption">Distributed Utterance Order Ranking (DUOR), 출처: DialogBERT</p>
+                    </div>
+                    <p>
+                        <br>예를 들어 섞인 문장의 순서가 [0, 1, 2, 3, 4, 5, 6] &rarr; [0, 3, 4, 1, 5, 2, 6]으로 바뀌었다고 가정해보겠습니다(코드상 저자는 양끝 순서는 바꾸지 않습니다).
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저자는 [0, 3, 4, 1, 5, 2, 6] &rarr; [6, 3, 2, 5, 1, 4, 0]으로 이렇게 바뀐 순서를 빠른 문장일수록 큰 수를 가지도록 다시 변환해줍니다.
+                        그후 context 길이 중 가장 큰 수로 나눠준 후, softmax를 씌운 결과인 \(softmax([6, 3, 2, 5, 1, 4, 0]/6)\)를 ground truth로 사용합니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[GT\,=\,softmax([o_{n}, o_{3}, o_{n-1}, ... ,o_{0}]\,/\,n)\]
+                    </div>
+                    <p> 
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 context encoder BERT 모델에서 나온 hidden state를 order ranking network라고 하는 linear layer를 거쳐서 나온 결과를 \(A\)라고 했을 때 \(score=A*A'\), 즉 내적을 통해 구합니다.
+                        그렇다면 \(score\)의 크기는 (batch * context_len * context_len)이 될 것입니다.
+                        그리고 최종적으로 score를 평균 내어 (batch * context_len)의 크기를 가진 결과를 softmax를 씌워 예측값으로 사용합니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[Pred\,=\,softmax(mean(A\,*\,A'))\]
+                    </div>
+                    <p>
+                        <br>그리고 DUOR은 위에서 구한 GT와 Pred 확률 차이를 Kullback-Leibler divergence loss를 이용해 줄이는 task입니다.
+                    </p>
+                   
+                    
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>NUG, MUR, DUOR 동시 학습 방법</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p> 
+                        <br>위에서 소개한 3가지의 task를 어떻게 수행하는지 실제 코드를 짜보는 입장에서는 많이 궁금했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">어떠한 경우에 MUR을 하는지, DUOR을 할 데이터의 비율은 어떻게 되는지, 아니면 MUR, DUOR을 동시에 수행하는지 등 디테일한 부분이 궁금해서 코드를 보고 어떻게 위 task들을 수행하였는지 알려드리겠습니다.</span>
+                        
+                        <br><br>먼저 데이터를 구성할 때 아래와 같은 조건으로 구성합니다.
+                        <br><br><b>전제 조건</b>: "[CLS] [CLS] [SEP]", s1, s2, ..., sn, "[CLS] [SEP] [SEP]" 형식으로 multi-turn 문장들 양 끝에 [CLS], [SEP] 토큰으로 구성된 special 문장을 추가합니다.
+                        <ol>
+                            <li>Multi-turn이 1개 이상이라면, 즉 single turn이어도 special 문장들을 제외하고 40%의 확률로 순서를 섞습니다(즉 양끝 special 문장은 제외).</li>
+                            <li>만약 문장이 섞이지 않았고 multi-turn이 3개 이상이라면, special 문장을 제외하고 하나의 문장을 마스킹 합니다.</li>
+                            <ul>
+                                <li>80% 확률로 하나의 문장을 "[CLS] [MASK] [SEP]"로 대체합니다.</li>
+                                <li>10% 확률로 하나의 문장을 다른 랜덤 문장으로 대체합니다.</li>
+                                <li>10% 확률로 하나의 문장을 그대로 유지합니다.</li>
+                            </ul>
+                            <li>위 2가지 모두 거치지 않았을 때, 단순히 multi-turn 데이터로 내보냅니다.</li>
+                            <li>위에서 마스킹 과정을 거친 데이터만 MUR을 수행합니다.</li>
+                            <li>위에서 순서가 셔플 된 데이터만 DUOR을 수행합니다.</li>
+                            <li>위에서 순서가 셔플되지 않은 데이터만 NUG 수행합니다(셔플, 마스킹 과정을 거치지 않은 데이터 포함).</li>
+                        </ol>
+                        위와 같은 방법으로 모델을 학습하게 됩니다.
+                        더 디테일한 부분은 다음글에서 코드와 함께 살펴보겠습니다.
+                    </p>
+
+
+                    
+                    <p>
+                        <br><br><br>다음에는 DialogBERT 상세 구현 및 왜 재현이 안되는지 개인적인 견해와 함께 살펴보도록 하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#DialogBERT&emsp;#MUR&emsp;#DUOR&emsp;#NUG
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('DialogBERT 첫 게시물 입니다.\n\nThis is the first post of DialogBERT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('dialogbert2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>DialogBERT 구현</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
