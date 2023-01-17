@@ -467,7 +467,7 @@
                         Sematic segmentation 분야도 CNN의 딥러닝 기법을 활용하여 빠르게 발전하였습니다. 
                         <ul>
                             <li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>Fully Convolutional Network (FCN) (2015)</b></a>: 기존 이미지 분류 모델은 pooling과 같이 이미지 차원을 줄이는 레이어가 존재하여 segmentation을 위한 모델로써 적합하지 않음. 하지만 이미지의 차원을 줄이지 않으면 메모리 초과 문제가 발생. 이러한 문제점의 합의점으로써 인코더, 디코더 기반으로 제작된 모델임.</li>
-                            <li><a href="https://arxiv.org/pdf/1505.04597.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>U-Net (2015)</b></a>: FCN을 확장한 개념으로, down-sampling 부분과 up-sampling 부분이 대칭으로 U의 형태를 띄고 있음. 그리고 down-sampling 할 때 결과를 up-sampling 할 때 그대로 concatenate 한다는 특징이 있음.</li>
+                            <li><a href="https://arxiv.org/pdf/1505.04597.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>U-Net (2015)</b></a>: FCN을 확장한 개념으로, down-sampling 부분과 up-sampling 부분이 대칭으로 U의 형태를 띠고 있음. 그리고 down-sampling 할 때 결과를 up-sampling 할 때 그대로 concatenate 한다는 특징이 있음.</li>
                             <li><a href="https://arxiv.org/pdf/1511.07053v1.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>ReSeg (2015)</b></a>: CNN과 pooling을 RNN을 통해 구현한 ReNet에서 파생되어 나온 segmentation 모델. CNN과 RNN을 결합하여 사용하였으며, up-sampling 과정에서 transposed CNN을 사용.</li>
                             <li><a href="https://arxiv.org/pdf/1802.02611.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"><b>DeepLab V3+ (2018)</b></a>: FCN도 down-sampling 등을 진행하면서 데이터 정보의 손실이 발생함. 이를 해결하기 위해서 ResNet을 적용하고, 확장 비율이라는 새로운 변수를 도입하여 정보 손실의 문제를 해결.</li>
                         </ul>
