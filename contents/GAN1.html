@@ -357,7 +357,7 @@
                     </p>
                     <p>
                         <br><br>정리해보자면 discriminator와 generator의 학습 난이도로 보면은 생성보다 구분이 상대적으로 쉽기 때문에 discriminator의 성능이 generator를 압도하게 됩니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">이런 상황에서 기존의 loss function을 사용한다면 가뜩이나 성능이 안좋은 generator에 영향을 주는 gradient가(0인 부분) 더 작기 때문에 generator는 학습이 제대로 일어나지 못하고 discriminator만 학습이 잘 되버리고 학습이 끝나는 경우가 발생하게 됩니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이런 상황에서 기존의 loss function을 사용한다면 가뜩이나 성능이 안 좋은 generator에 영향을 주는 gradient가(0인 부분) 더 작기 때문에 generator는 학습이 제대로 일어나지 못하고 discriminator만 학습이 잘 되버리고 학습이 끝나는 경우가 발생하게 됩니다.
                         하지만 우리의 목적은 데이터를 생성하는 것이기 때문에 generator의 성능이 더 잘나와야합니다.
                         따라서 loss function을 generator에 영향을 주는 gradient가(0인 부분) 크게 바꾸는 것입니다.</span>
                         그리고 최종적으로 변형된 식은 아래와 같습니다.
@@ -395,7 +395,7 @@
                     </div>
                     <p>
                         GAN이 학습을 하기 시작하면 도대체 학습을 언제 종료해야할지 막막합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">학습된 GAN 모델의 성능이 좋은지 안좋은지 평가하기가 애매합니다. 왜냐하면 분류를 위한 모델같은 경우 accuracy, precision, F1 score 등 다양한 평가 지표가 있지만, GAN은 사람이 감각적으로 판단할 수밖에 없는 생성 모델이기 때문입니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">학습된 GAN 모델의 성능이 좋은지 안 좋은지 평가하기가 애매합니다. 왜냐하면 분류를 위한 모델같은 경우 accuracy, precision, F1 score 등 다양한 평가 지표가 있지만, GAN은 사람이 감각적으로 판단할 수밖에 없는 생성 모델이기 때문입니다.</span>
                         그리고 위에서 gradient 문제 때문에 minimax game의 식을 바꿔버려서 discriminator와 generator가 이론적이긴 하지만 Nash equilibrium에 도달할 수 없이, 계속 서로 경쟁하면서 oscillate 하게 됩니다.
                         즉 이론적이긴 하지만 학습을 끝낼 수 있는 지표가 사라진 것이죠.
                         이렇게 학습 종료 시점이 애매하다는 것도 GAN의 단점이 될 수 있습니다.
@@ -430,7 +430,7 @@
                         \[IS\,=\,exp\Big(\frac{1}{N}\sum_{i=1}^ND_{KL}\big(P(y|x_i)||P(y)\big)\Big) \]
                     </div>
                     <p>
-                        <br>IS는 점수가 높을수록 좋은 데이터를 생성 했다는 것이며, 가장 안좋은 score는 1점입니다.
+                        <br>IS는 점수가 높을수록 좋은 데이터를 생성 했다는 것이며, 가장 안 좋은 score는 1점입니다.
                     </p>
                     <p>
                         <br><br><br><span style="font-size: 20px;"><b>Fréchet Inception Distance (FID) Score</b></span>

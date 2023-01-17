@@ -594,7 +594,7 @@
 
                         <br><br>이렇게 inductive bias는 모종의 가정이기 때문에 inductive bias가 강할수록 적은 데이터에 대해서 성능이 좋은 경향을 보입니다.
                         하지만 inductive bias가 너무 강하게 되면 훈련 시 보지 못했던 데이터가 들어왔을 때 대응 성능이 좋지 않을 수 있습니다.
-                        다른말로 모종의 가정을 하고 학습을 했는데, 가정과 약간 어긋나는 데이터가 test 시 들어올 때 성능이 안좋다는 의미입니다.
+                        다른말로 모종의 가정을 하고 학습을 했는데, 가정과 약간 어긋나는 데이터가 test 시 들어올 때 성능이 안 좋다는 의미입니다.
                         
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">Transformer가 이러한 inductive bias가 적은 모델입니다. 따라서 적은 데이터를 처리하는 데 성능 향상이 더딜 수 있지만, 빅데이터가 들어왔을 때 진가를 발휘하는 것이지요.</span>
                         즉 성능 향상을 위해 transformer는 CNN 보다 많은 데이터 필요하며, global feature를 추출해야한다면 transformer와 같이 inductive bias가 적은 모델을 사용하면 됩니다.
