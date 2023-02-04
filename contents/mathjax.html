@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Single Page Application (SPA)의 MathJax 적용</title>
+        <meta name="description" content="SPA 웹페이지의 MathJax 적용 방법을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/webImgHosting.html" />
+        <meta property="og:title" content="Single Page Application (SPA)의 MathJax 적용" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="SPA 웹페이지의 MathJax 적용 방법을 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AMPSemdZokCoyr5SukvEweKfON8nu12wnIsd9Et6WNWfDD6KApENxBTWl7lFzhLqEFE2Q9RA1caqYzcsztYeQjcAPmE-H5tpnm2XoSvTuAmbmtSFINu9vjMPbQSRbS2uyIHAaTgPvGU0rfnGCSXnDwxHix8TJu-lWhzskDHdTCtNdxjK50blk1u0aBgDqMYovFa5NDnfj1hbQIZ1Uxnhr4hS8qr7za0AN_XS_5TkinHI1vywmWtM9IMpt0e8lQsw7jE4ac8eX9enKGuHROAqipQtYXFs6b9Fl65pVBEpcLNa1_gOFkbrICTB9SC3lLeDmcE0JMiRftZuyMIrjvZeIGds4O3ruCIhvCOLSyAlwGj27jaCnV8MKxHbnhDvCUmNPyK5WhsBZroiZHnpRQiforukFYOmRA1I77UZRKHlBrZYQPg3f9AWPkebR0WhabZkt_hlZOhjVXZuDZtmXgmNrD3vAOHtUEA4DeUyYSITOZQBAXl4Aezc0Dp1ICXHT4hvix5JkiRfe8P-rcZnEzh8Dt8AO-HOd_R8YaD74WudpzIN-rsfyCJlN57C7mYiyieB7Ftp3H-RXDVuebf2UjLw5Uv1BUwdwd8-nAx1ig7KpV5dtddK9ntIei6_baaUAzIcmD7QOQoXtm7zRQz_Szc9egrPKmzw8qohpXkaJOZsYvfAu7XMvDIUVPqVyeEQ4jMadcYXzREX51s_7Nxswv6mE_viW_NUILEGGG4PajgWzuWqwWuMgpjc9ZvmC5qOEtRRPtoo-bMWK8LANbF_XsFpoT4UXG5OEQaNgRKPfxsqNyLMEBRqggExzRJA1LIgfntOn2DG06mzAOMRE0CFKBI0X9yobHzNCP3epSeOZs6j4d5myQalRpsOIb90gGS2Z8KoPeQS2rx5yHCTLiPmG0Pa5jM8p92YZy6diJL8PpCMjdyXf_chaJFVMDDdo-bCyteR-BtQVzWZYTN9c2uMwOWdm1K6q6PABsNkrfujN1zlAe2CxDumVTsgjxQyVV1HffxGsNcZuoAEFWIpYOtfQhY_2RI2PKvYUi5olsY05JIlvLjGFxYnznYb5KZzY4-NCMOnLU5lqza_t6sJWQ9oIuFcnIMyobeBuLflqfh840QEloUkvmBRedqEp_ObHX0z4UH1Bfz_0O-PPe1Ucah5cwjX6aPz2WpzizNJOtf1pzN3Osw8umourvf8XNYYjKFq4ArS-YuVzM7wPoM0OFuSVqBzMWom1w55cRCx6NE3VJS7tD1Jq9xCo9aRl264WTURRG4tq6E1B6XoYdksFHOaOZOnVYKQM4oSrNlMAdkHXR0rzhU2xpArS1YWoM3DdwLflv_7pLeyJQ6ftS38N7oKzKLSGjTjptnB3eWoWpCXbwHIPw8c53D5AT4gLQEXFaiYVRb8M-ztIE6xKrJaP_4Q1OZTeifv0ZyN0OezUe9eGS1YQ4eHPiBXCjG7fsEiEqSHMIxYfrGVUsxnjv-nNxSy15WDcsM" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">WEB 이야기 / Single Page Application (SPA)의 MathJax 적용</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AMPSemdZokCoyr5SukvEweKfON8nu12wnIsd9Et6WNWfDD6KApENxBTWl7lFzhLqEFE2Q9RA1caqYzcsztYeQjcAPmE-H5tpnm2XoSvTuAmbmtSFINu9vjMPbQSRbS2uyIHAaTgPvGU0rfnGCSXnDwxHix8TJu-lWhzskDHdTCtNdxjK50blk1u0aBgDqMYovFa5NDnfj1hbQIZ1Uxnhr4hS8qr7za0AN_XS_5TkinHI1vywmWtM9IMpt0e8lQsw7jE4ac8eX9enKGuHROAqipQtYXFs6b9Fl65pVBEpcLNa1_gOFkbrICTB9SC3lLeDmcE0JMiRftZuyMIrjvZeIGds4O3ruCIhvCOLSyAlwGj27jaCnV8MKxHbnhDvCUmNPyK5WhsBZroiZHnpRQiforukFYOmRA1I77UZRKHlBrZYQPg3f9AWPkebR0WhabZkt_hlZOhjVXZuDZtmXgmNrD3vAOHtUEA4DeUyYSITOZQBAXl4Aezc0Dp1ICXHT4hvix5JkiRfe8P-rcZnEzh8Dt8AO-HOd_R8YaD74WudpzIN-rsfyCJlN57C7mYiyieB7Ftp3H-RXDVuebf2UjLw5Uv1BUwdwd8-nAx1ig7KpV5dtddK9ntIei6_baaUAzIcmD7QOQoXtm7zRQz_Szc9egrPKmzw8qohpXkaJOZsYvfAu7XMvDIUVPqVyeEQ4jMadcYXzREX51s_7Nxswv6mE_viW_NUILEGGG4PajgWzuWqwWuMgpjc9ZvmC5qOEtRRPtoo-bMWK8LANbF_XsFpoT4UXG5OEQaNgRKPfxsqNyLMEBRqggExzRJA1LIgfntOn2DG06mzAOMRE0CFKBI0X9yobHzNCP3epSeOZs6j4d5myQalRpsOIb90gGS2Z8KoPeQS2rx5yHCTLiPmG0Pa5jM8p92YZy6diJL8PpCMjdyXf_chaJFVMDDdo-bCyteR-BtQVzWZYTN9c2uMwOWdm1K6q6PABsNkrfujN1zlAe2CxDumVTsgjxQyVV1HffxGsNcZuoAEFWIpYOtfQhY_2RI2PKvYUi5olsY05JIlvLjGFxYnznYb5KZzY4-NCMOnLU5lqza_t6sJWQ9oIuFcnIMyobeBuLflqfh840QEloUkvmBRedqEp_ObHX0z4UH1Bfz_0O-PPe1Ucah5cwjX6aPz2WpzizNJOtf1pzN3Osw8umourvf8XNYYjKFq4ArS-YuVzM7wPoM0OFuSVqBzMWom1w55cRCx6NE3VJS7tD1Jq9xCo9aRl264WTURRG4tq6E1B6XoYdksFHOaOZOnVYKQM4oSrNlMAdkHXR0rzhU2xpArS1YWoM3DdwLflv_7pLeyJQ6ftS38N7oKzKLSGjTjptnB3eWoWpCXbwHIPw8c53D5AT4gLQEXFaiYVRb8M-ztIE6xKrJaP_4Q1OZTeifv0ZyN0OezUe9eGS1YQ4eHPiBXCjG7fsEiEqSHMIxYfrGVUsxnjv-nNxSy15WDcsM);">
+                    <div>
+                        <span class="mainTitle">Single Page Application (SPA)의 MathJax 적용</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.02.05</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        이번 글에서는 single page application (SPA) 웹 페이지에서 MathJax를 사용하는 방법에 대해 알아보겠습니다.
+                        먼저 MathJax는 HTML에서 수식을 사용할 수 있게 도와주는 JavaScript의 라이브러리입니다.
+                        기본적으로 MathJax는 LaTeX 문법과 아주 흡사합니다.
+                        그리고 직접 구성한 웹페이지에서 수식을 사용하기 위해서는 MathJax가 필수입니다.
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">먼저 HTML에 MathJax를 사용하기 위해서는 &lt;body&gt; tag 안에 아래 코드를 입력해주면 됩니다.</span>
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+&lt;<span class="reserved">body</span>&gt;
+    &lt;<span class="reserved">script</span> <span class="var">src</span>=<span class="str">"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;&lt;/<span class="reserved">script</span>&gt;
+&lt;/<span class="reserved">body</span>&gt;
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 3);
+</script>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">현재 저의 웹 페이지는 SPA 형식으로 되어있습니다.
+                        즉 다른 페이지를 넘어갈 때 jQuery의 Pjax를 이용하여 특정 컨텐츠만 변경하는 방식으로 구성 되어있습니다.
+                        따라서 저는 위의 코드를 fetch 되는 페이지 안에다가 넣어주어야 했습니다.
+                        그래야만 fetch 되는 페이지에서 MathJax까지 같이 불러와서 사용이 가능했기 때문입니다.</span>
+
+                        <br><br>하지만 여기서 문제점을 발견했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Pjax를 통해 fetch page를 하고 다시 수식이 있는 페이지로 fetch하여 돌아왔을 때 위의 MathJax의 script tag가 불러오지 않아 페이지의 수식이 깨지는 문제점이 있었습니다.</span>
+                        따라서 HTML body tag 안에 아래의 JavaScript 코드의 함수를 추가하여 해결했습니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># JavaScript code</span>
+<span class="reserved">function</span> <span class="method">initMathJax</span>() {
+    <span class="var">MathJax</span> = <span class="reserved">null</span>;
+    <span class="return">if</span>(<span class="reserved">typeof</span>(<span class="var">MathJax</span>) !== <span class="str">'undefined'</span>) {
+        <span class="var">MathJax</span>.<span class="var">Hub</span>.<span class="method">Queue</span>([<span class="str">"Typeset"</span>, <span class="var">MathJax</span>.<span class="var">Hub</span>]);
+    }
+}
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 7);
+</script>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="annot"># HTML code</span>
+&lt;<span class="reserved">body</span>&gt;
+    &lt;<span class="reserved">script</span> <span class="var">src</span>=<span class="str">"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;&lt;/<span class="reserved">script</span>&gt;
+    &lt;<span class="reserved">script</span>&gt;
+        <span class="method">initMathJax</span>()
+    &lt;<span class="reserved">/script</span>&gt;
+&lt;/<span class="reserved">body</span>&gt;
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 7);
+</script>
+
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#SPA&emsp;#MathJax
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('게시물 준비 중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('webImgHosting.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>GitHub Web Hosting 이미지 불러오기</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>

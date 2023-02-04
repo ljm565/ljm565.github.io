@@ -45,7 +45,7 @@
         <meta property="og:url" content="https://ljm565.github.io/contents/webImgHosting.html" />
         <meta property="og:title" content="GitHub Web Hosting 이미지 불러오기" />
         <meta property="og:type" content="website">
-        <meta property="og:description" content="구글 드라이브를 통해 웹 페이지에 이미지를 호스팅 하는 방법을 설명합니다." />
+        <meta property="og:description" content="구글 드라이브를 통해 웹 페이지에 이미지를 URL로 불러와서 띄워주는 방법을 설명합니다." />
         <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypDaXt0ZbcZfV2OLXu4j8ECFWUso0jxemvdimmghZAAqJPBQpoGAC72drPHCLyaDDuN9eALv5XwaYv295phutM2CbUYlsL6weak3Wf7Bu2I2T-HpBuT_Q9tUC6d38lKxWhep5SUn85WK3t88G9UbLEiEJAUZgGPb6dw26iPqRycpE0dWXMZWuoMbC02JcKw0t4FLm-BzDiAioCGIzhsLdmeiEpQXr72lpVJa0Qbb9w7HmLI3d27QMw5Xv-11PLYabl1FOUgM_AQbE5b2kahvcHiioKSY8RqooYFXh8PA6OB8o_1xWJXM3C0mfVN47Z9IrmqIA2S3abUNopryJ3ryUgNkHeADab4aWHllDgXF2O64HSv5QbvlBf5nNFXyQi1QgVUK8ncCX4ihI8VWlgodSeufN0DXtreOA-VqK3lovPg2n38Ib5khtTksb-MjExWm8E0V1lKIoibn1eouu0AxJBZJv1hKxGYwPDSvLwK4BeKm-MlPG7LnSHafbVhxX6SNdkVBPmg0rLftpNZRLR4o6gclYCt8Yu-W4ETUYar7ELvgqAtYRmMMIOxnxMSecd_rk2ZEZ-Xt5-sWcuVXRXbSEt6MWrVIRVTb7Szpvk8NVMYMtxP9eXL7gd2irdRG3HVwO7xENJQz1WdgOvTZmKebNplBSC3vWbydobwmwmkYoGk6k4JO1PWLGnFiHhIjqY_VJAshPJKomYTGe2ZgB-03EbuUq6NQxZn42jnlm8aUU2FSqXJcJ5lqpCQxIavHwGQGB5dburGoc25qzTis_ddWEauvX-F_K6oHjAUztHzHNj3lxCMyztOuivZSfKk2ZzrX5VlNkw8UaYGSYM5moWwCCayCg0Mgey1spd5hHX1rP8oUOT4new_wKphbDVjI7qBuV7PYR7pH4aDJAAvIY0Yrzcpz6gMengtwXKmdz9EnoEf2Gg-Lhw2fGHe-teFscgQF8og5lux4VLpyNh-NFyHUwtLapop_4RK47p-keJaFDlcuQWIpYAB0HA9Xb1smRxxZA8S0ZhhGKa50vk8_sksMMa8LN9qIiyF5vdL41dAUiZK9jBkqvL4s75EAsKKCp1wjmMr3lt_uf3XLz8_4rCHZtDBGPFQXrV7hC4vDkWECLk8v6cSbrflj2LYygfHdwdzFtLDwwrjbwXzEmy2ROYvAGjirnYFvPafuMnY9DLE4da46PijtCm6TAGkPl3wVVH8ZJhRu5YMywLY6ATZ86-kOlCjZCiDG6w2uuh4z46HOwltk5g3iJNYJUHX9DNOTFWo_rx0nyaI" />
     </head>   
     <body>
@@ -163,8 +163,8 @@ lineMaking("code1", 17);
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
-                        <span><a style="position: absolute; left: 0;" onclick="alert('게시물 준비 중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
-                        <br></span>
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('mathjax.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Single Page Application (SPA)의 MathJax 적용</span>
                     </div>
                     <div class="pageTurnerRight">
                         <span><a style="position: absolute; right: 0;" onclick="alert('웹 호스팅 마지막 게시물 입니다.\n\nThis is the first post of web hosting.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>

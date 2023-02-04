@@ -7,7 +7,7 @@
     <label for="Big_web" style="font-weight: bold; font-size: 16px;">WEB 이야기</label>
     <ul>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Single Page Application (SPA)와 AJAX & PJAX</a></li>
-        <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">MathJax</a></li>
+        <li><a onclick="pjaxPage('contents/mathjax.html', 'mathjax.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Single Page Application (SPA)의 MathJax 적용</a></li>
         <li><a onclick="pjaxPage('contents/webImgHosting.html', 'webImgHosting.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GitHub Web Hosting 이미지 불러오기</a></li>
         <!-- <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">React (리액트)</a></li> -->
     </ul>
@@ -29,7 +29,7 @@
         </li>
         <li>
             <input type="checkbox" id="Big_VAE" checked>
-            <label for="Big_VAE">Variational Autoencoder (VAE)</label>
+            <label for="Big_VAE"><div style="display:inline-block; width: 90%; vertical-align: text-top;">Variational Autoencoder (VAE)</div></label>
             <ol>
                 <li><a onclick="pjaxPage('contents/VAE1.html', 'VAE1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Variational Autoencoder (VAE)</a></li>
                 <li><a onclick="pjaxPage('contents/VAE2.html', 'VAE2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Variational Autoencoder (VAE) 구현 및 MNIST 생성</a></li>
@@ -64,7 +64,7 @@
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Word2Vec</a></li>
         <li>
             <input type="checkbox" id="Big_RNN" checked>
-            <label for="Big_RNN">Recurrent Neural Network (RNN)</label>
+            <label for="Big_RNN"><div style="display:inline-block; width: 90%; vertical-align: text-top;">Recurrent Neural Network (RNN)</div></label>
             <ol>
                 <li><a onclick="pjaxPage('contents/RNN1.html', 'RNN1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">RNN, LSTM, GRU </a></li>
                 <li><a onclick="pjaxPage('contents/RNN2.html', 'RNN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Sequence-to-Sequence (Seq2Seq) 모델과 Attention</a></li>
@@ -119,7 +119,7 @@
             <label for="Big_dialogbert">DialogBERT</label>
             <ol>
                 <li><a onclick="pjaxPage('contents/dialogbert1.html', 'dialogbert1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DialogBERT</a></li>
-                <li><a onclick="alert('게시물 준비중입니다.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DailyDialog를 이용한 DialogBERT 구현</a></li>
+                <li><a onclick="pjaxPage('contents/dialogbert2.html', 'dialogbert2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DailyDialog를 이용한 DialogBERT 구현</a></li>
             </ol>
         </li>
         <li>
@@ -219,6 +219,7 @@
                 <li><a onclick="pjaxPage('contents/newzealand15.html', 'newzealand15.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">32km 대자연 트레킹, 뉴질랜드 루트번 트랙 트레킹 (1)</a></li>
                 <li><a onclick="pjaxPage('contents/newzealand16.html', 'newzealand16.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">32km 대자연 트레킹, 뉴질랜드 루트번 트랙 트레킹 (2)</a></li>
                 <li><a onclick="pjaxPage('contents/newzealand17.html', 'newzealand17.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">32km 대자연 트레킹, 뉴질랜드 루트번 트랙 트레킹 (3)</a></li>
+                <!-- <li><a onclick="pjaxPage('contents/newzealand18.html', 'newzealand18.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">멋진 설산이 있는 곳, 뉴질랜드 마운트 쿡 여행</a></li> -->
             </ol>
         </li>
         <li>
