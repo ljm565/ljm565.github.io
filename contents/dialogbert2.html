@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DailyDialog를 이용한 DialogBERT 구현</title>
+        <meta name="description" content="DailyDialog를 이용하여 DialogBERT 재현합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/dialogbert2.html" />
+        <meta property="og:title" content="DailyDialog를 이용한 DialogBERT 구현" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="DailyDialog를 이용하여 DialogBERT 재현합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AAbDypC_pkKyTm94-VPk_BaTEHF2cb9kZmoieSY-gEQsIPmzQl5zc0_tWAMaPg7Sj91dgnDWMffIT2UXyHrldMBinh5u12NnFTlJaXs065PDXDngZQr1b2G8mXIyHMwSmh3-5JaNqiTPEwTuQ5SKoHyrLXxDcPVl1_74d0Lrh98qKNveJ46-u9KripUl3kub7qEhwlpIHQFtEQiTXpnXeohFZY-fhc2Nk0--xO4rVJEk7JN-uwReDt2xAxndUPgYI4JjWq2fQ1nY1aN1wdpyDF2Vxh7AcVk6whaSyavumqRjgC-hNE0XpTBWYk5BcqsLIgobmd43zbr034PhGGnpR8w9AsVi4rwKzyf7LMEBNn6xTaVvotLwgpKCOuvIXodi7-Ts68wDMlUuswGgU9oITTFNAklN_KeRwWT6ctN-B81YoWR2jWN9DQHEpuuOu4idy72rMMMAoAkQ86vDapwO3zM56Rne5QRP5hHYTSRx7TKNJF93yOQl599H2jB8dbZyEvDTZJ86ZL7X9qOtmbRPxyhhB58b4J1o8dmEwaRtXgRiTuYTXiOvxakVGzYUOSH78qpYzbFROFND-75ZbaJsPH-l3Ao_PnJpvfh9kPyM1QjxzU-VJ4A9NCxF8cjp789gSrCopCj3y6OpjTPOz36uyPNLog7D5ItG7yrTsDeBy4RQSV81uKY5VRywSSvyUrY24BAO04h7bPL70jUm0eP1NZm2ocsA4RRgrX7HQCW4IBwUEtdux7zW-InyHWeyjas0FrMHncvHcmjD7eEfG0jZyU6VxgQu6a-PtJMPQYod62sqgijiqyQJjX6fxNzHmAZiiy-056oxErg6MgH0UAMgepGcwtK8b2oeoBzwBgPjl9ZoI23sQ3MSWVRjTDwPqOe9pMKarfnfPAc2IcvM3O9lcr9WY0fg2qRnLqyDs4aHEvzzDlgpY1J5jvR4e6qzsAD-1UTgAUotToyBkj_bTQWNaUYa0NWwpxe4YdGege0atI3MGfddL2mYQy8v_xSoanIkg-aMnvTRHAtRstaptp5vDzYvL4JlJBdzs98uNrNdZyCjG4iFS8VbRCVPO-vMTxvaO9bttQfUf6xgZYeUJk3qgjwXgoXkbGNUyu7lqMSN2ZS4iaeHxTs10gNNkZ9bNp4faauzI_GqDm2HoQkaxkIF5EV5djRCUDfM-sPrzJngOrYguv2MxHjYnsQaSS91j783ig1e2diDnI4ZA9zWmzcS5aBU5SO9cqagD9tqZYPhimwpfxXCvilkkLIHl2CbCvKatl2OXucc-H-LVSviToIPPzdVowujEtgT601ZZQfnU8_z9DwNxbYtHHOH4XldCdMUCpeVzblC_FR2mnuG2N1rE3jgRGyzSfqq3WEo_86ToZjGQnHWp1ByjaY16kwZBMv-WrD-EW18RT4vDNcKDX9q3xa-5DCe0allfATYDL7BNIYtNlLjnuceT5x_5DtjejwiAF9G9zHwarTo6Q_ZiGUArg8" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / DialogBERT / 2. DailyDialog를 이용한 DialogBERT 구현</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AAbDypC_pkKyTm94-VPk_BaTEHF2cb9kZmoieSY-gEQsIPmzQl5zc0_tWAMaPg7Sj91dgnDWMffIT2UXyHrldMBinh5u12NnFTlJaXs065PDXDngZQr1b2G8mXIyHMwSmh3-5JaNqiTPEwTuQ5SKoHyrLXxDcPVl1_74d0Lrh98qKNveJ46-u9KripUl3kub7qEhwlpIHQFtEQiTXpnXeohFZY-fhc2Nk0--xO4rVJEk7JN-uwReDt2xAxndUPgYI4JjWq2fQ1nY1aN1wdpyDF2Vxh7AcVk6whaSyavumqRjgC-hNE0XpTBWYk5BcqsLIgobmd43zbr034PhGGnpR8w9AsVi4rwKzyf7LMEBNn6xTaVvotLwgpKCOuvIXodi7-Ts68wDMlUuswGgU9oITTFNAklN_KeRwWT6ctN-B81YoWR2jWN9DQHEpuuOu4idy72rMMMAoAkQ86vDapwO3zM56Rne5QRP5hHYTSRx7TKNJF93yOQl599H2jB8dbZyEvDTZJ86ZL7X9qOtmbRPxyhhB58b4J1o8dmEwaRtXgRiTuYTXiOvxakVGzYUOSH78qpYzbFROFND-75ZbaJsPH-l3Ao_PnJpvfh9kPyM1QjxzU-VJ4A9NCxF8cjp789gSrCopCj3y6OpjTPOz36uyPNLog7D5ItG7yrTsDeBy4RQSV81uKY5VRywSSvyUrY24BAO04h7bPL70jUm0eP1NZm2ocsA4RRgrX7HQCW4IBwUEtdux7zW-InyHWeyjas0FrMHncvHcmjD7eEfG0jZyU6VxgQu6a-PtJMPQYod62sqgijiqyQJjX6fxNzHmAZiiy-056oxErg6MgH0UAMgepGcwtK8b2oeoBzwBgPjl9ZoI23sQ3MSWVRjTDwPqOe9pMKarfnfPAc2IcvM3O9lcr9WY0fg2qRnLqyDs4aHEvzzDlgpY1J5jvR4e6qzsAD-1UTgAUotToyBkj_bTQWNaUYa0NWwpxe4YdGege0atI3MGfddL2mYQy8v_xSoanIkg-aMnvTRHAtRstaptp5vDzYvL4JlJBdzs98uNrNdZyCjG4iFS8VbRCVPO-vMTxvaO9bttQfUf6xgZYeUJk3qgjwXgoXkbGNUyu7lqMSN2ZS4iaeHxTs10gNNkZ9bNp4faauzI_GqDm2HoQkaxkIF5EV5djRCUDfM-sPrzJngOrYguv2MxHjYnsQaSS91j783ig1e2diDnI4ZA9zWmzcS5aBU5SO9cqagD9tqZYPhimwpfxXCvilkkLIHl2CbCvKatl2OXucc-H-LVSviToIPPzdVowujEtgT601ZZQfnU8_z9DwNxbYtHHOH4XldCdMUCpeVzblC_FR2mnuG2N1rE3jgRGyzSfqq3WEo_86ToZjGQnHWp1ByjaY16kwZBMv-WrD-EW18RT4vDNcKDX9q3xa-5DCe0allfATYDL7BNIYtNlLjnuceT5x_5DtjejwiAF9G9zHwarTo6Q_ZiGUArg8);">
+                    <div>
+                        <span class="mainTitle">DailyDialog를 이용한 DialogBERT 구현</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.02.05</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 DialogBERT 모델에 대해서 알아보았습니다.
+                        여기서는 논문에서 사용한 데이터인 DailyDialog 데이터를 이용하여 multi-turn 대화 모델을 재현해보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">구현은 python의 PyTorch를 이용하였습니다. 그리고 DialogBER 모델 구현과 더불어 재현이 되지 않는 이유에 대해서 제 개인적인 견해를 살펴보겠습니다.</span>
+
+                        <br><br>그리고 DialogBERT의 설명글은 <a onclick="pjaxPage('dialogbert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        이렇게 구현한 DialogBERT 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다.
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>DialogBERT 학습 데이터 구성</li>
+                            <li>DialogBERT 모델</li>
+                            <li>DialogBERT 학습</li>
+                            <li>DialogBERT 재현</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/DialogBERT" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">DialogBERT GitHub 코드</a>
+                    </div>
+                    
+
+
+
+                    <h1 class="subHead">DialogBERT 구현</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>DialogBERT 학습 데이터 구성</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        DialogBERT를 학습하기 위해서는 <a onclick="pjaxPage('dialogbert1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 DUOR, MUR, NUG의 보조 task들을 수행한다고 했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래는 이 task들을 수행할 데이터를 각각 만들어서 내보내줄 dataloader 제작 코드입니다.</span>
+                        한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code1">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>, <span class="var">phase</span>):
+        <span class="clazz">random</span>.<span class="var">seed</span>(<span class="num">999</span>)
+        <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
+        <span class="var">self</span>.<span class="var">phase</span> = <span class="var">phase</span>
+        
+        <span class="var">self</span>.<span class="var">cls_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token_id
+        <span class="var">self</span>.<span class="var">sep_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token_id
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">msk_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.msk_token_id
+        <span class="var">self</span>.<span class="var">pos_pad_token_id</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.pos_pad_token_id
+        
+        <span class="var">self</span>.<span class="var">cls_token</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.cls_token
+        <span class="var">self</span>.<span class="var">sep_token</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.sep_token
+        <span class="var">self</span>.<span class="var">msk_token</span> = <span class="var">self</span>.<span class="var">tokenizer</span>.msk_token
+
+        <span class="var">self</span>.<span class="var">max_multiturn</span> = <span class="var">config</span>.max_multiturn
+        <span class="var">self</span>.<span class="var">max_utterance</span> = <span class="var">config</span>.max_utterance
+        <span class="var">self</span>.<span class="var">length</span> = <span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>)  
+
+
+    <span class="reserved">def</span> <span class="method">select_dialog</span>(<span class="var">self</span>, <span class="var">data_list</span>):
+        <span class="var">dialog_len</span> = <span class="method">len</span>(<span class="var">data_list</span>)
+        <span class="var">st</span> = <span class="clazz">random</span>.<span class="var">randrange</span>(<span class="num">0</span>, <span class="var">dialog_len</span> - <span class="var">self</span>.<span class="var">cur_turn_len</span>)
+        <span class="var">tr</span> = <span class="var">st</span> + <span class="var">self</span>.<span class="var">cur_turn_len</span>
+        <span class="return">return</span> <span class="var">data_list</span>[<span class="var">st</span>:<span class="var">tr</span>], <span class="var">data_list</span>[<span class="var">tr</span>]
+
+        
+    <span class="reserved">def</span> <span class="method">add_special_token</span>(<span class="var">self</span>, <span class="var">s</span>, <span class="var">id</span>):
+        <span class="var">s</span> = [<span class="var">self</span>.<span class="var">cls_token_id</span>] + <span class="var">self</span>.<span class="var">tokenizer</span>.encode(<span class="var">s</span>)[:<span class="var">self</span>.<span class="var">max_utterance</span>-<span class="num">2</span>] + [<span class="var">self</span>.<span class="var">sep_token_id</span>]
+        <span class="var">s</span> += [<span class="var">id</span>] * (<span class="var">self</span>.<span class="var">max_utterance</span> - <span class="method">len</span>(<span class="var">s</span>))
+        <span class="return">return</span> <span class="var">s</span>
+
+
+    <span class="reserved">def</span> <span class="method">make_tensor</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">id</span>, <span class="var">dtype</span>, <span class="var">src</span>=<span class="reserved">True</span>):
+        <span class="return">if</span> <span class="var">src</span>:
+            <span class="var">total_s</span> = []
+            <span class="return">for</span> <span class="var">s</span> <span class="return">in</span> <span class="var">data</span>:
+                <span class="var">s</span> = <span class="var">self</span>.<span class="method">add_special_token</span>(<span class="var">s</span>, <span class="var">id</span>)
+                <span class="var">total_s</span>.<span class="method">append</span>(<span class="var">s</span>)
+            <span class="var">pad</span> = [[<span class="var">id</span>] * <span class="var">self</span>.<span class="var">max_utterance</span>] * (<span class="var">self</span>.<span class="var">max_multiturn</span> - <span class="method">len</span>(<span class="var">total_s</span>))
+            <span class="var">total_s</span> += <span class="var">pad</span>
+            <span class="return">return</span> <span class="clazz">torch</span>.<span class="method">tensor</span>(<span class="var">total_s</span>, <span class="var">dtype</span>=<span class="var">dtype</span>)
+        <span class="return">return</span> <span class="clazz">torch</span>(<span class="var">self</span>.<span class="method">add_special_token</span>(<span class="var">data</span>, <span class="var">id</span>), <span class="var">dtype</span>=<span class="var">dtype</span>)
+
+
+    <span class="reserved">def</span> <span class="method">make_DUOR_data</span>(<span class="var">self</span>, <span class="var">src_list</span>):
+        <span class="var">pair</span> = [(<span class="var">id</span>, <span class="var">s</span>) <span class="return">for</span> <span class="var">id</span>, <span class="var">s</span> <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">src_list</span>)]
+        <span class="clazz">random</span>.<span class="var">shuffle</span>(<span class="var">pair</span>)
+        <span class="var">pos_id</span> = [<span class="num">0</span>] + [<span class="var">d</span>[<span class="num">0</span>] + <span class="num">1</span> <span class="return">for</span> <span class="var">d</span> <span class="return">in</span> <span class="var">pair</span>] + [<span class="method">len</span>(<span class="var">pair</span>) + <span class="num">1</span>]
+        <span class="var">shuffled_src</span> = [<span class="var">self</span>.<span class="var">cls_token</span>] + [<span class="var">d</span>[<span class="num">1</span>] <span class="return">for</span> <span class="var">d</span> <span class="return">in</span> <span class="var">pair</span>] + [<span class="var">self</span>.<span class="var">sep_token</span>]
+        <span class="return">return</span> <span class="var">shuffled_src</span>, <span class="var">pos_id</span>
+
+
+    <span class="reserved">def</span> <span class="method">make_MUR_data</span>(<span class="var">self</span>, <span class="var">src_list</span>, <span class="var">idx</span>):
+        <span class="var">masking_loc</span> = <span class="clazz">random</span>.<span class="var">randrange</span>(<span class="num">0</span>, <span class="var">self</span>.<span class="var">cur_turn_len</span>)
+        <span class="var">label</span> = [<span class="var">self</span>.<span class="var">cls_token</span>] + <span class="var">src_list</span> + [<span class="var">self</span>.<span class="var">sep_token</span>]
+
+        <span class="annot"># to prevent masking short dialogues</span>
+        <span class="var">mlm_probs</span> = [<span class="num">0.0</span>, <span class="num">0.1</span>, <span class="num">0.4</span>, <span class="num">0.7</span>, <span class="num">0.8</span>, <span class="num">0.9</span>, <span class="num">1.0</span>, <span class="num">1.0</span>, <span class="num">1.0</span>, <span class="num">1.0</span>]
+        <span class="return">try</span>:
+            <span class="var">mlm_prob</span> = <span class="var">mlm_probs</span>[<span class="var">self</span>.<span class="var">cur_turn_len</span> - <span class="num">1</span>]
+        <span class="return">except</span> <span class="clazz">IndexError</span>:
+            <span class="var">mlm_prob</span> = <span class="num">1</span>
+        <span class="var">prob</span> = <span class="clazz">random</span>.<span class="var">random</span>()
+
+        <span class="return">if</span> <span class="var">prob</span> &lt; <span class="var">mlm_prob</span>:
+            <span class="var">prob</span> /= <span class="var">mlm_prob</span>
+            <span class="annot"># replace one utterance to [CLS] [MSK] [SEP]</span>
+            <span class="return">if</span> <span class="var">prob</span> &lt; <span class="num">0.8</span>:
+                <span class="var">src_list</span>[<span class="var">masking_loc</span>] = <span class="var">self</span>.<span class="var">msk_token</span>
+                
+            <span class="annot"># replace other utterance </span>
+            <span class="return">elif</span> <span class="var">prob</span> &lt; <span class="num">0.9</span>:
+                <span class="var">src_list</span>[<span class="var">masking_loc</span>] = <span class="var">self</span>.<span class="method">get_new_s</span>(<span class="var">idx</span>)
+
+        <span class="var">src_list</span> = [<span class="var">self</span>.<span class="var">cls_token</span>] + <span class="var">src_list</span> + [<span class="var">self</span>.<span class="var">sep_token</span>]    
+
+        <span class="return">return</span> <span class="var">src_list</span>, <span class="var">label</span>
+            
+
+    <span class="reserved">def</span> <span class="method">get_new_s</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="return">while</span> <span class="num">1</span>:
+            <span class="var">new_idx</span> = <span class="clazz">random</span>.<span class="var">randrange</span>(<span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>))
+            <span class="return">if</span> <span class="var">new_idx</span> != <span class="var">idx</span>:
+                <span class="return">return</span> <span class="clazz">random</span>.<span class="var">choice</span>(<span class="var">self</span>.<span class="var">data</span>[<span class="var">new_idx</span>])
+        
+
+    <span class="reserved">def</span> <span class="method">__getitem__</span>(<span class="var">self</span>, <span class="var">idx</span>):
+        <span class="annot"># define current data length</span>
+        <span class="var">self</span>.<span class="var">cur_turn_len</span> = <span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>[<span class="var">idx</span>]) - <span class="num">1</span> <span class="return">if</span> <span class="method">len</span>(<span class="var">self</span>.<span class="var">data</span>[<span class="var">idx</span>]) &lt;= <span class="var">self</span>.<span class="var">max_multiturn</span> - <span class="num">2</span> <span class="return">else</span> <span class="var">self</span>.<span class="var">max_multiturn</span> - <span class="num">2</span>
+
+        <span class="str">"""
+        Select target dialogues and corresponding target sentence
+        src_list: [s1, s2, s3, ..., s{n-1}]
+        trg: sn
+        """</span>
+        <span class="var">src_list</span>, <span class="var">trg</span> = <span class="var">self</span>.<span class="method">select_dialog</span>(<span class="var">self</span>.<span class="var">data</span>[<span class="var">idx</span>])
+        
+        <span class="str">"""
+        Data for target (the last utterance for NUG) and vanilla source
+        """</span>
+        <span class="var">src_nug</span> = [<span class="var">self</span>.<span class="var">cls_token</span>] + <span class="clazz">list</span>(<span class="var">src_list</span>) + [<span class="var">self</span>.<span class="var">sep_token</span>]
+        <span class="var">trg_nug</span> = <span class="var">self</span>.<span class="method">make_tensor</span>(<span class="var">trg</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="clazz">torch</span>.<span class="var">long</span>, <span class="reserved">False</span>)
+        <span class="var">lm_trg</span> = <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>([[<span class="var">self</span>.<span class="var">pad_token_id</span>] * <span class="var">self</span>.<span class="var">max_utterance</span>] * <span class="var">self</span>.<span class="var">max_multiturn</span>)
+        <span class="var">pos_id</span> = <span class="clazz">list</span>(<span class="clazz">range</span>(<span class="method">len</span>(<span class="var">src_list</span>) + <span class="num">2</span>))
+        <span class="var">shuffled</span> = <span class="num">0</span>
+
+        <span class="str">"""
+        if
+            Data for shuffled DUOR
+        else
+            Data for MUR
+        """</span>
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="return">if</span> <span class="clazz">random</span>.<span class="var">random</span>() &lt; <span class="num">0.4</span> <span class="reserved">and</span> <span class="method">len</span>(<span class="var">src_list</span>) &gt; <span class="num">0</span>:
+                <span class="var">src_nug</span>, <span class="var">pos_id</span> = <span class="var">self</span>.<span class="method">make_DUOR_data</span>(<span class="clazz">list</span>(<span class="var">src_list</span>))
+                <span class="var">shuffled</span> = <span class="num">1</span>
+            <span class="return">else</span>:
+                <span class="return">if</span> <span class="method">len</span>(<span class="var">src_list</span>) &gt; <span class="num">2</span>:
+                    <span class="var">src_nug</span>, <span class="var">lm_trg</span> = <span class="var">self</span>.<span class="method">make_MUR_data</span>(<span class="clazz">list</span>(<span class="var">src_list</span>), <span class="var">idx</span>)
+                    <span class="var">lm_trg</span> = <span class="var">self</span>.<span class="method">make_tensor</span>(<span class="var">lm_trg</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="clazz">torch</span>.<span class="var">long</span>)
+                    <span class="var">pos_id</span> = <span class="clazz">list</span>(<span class="clazz">range</span>(<span class="method">len</span>(<span class="var">src_list</span>) + <span class="num">2</span>))
+                
+        <span class="var">src_nug</span> = <span class="var">self</span>.<span class="method">make_tensor</span>(<span class="var">src_nug</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="clazz">torch</span>.<span class="var">long</span>)
+        <span class="var">pos_id</span> = <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>(<span class="var">pos_id</span> + [<span class="var">self</span>.<span class="var">pos_pad_token_id</span>] * (<span class="var">self</span>.<span class="var">max_multiturn</span> - <span class="method">len</span>(<span class="var">pos_id</span>)))
+
+        <span class="return">return</span> <span class="var">src_nug</span>, <span class="var">trg_nug</span>, <span class="var">lm_trg</span>, <span class="var">pos_id</span>, <span class="var">shuffled</span>
+
+
+    <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code1", 133);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>DUOR, MUR, NUG를 위한 데이터 제작</b></span>
+                        <br>먼저 DUOR, MUR를 위한 데이터 제작하는 dataloader 코드입니다.
+                        여기서 나오는 config 부분은 <a href="https://github.com/ljm565/DialogBERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 src/config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화하는 것입니다.
+                        <ul>
+                            <li>4 ~ 20번째 줄: Multi-turn DialogBERT 학습 데이터를 만들기 위해 필요한 변수들 사전 정의.</li>
+                            <li>4번째 줄: (s1, s2, ..., sn), (s1, s2, ..., sn), ... , (s1, s2, ..., sn)] 형식으로 구성 되어있음..</li>
+                            <li>23 ~ 27번째 줄: 하나의 multi-turn 데이터의 길이가 사용자가 지정한 최대 multi-turn보다 길 때 랜덥으로 multi-turn 구간 선택, 작을 때는 전체 구간 선택하는 함수.</li>
+                            <li>30 ~ 33번째 줄: [CLS], [SEP], [PAD] 토큰을 문장에 추가하여 encoding 된 결과를 내어주는 함수.</li>
+                            <li>36 ~ 45번째 줄: Source tensor와 target tensor를 만드는 부분, src가 True인 경우 [s1, s2, ..., sn] 형식의 source multi-turn이며, src가 False인 경우 단일 target 문장.</li>
+                            <li>48 ~ 53번째 줄: DUOR을 위한 데이터 생성 함수. Multi-turn의 섞은 문장 리스트와 동시에 문장 순서를 예측해야하므로 원래의 순서 내보냄..</li>
+                            <li>52번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">추가로 양 끝에 [CLS], [SEP]을 추가해 encoding 할 때 "[CLS] [CLS] [SEP]", "[CLS] [SEP] [SEP]" 문장이 생성되도록 함</span>.</li>
+                            <li>56 ~ 80번째 줄: MUR을 위한 데이터 생성 함수. MUR은 masking 된 문장의 feature를 MSE loss를 통해 계산해야하므로 label을 만들어서 내보냄과 동시에 masking하는 함수.</li>
+                            <li>58번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">추가로 양 끝에 [CLS], [SEP]을 추가해 encoding 할 때 "[CLS] [CLS] [SEP]", "[CLS] [SEP] [SEP]" 문장이 생성되도록 함</span>.</li>
+                            <li>61번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Multi-turn 길이에 따라 masking 할 확률을 정함. 문장이 짧을수록 masking을 할 확률이 적어짐.</span>(논문에는 언급 없지만 원래 코드에만 존재하는 부분).</li>
+                            <li>62 ~ 65번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Multi-turn의 길이가 61번째 줄의 list 길이보다 길 경우 masking할 확률을 1로 설정하는 부분.</span></li>
+                            <li>68 ~ 76번째 줄: 61 ~ 65번째에서 정한 mlm_prob에 대해서 80% 확률로 masking, 10%의 확률로 다른 문장으로 대체, 10%의 확률로 유지하는 부분.</li>
+                            <li>78번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">추가로 양 끝에 [CLS], [SEP]을 추가해 encoding 할 때 "[CLS] [CLS] [SEP]", "[CLS] [SEP] [SEP]" 문장이 생성되도록 함</span>.</li>
+                            <li>83 ~ 87번째 줄: MUR 부분의 다른 문장으로 대체할 때 사용되는 함수.</li>
+                            <li>90 ~ 129번째 줄: 실제 데이터가 들어와서 실시간으로 DUOR, MUR이 처리되는 부분.</li>
+                            <li>91 ~ 99번째 줄: 23 ~ 27번째 함수의 multi-turn 대화가 사용자 지정 최대 multi-turn 수 보다 길 경우 랜덤으로 선택하는 부분.</li>
+                            <li>101 ~ 108번째 줄: 기본적인 dataloader에서 내보낼 데이터를 초기화하는 부분.</li>
+                            <li>116 ~ 124번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Training set일 경우 DUOR, MUR 데이터 제작. 그중 40%의 확률로 DUOR 수행(shuffle), 60%의 확률과 multi-turn이 3개 이상인 데이터의 경우 MUR 수행. 이 두 경우를 모두 거치지 않은 경우 단순 multi-turn 문장과 target 문장 유지.</span></li>
+                            <li>119번째 줄: shuffle 변수를 1로 만들어주어 DUOR을 위한 데이터 표시를 내어보내줌.</li>
+                            <li>126 ~ 127번째 줄: DUOR 또는 MUR을 거쳤거나, 아무것도 거치지 않은 데이터를 tensor로 만들어주는 부분.</li>
+                        </ul>
+                        <br>
+                        <ol>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">여기서 확인할 수 있는 부분은 모든 데이터에 대해 DUOR, MUR 둘 중 하나를 거치도록 합니다.
+                            다만 multi-turn이 짧은 특수한 몇몇의 데이터인 경우는 DUOR, MUR을 거치지 않는 것을 볼 수 있습니다.</span></li>
+                            <li>뿐만 아니라 multi-turn 문장 양 끝에 "[CLS] [CLS] [SEP]", "[CLS] [SEP] [SEP]"의 문장이 추가되는 것을 확인할 수 있습니다.
+                            이 부분은 multi-turn 문장 리스트에 [CLS]와 [SEP] 리스트를 앞뒤에 추가한 후, encoding 하는 과정에서 "[CLS] [CLS] [SEP]", "[CLS] [SEP] [SEP]"로 만들어집니다.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">마지막으로 MUR을 수행할 때 모든 multi-turn 데이터에 대해 80%, 10%, 10% 확률로 수행하는 것이 아니라 multi-turn 개수가 적을수록 MUR을 수행할 확률이 작아지며, 수행하지 않는 경우는 그대로 내보내는 경우입니다.</span></li>
+                        </ol>
+                        <br>위처럼 논문에 나와있지 않지만 원래 코드에는 구현이 되어있는 디테일한 부분이 많다는 것을 참고하면 되겠습니다.
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>DialogBERT 모델</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 DialogBERT 모델 코드입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">원래의 코드에서도 Hugging Face의 BERT 관련 모델을 썼기 때문에 여기서도 원래 코드에서 사용한 모델과 configuration을 그대로 사용했습니다.</span>
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code2">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">BertModel</span>, <span class="clazz">BertLMHeadModel</span>, <span class="clazz">BertConfig</span>, <span class="clazz">BertForPreTraining</span>
+
+
+<span class="annot"># utterance encoder</span>
+<span class="reserved">class</span> <span class="clazz">UtteranceEncoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>):
+        <span class="clazz">super</span>(<span class="clazz">UtteranceEncoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BertForPreTraining</span>(<span class="var">self</span>.<span class="var">config</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">mask</span>):
+        <span class="var"><span class="var">batch</span>_size</span>, <span class="var">max_multiturn</span>, <span class="var">max_utterance</span> = <span class="var">x</span>.size()  <span class="annot"># B x multi_turn x max_len</span>
+        <span class="var">x</span>, <span class="var">mask</span> = <span class="var">x</span>.view(<span class="num">-<span class="num">1</span></span>, <span class="var">max_utterance</span>), <span class="var">mask</span>.view(<span class="num">-<span class="num">1</span></span>, <span class="var">max_utterance</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>.bert(<span class="var">input_ids</span>=<span class="var">x</span>, <span class="var">attention_<span class="var">mask</span></span>=<span class="var">mask</span>)[<span class="str">'pooler_output'</span>]   <span class="annot"> # (B x multi_turn) x hidden_dim</span>         
+        <span class="var">output</span> = <span class="var">output</span>.view(<span class="var"><span class="var">batch</span>_size</span>, <span class="var">max_multiturn</span>, <span class="num">-<span class="num">1</span></span>)   <span class="annot"># B x multi_turn x hidden_dim</span>
+        <span class="return">return</span> <span class="var">output</span>
+
+
+
+<span class="annot"># context encoder</span>
+<span class="reserved">class</span> <span class="clazz">ContextEncoder</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>):
+        <span class="clazz">super</span>(<span class="clazz">ContextEncoder</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BertModel</span>(<span class="var">self</span>.<span class="var">config</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">mask</span>):
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">inputs_embeds</span>=<span class="var">x</span>, <span class="var">attention_<span class="var">mask</span></span>=<span class="var">mask</span>)[<span class="str">'last_hidden_state'</span>]   <span class="annot"># B x multi_turn x hidden_dim</span> 
+        <span class="return">return</span> <span class="var">output</span>
+
+
+
+<span class="annot"># NN for MUR</span>
+<span class="reserved">class</span> <span class="clazz">MaskedUtteranceRegression</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>):
+        <span class="clazz">super</span>(<span class="clazz">MaskedUtteranceRegression</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">self</span>.<span class="var">config</span>.hidden_size
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">self</span>.<span class="var">config</span>.hidden_dropout_prob
+        <span class="var">self</span>.<span class="var">layer_norm_eps</span> = <span class="var">self</span>.<span class="var">config</span>.layer_norm_eps
+
+        <span class="var">self</span>.<span class="var">encoding_converter</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
+            <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>),
+            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
+            <span class="clazz">nn</span>.<span class="clazz">GELU</span>(),
+            <span class="clazz">nn</span>.<span class="clazz">LayerNorm</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">eps</span>=<span class="var">self</span>.<span class="var">layer_norm_eps</span>)
+        )
+
+    
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
+        <span class="return">return</span> <span class="var">self</span>.<span class="var">encoding_converter</span>(<span class="var">x</span>)
+
+
+
+<span class="annot"># NN for DUOR</span>
+<span class="reserved">class</span> <span class="clazz">DistributedUtteranceOrderRanking</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>):
+        <span class="clazz">super</span>(<span class="clazz">DistributedUtteranceOrderRanking</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">self</span>.<span class="var">config</span>.hidden_size
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pad_token_id
+        <span class="var">self</span>.<span class="var">pos</span>_<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.pos_pad_token_id
+
+        <span class="var">self</span>.<span class="var">dorn</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">bias</span>=<span class="reserved">False</span>)
+        
+    
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">pos_id</span>, <span class="var">mask</span>):
+        <span class="annot"># predict order</span>
+        <span class="var">x</span>, <span class="var">score</span>_<span class="var">mask</span> = <span class="var">self</span>.<span class="var">dorn</span>(<span class="var">x</span>), <span class="var">mask</span>.<span class="method">unsqueeze</span>(<span class="num">1</span>)
+        <span class="var">score</span> = <span class="clazz">torch</span>.<span class="method">bmm</span>(<span class="var">x</span>, <span class="clazz">torch</span>.<span class="method">transpose</span>(<span class="var">x</span>, <span class="num">1</span>, <span class="num">2</span>))   <span class="annot"># (# of shuffled x multi_turn x hidden_dim) * (# of shuffled x hidden_dim x multi_turn) = # of shuffled x multi_turn x multi_turn</span>
+        <span class="var">score</span> = <span class="var">score</span>.<span class="method">masked_fill</span>(<span class="var">score</span>_<span class="var">mask</span>==<span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="num">0</span>)
+        <span class="var">score</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">score</span>, <span class="var">dim</span>=<span class="num">2</span>) / <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">score</span>_<span class="var">mask</span>, <span class="var">dim</span>=<span class="num">2</span>)   <span class="annot"># mean except for padding</span>
+        <span class="var">score</span> = <span class="var">score</span>.<span class="method">masked_fill</span>(<span class="var">mask</span>==<span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="clazz">float</span>(<span class="str">'-inf'</span>))
+
+        <span class="annot"># gt score</span>
+        <span class="var">pos_max</span> = <span class="clazz">torch</span>.<span class="method">max</span>(<span class="var">pos_id</span>, <span class="var">dim</span>=<span class="num">1</span>, <span class="var">keepdim</span>=<span class="reserved">True</span>)[<span class="num">0</span>]
+        <span class="var">pos_id</span> = (<span class="var">pos_max</span> - <span class="var">pos_id</span>) / <span class="var">pos_max</span>
+        <span class="var">pos_id</span> = <span class="var">pos_id</span>.<span class="method">masked_fill</span>(<span class="var">mask</span>==<span class="var">self</span>.<span class="var">pad_token_id</span>, <span class="clazz">float</span>(<span class="str">'-inf'</span>))
+        
+        <span class="annot"># get probs</span>
+        <span class="var">pred_order_prob</span> = <span class="clazz">F</span>.<span class="method">log_softmax</span>(<span class="var">score</span>, <span class="var">dim</span>=<span class="num">-<span class="num">1</span></span>)
+        <span class="var">gt_order_prob</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">pos_id</span>, <span class="var">dim</span>=<span class="num">-<span class="num">1</span></span>)
+
+        <span class="return">return</span> <span class="var">pred_order_prob</span>, <span class="var">gt_order_prob</span>
+
+
+
+<span class="annot"># NN for NUG</span>
+<span class="reserved">class</span> <span class="clazz">NextUtteranceGeneration</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>):
+        <span class="clazz">super</span>(<span class="clazz">NextUtteranceGeneration</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.<span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">vocab_size</span> = <span class="var">tokenizer</span>.<span class="var">vocab_size</span>
+        <span class="var">self</span>.<span class="var">config</span> = <span class="var">config</span>
+        <span class="var">self</span>.<span class="var">config</span>.is_decoder = <span class="reserved">True</span>
+        <span class="var">self</span>.<span class="var">config</span>.add_cross_attention = <span class="reserved">True</span>
+        <span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BertLMHeadModel</span>(<span class="var">self</span>.<span class="var">config</span>)
+
+
+    <span class="reserved">def</span> <span class="method">make_pad_mask</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">id</span>):
+        <span class="var">mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">x</span>==<span class="var">id</span>, <span class="num">0</span>, <span class="num">1</span>)
+        <span class="return">return</span> <span class="var">mask</span>
+
+    
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">trg</span>, <span class="var">cntx_pad_<span class="var">mask</span></span>):
+        <span class="var">trg_pad_mask</span> = <span class="var">self</span>.<span class="method">make_pad_mask</span>(<span class="var">trg</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(
+            <span class="var">input_ids</span>=<span class="var">trg</span>,
+            <span class="var">attention_<span class="var">mask</span></span>=<span class="var">trg_pad_mask</span>,
+            <span class="var">encoder_hidden_states</span>=<span class="var">x</span>,
+            <span class="var">encoder_attention_<span class="var">mask</span></span>=<span class="var">cntx_pad_<span class="var">mask</span></span>)
+        <span class="return">return</span> <span class="var">output</span>.logits
+
+
+
+<span class="annot"># DialogBERT</span>
+<span class="reserved">class</span> <span class="clazz">DialogBERT</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
+        <span class="clazz">super</span>(<span class="clazz">DialogBERT</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">config</span> = <span class="clazz">BertConfig</span>(<span class="var">vocab_size</span>=<span class="num">30522</span>, <span class="var">hidden_size</span>=<span class="num">256</span>, <span class="var">num_hidden_layers</span>=<span class="num">6</span>, <span class="var">num_attention_heads</span>=<span class="num">2</span>, <span class="var">intermediate_size</span>=<span class="num">1024</span>)
+        <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
+        <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.<span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">pos</span>_<span class="var">pad_token_id</span> = <span class="var">tokenizer</span>.<span class="var">pos</span>_<span class="var">pad_token_id</span>
+        <span class="var">self</span>.<span class="var">device</span> = <span class="var">device</span>
+
+        <span class="var">self</span>.<span class="var">utteranceEnc</span> = <span class="clazz">UtteranceEncoder</span>(<span class="var">self</span>.<span class="var">config</span>)
+        <span class="var">self</span>.<span class="var">cntxEnc</span> = <span class="clazz">ContextEncoder</span>(<span class="var">self</span>.<span class="var">config</span>)
+        <span class="var">self</span>.<span class="var">mur</span> = <span class="clazz">MaskedUtteranceRegression</span>(<span class="var">self</span>.<span class="var">config</span>)
+        <span class="var">self</span>.<span class="var">duor</span> = <span class="clazz">DistributedUtteranceOrderRanking</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>)
+        <span class="var">self</span>.<span class="var">nug</span> = <span class="clazz">NextUtteranceGeneration</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>)
+
+
+    <span class="reserved">def</span> <span class="method">make_pad_mask</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">id</span>):
+        <span class="var">mask</span> = <span class="clazz">torch</span>.<span class="method">where</span>(<span class="var">x</span>==<span class="var">id</span>, <span class="num">0</span>, <span class="num">1</span>)
+        <span class="return">return</span> <span class="var">mask</span>
+
+
+    <span class="reserved">def</span> <span class="method">select_MUR_id</span>(<span class="var">self</span>, <span class="var">lm_trg</span>):
+        <span class="annot"># to select only MUR-ed data</span>
+        <span class="var">mur_id</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">lm_trg</span>, <span class="var">dim</span>=<span class="num">2</span>)   <span class="annot"># B x multi_turn x max_len -&gt; B x multi_turn</span>
+        <span class="var">mur_id</span> = <span class="var">mur_id</span> &gt; <span class="num">0</span>     <span class="annot"># B x multi_turn x max_len -&gt; B x multi_turn</span>
+        <span class="return">return</span> <span class="var">mur_id</span>
+
+
+    <span class="reserved">def</span> <span class="method">select_DUOR_id</span>(<span class="var">self</span>, <span class="var">shuffled</span>, <span class="var">cntx_pad_<span class="var">mask</span></span>):
+        <span class="var">con1</span> = <span class="var">shuffled</span> == <span class="num">1</span>   <span class="annot"># to select shuffled data</span>
+        <span class="var">con2</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">cntx_pad_<span class="var">mask</span></span>.cpu(), <span class="var">dim</span>=<span class="num">-<span class="num">1</span></span>) &gt;= <span class="num">4</span>   <span class="annot"># to select data that contain more than 2 dialogues except for CLS, SEP parts</span>
+        <span class="var">duor_id</span> = <span class="clazz">torch</span>.<span class="method">logical_and</span>(<span class="var">con1</span>, <span class="var">con2</span>)
+        <span class="return">return</span> <span class="var">duor_id</span>
+    
+    
+    <span class="reserved">def</span> <span class="method">select_NUG_id</span>(<span class="var">self</span>, <span class="var">shuffled</span>):
+        <span class="var">nug_id</span> = <span class="var">shuffled</span> == <span class="num">0</span>   <span class="annot"># to avoid shuffled data</span>
+        <span class="return">return</span> <span class="var">nug_id</span>
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">src</span>, <span class="var">trg</span>, <span class="var">lm_trg</span>, <span class="var">pos_id</span>, <span class="var">shuffled</span>, <span class="var">phase</span>):
+        <span class="var">mur</span>_<span class="var">output</span>, <span class="var">mur</span>_<span class="var">trg</span>, <span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span> = <span class="reserved">None</span>, <span class="reserved">None</span>, <span class="reserved">None</span>, <span class="reserved">None</span>
+
+        <span class="annot"># make mask</span>
+        <span class="var">uttn_pad_mask</span> = <span class="var">self</span>.<span class="method">make_pad_mask</span>(<span class="var">src</span>, <span class="var">self</span>.<span class="var">pad_token_id</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+        <span class="var">cntx_pad_<span class="var">mask</span></span> = <span class="var">self</span>.<span class="method">make_pad_mask</span>(<span class="var">pos_id</span>, <span class="var">self</span>.<span class="var">pos</span>_<span class="var">pad_token_id</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+
+        <span class="annot"># utterance and context encoding</span>
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">utteranceEnc</span>(<span class="var">src</span>, <span class="var">uttn_pad_mask</span>)
+        <span class="var">output</span> = <span class="var">self</span>.<span class="var">cntxEnc</span>(<span class="var">output</span>, <span class="var">cntx_pad_<span class="var">mask</span></span>)   <span class="annot"># B x multi_turn x hidden_dim</span> 
+        
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="annot"># for MUR, MUR target must be detached and had False requires_grad</span>
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">no_grad</span>():  
+                <span class="var">mur_id</span> = <span class="var">self</span>.<span class="method">select_MUR_id</span>(<span class="var">lm_trg</span>)
+                <span class="var">mur</span>_<span class="var">trg</span>, <span class="var">mur_pad_mask</span> = <span class="var">lm_trg</span>[<span class="var">mur_id</span>].<span class="method">detach</span>(), <span class="var">uttn_pad_mask</span>[<span class="var">mur_id</span>].<span class="method">detach</span>()   <span class="annot"># (# of mur-ed sentence) x max_len</span>
+                <span class="var">mur_trg</span> = <span class="var">self</span>.<span class="var">utteranceEnc</span>.<span class="var">model</span>.bert(<span class="var">input_ids</span>=<span class="var">mur</span>_<span class="var">trg</span>, <span class="var">attention_<span class="var">mask</span></span>=<span class="var">mur_pad_mask</span>)[<span class="str">'pooler_output'</span>]   <span class="annot"># (# of mur-ed sentence) x hidden_dim</span>
+            <span class="var">mur</span>_<span class="var">output</span> = <span class="var">self</span>.<span class="var">mur</span>(<span class="var">output</span>[<span class="var">mur_id</span>])  <span class="annot"># (# of mur-ed sentence) x hidden_dim</span>
+
+            <span class="annot"># for DUOR</span>
+            <span class="var">duor_id</span> = <span class="var">self</span>.<span class="method">select_DUOR_id</span>(<span class="var">shuffled</span>, <span class="var">cntx_pad_<span class="var">mask</span></span>)
+            <span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span> = <span class="var">self</span>.<span class="var">duor</span>(<span class="var">output</span>[<span class="var">duor_id</span>], <span class="var">pos_id</span>[<span class="var">duor_id</span>], <span class="var">cntx_pad_<span class="var">mask</span></span>[<span class="var">duor_id</span>])
+        
+        <span class="annot"># for NUG</span>
+        <span class="var">nug_id</span> = <span class="var">self</span>.<span class="method">select_NUG_id</span>(<span class="var">shuffled</span>)
+        <span class="var">nug</span>_<span class="var">output</span> = <span class="var">self</span>.<span class="var">nug</span>(<span class="var">output</span>[<span class="var">nug_id</span>], <span class="var">trg</span>[<span class="var">nug_id</span>], <span class="var">cntx_pad_<span class="var">mask</span></span>[<span class="var">nug_id</span>])
+        
+        <span class="return">return</span> (<span class="var">nug</span>_<span class="var">output</span>, <span class="var">trg</span>[<span class="var">nug_id</span>]), (<span class="var">mur</span>_<span class="var">output</span>, <span class="var">mur</span>_<span class="var">trg</span>), (<span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span>)
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code2", 186);
+</script>
+                    <p>
+                        <ul>
+                            <li>5 ~ 17번째 줄: 문장을 encoding 하는 UtteranceEncoder 모델. BERT를 사용.</li>
+                            <li>22 ~ 31번째 줄: 각 문장의 첫 번째 토큰인 [CLS]의 UtteranceEncoder 결과를 encoding하는 ContextEncoder 모델. BERT를 사용.</li>
+                            <li>36 ~ 53번째 줄: MUR을 수행하는 모델.</li>
+                            <li>58 ~ 86번째 줄: DUOR을 수행하는 모델.</li>
+                            <li>72번째 줄: 순서가 섞인 문장의 예측하기 위한 내적하는 부분.</li>
+                            <li>78 ~ 80번째 줄: 실제 순서 target 제작 부분.</li>
+                            <li>83 ~ 84번째 줄: Kullback-Leibler loss 계산을 위해 DUOR target, predict 값 제작 부분.</li>
+                            <li>91 ~ 114번째 줄: NUG를 수행하는 모델. <span class="highlight" style="color: rgb(0, 3, 206);">BERT에 causal mask를 적용하여 decoder처럼 사용. ContextEncoder 결과를 encoder feature로 고려하고 target 문장을 decoder로 넣어서 예측.</span></li>
+                            <li>119 ~ 186번째 줄: DialogBERT 모델 부분.</li>
+                            <li>140 ~ 144번째 줄: DUOR과 MUR을 위한 데이터 중 MUR을 위한 데이터만 추출하기 위한 위치 id 내어주는 함수(dataloader에서 구성한 데이터의 값을 가지고 조건을 주어 구분).</li>
+                            <li>147 ~ 151번째 줄: DUOR과 MUR을 위한 데이터 중 DUOR을 위한 데이터만 추출하기 위한 위치 id 내어주는 함수(dataloader에서 구성한 데이터의 값을 가지고 조건을 주어 구분).</li>
+                            <li>154 ~ 156번째 줄: DUOR을 위한 데이터만 빼고 나머지 데이터를 NUG에서 사용하기 때문에 DUOR을 위한 데이터가 아닌 데이터만 추출하기 위해 id를 내어주는 함수.</li>
+                            <li>170 ~ 180번째 줄: Training을 진행할 때만 MUR, DUOR 수행함. Inference를 할 때는 NUG만 수행.</li>
+                        </ul>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>DialogBERT 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 DialogBERT 학습 코드를 살펴보겠습니다.
+                        아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다. 여기서는 무시해도 좋습니다.
+                    </p>
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code3">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">DialogBERT</span>(<span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">nug</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">pad_token_id</span>)
+<span class="var">self</span>.<span class="var">duor</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">KLDivLoss</span>()
+<span class="var">self</span>.<span class="var">mur</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">MSELoss</span>()
+
+
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epoch</span>s):
+    <span class="method">print</span>(<span class="var">epoch</span>+<span class="num">1</span>, '/', <span class="var">self</span>.<span class="var">epoch</span>s)
+    <span class="method">print</span>('-'*<span class="num">1</span><span class="num">0</span>)
+
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>, <span class="str">'test'</span>]:
+        <span class="method">print</span>('Phase: {}'.<span class="method">format</span>(<span class="var">phase</span>))
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="return">for</span> <span class="var">i</span>, (<span class="var">src</span>, <span class="var">trg</span>, <span class="var">lm_<span class="var">trg</span></span>, <span class="var">pos_id</span>, <span class="var">shuffled</span>) <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="var">self</span>.<span class="var">dataloaders</span>[<span class="var">phase</span>]):
+            <span class="var">src</span>, <span class="var">trg</span>, <span class="var">lm_<span class="var">trg</span></span>, <span class="var">pos_id</span> = <span class="var">src</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">trg</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">lm_<span class="var">trg</span></span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">pos_id</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+            <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+                <span class="var">nug</span>, <span class="var">mur</span>, <span class="var">duor</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">src</span>, <span class="var">trg</span>, <span class="var">lm_<span class="var">trg</span></span>, <span class="var">pos_id</span>, <span class="var">shuffled</span>, <span class="var">phase</span>)
+                <span class="var">nug</span>_<span class="var">output</span>, <span class="var">nug</span>_<span class="var">trg</span> = <span class="var">nug</span>
+                <span class="var">mur</span>_<span class="var">output</span>, <span class="var">mur</span>_<span class="var">trg</span> = <span class="var">mur</span>
+                <span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span> = <span class="var">duor</span>
+
+                <span class="var">nug</span>_<span class="var">loss</span> = <span class="var">self</span>.<span class="var">nug</span>_<span class="var">criterion</span>(<span class="var">nug</span>_<span class="var">output</span>[:, :<span class="num">-<span class="num">1</span></span>, :].reshape(<span class="num">-<span class="num">1</span></span>, <span class="var">nug</span>_<span class="var">output</span>.size(<span class="num">-<span class="num">1</span></span>)), <span class="var">nug</span>_<span class="var">trg</span>[:, <span class="num">1</span>:].reshape(<span class="num">-<span class="num">1</span></span>))
+                <span class="var">mur</span>_<span class="var">loss</span> = <span class="var">self</span>.<span class="var">mur</span>_<span class="var">criterion</span>(<span class="var">mur</span>_<span class="var">output</span>, <span class="var">mur</span>_<span class="var">trg</span>)
+                <span class="var">duor</span>_<span class="var">loss</span> = <span class="var">self</span>.<span class="var">duor</span>_<span class="var">criterion</span>(<span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span>)   <span class="annot"># duor_output: log prob, duor_trg: prob</span>
+                <span class="var">loss</span> = <span class="var">nug</span>_<span class="var">loss</span> + <span class="var">mur</span>_<span class="var">loss</span> + <span class="var">duor</span>_<span class="var">loss</span>
+
+                <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                    <span class="var">loss</span>.backward()
+                    <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code3", 35);
+</script>
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 4번째 줄: MUR, DUOR, NUG의 loss function, 모델 선언 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>학습</b></span>
+                        <ul>
+                            <li>28 ~ 31번째 줄: MUR, NUG, DUOR loss 구하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>DialogBERT 재현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        DialogBERT는 재현성이 떨어진다는 저자 코드 GitHub에 issue가 많이 달려있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저도 제 코드가 재현이 안되어서 저자의 원래 코드도 돌려보았지만 재현이 되지 않았습니다.</span> 
+                        그 원인을 조금이나마 파악해보려고 나름대로 분석했던 내용을 정리해보겠습니다.
+                        <ol>
+                            <li><b>단조로운 [CLS] 토큰의 context embedding 결과</b></li>
+                            <span class="highlight" style="color: rgb(0, 3, 206);">먼저 어떠한 multi-turn을 넣든간에 greedy search로 추론할 때 같은 문장만 추론하는 경향이 있었습니다.</span>
+                            이러한 현상을 분석하기 위해 [CLS] context embedding 값을 살펴본 결과 문맥에 상관없이 모든 문장의 [CLS] context embedding 결과가 비슷했습니다.
+                            BERT같은 경우는 [CLS] 토큰을 통해 Next Sentence Prediction을 수행하면서 사용하지만, DialogBERT에서는 직접적으로 사용하지 않는 것이 문제인 듯 합니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">따라서 문장 앞의 [CLS] 토큰을 embedding을 해도 문맥에 상관 없이 비슷하게 embedding되며 이에 따라 똑같은 문장만 추론하는 것이었습니다.</span>
+                            <br><br><li><b>논문 결과의 출처?</b></li>
+                            먼저 위의 현상은 greedy search로 문장을 생성했을 때 발생하는 현상이었습니다.
+                            <span class="highlight" style="color: rgb(0, 3, 206);">하지만 실제 저자의 코드에서 보면 multinomial sampling을 통해 다양한 문장얼 생성하게끔 만들어줍니다.
+                            아마 논문에 사용했던 결과도 이렇게 sampling을 통해 나온 결과가 아닌가 싶습니다.</span>
+                            다만 제 개인적인 견해로는 좋은 모델이라면 greedy 생성에 대해 좋은 결과를 내어줘야한다고 생각하지만, 이렇게 하는 경우 성능이 잘 나오지 않는 것 같습니다.
+                        </ol>
+                    </p>
+
+                    <p>
+                        <br><br><br>DialogBERT 구현 코드와 재현이 안되는 제 개인적인 견해를 살펴보았습니다.
+                        여전히 제가 틀린 부분이 있을 수 있으니, 발견했다면 언제든지 알려주시면 감사하겠습니다.
+                        <a href="https://github.com/guxd/DialogBERT" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">원본 코드</span></a>도 참고해보면 좋을 듯합니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#DialogBERT&emsp;#DailyDialog
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('dialogbert1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>DialogBERT</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('DialogBERT 마지막 게시물 입니다.\n\nThis is the last post of DialogBERT.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
