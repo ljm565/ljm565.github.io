@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Cora 데이터와 GCN을 이용한 노드 분류</title>
+        <meta name="description" content="GCN을 이용하여 노드의 카테고리를 예측합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/gnn2.html" />
+        <meta property="og:title" content="Cora 데이터와 GCN을 이용한 노드 분류" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="GCN을 이용하여 노드의 카테고리를 예측합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AMPSemcIpRUottr_NNn7DePj2f9Zgf3010i0rw8jdAXKO9M0HW1cPhLnmTrcpOwWFWxGHGvZNjs6zD48ih1DXMR_oH116r462NgoVK1Vfw3pY_b9Ts4Ke1XgSmMuE2MRhgVQfxZlDz43EJGlX3DML9scX9bXVboc1gLU2QlpJ7JqelTBIhVatratY1B8xCBydtpqMxI1BdvlYQpBgeK9tPwDujCvX4sNKKepF8iDpIfHDlaxAwFm5F45bZT8cOUwIhNmGMM0Lr4NwrDelwtS67hjkwED-PfeWgpbYX6gf0FuIzhfHlucTd6i-4cgJzTEx5YFVPlzOV6h7npDd-_MN0b6ym9BSHAOx3PkpH88rBQt4TiSvHY_aISJ4Nm90PXkVbKqxEreOXfU3tIzenwfny2EeYkPiI_SoKOy5uG8jLnQVoujodbqTSi6ctHuwuJus2qcmi43RGnL5iQnoV3aDISFaqrwqm-otM6x9OJ7HCRw-R6pkaMkmEnw4um-c7CpPOR84OH-_29PuOO-q2quw5E1waJHqQzLoCP2XIyQnitRp1ADpM1HDFxprxRAGaDPuXIKxQaYF7KGVCQwVg7UqLTG2h2C5lnc0XQcwI9DYemvSsbSPG6nZAHBikaK17SIzvhTyh_9ses5tEvKV6HXX1Ob2O4Rhhmh9nY9aKVhYCd1ToAtQAmpKXU2VgrfrD693eTq7qhkmpGcE7rvl4aFtAhxZprRQrRWe3yS6ujgKGeHvMkWg4ZpnQk3Biw-DmI5CKuCXP9Dl99KOo2-kb4X-Exwmdu0ihOyA1VHm83ykAxY-kVcQyhcw7RJcLu4dp8ryZeqovkv7V7UsBwZ1nTKqHnEfxky0DPYkSrEnAdWE-W7pFIhPN2HKP8vg3zlSC4xDMRmujJj32nhpnDE5Sb-6SWKFFa_BHXwBCnAovLEgSoWBuYmiEdQ5iyQYdVXkoqcD_Kn72AkX-qwRXA_SL0Qdbr7TABnMjPtAs200rk3ox4JHOHxpbhqCloIteL9a3sLA70Ln5t13ZG_mtXiJrVxDv7-Y4F0aP0lQdz7jA4n0RgrHxjQNdthr1PsbfrGdJv1LN5SZrtIPAD9TS_JliF4ClwJlWX4zN6sPtopGb1HyVCprs3Xg5Rxzp0ac2QnLk4F1aJlJfx9Uwn8BfQkWmaIuaIMyywo6Q6r1lt-H9vdXUZtDTBmKqSU7mE5topxft_SfMuU3pdqww5MnEamueH0MkfY5d-GSmrUXT-bajt3TI1eXJ2NZJtgb0IjjrtYO1diNm1Mty4IJovY2-2YS_v2luGKXQe5LheAkzYidkTLhMJ1-xpJa42ecKcSivA7Tny78ciqN_wtnamjWQnf39c1LYUMXYuWAyv25TW-eDvAIENF1Tb62y6MyiZHCmwUvhvn5uXud5IQHNE-HXR3L_-m7LxkOlujyn9cIHMRYtvjpkdI8IXF-4o3WM13o9mYHRaHfcaK3O-vBKu2LKC8py8nYbk" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Graph Neural Network (GNN), Graph Convolutional Network (GCN) / 2. Cora 데이터와 GCN을 이용한 노드 분류</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AMPSemcIpRUottr_NNn7DePj2f9Zgf3010i0rw8jdAXKO9M0HW1cPhLnmTrcpOwWFWxGHGvZNjs6zD48ih1DXMR_oH116r462NgoVK1Vfw3pY_b9Ts4Ke1XgSmMuE2MRhgVQfxZlDz43EJGlX3DML9scX9bXVboc1gLU2QlpJ7JqelTBIhVatratY1B8xCBydtpqMxI1BdvlYQpBgeK9tPwDujCvX4sNKKepF8iDpIfHDlaxAwFm5F45bZT8cOUwIhNmGMM0Lr4NwrDelwtS67hjkwED-PfeWgpbYX6gf0FuIzhfHlucTd6i-4cgJzTEx5YFVPlzOV6h7npDd-_MN0b6ym9BSHAOx3PkpH88rBQt4TiSvHY_aISJ4Nm90PXkVbKqxEreOXfU3tIzenwfny2EeYkPiI_SoKOy5uG8jLnQVoujodbqTSi6ctHuwuJus2qcmi43RGnL5iQnoV3aDISFaqrwqm-otM6x9OJ7HCRw-R6pkaMkmEnw4um-c7CpPOR84OH-_29PuOO-q2quw5E1waJHqQzLoCP2XIyQnitRp1ADpM1HDFxprxRAGaDPuXIKxQaYF7KGVCQwVg7UqLTG2h2C5lnc0XQcwI9DYemvSsbSPG6nZAHBikaK17SIzvhTyh_9ses5tEvKV6HXX1Ob2O4Rhhmh9nY9aKVhYCd1ToAtQAmpKXU2VgrfrD693eTq7qhkmpGcE7rvl4aFtAhxZprRQrRWe3yS6ujgKGeHvMkWg4ZpnQk3Biw-DmI5CKuCXP9Dl99KOo2-kb4X-Exwmdu0ihOyA1VHm83ykAxY-kVcQyhcw7RJcLu4dp8ryZeqovkv7V7UsBwZ1nTKqHnEfxky0DPYkSrEnAdWE-W7pFIhPN2HKP8vg3zlSC4xDMRmujJj32nhpnDE5Sb-6SWKFFa_BHXwBCnAovLEgSoWBuYmiEdQ5iyQYdVXkoqcD_Kn72AkX-qwRXA_SL0Qdbr7TABnMjPtAs200rk3ox4JHOHxpbhqCloIteL9a3sLA70Ln5t13ZG_mtXiJrVxDv7-Y4F0aP0lQdz7jA4n0RgrHxjQNdthr1PsbfrGdJv1LN5SZrtIPAD9TS_JliF4ClwJlWX4zN6sPtopGb1HyVCprs3Xg5Rxzp0ac2QnLk4F1aJlJfx9Uwn8BfQkWmaIuaIMyywo6Q6r1lt-H9vdXUZtDTBmKqSU7mE5topxft_SfMuU3pdqww5MnEamueH0MkfY5d-GSmrUXT-bajt3TI1eXJ2NZJtgb0IjjrtYO1diNm1Mty4IJovY2-2YS_v2luGKXQe5LheAkzYidkTLhMJ1-xpJa42ecKcSivA7Tny78ciqN_wtnamjWQnf39c1LYUMXYuWAyv25TW-eDvAIENF1Tb62y6MyiZHCmwUvhvn5uXud5IQHNE-HXR3L_-m7LxkOlujyn9cIHMRYtvjpkdI8IXF-4o3WM13o9mYHRaHfcaK3O-vBKu2LKC8py8nYbk);">
+                    <div>
+                        <span class="mainTitle">Cora 데이터와 GCN을 이용한 노드 분류</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.02.12</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 Graph Neural Network (GNN), Graph Convolutional Network (GCN)에 대해 살펴봤습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이번글에서는 GCN을 PyTorch Geometric, Deep Graph Library 등을 사용하지 않고 naive하게 PyTorch만을 이용하여 학습하는 코드를 구성해보겠습니다.</span>
+                        이렇게 하는 이유는 본 코드에서 사용할 Cora 데이터가 batch 학습을 하지 해야할만큼 큰 데이터가 아니기 때문입니다.
+                        대신 다음글인 <a onclick="pjaxPage('gnn3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GCN을 이용한 COLLAB TUDataset 그래프 분류</span></a>에서는 PyTorch Geometric으로 batch 학습을 하는 코드가 있으니 PyTorch Geometric의 코드를 살펴보고싶다면 다음글을 참고하시기 바랍니다.
+
+                        <br><br>학습에 사용한 데이터는 Cora 그래프 데이터를 사용하였습니다.
+                        데이터에 대한 설명은 아래와 같습니다.
+                        <ul>
+                            <li><b>개요</b>: Cora 그래프 데이터는 논문들의 인용 현황을 그래프로 나타낸 데이터입니다.</li>
+                            <li><b>Node</b>: <span class="highlight" style="color: rgb(0, 3, 206);">그래프의 node는 하나의 논문을 의미합니다.</span></li>
+                            <li><b>Edge</b>: <span class="highlight" style="color: rgb(0, 3, 206);">Node끼리 연결된 edge는 논문끼리의 인용 현황을 의미합니다.</span></li>
+                            <li><b>Label</b>: Node별로 label이 부여되며, label은 논문의 카테고리를 의미합니다.</li>
+                            <li><b>Node feature</b>: 학습에 사용할 node feature는 각 노드, 즉 논문이 포함된 단어여부를 나타내는 데이터입니다.
+                                <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 5개의 단어 집합 중 하나의 node가 1, 2, 4의 단어가 포함되어있다면 이 node의 feature는 [1, 1, 0, 1, 0]이 됩니다.</span>
+                            </li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">본 코드는 각 node의 label의 일부가 없다고 가정하고 일부 node의 label을 예측하는 코드입니다.</span>
+                        그리고 마지막으로 GCN으로 학습된 각 node들의 feature를 t-SNE로 가시화합니다.
+                        
+                        <br><br><br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>학습을 위한 데이터 구성</li>
+                            <li>GCN 모델 구성</li>
+                            <li>GCN 학습</li>
+                            <li>학습 결과 및 특징 가시화</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/paper-category-prediction-GCN" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Cora 데이터 노드 분류 GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">Node 분류를 위한 GCN 학습</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>학습을 위한 데이터 구성</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래 코드는 graph node, edge 데이터와 node feature를 받아 adjacency matrix와 학습에 사용할 feature, label을 구성하는 코드입니다.
+                    </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code0">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">def</span> <span class="method">load_data</span>(<span class="var">cite_data_path</span>, <span class="var">content_data_path</span>):
+    <span class="annot"># load edge information</span>
+    <span class="var">cites</span> = <span class="clazz">pd</span>.<span class="method">read_csv</span>(<span class="var">cite_data_path</span>, <span class="var">sep</span>=<span class="str">'\t'</span>, <span class="var">header</span>=<span class="reserved">None</span>, <span class="var">names</span>=[<span class="str">'target'</span>, <span class="str">'source'</span>])
+    
+    <span class="annot"># load node feature, the last column is label</span>
+    <span class="var">col</span> = [<span class="str">'word_{}'</span>.<span class="method">format</span>(<span class="var">i</span>) <span class="return">for</span> <span class="var">i</span> <span class="return">in</span> <span class="return">range</span>(<span class="num">1433</span>)] + ['<span class="var">category</span>']  <span class="annot"># 1433 is the number of words in dict and final category</span>
+    <span class="var">contents</span> = <span class="clazz">pd</span>.<span class="method">read_csv</span>(<span class="var">content_data_path</span>, <span class="var">delimiter</span>=<span class="str">'\t'</span>, <span class="var">header</span>=<span class="reserved">None</span>, <span class="var">names</span>=<span class="var">col</span>)
+
+    <span class="annot"># make label and node location dictionaries</span>
+    <span class="var">category</span> = {<span class="var">c</span>: <span class="var">i</span> <span class="return">for</span> <span class="var">i</span>, <span class="var">c</span> <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="method">sorted</span>(<span class="clazz">list</span>(<span class="clazz">set</span>(<span class="var">contents</span>['<span class="var">category</span>']))))}   <span class="annot"># sort: for reproduction</span>
+    <span class="var">node_loc</span> = {<span class="var">n</span>: <span class="var">i</span> <span class="return">for</span> <span class="var">i</span>, <span class="var">n</span> <span class="return">in</span> <span class="clazz">enumerate</span>(<span class="clazz">list</span>(<span class="var">contents</span>.<span class="var">index</span>))}
+
+    <span class="return">return</span> <span class="var">cites</span>, <span class="var">contents</span>, <span class="var">category</span>, <span class="var">node_loc</span>
+
+
+<span class="reserved">def</span> <span class="method">make_gnn_data</span>(<span class="var">cite_data_path</span>, <span class="var">content_data_path</span>, <span class="var">dynamic</span>=<span class="reserved">True</span>, <span class="var">directed</span>=<span class="reserved">False</span>):
+    <span class="var">cites</span>, <span class="var">contents</span>, <span class="var">category</span>, <span class="var">node_loc</span> = <span class="method">load_data</span>(<span class="var">cite_data_path</span>, <span class="var">content_data_path</span>)
+    
+    <span class="annot"># adjacency matrix</span>
+    <span class="var">data_len</span> = <span class="method">len</span>(<span class="var">contents</span>)
+    <span class="var">adj</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>((<span class="var">data_len</span>, <span class="var">data_len</span>))
+    <span class="var">adj</span>.<span class="method">fill_diagonal_</span>(<span class="num">1</span>)
+    <span class="return">for</span> <span class="var">row</span> <span class="return">in</span> <span class="clazz">torch</span>.<span class="method">item</span>(<span class="var">cites</span>.<span class="var">values</span>):
+        <span class="var">x</span>, <span class="var">y</span> = <span class="var">row</span>[<span class="num">0</span>].<span class="method">item</span>(), <span class="var">row</span>[<span class="num">1</span>].<span class="method">item</span>()
+        <span class="return">if</span> <span class="var">directed</span> == <span class="reserved">False</span>:
+            <span class="var">adj</span>[<span class="var">node_loc</span>[<span class="var">x</span>], <span class="var">node_loc</span>[<span class="var">y</span>]] = <span class="num">1</span>
+        <span class="var">adj</span>[<span class="var">node_loc</span>[<span class="var">y</span>], <span class="var">node_loc</span>[<span class="var">x</span>]] = <span class="num">1</span>
+    <span class="var">adj</span> = <span class="method">matrix_normalize</span>(<span class="var">adj</span>, <span class="var">dynamic</span>)
+
+    <span class="annot"># feature matrix</span>
+    <span class="var">feature</span> = <span class="method">matrix_normalize</span>(<span class="clazz">torch</span>.<span class="clazz">FloatTensor</span>(<span class="var">contents</span>.<span class="var">iloc</span>[:, :<span class="num">-1</span>].<span class="var">values</span>), <span class="var">dynamic</span>=<span class="reserved">False</span>)
+
+    <span class="annot"># label matrix</span>
+    <span class="var">label</span> = <span class="clazz">torch</span>.<span class="clazz">LongTensor</span>([<span class="var">category</span>[<span class="var">c</span>] <span class="return">for</span> <span class="var">c</span> <span class="return">in</span> <span class="var">contents</span>.<span class="var">iloc</span>[:, <span class="num">-1</span>]])
+
+    <span class="return">return</span> <span class="var">adj</span>, <span class="var">feature</span>, <span class="var">label</span>
+
+
+<span class="reserved">def</span> <span class="method">matrix_normalize</span>(<span class="var">x</span>, <span class="var">dynamic</span>):
+    <span class="str">"""
+    dynamic True: D^-0.5 A D^-0.5
+    dynamic False: D^-1 A
+    """</span>
+    <span class="return">if</span> <span class="var">dynamic</span>:
+        <span class="var">degree</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">x</span>, <span class="var">dim</span>=1)
+        <span class="var">D_inv</span> = <span class="clazz">torch</span>.<span class="clazz">FloatTensor</span>(<span class="method">fractional_matrix_power</span>(<span class="clazz">torch</span>.<span class="method">diag</span>(<span class="var">degree</span>), <span class="num">-0.5</span>))
+        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">mm</span>(<span class="clazz">torch</span>.<span class="method">mm</span>(<span class="var">D_inv</span>, <span class="var">x</span>), <span class="var">D_inv</span>)
+    <span class="return">else</span>:
+        <span class="var">degree</span> = <span class="clazz">torch</span>.<span class="method">sum</span>(<span class="var">x</span>, <span class="var">dim</span>=<span class="var">1</span>)
+        <span class="var">D_inv</span> = <span class="clazz">torch</span>.<span class="clazz">linalg</span>.<span class="var">inv</span>(<span class="clazz">torch</span>.<span class="method">diag</span>(<span class="var">degree</span>))
+        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">mm</span>(<span class="var">D_inv</span>, <span class="var">x</span>)
+    <span class="return">return</span> <span class="var">x</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code0", 52);
+</script>
+                    <p>
+                        <ul>
+                            <li>1 ~ 13번째 줄: cite라는 node, edge 그래프 데이터와 content라는 node feature, label 데이터를 구성하는 코드.</li>
+                            <li>3번째 줄: cite라는 node, edge 그래프 데이터를 pandas로 구성.</li>
+                            <li>6 ~ 7번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">1433개의 단어 집합 중 단어가 포함되어있는지 여부를 나타내는 node featur와 맨 마지막 column의 label 데이터를 pandas로 구성.</span></li>
+                            <li>10번째 줄: Label을 숫자로 구성하는 부분.</li>
+                            <li>11번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">Adjacency matrix 등을 구성할 때 row (or column) 중 특정 node의 위치를 정해주는 부분.</span></li>
+                            <li>16 ~ 36번째 줄: 학습에 사용할 코드를 구성하는 부분.</li>
+                            <li>19 ~ 27번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">논문은 인용과 피인용이 존재하므로 directed argument에 따라 directed graph, undirected graph의 adjacency matrix를 구성하는 부분.</span>.</li>
+                            <li>28번째 줄: Adjacency matrix를 39 ~ 52번째 줄의 함수를 이용하여 normalization 하는 부분.</li>
+                            <li>31번째 줄: Node feature matrix를 39 ~ 52번째 줄의 함수를 이용하여 normalization 하는 부분.</li>
+                            <li>34번째 줄: Node별 label을 구성하는 부분.</li>
+                            <li>39 ~ 52번째 줄: Matrix normalization 하는 부분.</li>
+                            <li>44 ~ 47번째 줄: Matrix를 \(D^{-\frac{1}{2}}AD^{-\frac{1}{2}}\)로 normalization 하는 부분.</li>
+                            <li>38 ~ 51번째 줄: Matrix를 \(D^{-1}A\)로 normalization 하는 부분.</li>
+                        </ul>
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GCN 모델 구성</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 학습에 사용할 GCN 모듈과 모델을 구성하는 코드입니다.
+                </p>
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code5">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="reserved">class</span> <span class="clazz">GraphConv</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">in_size</span>, <span class="var">out_size</span>, <span class="var">dropout</span>=<span class="reserved">None</span>, <span class="var">activation</span>=<span class="reserved">False</span>):
+        <span class="clazz">super</span>(<span class="clazz">GraphConv</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">in_size</span> = <span class="var">in_size</span>
+        <span class="var">self</span>.<span class="var">out_size</span> = <span class="var">out_size</span>
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">dropout</span>
+        <span class="var">self</span>.<span class="var">activation</span> = <span class="var">activation</span>
+        
+        <span class="var">self</span>.<span class="var">layer</span> = <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">in_size</span>, <span class="var">self</span>.<span class="var">out_size</span>)
+        <span class="return">if</span> <span class="reserved">not</span> <span class="var">self</span>.<span class="var">dropout</span> == <span class="reserved">None</span>:
+            <span class="var">self</span>.<span class="var"><span class="var"><span class="var">dropout</span>_<span class="var">layer</span></span></span> = <span class="clazz">nn</span>.<span class="clazz">Dropout</span>(<span class="var">self</span>.<span class="var">dropout</span>)
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">activation</span>:
+            <span class="var">self</span>.<span class="var">relu</span> = <span class="clazz">nn</span>.<span class="clazz">ReLU</span>()
+
+        <span class="var">self</span>.<span class="method">init_wts</span>()
+
+
+    <span class="reserved">def</span> <span class="method">init_wts</span>(<span class="var">self</span>):
+        <span class="return">for</span> <span class="var">m</span> <span class="return">in</span> <span class="var">self</span>.<span class="method">modules</span>():
+            <span class="return">if</span> <span class="method">isinstance</span>(<span class="var">m</span>, <span class="clazz">nn</span>.<span class="clazz">Linear</span>):
+                <span class="var">stdv</span> = <span class="num">1</span>/<span class="var">m</span>.<span class="var">weight</span>.size(<span class="num">1</span>)
+                <span class="clazz">nn</span>.<span class="clazz">init</span>.<span class="method">uniform_</span>(<span class="var"></span>.<span class="var">weight</span>, -<span class="var">stdv</span>, <span class="var">stdv</span>)
+
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">adj</span>, <span class="var">x</span>):
+        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">mm</span>(<span class="var">adj</span>, <span class="var">self</span>.<span class="var">layer</span>(<span class="var">x</span>))
+        <span class="return">if</span> <span class="var">self</span>.<span class="var">activation</span>:
+            <span class="var">x</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">x</span>)
+        <span class="return">if</span> <span class="reserved">not</span> <span class="var">self</span>.<span class="var">dropout</span> == <span class="reserved">None</span>:
+            <span class="var">x</span> = <span class="var">self</span>.<span class="var"><span class="var"><span class="var">dropout</span>_<span class="var">layer</span></span></span>(<span class="var">x</span>)
+        <span class="return">return</span> <span class="var">x</span>
+
+
+
+<span class="reserved">class</span> <span class="clazz">GCN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">input_dim</span>, <span class="var">class_num</span>):
+        <span class="clazz">super</span>(<span class="clazz">GCN</span>, <span class="var">self</span>).<span class="method">__init__</span>()
+        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.<span class="var">hidden_dim</span>
+        <span class="var">self</span>.<span class="var">dropout</span> = <span class="var">config</span>.<span class="var">dropout</span>
+        <span class="var">self</span>.<span class="var">input_dim</span> = <span class="var">input_dim</span>
+        <span class="var">self</span>.<span class="var">class_num</span> = <span class="var">class_num</span>
+        
+        <span class="var">self</span>.<span class="var">gc1</span> = <span class="var">self</span>.<span class="method">get_layers</span>(<span class="var">self</span>.<span class="var">input_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="reserved">True</span>, <span class="reserved">True</span>)
+        <span class="var">self</span>.<span class="var">gc2</span> = <span class="var">self</span>.<span class="method">get_layers</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">class_num</span>, <span class="reserved">False</span>, <span class="reserved">False</span>)
+
+
+    <span class="reserved">def</span> <span class="method">get_layers</span>(<span class="var">self</span>, <span class="var">in_size</span>, <span class="var">out_size</span>, <span class="var">activation</span>=<span class="reserved">False</span>, <span class="var">dropout</span>=<span class="reserved">False</span>):
+        <span class="return">if</span> <span class="var">dropout</span>:
+            <span class="var"><span class="var">layer</span>_list</span> = [<span class="clazz">GraphConv</span>(<span class="var">in_size</span>, <span class="var">out_size</span>, <span class="var">self</span>.<span class="var">dropout</span>, <span class="var">activation</span>)]
+        <span class="return">else</span>:
+            <span class="var"><span class="var">layer</span>_list</span> = [<span class="clazz">GraphConv</span>(<span class="var">in_size</span>, <span class="var">out_size</span>, <span class="reserved">None</span>, <span class="var">activation</span>)]
+        <span class="var"><span class="var">layer</span>_list</span> = <span class="clazz">nn</span>.<span class="clazz"><span class="clazz">Module</span>List</span>(<span class="var"><span class="var">layer</span>_list</span>)
+        <span class="return">return</span> <span class="var"><span class="var">layer</span>_list</span>
+    
+
+    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">adj</span>, <span class="var">x</span>):
+        <span class="return">for</span> <span class="var">l</span> <span class="return">in</span> <span class="var">self</span>.<span class="var">gc1</span>:
+            <span class="var">x</span> = <span class="var">l</span>(<span class="var">adj</span>, <span class="var">x</span>)
+
+        <span class="return">for</span> <span class="var">l</span> <span class="return">in</span> <span class="var">self</span>.<span class="var">gc2</span>:
+            <span class="var">x</span> = <span class="var">l</span>(<span class="var">adj</span>, <span class="var">x</span>)
+
+        <span class="return">return</span> <span class="var">x</span>
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code5", 63);
+</script>
+
+                    <p>
+                        <ul>
+                            <li>1 ~ 31번째 줄: Graph Convolution 모듈 구성하는 부분.</li>
+                            <li>35 ~ 63번째 줄: 모듈을 불러 하나의 모델로 구성하는 부분.</li>
+                            <li>57 ~ 58, 60 ~ 61번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);"><span class="clazz">nn</span>.<span class="clazz">Sequential</span>은 인자를 하나만 받을 수 있기 때문에 <span class="clazz">nn</span>.<span class="clazz">ModulList</span>로 구성.</span></li>
+                        </ul>
+
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>GCN 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    
+                    <p>
+                        이제는 구성한 GCN 모델을 바탕으로 코드를 학습하는 부분입니다.
+                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
+                        여기서는 무시해도 좋습니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/paper-category-prediction-GCN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                    </p>
+
+
+<pre>
+<div class="codeWrapper">
+<div class="lineNo">
+<pre id="code7">
+</pre>
+</div>
+<div class="code">
+<pre>
+<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GCN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">input_dim</span>, <span class="var">class_num</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
+<span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
+
+<span class="var">idx_dict</span> = {<span class="str">'train'</span>: <span class="var">self</span>.<span class="var">train_idx</span>, <span class="str">'val'</span>: <span class="var">self</span>.<span class="var">val_idx</span>, <span class="str">'test'</span>: <span class="var">self</span>.<span class="var">test_idx</span>}
+<span class="return">for</span> <span class="var">epoch</span> <span class="return">in</span> <span class="clazz">range</span>(<span class="var">self</span>.<span class="var">epochs</span>):
+    <span class="return">for</span> <span class="var">phase</span> <span class="return">in</span> [<span class="str">'train'</span>, <span class="str">'val'</span>]:
+        <span class="var">idx</span> = <span class="var">idx_dict</span>[<span class="var">phase</span>]
+        <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">train</span>()
+        <span class="return">else</span>:
+            <span class="var">self</span>.<span class="var">model</span>.<span class="method">eval</span>()
+
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">zero_grad</span>()
+
+        <span class="return">with</span> <span class="clazz">torch</span>.<span class="clazz">set_grad_enabled</span>(<span class="var">phase</span>==<span class="str">'train'</span>):
+            <span class="var">adj</span>, <span class="var">feature</span>, <span class="var">label</span> = <span class="var">self</span>.<span class="var">adj</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">self</span>.<span class="var">feature</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>), <span class="var">self</span>.<span class="var">label</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+            <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">adj</span>, <span class="var">feature</span>)
+            <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>[<span class="var">idx</span>], <span class="var">label</span>[<span class="var">idx</span>])
+
+            <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
+                <span class="var">loss</span>.backward()
+                <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
+</pre>
+</div>
+</div>
+</pre>
+<script>
+lineMaking("code7", 23);
+</script>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, 모델 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>모델 학습</b></span>
+                        <ul>
+                            <li>5 ~ 23번째 줄: Cross entropy loss를 이용하여 모델 학습하는 부분.</li>
+                            <li>5번째 줄: Train, validation, test에 사용할 node의 index를 저장해놓은 부분.</li>
+                            <li>19번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">모델을 업데이트하거나 loss를 계산할 때 train에 사용될 node만 사용하여 업데이트 하는 부분.</span></li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>학습 결과 및 특징 가시화</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 directed, undirected로 구성한 그래프의 학습 결과를 살펴보겠습니다.
+                        두 경우 모두 dynamic normalization을 사용하였습니다(\(D^{-\frac{1}{2}}AD^{-\frac{1}{2}}\)로 normalization).
+                        
+                        <br><br><span style="font-size: 20px;"><b>Directed Graph Loss History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemeAedy79EK-HS7t9T1Pt-8lqHZhNDPzr99w7IW4_KmHxHITMqLjzKhKK2xZSqaT8Gx-b_P3c9PiXUl27LBcDCTPFr6rQz_WnUe1kQW74yctqyLw6zOG5D6ydsLzsDnGkp59otvqJWInWkhXx96aJ7z-JgYXNcgaoJH-wcFKgtVIEnzKMO6yTbm_hCKm6Z9ZNHSI-kMcUQtKBMpeW91XpnGbarhh3BaD7rkEXvTYFSj9lKMKRoKs4w7aq2Pkmt6Xmyj0h65GILfbRjNilFL42xpvv7iwJiS-mNY7kZ5mJzDr5l6_7Io1gHnnDjFfWIwwxRjuDl0Y3rU0gLHQ0WG6y6JMaumDzR39KYJRF92EIKtw7eV-DjxhlASQYV6ok9Z4Ps10a8Zl95wdQor2tiQ4Yo1iMe7egGb3m6Afl7Hr_1ZzAUm0JfhfqX-iQL3MKzrNOMKynCsnctGVyizCP6FEeUdleXOZkEIFB-rZ7Gl5Ft8GnWnvzyzbTbbCIDygPO9-UgY9apjmQchlfZ2UUVobTc5AtZSNJckETvp-9jHgeuDsZHMmLBJ_vWgY_Aw35s4ujNQStdg4jbpY5XQrOemZTCSc816C-O3oLqkbDbEVc2Y_x43PhcsGUohvwcSldACeizOSaqk-CAojgjCwVQIPcGG8ZPoKoDaTKOZGoAo6XXvoI3tfmB8xbSxTWCexYEn7hTahhvWZeGWhIk-mxYdclafKZ6ijMkaHZN0mR8Aa7JmDktKCmHjgFAsj3bP-GjTSU04fn5S_iHXYcTPEddDWh1x2sK7SG8QhaGuQp_xLXhtXjkmPGQXXFYqoZygTA0f6L2oCSH5acdWoWbtChKhBIaRpmpbHpCkT46SNn0yHysd-I9cig1BaGOsNBCc4f8zFbSW9j1pvngZkHv_5mBMvZcgRgMsqb6I9OP3AtOb7HKC-pEu82NwNt0CWCTtMSZOJ5qdcsyrPELfo1waOWhy_-orcWV4jog6EYHrSBOF-dPWMvmbLkdTTG7EcP9vdZ87t016ItpYzMGYOGuysTljCma4Icb_PmPDqTDSEsauuZx0aj8T9raKFIU8-1-UxJCl4gTRSioVGFzqYWvcDFDpEOzSueIjrxGQoC9Zpn3OxjB6c7pP58A99E-JzqBFVxp_U5r6f_xRs_27k74iOvlHTBHyYA0Eo634cSt1izFe4ncGIq9M8evrRaqaYKxeEldWPUW-_pUgSAAe1rVv_jQr29AncYC_SHojomnrOVg3zYMxSHlOCDAboaKuLvWGFuTeg6XXAkjJNE2DCezvGVxaOL7t1GJQ-aR2FLHKgQpV7l714MXPmpH5naym5Mj4dicqoAlBreWMThbMklyqqMjFd6Nn1risut_EimlaB9aKEBINv61m_out7krbXZBik9gbu-2FGijyymuXI35i2IrgaYn0yw_KwNI4HmmzBT7aJ3zl3eZjxGZ_Y2sU2MuIv0hMA7vHeY4WYg-t0MetiyeA" style="width: 100%;">
+                        <p class="caption">Directed graph loss history</p>
+                    </div>
+                    
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Directed Graph Accuracy History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdPCT6aoPsPU3rXqY1-qzagsF5EXnMKj7pfyyn2Qtwq2JQNlmbw1H-tWVveGOztDETb6OqU6o6eUqaGOcNvteedLoeNp2y0nP8I7aQLuImq6Fdne5I4OySegUxc-dWj8PEmgt-EWBcATFU9egYjfTXKBkpOtKgL5xWAhtUT-hW8v3qSvTc-b-hPrV913Z1lNm-lf8AdlndI26NPfKdo7i5wCehpoZIwXa-_YHFAGSkvFZj06xV8zCrMEVxftI0ObGbv-vbBDA7bIcnjr3um-CaT738upyCDiwWT5NMUKSi5cyCNR79t90M3KzhXnSwbDLTLzmWpTj_R0EjRe9GawCCB_Hm4kDzmr483bkY-i0CJoVooJUGlJ5RJIXtF_WvX4CFvHwZqDM4hGt5j6eo1pyKRnb9ashoYaqo-WK9xg-uw27S-UT4AbTq11pcWepSsXnfrk0TO2g97ylNWYQKAbK6QtcPIBrecr_7z3RP25KfU1uinB5jA5BoxF2aNIMHlZyZ4PAgqCSSxGt6TGSHvQdUwwMvPB4vX3vYWB-uUtt0MbKGUIhimUNIoaFGV3a4VQE-SJd1jVqMJc2Y2t42714T-QOr52GHCgsX_FP24P25pvzvNAVNRJxo_i-Po9qdAWQlw71MrPYmTDrDbIvD2hVfOoFMrvHX4xlLQZwPK1uHTgFFro0QkNjICXkuA0NJp6O3CXdmhw0_uHMzFxQ5vuAkjrX3qedHOOrihB0PtvfOiuOBP4_2TFyWjZDPg4Y-Vagkd9ToBt8kxcPOr8qpy7LF_qgZ1HohTerTf_shhyNl5hrzWEbvT9nMyhgfiolBi4TruUSBPjw4s5e2s7XzATr2ipEVPbzB-MrbT3yxTD8LInXD_5RpN2oRbbIeDHHZBaOT5iIYrDivkSM0O9Ig31UkatcgLu-vXVgttltssfDksxywMOIcrvyiujLfiNT7PPizRn2XnCjpFQu4rHIJ_316xbZKv86N4-OhPtfPaYjKHE2Rx-ICFUr0CTh7wEYPWTcmBjoJNv9bQL94yhAvI0s6j5ahA4UyNB0fRzId61nc13lSwit-KzgkQUsW8zHrman1nztPuDEeI7p408721d-Und-qmhKNubdQhL5AcBzNunjTISKDvwxvuGz_4J67TC1AjQ79z-0TjTL1nM5nE3LzVunkoTEHi8e1I4wq4ZOlCDPZzjlrpDjG_EoVjIbhtmAbvyqozn_6dNonwIJKhZ7RCTO-hgjAHmgwF_jq9l3SzWPWkpmOiyLy6T6QRlKtYr8SnMZQmZtvgwz_KXrdQFa21j63kCaZTx4bRr76ZWu80PnHHJdmVNtgia0aM6pmTgZT5Vz2MhwK2xCcLbTAQPS_tWZPh0livOblAcTz2pbQYmK526nwyX-ncpYf3tU7ThidoyUkMvljC1uSL6R8KiHrey43X1wIp3Lyo3G2G05tzAd-hhU1siFLZQ6aci2Ot3Kl7FX3OmH-to9TShjc" style="width: 100%;">
+                        <p class="caption">Directed graph accuracy history</p>
+                    </div>
+                    
+                    <p>
+                        <br>아래 결과는 validation set의 가장 높은 accuracy를 달성했을 때 모델의 test set 결과입니다.
+                        <ul>
+                            <li>Accuracy: 0.8600</li>
+                        </ul>
+
+
+                        <br><br><span style="font-size: 20px;"><b>Directed Graph Feature Visualization</b></span>
+                        <br>아래는 test set의 실제 label과 예측한 label을 바탕으로 학습된 node의 특징을 t-SNE로 가시화한 그림입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemfTRaWoasxLIYSy8tXgJkhat7aFOXYK7Da7v10NPSOE5kAkLR1kQPrL6X58Ce6HYgPmaAo9xWzw1Klre0cm-iITtgbKbVnwtk4LhEdEQHPGCA3c9RHI_JnS8f4LseDvhlkF8YwXixXBhJzlqqj4XM07-vAS3AN12kEE9BNS3lwLQMfhi6noknMI2tAt2ARyRh-S2p1kK77QrmKHztZG6bXIGR-BG81mLl9YwdOykHWcnwi1Sjp17rGlv49vz-UxA0E3J6-GMnap4u4aluYCCWPBCRqPVrziMJUfLAaWF3B9mDIYVcoQ-bhBE05X-VZ-u5h_Ci4o5KBqtNIIHCEqdpC9dyoUmf1Jpz-QpPkSRAYZh1-_s-mLtcCW6bxL4zQTaJ6dkRykFzRa7Gyt6cliui4W_qInbTH_q6xEDZhl3O-mAnYkYTEonZVeKLvldGC2HdN67FhzN7FMqpOdHyX0ZF1EYbFaMbPA5T8FkT1fyUoANVCPJe2JGvwELPIwtwAt8klBOlmXVDdu39L54dbjzpNy7UxqpSDxilKeIUyM8ukBfC0p1mx44ptAWkR6Z9XlqqObdV_DsyzMLLIM58UvtTKKGVRUsv0f937mPSLnPTBiiweLKFLEEHK-YIbqfOgVmiyDBxpEPU5LSHVMr85_k1nk2pp3jO7XVVrNJMUTGWP8AbtNzNAOC8jhBKbR59pfoX7ByinWryYJUoux6MDTop4ZVvNglW8vkjbeHFTt8fdy2ufnbccLo_1CjW5TCN_heC9KFO2f5wDuKMrHv6qyPSKI57dHA2CRalcSVhZNbTE83HAu3vVr6vt6tincgTqwTvQM4Lfcvn-2mC2fBbB9ZiB2zZXheFCPUeWEvi7v_Ob6Rje3lHaZW7E9xEu7RPZBtiJsyVYTfyY3GxAHT4Lg8pnVgj8Jh8f2-irxPmZtzr1i4lkAibq4V8qqQSdi8h1iT2Kmg-ii7bZgKi1swhBcAQeEtmudjslVH-bpMOYWXvNOE69tiT00v6aoAdD8j8idjnHfHVbMIqIcdrhExU0bPIOvcnrZFPBlAiSznL6Iwp_Mqh6sFE9HR2x3nUu3-KTYSQerq5Avz-RAarm8c2elOgUhBGg9UKBhAkyas_LuoN5UWZV5GMkpHJFb1jAisyneoZBsb-1E2-hPU7Vry8z3iKVWvDHuhz44DCb6Anp7dlQVjbqU5UrTzkin1AQ-4R-DYpTGkiJG3_8ycOOTf3LT4MvQmtExadyqrVCy3HDTWHlcJc0VUvZLrhFo7ozalaxakbEdtjNtto_3gFJqOhAyo43F3my9UrX4YvY7FITpUhWIDLtUKZVm5DoxlpdGlHBYdRHQhCZbWSQTKJGoIRNsl6m0cGvd4Cx0bNiqLFb5e314-JZNXImo0v--alTJIRwjW0cYuFKI5Pq9017Qx6YP8MX8QvCO3fBMHcPNU6_W1j_x10qXRh1Ju5pqZtinTOPPYBatL_7DqTk6LXQ7zVc" style="width: 100%;">
+                        <p class="caption">Directed node feature visualization</p>
+                    </div>
+
+                    <p>
+                        <br><br><br><br><br><span style="font-size: 20px;"><b>Undirected Graph Loss History</b></span>
+                    </p> 
+                    
+                    
+                                            
+                    
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemd5xacJcl6T1T_8V4gN-G3kxkTsAlc-3Y1fvlCexUiiz8zH6W-YG9xqUb1P3NlvmctMO7WhN6LjLDC_dtiw0kvEBe2pgw4NeqSCWXUJ150nQ2DJUDfBkzvXmRDQYlocVXrxzlib7pKuLAv_jpwecgSJQ0G74M3IyY3VOQ-0UlpOaQvHdyKz1s5Z7OzWodywu8YkEwCPK8cnnCYDD2xd8KCoZ2huHDJs1ge-v-v2C40ns4wja4p3062KfvbaVVwr3UEjXOAdcOFalJWFXAzyHhRDb3VEEmvxQpK5WuL36AHXbOwEYHLOVDVDFfTHNh5WO31UI2XzqssHgqJSLZ6OzvyET6HjchxrumCtIwo7VdI6fHoT4AZg44_5_2f1jX6FYW6uCiTvY_QqUBAI20Rp7hr9_2Y9i499nPPTStTB8z5sYkawFJFPesII_rZn2W8uqz3q7COrCsfDbgfkvo_pe3QlM5F9aVArS8QJAsvwwdlQCCywPgIAR9-Asah1ElGnrC1r-3oBU4uqQYDVYZKakDzh4s9PEaHDC_2P4JOjhmTs_-iunLhzYzQef9G2hP47eCoDKayqPgNA_nNg5k7o46WmlB5kq4vGGQ2U4h9e57RCVPzal0xTvDNr5xCUxqFKLUklbc1ZaEzQixqcPlbINkJhMC0e92ZJJN2o28Q0bUi3sy9wBEGESvdLHSwh2Nq7Jd_wIGKmj9oIp8bDrb-Ys3kxXYKTkBbplPf85FVrvdNfiuCcyxNbSVbcEi7OpW5p0QNsTSdpViCF34w-TE955xoAf07fPNSbSS35mw_8Di3WzdV6bBKc60MjNMcT-5AYHRODfAw8fWBiLDtRbhDnTbbLtK3bmf1MkdIuq0cJLrOioOYcoIv7PCSGd5m2rvLi1BKcxb9MdNIDIx1ZCmakUTEajZEImy7OWGO2p9l1qAQLANCi6iacdFbN9SicVHByvSWGJXU9JImEH1aPm9fq1zZ0PTzSTOxQtmg0vKlWi_3JhXsFpyEyI1Bv1MwTHdEaABdnpPEbvGHbgNkch1PxREH3lyDKP0jf7bmpBx6gFYrvHgSNJVukmtqF88GwGf4ddEOr_-x9S9zlRUVyEESpqcdPVdk82sX9vN7aj2hpQocjkQRDRXn-hp5XJk6g1UWo72pNDjxN3I5bGFIzLijO0KNhxsY-FDURz_s6verPnMh7XXsSuMmYQt8ZZrptBmbsm0lEpFWDt0NlCATrRHRM9twxk8M6hYM4GQ-TSx6ii8vkQ9ntKtQXeJ5py5GXOnnG2zuVV8dRtPgRmGPG2KPc4SDCZVaHdsjxK4XPVAIqkDVkTw_hPjhXNjnjFerW2SIeol3Xxh8fcZk8U5f02kLufLheLhB-sFTnNJmzEdzgJcHvMO4talGRF4CrL5zCO1eIr1C2hCs9Nzcr7lK_Uo3faakGT-hl4m71vfMfVpsJE1ukib90iqWnoPh2UjV1Me54IQGSMIIzH_wqTPwqXy4" style="width: 100%;">
+                        <p class="caption">Undirected graph loss history</p>
+                    </div>
+                    
+                    <p>
+                        <br><span style="font-size: 20px;"><b>Undirected Graph Accuracy History</b></span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemfFI6vlkvFBarK_VgPNFC2nO0RTV9PhLgvPVzTg1d_4E2e_VeSi-isOfoCHD2xMj7OeuR2pRBrDNE9vK_og7zpb54It7KmaltSjDPtiHjTQB3IJv_h0bHo3iROLTpDz84HEvUULj1kzAg_ChykP7fvC14MEk3rHyz9kTOgr1u6gzzduY3jT7aP7AxHTb9SyvTPjFR_g_yRmgPp7o2Q39985QvhVATYNWPgsDPVBOCAkFFJaXtSp2XcZLWCOMRYdstR2jhlwJUrSKdezB3E0jn9tVL1cTw4cXD5judm4QDFnHy-_1UW9DV-Yz6W65YqDWqSL5aI79IRO764EUywaFeqWVYT-vk09UxowDjF0iG4TG383nQut29YvhJh1t2eLXJCH-ULInKBswxYWcpwVDwpFlIwSIqEI_BcVl-3Ul4coWVJ8DCzdGUw0Ulpg9ST5F77gDVbQfdQErmzvZUH9Z7cdS-RKfd913WoAbMmb0NXGzexX1VFzU6LXc13fiq0SV2rGc2durvugqPFAjdMq_qL2xO07Ha2LET61ZU20DOARv3TehsVwzeKRPHB0TjjMR0HY8zK-SPn-riFKk_5xMsJVC8pitLiBLdqbB6iw8PNKrXLB-fVwbE6WYbFJYARn8jQjB4b0hqsIUCluSW3FuDxgysl2WrziET6orzjBq9Hy7g4hbfSCdB2NnCxa13BRCBeqW5nwbmvNwVTvOU0i7Y1Wnt4V7vOG42DGBhxZMFGNffPAJO5QDA4MsCRDFMvBuRGHz2hEuxjIDdQJYafabPjSxJI_5YX7_zzhBUrkeHHRnBnWzk__U6gv3eo2lOJ31Yf1ywkf7y-JrwRZJu_UO6bXz9WJivwp2SkJ0gDU-iJvcKM56zEP8GTELMsS8scQSHEox2H2HmcsDZcX9gYLf2n4QNyAkxiPApDN8ib-rBX0O1qOcGCaNGX-pLOhIuNcOoCW5CbKwJ7n9Q3Uv9C9KSpDMkD18b3kE75ttFQG5p2Nzj2-QrISWD23iFcZpAx3LjROGY6nqR5HF46Ul-lh4ZxCRBv0_n8lnJKoSjsLOLiWl9erXiI8qXL23E5onKapcuHcQCJBP4EEpVWlhfXdZJa59NQfUCaPC4IOrWtDXXBO2pXx-QylAmT9wrAcJeJ7aKpDHSGRtrSSaL5if5LpDurQ9nJ3R2os_qFX2Xn_Wt_UBSmTltk1V7T4rAXueiR3dbppNxiBp8YNy_1_lBZ_VsNUHQAjCB2gFv3a1dp3lhjD_P5biTAuqTR1T6Wba5SLriPXXhkSADw9w3F4vUlKhavVZuP5COTMFgZJ_3vs5zN-m6WxxdAlRleeqQlWjYBclq6AYgN3BckRTZD8ZBa_IBRLKQu9YO5bKHy1u5c29TIgGQsTSDPKVWGP9IAwuoeMM-kQtHgIR8VmGRnPQ8iXKTWbZN5pYMEFma-o8enhoh6vlRsJoQ98hHQ9gFaCFArjhU-0ccOsb4K_nfDj0v0" style="width: 100%;">
+                        <p class="caption">Undirected graph accuracy history</p>
+                    </div>
+                    
+                    <p>
+                        <br>아래 결과는 validation set의 가장 높은 accuracy를 달성했을 때 모델의 test set 결과입니다.
+                        <ul>
+                            <li>Accuracy: 0.8771</li>
+                        </ul>
+
+                        <br><br><span style="font-size: 20px;"><b>Undirected Graph Feature Visualization</b></span>
+                        <br>아래는 test set의 실제 label과 예측한 label을 바탕으로 학습된 node의 특징을 t-SNE로 가시화한 그림입니다.
+                    </p>  
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemcIpRUottr_NNn7DePj2f9Zgf3010i0rw8jdAXKO9M0HW1cPhLnmTrcpOwWFWxGHGvZNjs6zD48ih1DXMR_oH116r462NgoVK1Vfw3pY_b9Ts4Ke1XgSmMuE2MRhgVQfxZlDz43EJGlX3DML9scX9bXVboc1gLU2QlpJ7JqelTBIhVatratY1B8xCBydtpqMxI1BdvlYQpBgeK9tPwDujCvX4sNKKepF8iDpIfHDlaxAwFm5F45bZT8cOUwIhNmGMM0Lr4NwrDelwtS67hjkwED-PfeWgpbYX6gf0FuIzhfHlucTd6i-4cgJzTEx5YFVPlzOV6h7npDd-_MN0b6ym9BSHAOx3PkpH88rBQt4TiSvHY_aISJ4Nm90PXkVbKqxEreOXfU3tIzenwfny2EeYkPiI_SoKOy5uG8jLnQVoujodbqTSi6ctHuwuJus2qcmi43RGnL5iQnoV3aDISFaqrwqm-otM6x9OJ7HCRw-R6pkaMkmEnw4um-c7CpPOR84OH-_29PuOO-q2quw5E1waJHqQzLoCP2XIyQnitRp1ADpM1HDFxprxRAGaDPuXIKxQaYF7KGVCQwVg7UqLTG2h2C5lnc0XQcwI9DYemvSsbSPG6nZAHBikaK17SIzvhTyh_9ses5tEvKV6HXX1Ob2O4Rhhmh9nY9aKVhYCd1ToAtQAmpKXU2VgrfrD693eTq7qhkmpGcE7rvl4aFtAhxZprRQrRWe3yS6ujgKGeHvMkWg4ZpnQk3Biw-DmI5CKuCXP9Dl99KOo2-kb4X-Exwmdu0ihOyA1VHm83ykAxY-kVcQyhcw7RJcLu4dp8ryZeqovkv7V7UsBwZ1nTKqHnEfxky0DPYkSrEnAdWE-W7pFIhPN2HKP8vg3zlSC4xDMRmujJj32nhpnDE5Sb-6SWKFFa_BHXwBCnAovLEgSoWBuYmiEdQ5iyQYdVXkoqcD_Kn72AkX-qwRXA_SL0Qdbr7TABnMjPtAs200rk3ox4JHOHxpbhqCloIteL9a3sLA70Ln5t13ZG_mtXiJrVxDv7-Y4F0aP0lQdz7jA4n0RgrHxjQNdthr1PsbfrGdJv1LN5SZrtIPAD9TS_JliF4ClwJlWX4zN6sPtopGb1HyVCprs3Xg5Rxzp0ac2QnLk4F1aJlJfx9Uwn8BfQkWmaIuaIMyywo6Q6r1lt-H9vdXUZtDTBmKqSU7mE5topxft_SfMuU3pdqww5MnEamueH0MkfY5d-GSmrUXT-bajt3TI1eXJ2NZJtgb0IjjrtYO1diNm1Mty4IJovY2-2YS_v2luGKXQe5LheAkzYidkTLhMJ1-xpJa42ecKcSivA7Tny78ciqN_wtnamjWQnf39c1LYUMXYuWAyv25TW-eDvAIENF1Tb62y6MyiZHCmwUvhvn5uXud5IQHNE-HXR3L_-m7LxkOlujyn9cIHMRYtvjpkdI8IXF-4o3WM13o9mYHRaHfcaK3O-vBKu2LKC8py8nYbk" style="width: 100%;">
+                        <p class="caption">Undirected node feature visualization</p>
+                    </div>
+                    
+                    
+                                       
+                    <p>
+                        <br><br><br>본 코드는 PyTorch Geometric 등의 라이브러리를 사용하지 않고 naive PyTorch만을 가지고 GCN을 구성한 코드입니다.
+                        Cora 데이터가 크지 않기때문에 batch 학습이 불필요하여 이렇게 구성하였지만, 대부분의 데이터는 그 크기가 크기 때문에 batch 학습이 불가피합니다.
+                        PyTorch Geometric을 이용한 코드는 <a onclick="pjaxPage('gnn3.html');"><span class="highlight" style="color: rgb(0, 3, 206);">다음글</span></a>을 참고하시기 바랍니다
+                        
+                        <br><br>학습 과정에 대한 전체 코드와 학습에 필요한 데이터는 <a href="https://github.com/ljm565/paper-category-prediction-GCN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GCN&emsp;#Cora&emsp;#GraphConvolutionalNetwork
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('gnn1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Graph Neural Network (GNN), Graph Convolutional Network (GCN)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('gnn3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>GCN을 이용한 COLLAB TUDataset 그래프 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
