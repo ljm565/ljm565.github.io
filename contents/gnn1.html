@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Graph Neural Network (GNN), Graph Convolutional Network (GCN)</title>
+        <meta name="description" content="Graph Neural Network (GNN), Graph Convolutional Network (GCN)의 개념을 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/gnn1.html" />
+        <meta property="og:title" content="Graph Neural Network (GNN), Graph Convolutional Network (GCN)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Graph Neural Network (GNN), Graph Convolutional Network (GCN)의 개념을 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AMPSemdbVIPHs4oOIN_qe7ey3YX2vw5zqfxzBK3CsAOpRZAbpUtBcF2lgb5t2f_VtGfnnLMAiRaM_GR4fv3YKWxJnlMUtjekv6XP2k8LkSKpkxQJ5v-Unk2JXEaUQBNT9o1o6yNefZBVcL1k-uWUuIMwreK8AwW4xZzJVSb0lNufEvgXKf_8STO5zutJkYWv0KQ5POMpdI5xgc6L3URQiXyCQ709We58cgrEXXkx1JtjwgQaFN6nQaGjHxLXwiJiNVji38cApOWr9M-6KuL0hewoifaFOZRR7kOknVu14nfoca9KysxMkrUZTpUX8B9Sjy1RRc6LfyJ46XbCTBkukKdPrxVNDoSAH1Cu2Dd_nrMhoEdsR9BY2evFuo9gNyRPEw3W576cPbgkdUc-PwLBvZx6jwmgkzyfHoA5gXdf1AWMAUtLskG7aovr5Ahw-dLeeL9IsjocEvnt4LBKJIocNXxVWLhfdg1Avjbip7uUVdXkYc4aliL0Mk6EAwNK7NENvc0WQ6xn3ZP1dq5R2ZalvX4P6SVl0jvp7_IjOEjlO3dleOuINWmM-6tfErNjBEP-IfZWqd8yvVpE3dJ8gWBoV9NTeGLYdQDA1JsOaPWc2zlpyyDRw9BzJbU02zpdODeUU8D1YjtRB12HN7Eqj3X3BJ4NgnNiJjy3_LeIXP1HBhVyOfsOPyv4O5TLr18RdAKDWmv6ZOoMJAMrKODUQ6Hepnft1ypQUugYbMuAyzu1GMEzip4uKTtZCK9goQfc73PfP-OWPu58uySzSh1pmuha5PPD66sWnw-iIAmNzLJ92u90n4kBmK-jyhY9UOQt7RZnDeApBv6VpDJRpu8FbJwjUYMGCl9OuSQMn8dN8O2qThfCXnerMF7igH-0Dbmawi8byidr9Gz_28l3NZ-ge2SUfKjQQN4xGSYBkvdb4ACVTGkVyzAlj_CtuA-3Ncsfc24vCjgJ9jjF9mHUiO8i-M7hhEisyik4u8aY36ARZaifdoi0BPDPjxC9katRpr8rDKWvMZ8CEYAZG3YVWRQIqq5CQ-CSZQO8Pg07psAaBK4DOAkpXXeUMLjaAN8p1PGez5681YUyVYwIDEpKgMGSp9MHefPyHxvunYoMgIw65QbMgyn_fHhwcsg6vpaqYHr9ySRM4K3EugP1hQw_Kz82byV7LnusarNp21sT757FCjWLxaQZIh3cIchYnYoJZ7d35XF7WfmjysiQef16Pd8MVgfIL2DGlwEPtmiusvMH_us8jDSNxiw3-58wdZFAnkT-kF1BI3OlZ3kkEqFTxTcn2NlTuQo0tzFDrOZMpKJF7tG7Vqs6NvR13W5g2eetjWUrasLVWzzCwVvE7e4D-phH4w8tP7xrqu160RWkJN39U2yy1rBTMNYpeSBr8Vpq92xIBnhF-Z061xt7oFHQqSoQs-qKFTHtH4FA_w2qU4saB8goDlQHZ9-moRrCUTarq5pkWIT8d6jVHToqm10_Lyy2mvr1bzU" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Graph Neural Network (GNN), Graph Convolutional Network (GCN) / 1. Graph Neural Network (GNN), Graph Convolutional Network (GCN)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AMPSemdbVIPHs4oOIN_qe7ey3YX2vw5zqfxzBK3CsAOpRZAbpUtBcF2lgb5t2f_VtGfnnLMAiRaM_GR4fv3YKWxJnlMUtjekv6XP2k8LkSKpkxQJ5v-Unk2JXEaUQBNT9o1o6yNefZBVcL1k-uWUuIMwreK8AwW4xZzJVSb0lNufEvgXKf_8STO5zutJkYWv0KQ5POMpdI5xgc6L3URQiXyCQ709We58cgrEXXkx1JtjwgQaFN6nQaGjHxLXwiJiNVji38cApOWr9M-6KuL0hewoifaFOZRR7kOknVu14nfoca9KysxMkrUZTpUX8B9Sjy1RRc6LfyJ46XbCTBkukKdPrxVNDoSAH1Cu2Dd_nrMhoEdsR9BY2evFuo9gNyRPEw3W576cPbgkdUc-PwLBvZx6jwmgkzyfHoA5gXdf1AWMAUtLskG7aovr5Ahw-dLeeL9IsjocEvnt4LBKJIocNXxVWLhfdg1Avjbip7uUVdXkYc4aliL0Mk6EAwNK7NENvc0WQ6xn3ZP1dq5R2ZalvX4P6SVl0jvp7_IjOEjlO3dleOuINWmM-6tfErNjBEP-IfZWqd8yvVpE3dJ8gWBoV9NTeGLYdQDA1JsOaPWc2zlpyyDRw9BzJbU02zpdODeUU8D1YjtRB12HN7Eqj3X3BJ4NgnNiJjy3_LeIXP1HBhVyOfsOPyv4O5TLr18RdAKDWmv6ZOoMJAMrKODUQ6Hepnft1ypQUugYbMuAyzu1GMEzip4uKTtZCK9goQfc73PfP-OWPu58uySzSh1pmuha5PPD66sWnw-iIAmNzLJ92u90n4kBmK-jyhY9UOQt7RZnDeApBv6VpDJRpu8FbJwjUYMGCl9OuSQMn8dN8O2qThfCXnerMF7igH-0Dbmawi8byidr9Gz_28l3NZ-ge2SUfKjQQN4xGSYBkvdb4ACVTGkVyzAlj_CtuA-3Ncsfc24vCjgJ9jjF9mHUiO8i-M7hhEisyik4u8aY36ARZaifdoi0BPDPjxC9katRpr8rDKWvMZ8CEYAZG3YVWRQIqq5CQ-CSZQO8Pg07psAaBK4DOAkpXXeUMLjaAN8p1PGez5681YUyVYwIDEpKgMGSp9MHefPyHxvunYoMgIw65QbMgyn_fHhwcsg6vpaqYHr9ySRM4K3EugP1hQw_Kz82byV7LnusarNp21sT757FCjWLxaQZIh3cIchYnYoJZ7d35XF7WfmjysiQef16Pd8MVgfIL2DGlwEPtmiusvMH_us8jDSNxiw3-58wdZFAnkT-kF1BI3OlZ3kkEqFTxTcn2NlTuQo0tzFDrOZMpKJF7tG7Vqs6NvR13W5g2eetjWUrasLVWzzCwVvE7e4D-phH4w8tP7xrqu160RWkJN39U2yy1rBTMNYpeSBr8Vpq92xIBnhF-Z061xt7oFHQqSoQs-qKFTHtH4FA_w2qU4saB8goDlQHZ9-moRrCUTarq5pkWIT8d6jVHToqm10_Lyy2mvr1bzU);">
+                    <div>
+                        <span class="mainTitle">Graph Neural Network (GNN), Graph Convolutional Network (GCN)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2022.03.22</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에는 그래프를 바탕으로하는 딥러닝 방법인 Graph Neural Network (GNN), Graph Convolutional Network (GCN) 이야기를 해보겠습니다.
+                        그래프는 생각보다 많은 곳에서 사용되는 데이터의 형식입니다.
+                        따라서 그래프를 이용한 딥러닝 기법들이 최근에 많이 연구되었으며, 현재까지고 많은 사람들이 관심을 두고 있는 분야입니다.
+
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>그래프</li>
+                            <li>그래프 데이터 종류</li>
+                            <ul>
+                                <li>Friends or Social Networks</li>
+                                <li>PageRank</li>
+                                <li>Chemical Structure</li>
+                                <li>Knowledge Graph</li>
+                                <li>자연어 문장?</li>
+                                <li>이미지?</li>
+                            </ul>
+                            <li>Graph Convolution</li>
+                            <ul>
+                                <li>이미지, 텍스트, 그래프 데이터의 표현</li>
+                                <li>Image Convolution VS Graph Convolution</li>
+                                <li>Multi-layered Graph Convolution</li>
+                            </ul>
+                            <li>Vanilla GCN의 변형</li>
+                            <li>GCN과 Transformer</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">GNN, GCN</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>그래프</span><br>
+                        <span>Graph</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        그래프 데이터는 아래 그림과 같이 이루어진 데이터입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemfJuaG_1O00ttIFgbe9jdt29HGe1sCMQybEAhPCRZfWcsHVDiYwbv4_THDS115cfZUK7-g6nMyO1BF2zXltkqVfcShuYj2yi2wvG_gJorsX_aOE32PFtubzEmGAGd0TeafIEPGu6QToVCnbHGRvgl0EgUeEP0-5YC0KTg2BC95T_IJYhd258SxizBQhYAt3_eAdzEjuuDeJhcdSn64dW8LMd8C2qvjLWJ-oBWcC5s2EvGwIhaa3DPK769sP-NwTDSjDgo7gXN70-i0klEOc_a0Ul61nZymbr8Ejl5ORKV7LacuFfE1usYswWrb7TgXo7zBT2nQv1C6rRnjvo0E83JcgR978aDfyKEsnYzHg6DpV3yALBFNml88zJSujzYSy1HQdsDJzLpzglMZr0e457MzoAqaiID4aIQw8sSVJGjX2H0k3A6xGGC_qJXfgOcR-NklnugCqncQLPeKft78hk0hT_5aK6JPuGhrW6Vc4ru2JP7u-vM1-dQXD0aJbJ417SCIb8aMHNDxSCX0Pf7ZcSu65L4Ziqm3R8JmiUoChrFJo1qLUciCIgmCrs4UVXAf8FfYvTF3260QP-BPL3sO2ZVq50zYDGnTROgzqrsJSxgnWS4HZpVnUDEtjRq4yJpqpw2tjLXsdi6OpZilIb78C-pTLkI_aReoWyJyWPV6LFqxlGQ66tkKz6jgpNSQQZopHbbP48W_7FKgJJhzRxqT4uZnwb-F3BEneK-MHHrniWsLFJlRUr6IDJHwdsAVIOc90k53OtiXYBGilwe5c-DtAc2S3HUwkhOpjRiX0eqq3XhybAV0QORrIDRhaB6Xs6FpI55ZMyjRXM2gSES2YtORoqNB5tm6Q9ZMf2rO-vCTN6HQrWtDmvo88QPM0YC25R5u45FYfN_YfLQA0QmNWHyJsnYazI-LwfgOnTrPsNHfq5lbqlnC0v2SsvIluAIc0mnzY06pwLdwIaRtDrfJ2hjWnSM3EMoP9o_fAIF7gLdzVrOnW9E9LAfS8tNE-2G-GUiJP_fO1udNjRU4POyueTrGSqlqQhJ1W-mcdtfx_E-7IIzsUT0iCGsNqEm9R4iS3hPjFi5WrORto6qMiZvh2LaJTgJzG0TxCImkX5AGNXYgOJPYZLe5ZuvT2O3Kton4YSHwKDFT54eKNtC2-ZVX72jGuTPttWrSFfATYsd2ViiYX7o0DhwismHnobGkVGw36c0kv7Dci5a_lmvprC3NzJDo8w7BAew3srHEClDnHzuO5JmogpODxsj1kTdNHf4BeE6Yi7CORUEWbV7AiowF8iQj61Ub60QBPqWdE6GNdYdFtf6NgxbDLeeL_bTgu6vnSC15BR5xnWdEQbIb83Gx7gutl-9gPoYz2y7LXhRgLuyoo_SrUXfO3JKpAwRW-vZeAhPR7Vaxp5-Zcww8ackdxXz5oA9Z6Wo4qLQu8NnvqKvgBq7_25Cd-oMPYyIB-qaAr88kVwW_GVSfAx0mBCdOH6ps" style="width: 70%;">
+                        <p class="caption">그래프 데이터</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 그림에서 처럼 그래프 데이터는 A, B, ... I 처럼 여러개의 노드(node)와 각각의 node를 잇는 여러 엣지(edge)로 구성되어있습니다.</span>
+                        <ul>
+                            <li>Nodes: 보통 Verticies의 약자 V로 표현</li>
+                            <li>Edges: E, nodes의 관계를 표현</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSeme5JgeJFS8i2j8poByDvZE0VhFD9hgG06be-kTpXosQTG1l5ez-4cnVvoysoLc0FVBKqNW6_Z0SwxaseW-gMj-1S4TUQ76BJDrQhkgtbSS5V75iVhgwTCKpGHh81aVnR9o6GqeyrnUy14GOr4khrProUZ98i-DkUGRmnE7dQMjFj8wfYjqMgLcSmX6GeEyz_brwm9lw6xhCAviF0wkhf7Y5_v7L4AjuO1uedn02-DgaxcGoa0xKlUPuJTOLWjDMyISQbMbSM-SjGDIsm9r1F0acqKzPEIN8dKqbB5Sx3YW2HfEMtLwJ7Ig9QBYh1fsopLJ7be_4GEa8Qpx5Ku6jOtKyma3S6zPtPeMbrZm75i8nI25ixjCMU9wHnMrsvjlEbDliJM7SNS7AEV1ZVVsDskIJ2ZG7GsH8PnPS_mYZsWKrO2dyhQmia7FKZtInoK60lzh320E68rEOKdRatdZWJebqpeExcSxv-wHaadsBpCYXNnxsxe-H91IcfUq2Rp_F5CEFJDNYHanPy0wZqGrCsEhmYySh_9377T23ylFb8sYOXIDcjds_QG1S3y3SgpKGxvFU5Tkh_GFkioZDUBR4wvgSvbRiiwFzP9jDjxPaeHBzCJ3ZQOf4BiJCs0jHyFJB6l_aiDYgCeQtbMroDYV5wwTWUaE8fDwAt3WpA-cjQC0kTNREISOy6PUYjDuWFt7mJh1iYdMr_ye-XmztmVlhnySSh5LLow5zVNBRKMOMmxbPsMkr14b1gee45WGx-gKtOoVbF8F0yqxtRmw9VpZgDGtn4PiAPGfpfoJfoZhs1aheSempSnKes-7UuG6iZ5XxuS4G88wNvWpZm99OUcZ8-d_S0XtjTpO75ofz42ITUylTDIOeNuuNJMC4Xwjq26NygWbhaxltBvWRNIcfQQHplIRDP9HXbzayfbzN9BdYiu0nY1xTvtvnMc_oxvqYntDJJlBwnroVbNbYeZ6nMKHFR6jtb_t8uo_3l5B6lN5_pHiNvKr8-f1q_mCYBohHzsi-_JqQEUi59Ig7P5Rhr8_nO68-APz4x8QaAgWw1tLeUNICRrw6QEO2TIuMxXTChA5DWsEetee8gxZMYTKm_IVUtIvwJj9f51pAnFsLghWBrzR7c3wwilhJOfs55xgPyYdNuqeLmneZwsREcqYW7mz4t_PGp0rsgIa2mrWrgZsn5pLnp7zGtY1jaokMv3lb2iyKRG3Rr2yVf5tZ7k8myC8gz0tuCeGdPJE4rDBMdefBmXVn8Dpo98AKE2-Z5RXdNRAOx7hlqau0437_Zm1lw1iX6qVuXk3NeGsMTfB9DTqFGkPJdVg8bb6BBwgpVmHPgrN9VQ1AEcAkv_HRYQkooiGsYeYWXTgF-3wmW8lIl_kpdAA7e8y-ah7D0QDhJ6VRsmCEL6qJpvqClEQypiwNIuT7OEb07ZrWZnAh9xZ0A3uMlR-Z6kqLz1xFcp12YUp2TfZWsq5aIPnzFmmQ_WRsWPo" style="width: 70%;">
+                        <p class="caption">Graph node와 edge</p>
+                    </div>
+
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 그래프는 크게 두 종류가 있습니다.
+                        바로 edge의 방향성 여부에 따라 나뉘는 것이지요.</span>
+                        <ul>
+                            <li>Undirected Graph: Edge의 방향성이 없는 그래프</li>
+                            <li>Directed Graph: Edge의 방향성이 있는 그래프</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemenHRrC_2LM2VNks2iuRcv0QmYAWAKH-qxOukZiHszlFVYxTNiCTfOK6GP-OshdQsFYll2AKZlwW37AoPQw05rKnghzseaVz4oy2xVNI_T0yA8JG78dR3McU3DLoJnBRTLnYIiezGuFR_uVMnXSZW_bj7hk54KXnt__CvMh_gT_E33v9UKLBuELvh0ZYKFXCCR_qa28SlLa8q2txZPiA2DRAgG9E5HHVuTGoRx6tOH4lRiY6AgyuE8cUBIrOqas8BfeEyYUvYFQMzJLspoBGPS3mosriJBQn09ZCu42_2SVOZkCgc8dKsXF4kVkNkiMIYN65WDpeHU4MMqC9jwYheM4shZ6ajLvILkq6ObBrIL0_jvGpuxJ2GEJ82eJEG1vGO6int181-6fqpJ13sWFJprd22OegZ11qT0JPrOj1-wyc9rKfWm5ibvDzrpQcI4JrPEWnaiZsM5zPcy7antkvPtPStZO2yFYmXAE_CgxF8nYEplvV1KXcSLZumhjKiMe7zPmCW5h0lkaQICO3XTHfCQ_DAk5bgPWIwloUGzmhQ-He4OfNAEWdb6T5vVPJHn8wQST0jDA2icDZRDRn2f7LN6RbsfnlrnHzhnYLHFdO_ZCTvxW4mU_UL6v3qhDCkrBuSM311umNQ_YJKV30b7VrJfoJx9bml5AKIooIYgqk4gRK4X-MZYsUxV3xsBoAV4g1czhNMsY8VBgPXFs24PeZRYyRh2e5Y8VMHocQnHTZpb3b-s3I5akEiUlJKt7uOzWZB9x7gbEE6mf_bEjMp_rX-wMVuN6CaMw-Ra6P8Nyq6EvVvDqZlshoxJU6c_HzaWj5EV9yWL_dT7TTgaQqMHF_C0wkHvyL6VO-YSfqpY-jer2dWC_5F8lQ3WnPDV9d6PNTMIQ2ODdfv6BclQOzQxaW1aoI3CRmnndA4v985_f8QcZvITD3M2eet57U1obZ-xudf5ew_c5Q79RCRMhGJLCryAuEyfGeHm-vzdOM_dpGtPSD3YZhLDG07qT5LLKXWX00WjQMD-UAf9qKwEMOjbs5S68cOmgMDiOGO-ltZ7nSPMyKKbL5qmsKOMvNXJ2LeoiqkWIO3uSB1cXe3IWt6qtx5XK1eoxYNdhOpTYCWW6Z0aWw2FEx-6rtNWZXTpArfYzwN8p5B7fV3Z5ivdp_5sbExjlb0uRR5R7zfHEuu8OW9fIFLrNJWxxCNWS9_UBl1FTqD6RRW1FTAz6PbR7AKjDgc29mL-o0GPTedUQHpGt1A7BzO5PcScQ-1PNzsNVpzVy5OF68tC3Nb-EndI6-rPFNjSbJkR02idFFwOr2DLLK7ZhkOl5VVuMPmQvApEPKE8KD7W5fwYVabo5sVQZS3OfUyEf6nmlhPVL-e1M8bXnpWcl-3PqlCfrIS7UsC3raAYMLdWhf6pRtS05Z6TifwsqlNzQ1Qp66SbtrSnsro8V3qxenSYK5IHa7LaY9oT7jzHQWAdZvd-VZ6Xz6fiSJL8" style="width: 100%;">
+                        <p class="caption">Undirected graph와 directed graph</p>
+                    </div>
+
+                    
+                    
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>그래프 데이터 종류</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        그렇다면 그래프 데이터의 종류는 어떤 것들이 있는지 몇가지 예시를 살펴보겠습니다.
+
+                        <br><br><span style="font-size: 20px;"><b>Friends or Social Networks</b></span>
+                        <br>아래 그림처럼 인간 관계 혹은 SNS 관계를 나타내는 것도 그래프의 일종입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">예를 들어 친구 관계는 방향성이 없으므로 undirected graph, 인스타그램처럼 following, follower의 관계가 있는 데이터는 directed graph로 표현할 수 있죠.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdN1DBoLvxjePWM2nxJo1oQfFCHHtW4sfW4fgm9dfbBdWUM_ArpUw9fJw7jRl3pxC4Wqba3cQbwVZNtTzWPJBScMx0ixSer6gwO2h8c-gwiwLiK8uUncN-mEr2vkmeK2d-44q2ZdEVgF0uTy38MES_MT0olHqJiA-c7YjRlNCmdHgopHQMhSghySTUK6aGY6fAsFXk0zT1B5qBF6cz4l1K0O8lowBS4PtPqPRIuezjEI-xIY2o8jmqHoiu83zF6IlQnSdJN1NRtzwvFnqwrkJ7_k8-X_2bkwJnC0WEoFH0fAXYANuEaQLedW1bfyx7Amfqy5J27q_Pdjzp5Drb8N82AV73_fb9NxB0GSmaxye28UVc7ScJXcNApP-gLBtcF1SIgQeLoN8TWYUXV1dIsD-_rgMpEK1AEDuqHEmO5SDbmpSrBK2VFhDub9TTOaTxac63Ug_ec-2TulypvQJmaX2InT8ikLQ20npGKeuVY64lLPGkGxNHThudakN65uZRu1kMlrbHE54FkZkyqOjzXYsGAHLFWdb1aQusp2XpNWS2_L_OP9UDu02TULGm4XBGrccNqLZvHIJplvqKasT1cJ6jjXXjPoBmj6ZRxE27Z-MTTeT6T38LYfwhfjYez4AtSQmkL5JaeQrCLnV5UNT8PcoSquqxAnYKhtZty5zZi35uNv-Ce4aPGn3rNqVnFo4U9l3sHu214rzDAM6N3VzqJCBGWRQIkeztkiGRjlGJetpvplljwxzCYgOVyLOIX6UpTJHlchMSr8ds9CYRD4ukA2GJ-Z7fT8zPPzRCA7u-nX0AefplYv6ItPPhm2chYGTdCzT3256YoQXLBO_m2PzBHgXuSM0A1xy43j0TPv33jnisTrbrr3WYZ6ShyTra8msQrtETCSPiwaet6Qp4jY4P8WWYbrHXUGxxe8bSHdAxi_pfPCj2zTRu6bQogN8oynVcbhnze1UHOm7NkHmyzeRkfL6jh423Q09TlB8imO5VFr18JmVmcMD1rmOKEE5InSnDEv8QgdhHQPpZdv73BcLLPW8-r4dMkIjhPfK68FfGrmo_MUrUBoogZcUjgoCM_Jhb86SGxUs0yu4LykiI5JhwnrSwQQImVOmNEyjSfGeotnCuVQDsYpCYUWFytj8Cy8Ju1yL4jwG_Rzw0APLLFLs1hm6vKlc8f9Mk6Ail2V9yj7ar9yJ1XDG13F07sPhfAmr0AA_nRypvDTpVHtUX21sdwyBgBjwayz9cyCq1SFEvK2c7gLlVa5fCd-gwlOuUvbZtdv-P3BfWlVvtGKqTk_paXJbNDn6t7e3rVpA0XidrHhIPv7TX6emCIX0nPWAYfNgjgrYmxf74trgBp4EYj7JqzTaY01qDTxdmI1DD30gZPlUK1OrLV9-yHj_Ceh6bKwGdPboKL1a66OGIAOjMacu46ReMTccve0aEWBJGv1An-6KjkIRUWX2d7H8bPBs5hWQojnMcpIuTM_FdJZxDanXM" style="width: 70%;">
+                        <p class="caption">Social Graph, 출처: https://medium.com/analytics-vidhya/social-network-analytics-f082f4e21b16</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>PageRank</b></span>
+                        <br>과거 구글이 처음으로 검색 엔진을 개발할 때 사용했던 기본이 되는 알고리즘인 PageRank도 문서간의 관계를 나타내는 그래프로 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">PageRank는 웹 페이지간 참조 현황을 나타낸 그래프이며, 어떤 문서에서 어떤 문서로의 link가 있으면 그 관계는 directed edge로 연결되는 방식입니다.</span>
+                        이를 바탕으로 문서의 중요도를 계산하고, 검색 시 상위에 노출될 페이지를 결정했던 알고리즘이죠.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdZ_Ui9PaqwrPotMFAg7dYznEkPUm1nFmThokP3U5te3I-zql5LWrnVKxflyUuH1SSKII0-bBKPo8m_GbC8-OgqTbknloaW9q1PVrf57ZAeP87OFUMB7WznM74_Yo-RksY7dBQhIjHyfNPQiuMSzfi9SBIJDd_fMZ4hcjbQbJiIPFHCRIZc8X7A2h7zTT2VOeHTfjFcsIgl6npzqeL_fdbSLdsc9R8DV90gRAlx-w0DtGrNw879Y8MoGAYy0NetNctJ6l0mWN8Ix9zKRqPytAsRFuGMI-wrdEU9kR-W_QUXZgL9FyCu88C4-wid_uS9lqNE0d247A89tytNbwKgzkkRloMMr5t1fZps1cniX8LlrmJWRdZaBjgkbG74tzCJ-W0t2rr9Vqlz4oAK8NO7gYyL0Y03zC7m9PWgG98PDhnCdQnSj9mG6GeD_wJQiHQqUa3qKlrdsI7dCL-xZVya61Kt17u4ykz_8MtWgAy0Gc-4qI3A62K7d7WrAm3xBvL1NL5SGrCHqwFJfryMQIk5shu1lJlg8BCV3l3Jmz5THPo1p71k0eLsgDhYqu2arr496gT33pQ4U9Rl7Z_ywEuUtfuBRV1lUVYq3BO4liCVd0mQNJblP1o6BLl7TYCuVYQvLrvyz62KwasZVdtQuxQb8nhEbbPaaWr3uXIKFPUgX1v9e0FS6HWvOb95Wuz8k18YwaJnrIjIDxJRFrp4NU8VCZE8j3oBHRLAubjmUT56xio0CbEpFPn7DVLCYYEmBDoCDHG5V0apVQWA0L2UwFUw2gtpdsm2xdqK-W4L7BZLghjX7_qNA0PtKH0ZTTM896LxWsRQeiEJrl7xHKzKn8HM6L98WnlFn3rN6F2RIc29v8vwoIFSkKjBL5d4nxElYPmD16OMPGAzbsUrTI2LnyV7mOKk3g1z_mwdASrJPSqUJsSST9MjxcegtPXbD_RZJMV1VgdwKcrx1JiwWWFFS7_g-9Q4ON8eGIwjBCvI7OdCYV_nKBkZJiblhkIDDzjVDgHc1nil94UDQEOBhIviZ84UL7TBPySOr0rYB9854zP1AIeZEsWaoCLcGKBJqhRZFdt_SlfGOw37UmDNvmtiCIH4B30hMiiU5h1s0BEKUHMcLcf0DKcbemraT_7L8XOyIUY3SGraGY0sCBNKKwVdh4ITzAkZ9GjZKoxH3g-1FdfFTs9cqIN-QACz8wXCulyAzVe7slWWtAk0ujnJ4z3FQYz4_alHEJz3ZPW0Uedd0TO-VzWCYS6Lrk5zTIoorOh33TJK6EFidTnjJm0zok05y2xST64C0yAXn2bhVbrPDCNG36N8l7BycZkDyI1kS9enleQWiqdlsJcJ3pl34QA5NK4uBVX52eo51MQOoXjBGDTT8eckAny6bjMiGiIxEpCcsQ7ZHhjgWZCFkMXgN0UxJzNPdGibMQaxgBWU7hBL9Y3pn49cMgxxhStU8NeZC7QJtEOQauwsVlLSqm4NjFpSXeg" style="width: 70%;">
+                        <p class="caption">PageRank, 출처: Wikipedia</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Chemical Structure</b></span>
+                        <br>아래 그림은 식초의 분자 구조입니다.
+                        분자 구조 또한 그래프로 볼 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">분자 구조의 그래프로써 특징은 같은 원소들, 즉 같은 node들이 서로 이어져있다는 특징이 있습니다.
+                        뿐만 아니라 단일, 이중, 삼중 결합 등 edge의 weight가 존재한다는 것이지요(Weighted Graph).</span>
+                        이렇게 분자 데이터와 GNN, GCN은 독성 예측, 신약 개발 등의 연구에 사용됩니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdqEXsw6qcnp50QNhApWG5INMXa6zRFXi8Os9UeGyNMT6aGs-gLfE68zQ6-6T7bGNvlViuqPH9a0S9vSDaZdHryYj2yimTjY-tYbf4K2IR_toR4f5C7dzGLOcj0s0bDv6jZZf9WRlU1iu_jSVolOqEcPkQZEDRmwuEdO2Hjq1NH61h2S2WQib-agrv5G1TvqXoEx2vrd23DgEC-5zvkWzWR6EnqhiDN5qwK5A8uWL-xcVjh8Y45mvNfZ0rPWoGeQn8v81sYau823mbYP5JOvX-FvXIY7w0Z1TzfhCG0ryS426Qz3mJMyjsLMo5vzCkeEcShdnt5Bsm_uFufRYOyY9RjQMJPkFQ9CJ4RSgyE9dcLERy48s6wjubeKpAg4dBCOsUOvUkFv434d6dsGPTdaaRgbINqp1UycVOnOPJkgvJcGo632aSu0pAYtkowUFdhsdMUZYBO0VLVBIyMunrq_4CHVojVQ4b1COAkzskv1JLpkitPtZIJC_g6EuU15xu1ogKobLxi534UKTH0Q4YmPewitHcVJB0KWv85eltzTGSiQ4YI8ZgciYwHYaPgNAnP2O4hJpx0Odckf3ND6euUIAlwcg-fkcB1qXPU4tkHvc8lMWWk_1xkInOW9DW8dkqkZWfA1Eu6MIDPRPXW50bybd3nLKiEztLKFjERY4RCJf11YthhiJu6BHv-CMXGyE-0QipEaOS7xtmw6yBHb2hOie_lMW4gCcQQSS0TVy5wNb7asmTPH1P8dTgV085eCcnblsBxbIOzdrI0l7HLyC7ZYliekQsaNeh7Bl_hN12qfol3bSGym8jHRBAv1-kPIpvPFnSQY8VDViutml2HEWhPkTwOzFPEpizLi4BmbERmqbNQ0LM-gqq_F_vp8DEhyzCXtCBtPUQaSe4jDr8ADCXxqPfP14HgzZobJcDpc3tbx3K_fIir5-Lj3yT1VuSOcqpROLXaz10HfvqoNtGXi0bqHwxnc7jCnRew-4I1qexPhLodTVUvwmG6rGqBwy-3vbjvchgaqe8SsNwoNtPspfyaxbbGA6v06PK0jsqNTdjFTm8P3H49-yMUchd7gLuYhUfw9AZtQ3SAnIabg4wNTiTmrzHbW3s-iHgjT3d9KWTXWrnu_4DYfud5Tgb06tsURK1z8HZc9ls3WB4_MKvJ8XJjc_SWbUsvuaq8FB1SvkRiwHvAELAfPDjFm5urby8RvWWKMJ1cDc58q6L6Zo7gZaualp7NAtUl5jx0nwQ8H3ewWF_0A25eEo8JYPYe3ZfbPdHwP1agMAB4HwXCQiAIuYTgdWJMufiJCIM3WfdWnDuyZS70fcihYeCpcm9sl-Ep1m1XZ3nSCvZaPKyPFu9iRrbR0qM0TEfMq-bJ5wxj4IgyO1k2SH7tMT0ayGtEMzXuQbqywBDMeowPlFIHIyHc8E3nrOUhKinQNyYa70szlvBDcZvlH1NxEDRyunZkTIWLzMdKPu1qU5mHftOfEMcXvOU" style="width: 50%;">
+                        <p class="caption">식초 분자 구조</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>Knowledge Graph</b></span>
+                        <br>아래 그림은 지식 그래프입니다.
+                        이렇게 다양한 종류의 entity를 node로 활용하고 다양한 관계의 edge를 활용하여 지식을 구축하는 것이지요.
+                        이러한 분야는 실제로 질문 생성, 질의 응답 분야 등 사전 지식이 필요한 부분에 사용되는 데이터입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">보통 이러한 그래프는 (Head Entity, Relation, Tail Entity) 형식으로 나타냅니다(e.g.(Da Vinci, painted, Monna Lisa)).</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdbVIPHs4oOIN_qe7ey3YX2vw5zqfxzBK3CsAOpRZAbpUtBcF2lgb5t2f_VtGfnnLMAiRaM_GR4fv3YKWxJnlMUtjekv6XP2k8LkSKpkxQJ5v-Unk2JXEaUQBNT9o1o6yNefZBVcL1k-uWUuIMwreK8AwW4xZzJVSb0lNufEvgXKf_8STO5zutJkYWv0KQ5POMpdI5xgc6L3URQiXyCQ709We58cgrEXXkx1JtjwgQaFN6nQaGjHxLXwiJiNVji38cApOWr9M-6KuL0hewoifaFOZRR7kOknVu14nfoca9KysxMkrUZTpUX8B9Sjy1RRc6LfyJ46XbCTBkukKdPrxVNDoSAH1Cu2Dd_nrMhoEdsR9BY2evFuo9gNyRPEw3W576cPbgkdUc-PwLBvZx6jwmgkzyfHoA5gXdf1AWMAUtLskG7aovr5Ahw-dLeeL9IsjocEvnt4LBKJIocNXxVWLhfdg1Avjbip7uUVdXkYc4aliL0Mk6EAwNK7NENvc0WQ6xn3ZP1dq5R2ZalvX4P6SVl0jvp7_IjOEjlO3dleOuINWmM-6tfErNjBEP-IfZWqd8yvVpE3dJ8gWBoV9NTeGLYdQDA1JsOaPWc2zlpyyDRw9BzJbU02zpdODeUU8D1YjtRB12HN7Eqj3X3BJ4NgnNiJjy3_LeIXP1HBhVyOfsOPyv4O5TLr18RdAKDWmv6ZOoMJAMrKODUQ6Hepnft1ypQUugYbMuAyzu1GMEzip4uKTtZCK9goQfc73PfP-OWPu58uySzSh1pmuha5PPD66sWnw-iIAmNzLJ92u90n4kBmK-jyhY9UOQt7RZnDeApBv6VpDJRpu8FbJwjUYMGCl9OuSQMn8dN8O2qThfCXnerMF7igH-0Dbmawi8byidr9Gz_28l3NZ-ge2SUfKjQQN4xGSYBkvdb4ACVTGkVyzAlj_CtuA-3Ncsfc24vCjgJ9jjF9mHUiO8i-M7hhEisyik4u8aY36ARZaifdoi0BPDPjxC9katRpr8rDKWvMZ8CEYAZG3YVWRQIqq5CQ-CSZQO8Pg07psAaBK4DOAkpXXeUMLjaAN8p1PGez5681YUyVYwIDEpKgMGSp9MHefPyHxvunYoMgIw65QbMgyn_fHhwcsg6vpaqYHr9ySRM4K3EugP1hQw_Kz82byV7LnusarNp21sT757FCjWLxaQZIh3cIchYnYoJZ7d35XF7WfmjysiQef16Pd8MVgfIL2DGlwEPtmiusvMH_us8jDSNxiw3-58wdZFAnkT-kF1BI3OlZ3kkEqFTxTcn2NlTuQo0tzFDrOZMpKJF7tG7Vqs6NvR13W5g2eetjWUrasLVWzzCwVvE7e4D-phH4w8tP7xrqu160RWkJN39U2yy1rBTMNYpeSBr8Vpq92xIBnhF-Z061xt7oFHQqSoQs-qKFTHtH4FA_w2qU4saB8goDlQHZ9-moRrCUTarq5pkWIT8d6jVHToqm10_Lyy2mvr1bzU" style="width: 100%;">
+                        <p class="caption">Knowldege Graph</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>자연어 문장?</b></span>
+                        <br>이제 그래프의 개념을 조금만 확장해보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">우리가 일상 생활에서 사용하고 있는 자연어도 그래프라고 볼 수 있습니다.
+                        아래 그림처럼 문장은 어떠한 순서를 가지고 각각의 단어를 node, 그 순서를 directed edge라고 보면 자연어 문장또한 그래프 데이터로 볼 수 있는 것이지요.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdf5MrtSmEp-aBq9459nbx3mUI706mCqHoNCcnr8McnPKUuOqoqwyHO1QWnW-RLQA-Canf2zSlklBA0cz-xkk4sDgir0_26SzJtW2gGTxAnOPqG2DOJDXU7TnilgzaIIBh4HI7YPVzEnDqa3GqLIMUkzTy5dW4pu4x7aiDxLwCQz2nv7DLtOpzgGQmHLvEx0XR_9s6Z5bInYec8AK_b46JUg6msUkSwymdO5kqp8ke_bvzigQohrqWbNFTgxvmbLgWbEtwEtEwLiE818Cab-OPjZ9b2eFLS9pHukwtxUFJziVzYWbx8iXCe1IsVBvabch387esJwQpNHVqkKPv3aZQT2JDQRjV6kl49eumgNMXsgYpNijp-kN7IpwkchkkeQZ0CNVSGMTAqiA__uws2HduOVOka1EfVp0LNNybUKh-bnec8bMYnPHixPe4cntCJ3Fr3ZzboV7tCF9xjZ_JWh5bl9kemWl0LRBSkzrn2O2OniMfYUry0Ngw3hQQKFYYrcrOaK-5rVvzG35zXajUJJ2J9W4l_2tB-3vKGPDrJCjXkTGP_9bcEWgKa2Sc69UYGlA2r5OkXmgsQt6O0vyVEqSHN0me9q33KO7ZmndYpUst6SyxQQ23B55Cgq3qxKCi3CGZDDK8w44_FK_dogTofuu5xh-EA100qVY5vKHKDqe7Tmx27mg-nnpDSBUhisXtAI3vLXgQoPRhT_ZAxbd2nmiE6n6pnQMdafhOSpixwzccG5u7DF6u6AgWcJzg9h09ha-vNc5ovRLU37q8SDguZ4yJgB90wAfg0AHtTU0dZIgBJxTdhVqJNOgDsgANyaHeYcSGGR9moNqdAfACVsRsajlnySJn1Hd-_QVqFqBB1qxNGP_uUr_sBYoA1C06IhhMmeYQFVVX9UfOqygfYNGpgann3gvtrqB9pIrR31LUxB0Iesat8M66-Gf28Lptnfq-_UJoQ9tZviKbHZ6mbtftXZwJU44iCTYHZoiQTAXYY4XFC7tx50hN89zhoUcNcM7F8Uh7N3kSt7cpKdgIdM7j8oznqmQTeUzPOJWTVKeKG-JTPar6hgEAXqTOcNPrOjQjicVFOXCL2p2cdZVsAYxG7vL6BZ0XhiBKsX-mODXcJEJggQr2xeX66RWB58xMyddNo78K-PtsL4aCgcVJ-s0FTSX3u3Yw1q5WyAIi7u_9c90X72tSLKy52eA5AA0EzaM9KLB-xPCaCPTCqUDVdXCJHma0uuLrpjt6LoKAsROanvmA-8c45K90rGWiGx3kjVYiXpvU-9VTQbYKWkl06U3-fOSoAqQ6IOnq92SRW1J_5WTqZZkF4L13QaAm8WIxNjxTKRKP5MaRiFhIeZo-MoDJAYcCoyYMQ8F56raeuBBBwiqRCmZMaTdL5pyEyzAbp13HdwLEO3EDgiInWRjdp3dsrjLU8b-9nPUakZw7wNwERQEaSsHk2YLYLog7v2mq14lgLcPDP5kkZMuYGxOitVAg" style="width: 70%;">
+                        <p class="caption">자연어 문장</p>
+                    </div>
+                    <p>
+                        <br><br><span style="font-size: 20px;"><b>이미지?</b></span>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">마찬가지로 이미지도 색상 정보를 담고 있는 픽셀의 연결 형태로 바라볼 수 있습니다.
+                        즉 아래 그림처럼 이미지를 픽셀간의 연결된 데이터로 바라본다면 이미지는 undirected graph가 되는 것입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemf723NDkrlVuJbxY7HhpssWzvPx7xhKe68UFUkoZHA_OvjOwSEfMoTNud2xKnoLuThaqmto5OCYBuRaShU1rvSiV-wn06hZZ37v02a7EZskmvDJZmfBZxCpdyAyEfmmxDCkY1PA5wmM3VDHVTnHxJOIyQD5fRSHxVWmvB7ie5jarWaJOM6RdQbAMqpBgZyDCJ5P0lfEtovuHADhlmj7LbseQ2VSCjA92H-J5WZL9_X-a16ZC2NoVZ7yMGGujCfJSPG-iI8V5FVHwYJpZNGzwIi6MdFmiXUykFdwVpopEx6vMU1krSDUktIAP1UrKyOqEk5tWxb57Im7sQ2ogUjv5H9cMDBIA4n-ZBxe-yZrO5xpdou7An3AppsvzvCeM_oXSobsVXTySzzrqOo1OaTH9kY4z5dFvn5zZc4sY-HzPhFcffpfQv3mzmZtryU6qzvQk2XVR1IxguARPztWd9OqlHkecYesE2TByiauroL3UlUJR9LYJwulEz1UK0Ws92OnQImqdPUSGo-pPWaV6-nmjPxBkSWHAGIUD_VrPPh2PRJamLBAVAP-vzynH27-DNA-CZOMp9WjyBMJ3rcqfIkG579l2XBFOBIo4BLu5uCoKhu4ubDrHburRS-iD8TUefBBfUhZ-qvnkKV7IMVQ2IRwlQ4gSwsdRpQXZ-nK2MBeVwdOiucrs-QPqafkQMS1peH8gZicz1yGEx_nekvo5Cg7vovHJWYGzJB958WDzL9PAgvL_CC6ctRl80lJi3X31GTXEn-jIolAgKa35K0JrDvuAq2uiCR-6CjPAKprFf4zyyK6Y-xf-NrbaYSDcYn_Km_ex1pwg9FDniCLWwVVaRq1XJBvQm_NsPu1OHu900IwGqU3sGBOgv5HMOTzbR3Gcq3_62H3DhTJVTOdYLBwk_WgRl0zEflX_gkQVFC_2HGK5gvqX5nHLvJ2DVPdPZZABFFzXgP2SVGvdGzxH7IjHsU2h3xT0I-u6W8iHB3DozbR7f9KAs7lc80BfD8DfHZ1BuohV01Bu_m_B88L0TBJDBVaCuoUfvZCznYeqk2Fq_ZoEfuMI2_meo2V97FT-RsZ7FhRnKPXo79C-0hLU67LzXsCZAtiVnxRdO-NtWsiLvLwIsy2zLwBdLD3pxn1DnQT2W_4wGr-0saTIFH6J8_fN108UrcgnpsJsF0XzFaiPmv1AA7PRakdHw7mMAeqTG8H28hoDiT5WzNatNzCo5tdcHKxFIjYhU3TlHdNGtuPjmJ605SNHOZ3BiQeEBeWGFfK_SkXvjBmzklvdxj4_MU_TpUh5nD8jS2Hw3E2ri-l_sVAjjzFz9bAXSkqcK6x5Osxy6kYjIJSSqSBg-2aHvRLb4pgCzQ9SfpsKCIA7py5JqahBwai1SrJLP08CypPj0j6gTNhxZVSPV4QAI6LM15UR1736UEg2I4ezo1XUNi3_ZZ-OUEswyriLZETLYMy0P2yjjewGUmmtw9ToNkm3Vx0Wi8" style="width: 50%;">
+                        <p class="caption">이미지 픽셀</p>
+                    </div>
+                    
+                    
+                    
+                
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Graph Convolution</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>이미지, 텍스트, 그래프 데이터의 표현</b></span>
+                        <br>그럼 우리는 graph 데이터를 어떻게 representation을 해야할까요?
+                        우리는 이미지, 텍스트 데이터같은 경우는 아래와 같은 방법을 사용하여 representation 하는 것이 일반적입니다.
+                        <ul>
+                            <li><b>이미지 표현 예시</b>: (channel * H * W) &rarr; CNN 기반의 모델 &rarr; 1,024 feature vector</li>
+                            <li><b>텍스트 표현 예시</b>: length &rarr; RNN or BERT 기반의 모델 &rarr; (length * 768) feature vector</li>
+                        </ul>
+                        
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 그래프 데이터는 어떻게 representation 해야할까요?
+                        아래처럼 우리는 node와 edge로 구성된 그래프를 바탕으로 graph convolution이라는 일련의 과정을 거쳐 그래프를 표현하게 됩니다.</span>
+                        <ul>
+                            <li><b>그래프 표현 예시</b>: Nodes와 Edges 기반 그래프 &rarr; Graph Convolution &rarr; Nodes 표현(+ Edge 표현)</li>
+                        </ul>
+
+                        <br><br><br><span style="font-size: 20px;"><b>Image Convolution VS Graph Convolution</b></span>
+                        <br>그렇다면 graph convolution은 어떻게 이루어지는지 알아야합니다.
+                        Convolution이라는 단어에서 유추할 수 있듯이, graph convolution은 우리가 이미지에서 사용하는 convolution 기법에서 착안한 아이디어입니다.
+
+                        <br><br>이미지 convolution은 고정된 사이즈의 filter를 이미지 위에서 옮겨가며 이미지의 feature를 추출하고 학습합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemerb5cJ6d5rnBkieLgM_MgepjbUPPg6485JmvVy3IYOmxG010_8wWVFq-4FE7Tc-8Izi2TfWn8-j_i6eHqFU1MTGOtGCaOprzFUUGs-7Y7PcEgZ347jEO-GsUwk-blJeY0WSJHhGWakFNNQ49XEbVvEHsld065BCj7jNGl5rxMNzNzJOAQvcN7DMvuv5BGTIR_INxv6odxO9D1ro0NlDem-iHf8f6o3zGQy7b6Z_isBL9ssRxDw59xePearM_lJWaJ-o2Z5mct3TlFgwG-IWIh7TdraDSutK5NwHCtqQOkiENRkkM06lFlop97C1hp6O378l2QrABBQX0s4LGSVrc-cgQMdpoDI5-ucuAWL16Nz83O_BP2p1bfzeK32WMPczrSCcKXj9zngB4Z317rvk619NiIRVMRmxEqp2TmefEUQIW13tzHyVoe9P31qaXyLRDSd8BMW-FZ1u7hqOy17vfCgGBs0mTIkj7Q-lgT859LEPvBuYr4s3xmNYs1AmRyUi5u0vI6E8bpKW7OBruym4RS1w1yMS_DHz25nJEYmW1YVgQ-YTWrBp8jVaWIFXUPvmTn1vc8y0dMuVS1C7hFgsvZ-WWWvCfwTWEjU-xzmmQ-pCQNqpyRtQ3N802G8wB8PZMD6_NG7lM3psDUcmSyScxxqj78YXvo22wFq8c8IVQlSTxajdE8Pmo4uBkOPwGeWqDNjkJnJxVeLcMMhnHHmRFpRpZDAGIsoaUEXy1lc2pqvCMD6NZZx7VOWdLHLMDGCPP27fvwc_3Pp_JOy-Qd_i-K3Zfj7NvtAlnDa6-XGXOxECR4T77qN_A8UaB0mzWc84DO7g0AExkhhMmo712DMsSL5QNzJfmxngdSCb9BvgxoBAhAi6GCYsKrkzbBk5oE6PyVqbhw2YnVS3owNQiDzChhPEf_kiXB9hJ9dkkQGG-StvUuJP8d9uc2JsVrZaGXJBRBhPN_8phbbIrHjvDGszGyOHBCbEDspEZQ8_Xt7jqMzvnTtjJV_I3es-Dg83Ou9gpaiJ0wRVOr6D7DECHtN49v334QeSoNjjJP2J1oMBR-D0qACvbuHKwa2F9IbXt94p6Ze3PEEDeoOUkBQX2GNUuyZr7_Vz8luO6HV-dz7aMZ8BaIKNdh__i5lG-zWImKPWmqfXZFnyhqWmwFCnLhCToqHwviGaYROmWxu4lUD0Cz580NNIMTlDqV65p2IUlspr0-dmbe8xfpwUYMaCoD94BlS14QXRJ5sw9dFyt356tRIoHgzn0aHk3LWIX6nf4qj3zbv2O2wGsZNyT8cys8TckMPl1J-96hKryFDEQvqFDJatfm2L4CyL66R0zH8dLk0YjCyoTb3x_L44bebvspJ4lR-GJLRw69LT8FfyvfiDG_yL0iw6mb3JT0qDP04GHFX3Dzlh4rh7KHxpWyexpPuejp0NiYpw9C5LI9zDfxmF4Jv6-wuYJeGvPaTz8F1YdLavITmqFbdk8FbtVXFOxo" style="width: 50%;">
+                        <p class="caption">이미지 픽셀 위로 지나가는 3x3 filter</p>
+                    </div>
+                    <p>
+                        <br>하지만 그래프는 고정 크기의 filter를 지나가게 할 수 없습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">대신에 그래프에서는 필터가 주변 local 픽셀 정보를 수집하여 계산하는 것 처럼 각 node들이 이어져있는 주변 neighbor들의 정보를 활용하기로 합니다.</span>
+                        즉 정형화 되어있지 않은 그래프의 특성 때문에 각 node별로 어떠한 node들이 이어져있는지 파악하여 특징을 추출하기로 합니다.
+
+                        <br><br><br>아래의 그래프를 우리는 아래와 같이 수식으로 정의해보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemfJuaG_1O00ttIFgbe9jdt29HGe1sCMQybEAhPCRZfWcsHVDiYwbv4_THDS115cfZUK7-g6nMyO1BF2zXltkqVfcShuYj2yi2wvG_gJorsX_aOE32PFtubzEmGAGd0TeafIEPGu6QToVCnbHGRvgl0EgUeEP0-5YC0KTg2BC95T_IJYhd258SxizBQhYAt3_eAdzEjuuDeJhcdSn64dW8LMd8C2qvjLWJ-oBWcC5s2EvGwIhaa3DPK769sP-NwTDSjDgo7gXN70-i0klEOc_a0Ul61nZymbr8Ejl5ORKV7LacuFfE1usYswWrb7TgXo7zBT2nQv1C6rRnjvo0E83JcgR978aDfyKEsnYzHg6DpV3yALBFNml88zJSujzYSy1HQdsDJzLpzglMZr0e457MzoAqaiID4aIQw8sSVJGjX2H0k3A6xGGC_qJXfgOcR-NklnugCqncQLPeKft78hk0hT_5aK6JPuGhrW6Vc4ru2JP7u-vM1-dQXD0aJbJ417SCIb8aMHNDxSCX0Pf7ZcSu65L4Ziqm3R8JmiUoChrFJo1qLUciCIgmCrs4UVXAf8FfYvTF3260QP-BPL3sO2ZVq50zYDGnTROgzqrsJSxgnWS4HZpVnUDEtjRq4yJpqpw2tjLXsdi6OpZilIb78C-pTLkI_aReoWyJyWPV6LFqxlGQ66tkKz6jgpNSQQZopHbbP48W_7FKgJJhzRxqT4uZnwb-F3BEneK-MHHrniWsLFJlRUr6IDJHwdsAVIOc90k53OtiXYBGilwe5c-DtAc2S3HUwkhOpjRiX0eqq3XhybAV0QORrIDRhaB6Xs6FpI55ZMyjRXM2gSES2YtORoqNB5tm6Q9ZMf2rO-vCTN6HQrWtDmvo88QPM0YC25R5u45FYfN_YfLQA0QmNWHyJsnYazI-LwfgOnTrPsNHfq5lbqlnC0v2SsvIluAIc0mnzY06pwLdwIaRtDrfJ2hjWnSM3EMoP9o_fAIF7gLdzVrOnW9E9LAfS8tNE-2G-GUiJP_fO1udNjRU4POyueTrGSqlqQhJ1W-mcdtfx_E-7IIzsUT0iCGsNqEm9R4iS3hPjFi5WrORto6qMiZvh2LaJTgJzG0TxCImkX5AGNXYgOJPYZLe5ZuvT2O3Kton4YSHwKDFT54eKNtC2-ZVX72jGuTPttWrSFfATYsd2ViiYX7o0DhwismHnobGkVGw36c0kv7Dci5a_lmvprC3NzJDo8w7BAew3srHEClDnHzuO5JmogpODxsj1kTdNHf4BeE6Yi7CORUEWbV7AiowF8iQj61Ub60QBPqWdE6GNdYdFtf6NgxbDLeeL_bTgu6vnSC15BR5xnWdEQbIb83Gx7gutl-9gPoYz2y7LXhRgLuyoo_SrUXfO3JKpAwRW-vZeAhPR7Vaxp5-Zcww8ackdxXz5oA9Z6Wo4qLQu8NnvqKvgBq7_25Cd-oMPYyIB-qaAr88kVwW_GVSfAx0mBCdOH6ps" style="width: 70%;">
+                        <p class="caption">그래프 데이터</p>
+                    </div>
+                    <div class="equation">
+                        \[Graph:\,G=(V, E)\]
+                    </div>
+                    <p>
+                        <br>그리고 우리는 각 node \(v_i\)와 연결된 neighbor node들의 집합을 \(A_i\)라고 해보겠습니다.
+                        그리고 각 node \(v_i\)의 임베딩을 \(f(v_i)\)라고 해보겠습니다.
+                        그리고 node \(v_i\)의 neighbor node의 임베딩을 합친 결과를 \(a_i\)라고 표현하겠습니다.
+                        이렇게 가정하고 위의 그래프의 H node로 neighbor aggregation 예시를 들면 아래와 같습니다.
+                    </p>
+                    <div class="equation">
+                        \[A_H = \{v_B, v_F, v_G\}\]
+                        \[a_H = \sum_{v_j \in A_H}{f(v_j)}\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 수식에서 node H의 특징을 representation 하기 위해 먼저 node H의 이웃 neighbor node의 임베딩을 모두 합쳐 \(a_H\)를 구했습니다.</span>
+                        이렇게 neighbor 정보를 수집 후, 본격적으로 node H의 representation인 \(h_H\)를 \(a_H\)와 자신의 정보인 \(f(v_H)\)를 combination 하여 \(g(\cdot)\)로 표현되는 graph convolution 과정을 통해 아래와 같이 구할 수 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 과정은 위에서 neighbor aggregation을 한 후, 자기 자신의 임베딩을 합치는 combination된 결과를 graph convolution하는 과정인 것입니다.</span>
+                    </p>
+                    <div class="equation">
+                        \[h_H = g\big(f(v_H), a_H\big)\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">이제 우리는 node의 feature를 representation하는 과정을 알았습니다.
+                        위에서 수행되는 과정이 graph convolution 일련의 과정이며, graph convolution을 위한 과정은 크게 아래와 같이 두 가지 과정으로 이루어져있습니다.</span>
+                        <ol>
+                            <li><b>Neighbor Aggregation \(a_i\)</b>: 자기 자신을 제외한 node의 neighbor node의 임베딩을 모두 합치는 과정</li>
+                            <li><b>Combination</b>: 자기 자신의 node embedding을 추가로 합쳐주는 과정</li>
+                        </ol>
+                            
+                        <br><br>이제 알아야할 것은 위의 두 단계의 과정과 더불어 graph convolution을 어떻게 행렬로써 수행하는지 알아야합니다.
+                        이제 이 부분을 아래에서 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 위에서 예시로 들었던 그래프들의 node의 인접 상태를 나타내는 행렬은 아래와 같습니다.
+                        이와 같은 행렬을 우리는 인접 행렬(adjacency matrix)라고 부릅니다. 여기서는 인접 행렬을 이제 A라고 부르겠습니다(비어있는 곳은 0입니다).</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdwb2V5rwhaMWRgY8NhxNYLBgbeHJf3gIkDEn2ODvtpgIrgi-Z5NixwMITK1U6RAmQXnU4Dl_aWcv-oWmCnC8rIOgtda8UHDv_FpmFLKQR4APEJLUQDaGdlsK6sEkNa4-IkvgjAgAX4jq7b7ueL3beicSCWUAmehCOJ4jRM0hA1sHb35sAEWgJvGS_jmfmb62cxeacfNNnAZsbTK5PDjeT6kNxdH4whyLvmy8xgJYkaDbpnFSzEBB8wObqzyNRG3VsPig6B_XGF5yl3so1bZEtnIZdE7AmzGNknaPC_WGjevl7JjauGl9IxFVkzkjqofG9KsOHK9uD91R60gTPxyuGctRfPM1irbqp3SVGh4JHIC3C3m6v5rj_NhAWCnwSskptyll4R6-yGA-TjJ0Bgd-_yib7ss9KEA6iiJP_9nepSZ7aoD-F8IW0M9tmTta2XLsCJ_z4U328T3bC5vFgk7jIeJjr8kPpJdV6U6pFHumgyA7Ij11F2tqUAryVmP_zkd98AAZIJBExNKUpK1JH8Rp6-wnWtAjfzTqmaXxcl7009C4F-gDvL-Xrl_NS-Tn5mAAtNynNtmidZohLW1Ha88Til1uqFEsF7JPFc4_msUnabhFbmhReG6Nbo8_NXSbI-nPR7KJwGr-ce3V3tTlvA15rxE1P14p-LIE8ZR1Lz5AYTseiI59taymW6LdNPnvBZX4QRUGKyo072HEtjqoDUPisa-Fes6pkceCNfsAmb7Y10oXVhqIGF6ckEKMYXX5NyjF4eSpuGkxFPjdhFXCBc6HpGLcs6n_zmd5vJeHkmScRk8P3CCw7L8knnqodlaOmsC5bKfkR7BvlVzwguWQNGQGD1TzqSTxwSCQAMQuvRWqyd403IIxWOsXv6lFKJrI8Vu6oUoTMr__QxnbbD3lTN1bi5rzokTI0Q6o-xmmhr80m2NFVNreXGJXYFME8j68z8gRaVD61yOAJUAYDM0yB6sjh0sNG6_NZjM8gzpDxZTw_gCSlagNPV8hJn-sXEbDC4ZCcCLqxvuziJ-QWS8fFA1ENHlw-90Ew6eTEl4LFNpxCmgslj2q-gVcOH8kevQdQHmDlpp91zkpkMQZDxbIJ7MIHNZjhjCIjaum-WWa1Yq8R9WZaHXWt_b1_I5TfzXww6EzRPBaXrxKpgC-GkxcQ7pZxsWRhHrWf6thzIPsvD_ad2lZppoco-PSh0edmjYEXZBU6DK2925jXtaC0oOONEc6PDwM-drJerEyrGNmMO-XaAUX_cggx8LRKQZ43ne-wqqxTGq_Cc3qH0D3xbgQscCWujcoFeIslLbTmhHeJa-bQGr06_v8pHet-raV_5qhQvirLBaGt6enKuE58LItU1eWfg1uMIYoLBWBDy_x9taZTsdglhoh68yJ2peQgUoKc9RlJoVaMMDzlVVP9fZVupf9f7DWmx7nboswcXdnWlZyLV34U1yRUnOtPJWSs5gTo7SS-CXLvW8IfG-Jn5BZQ" style="width: 100%;">
+                        <p class="caption">그래프 인접 행렬(adjacency matrix), A</p>
+                    </div>
+                    <p>
+                        <br>이제 graph convolution의 첫 단계인 각 node 별로 neighbor node의 정보를 aggregation 하는 과정을 보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 위에서 구한 adjacency matrix와 node embedding 값을 곱해주어 각 node 별로 neighbor node의 임베딩 값을 더해줄 수 있습니다.
+                        이때 node embedding을 구하기 위해서 W라는 학습 할 수 있는 가중치 행렬을 곱하여 추후 학습을 진행할 때 node embedding 값이 바뀔 수 있도록 해줍니다.</span>
+                        <ul>
+                            <li><b>A</b>: Adjacency matrix</li>
+                            <li><b>X</b>: Raw node embedding (or node index)</li>
+                            <li><b>W</b>: Node embedding vector (learnable parameter)</li>
+                            <li><b>AXW</b>: Aggregation results</li>
+                        </ul>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSeme0dyHbVUq4gkxAL0uv7Ht9cNCxGwSEOzBMF3Oj0Huf1AI7FoHJMUzV-H6UiRg35GKOONzGnXnkOLz09n-efLwsG9fkyq4ieSW87qcK78U-QkDBgZzrYUIykiX122q3kRFK6v5lXYMD-ndNN6wgTrKBpmLPablA7efXQVHZhe03pDevCwIsbSJU-Nu1ssl2kfuyi7Z_YYdDRiJAcMcxnhu9EREW-_zB7YFC6fxWtgTRbWKAFsM9BqQJt7Gvn66gxPGBp6HovZTc95wvoFKm-bMIEJTMORESsDprMA-2DqUoNqgBL1GTa9vw3Vo7zzNh-QfPkeVjC5ani7jktJ1ATHey-_Vdu_EIPcO7FhGEG2YHMjt7OCyK0Wi_r_hfJCE0NMEJHEQ1d46EgDhSlSs0J-YqfdGw0521n9fJcg7RC6a1TZaKWEln1egVmg44sMtS_r9_AhN9sJJYu0jAhAuE9nT04nDVyJKgrqqjqQ9BXWxhl69Gy97aoZQ-4UDlD5t68HCmogH_OjJfLoZ0OUJ5C_13EgbUu3iHXG-6BHdtpVdW1_mBpMH6FHX6ZKRcWh-IFhMifCVCZ2e4GAI_aS4Rrfe96feK2_1bdQhnVTNX4Nb4GlMl4ZVkxtlEQBtdiOc9tyRNxktmsyuTGFypq8F05LIShgIsP_7M96ydoAp-VpsTaqwsYSm4F9jWiu1W8e7iNKXGHrs1Sn2yJhLz3ZL7BboUX3Dup8Gg_ieEi0jclL5lSV0wxJjKE9gF0jdSdBnpLOClxt2wJ5cZJtblv1sW2zAf9NSPdPcGweZea-jyU9pApFmoC5enz8LzoGhTl56hkzXnu9zyz-Zvdo48qtIpCKdS-rxCcfh-yo3y9qIa_bSBxm1fSzEfBewZUpFGckMTX0A1s-kXmSH6oCPWTCm2DwhEv0Ww009NUurepDcvUCZF7hipoqNGnLzXmsVNYC6iQrMPQoUYu3QTK-26uHNZLsdPETsCacDjYX5rUkkVzUBRXUewfhOa4vATGT5btVlWggCRcVnIPCXkKFTzAKvr6gow0kWR5q-qRPUPP58rEeKDNMe0ULJqZMZQ2a-_h5-vijUkd1iEInxBNM0-HgaIclqyjpHhbhUIyMN03vNHutbNewfNsMsdL2ZFBHatmNjAqFrZaewX8rpU0urvZcWtRRVVujYoUYjAuV7WX3aAko3vqY0lwdXD_pbk1v1J5xLGyZq7RbUtv8x5s8guURWl4xksKmMVCN2jNc69wb3CaszwAQKrgF7NcOhkqGZeTPEU0Suv90oSBKpuC8S6aar_VrdUxVDQeCWhu2eY6_1TjE2Vppv-GZ7isY7RY-XfCGeOA0QPbdL_T1pHh-yeKoUOytanD9BC5ToAkgrU0B95xvN6s5_5lVkngoyk6vJxwP_N-iTeRshjYcee4w1ECjK656yQ4uaVIByod2kEV5aJGRTPEaF1P6XqsKrr0Q6HJlFXqb4aZxv7qJYMjUAMPjM" style="width: 100%;">
+                        <p class="caption">Graph onvolution, aggregation 과정</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 위에서 aggregation하는 과정에서 자기 자신의 정보를 포함하지 않는 것은 직관적으로 생각했을 때도 분명 이상합니다.
+                        자기의 representation을 만들기 위함인데 자기 자신의 특성을 포함하지 않는 것은 이상하기 때문에 우리는 아래와 같이 combination 과정을 거칩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemdeT5WFmQd6RXCEfV9m5QV10oGcwW8EU15xb_vM3j5gg4-vDkuDBH4fjTNv2tY9KXTkIiluvzhOxtGnP61SgAnxn-i9XbgwE1H8wKbaiBvOjgNTufyTmujYAqMat0FJccsFZTFQTlQQmWCMaW3JuohJpCUlmWR5mFYCSactNza-sX8wFGqYTbSxiZfzJl6CZF0ccqIo9wLltIRnlOiiBWLG3Y_OPmpztCEhXBgda6di-VpRrcmacleOpGtqEYd7Cld4zMLJOf2Eyik4mepQw1Ndqj1lk5RyOBYebLD_f9yd2Ijnork_hfiGAKUKGGUayMXA2LDeHstdmVuDL0owx1eKLKopqcFdbJDnRfWSUxMx-dpuT4E7KOV_tDy2BUhOf80IvI8yE1xkSQhGUP7AYWd82Ofwxrsir272_UWAlgDlEUqjtJxW8TNLX0iCxtslT7vHqWvowqsUNiaSfhX0-gz3rTiUHTIgHzHuM94Dre-HiNpKIjgvD8ZHQIHoZffyksCSAuDxbyp7oQQdSo5ap4Eybc6XyArQDjxYxGS0MwVQpCjKU2OzGKypO9OSf3dN4ehICXKtlP55qYC4qeTMfvT3stTiobqdk9EfjYoRE2AU65G1la-eSS6CcHX0rvWD2apuPGe0isnKSCiGoK_Wbr58wzv5lVa35eSqh9L22AZL2yrzv5rda40NFMC45t6UqGTM_CoSM-e7RiiSpMcrzpwDYrVO51elCe29WBt6FmkiAim4pVZF4XUJKpTEW23E4rzHLTdYIWZPMC8vyTyQIl4QPMPDHdIokDe3D4kAKDJ6Wx4RbhAckTl1WYMFS58s6nxFlcqWGKKgPtba_OxQZgAI9MAjPYeMzVrlwI9dXfGQkwHw5CC-dSgtNoiEWhoQWTEzlnj5oUl5Elqn2EuOtW__H8aazczhWdMZXGV_oLt5p9jMprjo2SAZw5yB7qS4724sQUxB0uC9ahrUOUEdOqbH5A4Y6mZ0buhEchGMjpmrRm6W_39eUYV9lJ39nTTTSd4JgYcnud5z-aMZftnBCjLt_Qy2ImrObmWioc3N_l9wGkR33ZvNz42S-Jh1uqdglF7Q0q_bjGD6XqRqfzhPBy6MNVujVtW3esyikJe3jLH-EDUaI8mvvUyCM83090mWXO_mJ7lGnfs46L3UIGG6q_XeCNAguLtHJG6wbW1NpEyYK1q6_ygJ6Ri6fybU4S4ld4oMjOGN5-U63dEwXmi8gq4CzOY5K1ngITdTAe_g7NOI3Prb6D2a6DLMmBuuAMByqnXjlIlyWEmd-QMSbvY9GbMo8kgopV7g09UG6LbDhSuLDYvUg9RdNT265-dVYY8j5SoVghs9s2Ep8b5fhB4ZI6Fxnit6oaK9mJ2oDMTvh7XeVqh-b5YrFBjEsooMBbyGq9ZmPqXnVR41pRXaDgWyrfwWk_Eevn_C3r8WNmKtb639QOPfzuLnClQShC-VMeemMC0jOqMyzREmEOrszJo" style="width: 100%;">
+                        <p class="caption">Graph onvolution, combination 과정</p>
+                    </div>
+                    <p>
+                        <br>하지만 위의 adjacency matrix를 보면 node B는 aggregation 된 6개의 값을 더하고, node E는 2개의 값밖에 더하지 않습니다.
+                        이는 node가 무수히 많아지게 되면 aggregation 된 값들 차이가 많이 커지게 될 것이고 학습 안정화가 어려울 것입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 우리는 adjacency matrix를 정규화 하는 과정을 거칩니다.
+                        정규화를 통해 학습을 안정시키는 것이지요.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemftjsiFmCetNCtcXHyoss2z0ijk9tIvBCANfiIz4PQgO2t1Tx1k5Bq79ITiLP4bHD_ZPSvAvkN1Wkr3Xy7pdZ9a1LQr7KGxdLCiioGIq_y0JBD5ZeS2NQw4J-lTTSBK_5c-CG0CKm-JpJ3mtFDN7oZWXwrf_Yb7abw8d8XyNwqgGURVlha7DD57EOzwAfhASc-nryk_hdKeUF5735P6ImTsT43YY4RAms1dii5_0nqPJlT2K4ssCltmYmuCgTO3jf6tWefrsiAM0mLx-Kzn7HVnPnbee9QL7jblpgQabsdS1fjQ_NgQgbkmeKiiqUOOT-ut0UsD2XqV4uPc_HnEBihzuznS2vSFEjJFl4DwFWHMz9V3YXnQ_v_bxaiC7zD5yTLN6IQ_ySSLhemOqootysBzriSDCDsqrsF-RM-AXSUCS6v5mKnf6iAF_8Pn6euwaHtCwJVePRc9RgFzDIIeXss1BrEHUbn9ZxUsPnCZi1wwg8fefnZs0AV-77D-c7PfWoHbAjXJwZ9PMZcqOZqHIzKPHnw-tFD1YTIasjXbhAC22k0PUYAiRKNfOU_YoJ64uNw8og8WlSDI5rYv1gOOMwwyhPdR-b9nQQ3V_fL4LlJaHU441ZkLr1sAQHm_Cw6y0A-Bx8j7l8BBpRW037GupkAVHwHDpx_YXwCaRBrm53J_hT59qITDm6lqhxiMNI6p4qKecpTxHKmfumqt7ve9hx8TBVYiLiffq9Q80cctbQ3fjS5raJv48LZjhetncjFZUrAP9ZPvT1rd4hV6uQyH0kwkZ8O6Eao25laEcx3ToFa71Zq1Q4bjIADUGGXQ_eL9lCN0H4oeQTarQegJt1Qa9TMmyZ_-M1U1myZ8V4NRnsJVUPkW6QWimwIt3VxUKy6Yzfv2y7pkk6q9RxD-CLBP-bga-hPLKsgaedFAXvu5I7XGBImZdeNZu5ZSLsovIjWt1W34vVnqoVs0FRe9PyjWopD9xzjz0ChxLGpmuOOPWWh02HeNo7ulxQrl7xDrDvaKyO5Oy6nF9CjbK9fdPKITEXuB6tFbcOk9yH6-0K7AREB8fjYu_WuM3TYpeeIhViNgAn_nbwlP0EQRHSI2b7Ggv33SA3HHCJ3FfYx2fBhILhxS2agALsO5u-iOnzfHSdVwOE8aNhvbqtRHKliP0heHWsZH6OCgNSKI8k3xr7O1tcFQCa3NjLZp1s5Zvs4v6HvAyaG6pfixxzIrNhpsrSV1eu32OsvGgElojCv3PF_3wsw62RJyeCA4F2nMvCyrX7MpleX7KVbkO3gFtyhbMarlNCHsRSb0EE-RVIlGt9nV0lRDYs1t0WWmpMXwvd4TCqYCgtjhQZO2UxjHzI-GbMNas77HcEsqQAjuFWCNGTJk4lm4EaxXZqAsMtpFoL2yuF0SE6wEDY_tLSzCFVGi-obmSn_8_GI57xNtMOzwPxoTRMXbzCQRbMHv9yCenm-gbtOP5dWT0ndHh7cJAdopqKs" style="width: 100%;">
+                        <p class="caption">Graph onvolution, 정규화</p>
+                    </div>
+                    <p>
+                        <br>이제 정규화까지 했으니 node의 representation은 끝난 것일까요?
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아직 하나의 과정이 더 남았습니다. 바로 non-linearity를 주어야합니다.
+                        딥러닝이 과거의 머신러닝과 다른 또다른 커다란 이유는 바로 non-linearity에 있습니다. Node의 feature도 학습하는 것이므로 우리는 ReLU와 같은 activation function을 추가해주어야 합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemer9QQgRF533UBde98jKXFJelLSTGaaJ9RHC3MCyIt9GWqqhPUccXFbIsAK24ZqNjzGdKZ5xql1p8Bk8YzcYjh1EiHx_WlHkOgFVazPMo4dBVXnk7p9MxlUuIGUz3w_oNiNe1eepkrBjNwCMWsrWj_WyCZDEwCfGyX-ksEcwolYSD7YwPJfjHtAMwNNNJDKfYaXEGXooLtZh7UfVWaw2J35_hZQgrpMSuvRhB1fSRJHZVJMoTH0GgUjcsH_4wb--BsF2c7Mrr1GHI12MFQFOYrrUWUvWljyKUWCuaoXYr3sNAJpulTQLu1qBJ5VbRU854pG8XmLNNWtN7ZdNFy-Mab2jtU90ZBtB26Mt0ekl-2tvZb5Xnp-Blicvx_n0U1MovkR8k4ATeuaG5oFuTFAw2gL0mq58fuitxZJl9s4atqFVc36yZVzaxvuqSbMqnSOYMPBnJD0AsTDqeltyTApBf7y5kLF25DMFmqIYZP1WBDJ7WIwAGM0HFATyI1DXLjUzDwP0UqaeUCtBhy5KVdih8q_vC0b5zXTjrtBrpbBBVI6zHl7gRJ0tkTmWzp1ACKH5Cu4t44BPmfdv9wjhQ--4gqG4KOMCjmuqKPuwpdaanVDWtZUJJSa120B2pXGR8A42v7uZFq3dEWwkjDYAT9CBc4iEnohphoi9FoQl7Nfw-aY4qI8ssG4CAFsVC0KjgT1zuDj6UVwrzf86ZBLnBbB9TQjqjoZA29kH_SDtgr3tmdGCOl09rTwwNkcLNouZwv7GEvhJ5yape5OQB5FdobWKegtFDLO2MPckf8VyYaJwCOXAGjpOzT3M8GeZUgclRtK6zoOnmefGAdHcwUMUrW_tcIYDo_q5Qe4VqBSyaoWFkByWN48vTT2H2uHGG2nAYyPnreefxX0FfBp3LT8CMDVWkrI7KjvkwIEhRSA13gmW_rCxv2J2F0pMRYsaS99csU-4-LWJ1A3IZskDEYOA6RHedvy4NmGYMVY8E2iJPYZg24JkRybW4V1NUR3ZHjMyM8xsj95UwknA3KtpX1YD7WlYmUiQReqN7n1upm6Xq1wHFVR9pf1dXrZVFeDh_KR01doa63LgntLgyP6l-JHruH2NbvDqrPp-Lo8_kDU-vWk_Vz9O6MAxzhMy9rEop9qlVN99vopP5spspZmm6fG216RSiBC86A4k6Di-MbxtHtaiEnriZvJu_mgF-fYncpBcAIQ_vr7ueTrVu62_rUYA7tXOdRJApRaGVIPvhB_yPLTNMoiTyWwXJ4AhErCCcPiv2XF-9Bn1yIYK_JOibaDOd5lWvaKFnllwYA_mrjfSOEb75he0RM1EGZIAcitvxPNHxvfthlwWnlw3h36zjQylUzrRTlqGGIEA6IT8TjMZfGVtXLTCmQUf5TQ-FdUMvNaqwGOR0kwKgwt6xWyCFJcP1JX8Mmj2aMULGI39gzxTr7pJKTxNalmfQZdcp1_L6707AUldmS2eaBDi7DBwSO7d8E" style="width: 100%;">
+                        <p class="caption">Graph convolution, activation function for non-linearity</p>
+                    </div>
+                    <p>
+                        <br>이제 정리해보면 node의 feature \(H\)는 아래와 같이 쓸 수 있습니다.
+                        <ul>
+                            <li><b>A'</b>: A + I (Adjacency matrix + Identity matrix)</li>
+                            <li><b>D</b>: Degree matrix</li>
+                            <li><b>W</b>: Node embedding vector (learnable parameter)</li>
+                            <li><b>\(\sigma\)</b>: Activation function</li>
+                        </ul>
+                    </p>
+                    <div class="equation">
+                        \[Node\,Feature:\,H = \sigma(D^{-1}A'XW)\]
+                    </div>
+                    <p>
+                        <br>하지만 위의 정규화 방법도 다양성이 부족하다는 문제점이 존재합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">가령 adjacency matrix가 5x5의 크기를 가지는 행렬이라고 가정해보면 각 행의 최대 degree는 5, 최소 degree는 자기 자신만 포함하는 1이 될 것입니다.
+                        그렇다면 정규화된 adjacency matrix \(D^{-1}A\)가 가지는 원소의 종류는 \(\{1, \frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \frac{1}{5}\}\)의 5종류밖에 없으며, 이는 다양성을 저해하는 문제가 있습니다.
+                        따라서 요즘에는 \(D^{-\frac{1}{2}}AD^{-\frac{1}{2}}\)로 정규화 하는 방법을 많이 사용합니다.</span>
+                        이 두 가지의 정규화 방법이 어떤 차이가 있는지 아래에서 예를 들어보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[A = \pmatrix{
+                            1 & 0 & 0 & 1 & 0 \cr
+                            0 & 1 & 1 & 1 & 0 \cr
+                            0 & 1 & 1 & 1 & 1 \cr
+                            1 & 1 & 1 & 1 & 0 \cr
+                            0 & 0 & 1 & 0 & 1 \cr}\,\,\,
+                        
+                        D^{-1} = \pmatrix{
+                            \frac{1}{2} & 0 & 0 & 0 & 0 \cr
+                            0 & \frac{1}{3} & 0 & 0 & 0 \cr
+                            0 & 0 & \frac{1}{4} & 0 & 0 \cr
+                            0 & 0 & 0 & \frac{1}{4} & 0 \cr
+                            0 & 0 & 0 & 0 & \frac{1}{2} \cr}\,\,\,
+                        
+                        D^{-\frac{1}{2}} = \pmatrix{
+                            \frac{1}{\sqrt{2}} & 0 & 0 & 0 & 0 \cr
+                            0 & \frac{1}{\sqrt{3}} & 0 & 0 & 0 \cr
+                            0 & 0 & \frac{1}{\sqrt{4}} & 0 & 0 \cr
+                            0 & 0 & 0 & \frac{1}{\sqrt{4}} & 0 \cr
+                            0 & 0 & 0 & 0 & \frac{1}{\sqrt{2}} \cr}\]
+
+
+                        \[D^{-1}A = \pmatrix{
+                            \frac{1}{2} & 0 & 0 & \frac{1}{2} & 0 \cr
+                            0 & \frac{1}{3} & \frac{1}{3} & \frac{1}{3} & 0 \cr
+                            0 & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} \cr
+                            \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & \frac{1}{4} & 0 \cr
+                            0 & 0 & \frac{1}{2} & 0 & \frac{1}{2} \cr}\,\,\,
+                        
+                        D^{-\frac{1}{2}}AD^{-\frac{1}{2}} = \pmatrix{
+                            \frac{1}{2} & 0 & 0 & \frac{1}{2\sqrt{2}} & 0 \cr
+                            0 & \frac{1}{3} & \frac{1}{2\sqrt{3}} & \frac{1}{2\sqrt{3}} & 0 \cr
+                            0 & \frac{1}{2\sqrt{3}} & \frac{1}{4} &\frac{1}{4} & \frac{1}{2\sqrt{2}} \cr
+                            \frac{1}{2\sqrt{2}} & \frac{1}{2\sqrt{3}} & \frac{1}{4} & \frac{1}{4} & 0 \cr
+                            0 & 0 & \frac{1}{2\sqrt{2}} & 0 & \frac{1}{2} \cr}\]
+                    </div>
+                    <p>
+                        <br>위의 결과에서 보듯이 \(D^{-1}A\)의 값은 \(\{0, \frac{1}{2}, \frac{1}{3}, \frac{1}{4}\}\)의 세 종류만 존재합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 \(D^{-\frac{1}{2}}AD^{-\frac{1}{2}}\)로 정규화를 진행한 결과는 \(\{0, \frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \frac{1}{2\sqrt{2}}, \frac{1}{2\sqrt{3}}\}\)의 값이 존재하며, 이는 \(D^{-1}A\)로 정규화한 결과보다 다양성이 증가한 것을 확인할 수 있습니다.</span>
+                        즉 우리는 graph convolution을 통한 node의 feature는 아래와 같이 결론지을 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[Node\,Feature\,by\,Graph\,Convolution\]
+                        \[H = \sigma(D^{-1}A'XW)\]
+                        \[or\]
+                        \[H = \sigma(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}XW)\]
+                    </div>
+
+                    <p>
+                        <br><br><br><span style="font-size: 20px;"><b>Multi-layered Graph Convolution</b></span>
+                        <br>우리가 위에서 보았던 graph convolution 식을 다시 상기해보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[H = \sigma(D^{-1}A'XW)\]
+                        \[or\]
+                        \[H = \sigma(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}XW)\]
+                    </div>
+                    <p>
+                        <br>그리고 위의 \(H\)의 결과는 아래 결과와 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemer9QQgRF533UBde98jKXFJelLSTGaaJ9RHC3MCyIt9GWqqhPUccXFbIsAK24ZqNjzGdKZ5xql1p8Bk8YzcYjh1EiHx_WlHkOgFVazPMo4dBVXnk7p9MxlUuIGUz3w_oNiNe1eepkrBjNwCMWsrWj_WyCZDEwCfGyX-ksEcwolYSD7YwPJfjHtAMwNNNJDKfYaXEGXooLtZh7UfVWaw2J35_hZQgrpMSuvRhB1fSRJHZVJMoTH0GgUjcsH_4wb--BsF2c7Mrr1GHI12MFQFOYrrUWUvWljyKUWCuaoXYr3sNAJpulTQLu1qBJ5VbRU854pG8XmLNNWtN7ZdNFy-Mab2jtU90ZBtB26Mt0ekl-2tvZb5Xnp-Blicvx_n0U1MovkR8k4ATeuaG5oFuTFAw2gL0mq58fuitxZJl9s4atqFVc36yZVzaxvuqSbMqnSOYMPBnJD0AsTDqeltyTApBf7y5kLF25DMFmqIYZP1WBDJ7WIwAGM0HFATyI1DXLjUzDwP0UqaeUCtBhy5KVdih8q_vC0b5zXTjrtBrpbBBVI6zHl7gRJ0tkTmWzp1ACKH5Cu4t44BPmfdv9wjhQ--4gqG4KOMCjmuqKPuwpdaanVDWtZUJJSa120B2pXGR8A42v7uZFq3dEWwkjDYAT9CBc4iEnohphoi9FoQl7Nfw-aY4qI8ssG4CAFsVC0KjgT1zuDj6UVwrzf86ZBLnBbB9TQjqjoZA29kH_SDtgr3tmdGCOl09rTwwNkcLNouZwv7GEvhJ5yape5OQB5FdobWKegtFDLO2MPckf8VyYaJwCOXAGjpOzT3M8GeZUgclRtK6zoOnmefGAdHcwUMUrW_tcIYDo_q5Qe4VqBSyaoWFkByWN48vTT2H2uHGG2nAYyPnreefxX0FfBp3LT8CMDVWkrI7KjvkwIEhRSA13gmW_rCxv2J2F0pMRYsaS99csU-4-LWJ1A3IZskDEYOA6RHedvy4NmGYMVY8E2iJPYZg24JkRybW4V1NUR3ZHjMyM8xsj95UwknA3KtpX1YD7WlYmUiQReqN7n1upm6Xq1wHFVR9pf1dXrZVFeDh_KR01doa63LgntLgyP6l-JHruH2NbvDqrPp-Lo8_kDU-vWk_Vz9O6MAxzhMy9rEop9qlVN99vopP5spspZmm6fG216RSiBC86A4k6Di-MbxtHtaiEnriZvJu_mgF-fYncpBcAIQ_vr7ueTrVu62_rUYA7tXOdRJApRaGVIPvhB_yPLTNMoiTyWwXJ4AhErCCcPiv2XF-9Bn1yIYK_JOibaDOd5lWvaKFnllwYA_mrjfSOEb75he0RM1EGZIAcitvxPNHxvfthlwWnlw3h36zjQylUzrRTlqGGIEA6IT8TjMZfGVtXLTCmQUf5TQ-FdUMvNaqwGOR0kwKgwt6xWyCFJcP1JX8Mmj2aMULGI39gzxTr7pJKTxNalmfQZdcp1_L6707AUldmS2eaBDi7DBwSO7d8E" style="width: 100%;">
+                        <p class="caption">Graph convolution, activation function for non-linearity</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위의 한 번의 graph convolution의 계산 결과를 살펴보면 각 node의 첫 번째 이웃만 aggregation이 된 것을 볼 수 있습니다.
+                        즉 첫 번째 이웃 node, 1-hop만 고려하는 것을 확인할 수 있죠.
+                        다른 말로 각 node의 두 다리 이상 건너서 있는 이웃 특징은 aggregation 하지 못한다는 것을 의미합니다.</span>
+                        상식적으로 생각해봐도 첫 번째 1-hop만 고려하는 것 보다 당연히 2, 3-hops를 고려하는 것의 성능이 더 좋을 가능성이 크기 때문에 우리는 n-hops를 고려해야합니다.
+                        이는 간단합니다. 아래 수식을 통해 n-hops를 고려하는 방법을 살펴보겠습니다.
+                    </p>
+                    <div class="equation">
+                        \[1-hop:\,H^{1} = \sigma(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}XW_1)\]
+                        \[2-hops:\,H^{2} = \sigma(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}H^{1}W_2)\]
+                        \[\vdots\]
+                        \[n-hops:\,H^{n} = \sigma(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}H^{n-1}W_{n})\]
+                    </div>
+                    <p>
+                        <br>또는 \(D^{-1}A\)로 정규화한다면 n-hops를 아래처럼 나타낼 수 있습니다.
+                    </p>
+                    <div class="equation">
+                        \[1-hop:\,H^{1} = \sigma(D^{-1}A'XW_1)\]
+                        \[2-hops:\,H^{2} = \sigma(D^{-1}A'H^{1}W_2)\]
+                        \[\vdots\]
+                        \[n-hops:\,H^{n} = \sigma(D^{-1}A'H^{n-1}W_{n})\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위의 식처럼 (n-1)-hops을 통해 나온 node feature를 다음 graph convolution layer의 node embedding으로 넣어주어서 계산하면 n-hops를 고려한 결과가 나오게 됩니다.</span>
+                        그 이유는 아래의 2-hops를 계한하는 graph convolution의 결과를 생각해보면 당연합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemd_DdlQuVggmJN48tVWkUE0ENQzcKrlgC2OyeaExX01HnW-NeWpGv9wSqroW_GKAnlXdR-NdKJShGV9vCx1WezrIYW4br7TecIVwVlOFAoI-saCASZOD304hvNgPgz-A9dm5BReGMxD6OZ4WVez8kfNVoX-3NwNTWGRVeM2p-LBh25zXf5pOVypcVI69esuSp6uKdwKZruqIF9vvo3IhxfrghgFz8x08fkZQX7RUbM7vsL2USFlUdTCgjXZPbLvnTkdJDg37vo8cKU7aI4Piq6EKDGF5r8sHgPSenYKy1gHIOBNjfOt1jvuvgWMLQPh1Xo-JIGTSdGZ2xWja_jlpp_MiVZS_wz_x7pWzeiVtc82ICTW1eb3Lg6vRDbcmrcq7FvWuu2jn0HdLcBNiBMeyG3L_3MZ84ujQtZxzR99__f_fDI-fkFd0dVLOflaiVRMzi3iZzSqEwyL4enfqDd8HBt66HJcy8U7XpA_9uaapI2_YKlvUOYyVmzIBB7tvwRjPPL2NX2kmhxfe545TheJPMdqxU2X29-GLHJyB3ix8-cybPjMpvNdSkrRqmBoQnym2901vDxdexKDWy2Ul6yB0SB3dBI9FznHhAw-_oBYPbDNQcywTbmYMGtFFpVZFE8W0Y8m7y-_FxOOzUlNvaGqC80K9GxSb1vx6d84xnQqvLB8mJM7L7Rmpi1ly2xbD992UUR5ewRoUuSn0fhtMZpcuLMWSNhYJxLIgwxn_onaToFAtHRvxLO9nk0BkJo2uvl5nMGlNCSCRZWIEADtM7DfRWEFv_GGAIL7iVgy0W-v9DDnmtGsUqCtdhZgRFIbhvMyuohy4avNtmJUjDUG6X64TJ_WSe4D8qZPc0-zTQjVhvM4-CHgfftlhTCoJraNzJ_rx_L6SSVq48l8WK28gqDNn45pWDDEjOjQPc_XKbENiY7hB_PpJyvUsLY13dVeiy9IYvlElNMVVZD2oGDKu7XkSuDaq10Z8WtRtBFCDyf-NP2yoDMfK2BVvqxnSSlX5FMCsuNDOZi1B2Wl0pTGWOLUtXv6khp071Xv0IHpS-BLmGJYextf44uLveo2l2l2jIVx-Rsmi7e8z7pU-d9O3it5qOPh7KmvmMq2W90KrIFsbnZbg3dEa5IIPFBCZ8uj5Q29hjWGi2gTeqK75DH7TZhx0GZ_6R7WJl3TnFRpfbcYLK3aOfol_8O09WpuLgcUHAxdFpjIUXNJSb7NwMHL1JNkXa1BxVdPot4gTdSl89VCizJUf4To3lQ8kjVquJKI2tUbzPOnlFBvtaH_rYAHWr5uPP_WLRQyEWnJDFuJ4NHrvR65wLyMarZtvZnCz_ouGbx42GIZsM1JkihZRXPV1XLMFWYxiQQT__7oK4eLj4VsHaXJemBSmSByQU0bQKmLUCsNWGNCDTK5LMafk60qKOZDuROKPem3kgkB_GxrlJFf1YtB2qKhUyzhG71E_2L7S27cdf2OkX1Kyf2-IHC9tFg" style="width: 100%;">
+                        <p class="caption">2-hops graph convolution</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">결론적으로 graph convolution layer를 n개 쌓아서 거치게 된다면 n-hops를 고려할 수 있습니다.</span>
+                        따라서 multi-layered graph convolution은 n-hops를 의미하게 됩니다.
+                    </p>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>Vanilla GCN의 변형</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        위에서 소개한 방법은 일반적인 graph convolution의 방법입니다.
+                        사실 \(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}\)로 정규화 하는 방법도 \(D^{-1}A'\)의 방법을 변형한 것입니다.
+                        그렇다면 정규화 방법 뿐 아니라 다른 변형 방법도 몇가지 살펴보겠습니다.
+                        <ul>
+                            <li>\(D^{-\frac{1}{2}}A'D^{-\frac{1}{2}}\) 정규화 방법: Spectral graph convolution의 아이디어에서 나온 기법, graph Laplacian과 관련있음.</li>
+                            <li>Combination 방법: 지금까지 자기 자신 node의 특성 \(f(v_i)\)를 combination하는 과정은 adjacency matrix에 의해 neighbor node의 특성 \(a_i\)와 더해주는 방식이었습니다.
+                                하지만 \(f(v_i)\)와 \(a_i\)를 concatenate해서 linear layer로 합을 해주는 방식도 있습니다(\(W \cdot [f(v_i);a_i]\)).
+                            </li>
+                            <li>Node의 neighbor 상태를 sequence라고 가정하여 RNN으로 해결하는 기법도 있습니다.</li>
+                        </ul>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위의 기법 말고도 그래프를 처리하기 위한 다양한 방법들이 있습니다.
+                        이러한 방법을 우리는 모두 Graph Neural Networks (GNN)이라고 부릅니다.</span>
+                    </p>
+                    
+                    
+
+                    
+                
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px">&ldquo;</span>
+                        <span>GCN과 Transformer</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        우리가 위에서 살펴본 GCN의 기법은 사실 transformer와 그 형태가 비슷합니다(<a onclick="pjaxPage('transformer1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">Transformer에 대한 설명글</span></a>).
+                        먼저 아래 그림의 transformer에서 사용하는 encoder의 self-attention을 살펴보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemde-OkrB_qgx3QQwHwRnxZGMl-RVSA4l59afuQKIFcR2v1WdvsaemFFCRFuRKk_fP3o0wubJ_3zRI-VA9-Wqxi22XnsZZVbkJOhHnzcjq4vSWWwJHvbynTKdqpSm3x5tzDw3lG0j8oUVtG7z2MKJN-GzredIZ9MhzRPgWcOVrcOFjQaY2HsZt5gccID5ffYK22eSZWEMOXD7Hk3HxCV_bvLGG5987wyhdXGgL4qkp5uh1_ZTN5RcJ2BdUSGceB6fS98clz622kqyRhZ56VDEDdWbMhfMyT6ujogO7BBZhAs_BK-dWoz41O35Pr8YOR4xlFMuVrkIsbqDt8TNW9RttWLrshgxmkTdY6afYi_q1mkXQYd6wZhnbNRY0pBhP_CG5LBRbcHV-0oemCL82VZFcJZpnugB5LUQpYvbrSjKJ35LmubuP7ommy2TWd0XcjJj0y_Kqc3qrtbuQz-jJkA90glCxY8Jhd27VX9olmSn6xhrmHSvii3ld6xOPducXFzwnY2nGIOu04vr4nBxvV5hw8OCrenpMqNpsZExuBM2szIOUPrbrs0Wy3ZfpdwMnzdMTD_eGPghi9hxeZym1-BXiC2s5OFjAXShO-OKRBoYvkA0pChBPNJLr2oQ0ue-ZkVDjd3GkKaeYBKGWmCAiSMO3grWXQ0ffbglfCzBUmrd3ftYzKhrDh8ykxqVF_glP7H69K5Dx0ncFWwKhqVJ1ks9HoceXVItVBsTKHi58Qaa02nrHfN61DgsllEPVDzRyvyGyK1Q3f5Fmuqd4B9aPy_7Rce5O5vBFG2Bl6A7bwwYji1HMu9rHC1mtqP3DQviNXBj7wWJAEBIo-xu2C24bLWAWQwLSnwHgVziM95oJ84c0K5IbWrnWbab_gauHq5rivObDO6HwZXeFjBWJ6wzxhN1rF8nSvXj2v992jUU99UcQJzNn7Tq0OZ4Wmj8HVNzJM73zIQLJ-7KyjHxibjA_REheeVKVWMpNHIINyNhTOVxTlJqt8dt9OzrSZMKz93NrDeTeSLif70j8trzz8f95OA3ss0b4GF7ZzV7zhNnzm-fbgUYIklzA3KIp4UNozq2WsyllcGJYmIpIOLXaAO_Jb5cxHpIlDn7dscpQUtHLw0MfxTDX4P2Ve2D65aZ0d3vjD3v_DbVstjorkKFOeTmuYxwl8vSf_E4UQDfi2IDGPSP_9BoC3KjpjfxQDK12qt6X5w54F9VPq6-mxex-Ca20bnYDdtnKdTri4CDPzuG9Xk8CAn3AlSObp6MrOuI3je-D8LkgmZIaOcQtx82PQklFYCdpPqmmEYuKcX_ZzFQPWriU8DUHUf4YESiTp2mLwMZBRkkr6oaGyPc27WeuGRE7vu3dILNJAfGfb1IrI1DegxgoIbshGeZTEqTepp-nWSmidjb47hl8vRuEPWk1fvUxhK7ZssXITSUGnGQm_LcPDp8wKBRnqkvgcwcQTJZFVF_7vuMfFhp3pRdX8A--1UfIY" style="width: 70%;">
+                        <p class="caption">Transformer encoder의 self-attention</p>
+                    </div>
+                    <div class="equation">
+                        \[Attention(Q, K, V, x)=softmax(\frac{Q \cdot K^T}{\sqrt{D_K}}) \cdot V\]
+                    </div>
+                    <p>
+                        <br>위의 그림을 잘 상기하고 아래의 graph convolution을 살펴보겠습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemc-udq_ll9sol6ep8sWIPQihfGk9-dENlyg0y2tSEfeQwIPmSDhFM7MOGGnPc02hOFLhFGEtQyvdIwxrqCFBNMTCZZwUleE-409GXGVl6cI4owwTlT8_N6-RaaEFn6qIgAbedaTi9e9W_ZlvXDx0y8EOL1au2FphrR-gTzP6yjy-VJgrZAm_psfjVkfMq20g4t2Gjwc21jHiUTClCcLeb_ISoqnO8gIHdhBRm0z5g73BjDi3UqLKd5t-fnXNya_QZLJCKxZY2OgdYGuHHqpn-CJNS1rRVACi9mlZG7vQwcZ2mDIt5U5VlNztGvwf_7j2KIl9OEhPpA9f_jPzCZ0WlwHLGqz7JLR9TxS82UWeAbxG-0ZFEp6cF23yOFscEi-Hz6tobDAQCOGAZptSmvlzg0i4pj0QiB1vCxWgP02fNixhUT_r8wktYpI3PgWvzlYeCLoAbh2VY-3a78l6bRvqMhan7z8rHJMN1sZV_VtsjFjyCcyajjdYuAXBFgG5ZXPfpdB3CNuKT4TlQhj7ajJ3XqQyhexNRe6it3W01XWHFWMIuxUbxGgU4n2uzyTqNPcHxLgULekGxVTRGdH9MzCT_HeBODqJw6QmBC6bmBgEpoHRwRZHapYn1GoJBvfRIsssRRv_bELtO4CLUj8hrJvlRZQbAcoZdrde0ztl0MC1mgpWWvnafDVeeeanUKtOFS_AjTHyFvZSPQB_sTtwRvE8KmjTzI5tttPnGquUsNnKRtPgXD3uCWrkW-OG3C62SHR3t5mVPcbgj7ZTxVgIbqN-oHiJAmwbS16ym2kWUEx62QiU_aMcxg-0gIRZ8z1TcKVcDPrtQ0LOwC-v5DeNfa36chrC9sb3rcXxZ_TZbZuhVCCdh5pKUjZfmqirSFQ7W1QM1Sntqbp9gfm1fr_eN_wWTWzY_UjBZHe6hzk49AV4Bs5frJd1bamvmhk5YMt1hpwUnl61_P1L3S-rXz83tHTGPQdujrFTSmwjH3R0o8BktL7FHqDq3bPM-VvdI-gMD3Cvn_cRVgj4kgcaSGN6fsq3b1f4T38KvdT_bFByA86n7DfwAtAyGAX68FeZ5lUfXhQtTRUIhxNzsHHPHULY-VSSnzBDa15CaEEHVVpmh4Aioglvne9vaYxcJpnhwlT96FgKfgU7QNMQtf1RNyFmfx5upV0RbzJhVTifhhAbvmxNIsomwaaIkLr2evVZKx3eKc6WDenjqloaTm9WKMFZREW-ZYTn-C2k_O3ce7baLNEsvSdl4r-nuvPnTXtODoE4rVfrwfpwd7wSpHJemS0q_w88PY7NTHf7NQpmRE_Nc49-kZ91hmLW0P8XtZxq7tz4w4T0aga5a98WUQT1VrKUznLm_7ajDFRdqznz1EIxk6i0nB2No_0tqW4qtbPebb1ZZvQ9ZK2M7TFt8Uyk44XbBkWBDYV-4qm_T16d6zZJjok_T0REllJr_FvAybjXJWJK-d1aLuaR4twBw49Xq024Ig" style="width: 100%;">
+                        <p class="caption">Graph convolution</p>
+                    </div>
+                    <div class="equation">
+                        \[Node\,feature:\,H = \sigma(D^{-1}A'XW)\]
+                    </div>
+                    <p>
+                        <br>Transformer의 self-attention과 graph convolution의 과정은 수식적으로 매우 유사합니다.
+                        Attention score도 linear layer를 거치기 때문에 self-attention과 graph convolution의 식을 다시 적어보면 아래와 동일합니다.
+                    </p>
+                    <div class="equation">
+                        \[self-attention:\,MLP\big(softmax(\frac{Q \cdot K^T}{\sqrt{D_K}}) \cdot V\big)\]
+                        \[Node\,feature:\,MLP\big(D^{-1}A'XW\big)\]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 식에서 self-attention의 token embedding \(V\)와 graph convolution의 node embedding \(XW\)가 대응된다는 것을 알 수 있습니다.
+                        그리고 attention score \(softmax(\frac{Q \cdot K^T}{\sqrt{D_K}})\)와 adjacency matrix인 \(D^{-1}A'\)와 대응되는 것을 확인할 수 있습니다.</span>
+                        이렇게 비슷한 현상이 발생하는 이유는 transformer의 encoder도 모든 단어가 연결되어있다는 implicit graph라고 가정하기 때문입니다.
+                        
+                        <br><br>즉 아래 그림에서 보이는 score는 한 단어(node)가 다른 단어(neighbor node)와 연결된 edge를 의미하고, 그 edge의 가중치가 다르다는 것이지요.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">만약 우리가 위에서 설명했던 graph convolution의 edge를 모두 1이 아니라 연결의 중요도에 따라 edge의 weight를 달리 주는 weighted graph라고 가정을 했다면 아래 self-attention score와 완전히 같아지는 격이 됩니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemde-OkrB_qgx3QQwHwRnxZGMl-RVSA4l59afuQKIFcR2v1WdvsaemFFCRFuRKk_fP3o0wubJ_3zRI-VA9-Wqxi22XnsZZVbkJOhHnzcjq4vSWWwJHvbynTKdqpSm3x5tzDw3lG0j8oUVtG7z2MKJN-GzredIZ9MhzRPgWcOVrcOFjQaY2HsZt5gccID5ffYK22eSZWEMOXD7Hk3HxCV_bvLGG5987wyhdXGgL4qkp5uh1_ZTN5RcJ2BdUSGceB6fS98clz622kqyRhZ56VDEDdWbMhfMyT6ujogO7BBZhAs_BK-dWoz41O35Pr8YOR4xlFMuVrkIsbqDt8TNW9RttWLrshgxmkTdY6afYi_q1mkXQYd6wZhnbNRY0pBhP_CG5LBRbcHV-0oemCL82VZFcJZpnugB5LUQpYvbrSjKJ35LmubuP7ommy2TWd0XcjJj0y_Kqc3qrtbuQz-jJkA90glCxY8Jhd27VX9olmSn6xhrmHSvii3ld6xOPducXFzwnY2nGIOu04vr4nBxvV5hw8OCrenpMqNpsZExuBM2szIOUPrbrs0Wy3ZfpdwMnzdMTD_eGPghi9hxeZym1-BXiC2s5OFjAXShO-OKRBoYvkA0pChBPNJLr2oQ0ue-ZkVDjd3GkKaeYBKGWmCAiSMO3grWXQ0ffbglfCzBUmrd3ftYzKhrDh8ykxqVF_glP7H69K5Dx0ncFWwKhqVJ1ks9HoceXVItVBsTKHi58Qaa02nrHfN61DgsllEPVDzRyvyGyK1Q3f5Fmuqd4B9aPy_7Rce5O5vBFG2Bl6A7bwwYji1HMu9rHC1mtqP3DQviNXBj7wWJAEBIo-xu2C24bLWAWQwLSnwHgVziM95oJ84c0K5IbWrnWbab_gauHq5rivObDO6HwZXeFjBWJ6wzxhN1rF8nSvXj2v992jUU99UcQJzNn7Tq0OZ4Wmj8HVNzJM73zIQLJ-7KyjHxibjA_REheeVKVWMpNHIINyNhTOVxTlJqt8dt9OzrSZMKz93NrDeTeSLif70j8trzz8f95OA3ss0b4GF7ZzV7zhNnzm-fbgUYIklzA3KIp4UNozq2WsyllcGJYmIpIOLXaAO_Jb5cxHpIlDn7dscpQUtHLw0MfxTDX4P2Ve2D65aZ0d3vjD3v_DbVstjorkKFOeTmuYxwl8vSf_E4UQDfi2IDGPSP_9BoC3KjpjfxQDK12qt6X5w54F9VPq6-mxex-Ca20bnYDdtnKdTri4CDPzuG9Xk8CAn3AlSObp6MrOuI3je-D8LkgmZIaOcQtx82PQklFYCdpPqmmEYuKcX_ZzFQPWriU8DUHUf4YESiTp2mLwMZBRkkr6oaGyPc27WeuGRE7vu3dILNJAfGfb1IrI1DegxgoIbshGeZTEqTepp-nWSmidjb47hl8vRuEPWk1fvUxhK7ZssXITSUGnGQm_LcPDp8wKBRnqkvgcwcQTJZFVF_7vuMfFhp3pRdX8A--1UfIY" style="width: 70%;">
+                        <p class="caption">Transformer encoder의 self-attention</p>
+                    </div>
+
+                    <p>
+                        <br>마지막으로 이러한 concept을 이용하여 활용한 연구도 많이 있다는 점 알려드리고 글을 마치겠습니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1710.10903.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GRAPH ATTENTION NETWORKS 논문</a>
+                    </div><br>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1906.04716.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Graph Convolutional Transformer 논문</a>
+                    </div>
+
+
+
+                    
+                    <p>
+                        <br><br><br>다음은 비교적 작은 데이터인 Cora dataset을 가지고 node의 label을 분류하는 GCN 모델을 학습해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#GNN&emsp;#GCN&emsp;#그래프
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('GNN, GCN 첫 게시물 입니다.\n\nThis is the first post of GNN and GCN.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('gnn2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Cora 데이터와 GCN을 이용한 노드 분류</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
