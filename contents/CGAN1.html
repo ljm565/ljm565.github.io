@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Conditional Generative Adversarial Network (CGAN)</title>
+        <meta name="description" content="Conditional Generative Adversarial Network (CGAN)에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/CGAN1.html" />
+        <meta property="og:title" content="Conditional Generative Adversarial Network (CGAN)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="Conditional Generative Adversarial Network (CGAN)에 대해 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AMPSemfDz-OT-WP2UvtgPLvDIq1r5cs9xdZ-AI0_JBdsQph0tQeYhn3z7KxVibN4uW7QterrpOLNxSEJ_GKEEKjrkiqPq-eUvabZieXdDWqAP7uLMG6hDuy-318YttCCuQ9o13hqfSb_nYQExELaz8GkHOdSCrVgPt6aVGdjRwFpoUwr7ydRiyRXcV32b2Vy-1qYAZwQgsBCokIL0D_nQSjgOM9SD_kdV4KmsVNly_mui58A4W1JtZFwWenyxGvMMD9tbEjTs21AhuDN8JZ5FjW0R5MdHeOO2_d3mCgw0ILR5Bp9SURgjDSwC_6tWB0t7FCLw-1zCmJQvRrRahNXELrpVNldHO2BCP8Lcp0nNPDG1LLyT_nv5Jk8-tpZ_k8e51omKNmTsJEcKq_oSTckwUykD_Y9HEg3GZIa-vnmHxAg31XBHdeUzozbJjOxeG8Ye3pVSj-nxDkVMCqHTZl2ZzIF7-So7ABforBISeSrTL1JQ_HN3CTgLGpikNz3-1BFTaT_Akt9fqljl3QqaWZYJAL-Q7997jPyyMc0Rd85gqktAEvFlLHzFNzKcKGOE18v5LaPjp6WEN24nCrg_O2WEn7EWBU49maq-oZHWya5vYnmG9PFwTTEjoiGsPBrvUTP21KJAaZLOVokGZmBtcF8NF0BGFSzJpRpBbtnbQjos6s3D7fO5gQQlhkvyIO2L9eX_XU7-gOhftpPCW7p3Xh2xo1TVhu6YX9A3sEcYoV2QvBrkE0UOqllI5_wQbmd15tzDwSmgcgZbgcAT5rsyTgg7nEiQTAySlsRqQCqBMgSfabxpzSD1VAWHDecwis3HZmVjCHHHj9_Luah65TKQQ2RD-NOYAgj-qYuiyPT6PdM5NGkwgqZGABo7HteIvGNag7TdPkpwD027jxaB4GjqJ7gk9QCFdILTXLazek1Os2jDxXr7nbw-mRdnfevhSrvjK-bmjSbwfGk8kWfitVuhbVDaytkZ9JiQLY4bE51adLG5r8qkNcmqWK4UQgtF9KZCM-RmYQRJ28JMJIRHQs_1foCxdr3bvx_axJb5oqwGA5lPPjeJjnIY_m8OZ11r8dZuoPRqYFKtut1gop2i8I2eY3Qiq_sb4-DPBjWwl3ARoh-2ZNe3yTRdLYJZQav_xLPGb8SuxlOSTfpq4mA6cbx-JpjiNfvxzRhD8UOEtlPh-MbJFwLfAXRPXX13dgqoiRoK6pLhEQak3B4-XRbzrDx889XB-YeGB8yifJyhzjz19nut3gD3feCYTN9aXKtXh7wEX0VrzTE5ZOUMLETlF8ev90NUIxvdLG8C7nHHDDVL3lkb1tYmOAuxnoyH4EYNdqmcVcPccD0B1kHlFH1mt12AHYT8h-AQsKXvC9zdmvg4g0qeu83q2L3zB1TDboLvuzvaixrkzkQCUjXPFqbQXngeJjscP7Os0zN2q1l87P8uC3o9CgKVBCXv2eSqIFp-g8jidym3kruSbjsUcGtYB9xCSzWH34" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Conditional Generative Adversarial Network (CGAN) / 1. Conditional Generative Adversarial Network (CGAN)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AMPSemfDz-OT-WP2UvtgPLvDIq1r5cs9xdZ-AI0_JBdsQph0tQeYhn3z7KxVibN4uW7QterrpOLNxSEJ_GKEEKjrkiqPq-eUvabZieXdDWqAP7uLMG6hDuy-318YttCCuQ9o13hqfSb_nYQExELaz8GkHOdSCrVgPt6aVGdjRwFpoUwr7ydRiyRXcV32b2Vy-1qYAZwQgsBCokIL0D_nQSjgOM9SD_kdV4KmsVNly_mui58A4W1JtZFwWenyxGvMMD9tbEjTs21AhuDN8JZ5FjW0R5MdHeOO2_d3mCgw0ILR5Bp9SURgjDSwC_6tWB0t7FCLw-1zCmJQvRrRahNXELrpVNldHO2BCP8Lcp0nNPDG1LLyT_nv5Jk8-tpZ_k8e51omKNmTsJEcKq_oSTckwUykD_Y9HEg3GZIa-vnmHxAg31XBHdeUzozbJjOxeG8Ye3pVSj-nxDkVMCqHTZl2ZzIF7-So7ABforBISeSrTL1JQ_HN3CTgLGpikNz3-1BFTaT_Akt9fqljl3QqaWZYJAL-Q7997jPyyMc0Rd85gqktAEvFlLHzFNzKcKGOE18v5LaPjp6WEN24nCrg_O2WEn7EWBU49maq-oZHWya5vYnmG9PFwTTEjoiGsPBrvUTP21KJAaZLOVokGZmBtcF8NF0BGFSzJpRpBbtnbQjos6s3D7fO5gQQlhkvyIO2L9eX_XU7-gOhftpPCW7p3Xh2xo1TVhu6YX9A3sEcYoV2QvBrkE0UOqllI5_wQbmd15tzDwSmgcgZbgcAT5rsyTgg7nEiQTAySlsRqQCqBMgSfabxpzSD1VAWHDecwis3HZmVjCHHHj9_Luah65TKQQ2RD-NOYAgj-qYuiyPT6PdM5NGkwgqZGABo7HteIvGNag7TdPkpwD027jxaB4GjqJ7gk9QCFdILTXLazek1Os2jDxXr7nbw-mRdnfevhSrvjK-bmjSbwfGk8kWfitVuhbVDaytkZ9JiQLY4bE51adLG5r8qkNcmqWK4UQgtF9KZCM-RmYQRJ28JMJIRHQs_1foCxdr3bvx_axJb5oqwGA5lPPjeJjnIY_m8OZ11r8dZuoPRqYFKtut1gop2i8I2eY3Qiq_sb4-DPBjWwl3ARoh-2ZNe3yTRdLYJZQav_xLPGb8SuxlOSTfpq4mA6cbx-JpjiNfvxzRhD8UOEtlPh-MbJFwLfAXRPXX13dgqoiRoK6pLhEQak3B4-XRbzrDx889XB-YeGB8yifJyhzjz19nut3gD3feCYTN9aXKtXh7wEX0VrzTE5ZOUMLETlF8ev90NUIxvdLG8C7nHHDDVL3lkb1tYmOAuxnoyH4EYNdqmcVcPccD0B1kHlFH1mt12AHYT8h-AQsKXvC9zdmvg4g0qeu83q2L3zB1TDboLvuzvaixrkzkQCUjXPFqbQXngeJjscP7Os0zN2q1l87P8uC3o9CgKVBCXv2eSqIFp-g8jidym3kruSbjsUcGtYB9xCSzWH34);">
+                    <div>
+                        <span class="mainTitle">Conditional Generative Adversarial Network (CGAN)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.03.08</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에는 원하는 데이터, 혹은 원하는 label의 데이터를 선택해서 생성할 수 있는 Conditional Generative Adversarial Network (CGAN)에 대해 설명하겠습니다.
+                        CGAN을 이해하기 위해서는 먼저 GAN에 대해서 알고있어야 합니다.
+                        생성 모델, GAN, GAN의 평가 지표 등 여러 내용은 <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GAN 설명글</span></a>을 참고하기 바랍니다.
+
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Conditional GAN (CGAN)</li>
+                        </ol>
+                    </p>
+                    <p>
+                        <br>그리고 아래는 CGAN 논문입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/1411.1784.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Conditional GAN 논문</a>
+                    </div>
+
+
+
+                    <h1 class="subHead">Conditional Generative Adversarial Network (CGAN)</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Conditional GAN (CGAN)</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        기존 vanilla GAN은 데이터 합성(생성)을 위한 모델입니다.
+                        다만 training data를 label의 구분 없이 넣어주기 때문에 원하는 label에 해당하는 데이터만 생성하는 것은 불가능합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">가령 MNIST 데이터로 vanilla GAN을 학습한 후, 8에 해당하는 숫자만 생성하도록 모델에 요청할 수 없는 것이지요.
+                        이렇게 특정 데이터를 생성하기 위해 나온것이 바로 CGAN입니다.</span>
+
+                        <br><br>먼저 아래 그림을 보기 전, 적대적 학습(adversarial learning)에 대해 알아야하므로 이와 관련해서는 <a onclick="pjaxPage('GAN1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">GAN 설명글</span></a>을 참고하기 바랍니다.
+                        
+                        <br><br>이제 GAN과 적대적 학습의 개념을 알고있다는 가정하에 아래 그림을 살펴보겠습니다.
+                        GAN에 대해 알고있다면 아래 그림은 전혀 어려울 것이 없습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Discriminator에게는 real data에 label embedding을 추가하여(concatenate 하여) 학습하고, generator에게는 Gaussian noise에 label embedding을 추가하여 학습하는 것이 다입니다.</span>
+                        이렇게 학습을 진행한 후 원하는 label의 데이터를 만들고 싶다면 generator에 Gaussian noise와 label embedding을 함께 넣어주면 그 label에 해당하는 데이터를 합성해주는 것이지요.
+                    </p>
+
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AMPSemfDz-OT-WP2UvtgPLvDIq1r5cs9xdZ-AI0_JBdsQph0tQeYhn3z7KxVibN4uW7QterrpOLNxSEJ_GKEEKjrkiqPq-eUvabZieXdDWqAP7uLMG6hDuy-318YttCCuQ9o13hqfSb_nYQExELaz8GkHOdSCrVgPt6aVGdjRwFpoUwr7ydRiyRXcV32b2Vy-1qYAZwQgsBCokIL0D_nQSjgOM9SD_kdV4KmsVNly_mui58A4W1JtZFwWenyxGvMMD9tbEjTs21AhuDN8JZ5FjW0R5MdHeOO2_d3mCgw0ILR5Bp9SURgjDSwC_6tWB0t7FCLw-1zCmJQvRrRahNXELrpVNldHO2BCP8Lcp0nNPDG1LLyT_nv5Jk8-tpZ_k8e51omKNmTsJEcKq_oSTckwUykD_Y9HEg3GZIa-vnmHxAg31XBHdeUzozbJjOxeG8Ye3pVSj-nxDkVMCqHTZl2ZzIF7-So7ABforBISeSrTL1JQ_HN3CTgLGpikNz3-1BFTaT_Akt9fqljl3QqaWZYJAL-Q7997jPyyMc0Rd85gqktAEvFlLHzFNzKcKGOE18v5LaPjp6WEN24nCrg_O2WEn7EWBU49maq-oZHWya5vYnmG9PFwTTEjoiGsPBrvUTP21KJAaZLOVokGZmBtcF8NF0BGFSzJpRpBbtnbQjos6s3D7fO5gQQlhkvyIO2L9eX_XU7-gOhftpPCW7p3Xh2xo1TVhu6YX9A3sEcYoV2QvBrkE0UOqllI5_wQbmd15tzDwSmgcgZbgcAT5rsyTgg7nEiQTAySlsRqQCqBMgSfabxpzSD1VAWHDecwis3HZmVjCHHHj9_Luah65TKQQ2RD-NOYAgj-qYuiyPT6PdM5NGkwgqZGABo7HteIvGNag7TdPkpwD027jxaB4GjqJ7gk9QCFdILTXLazek1Os2jDxXr7nbw-mRdnfevhSrvjK-bmjSbwfGk8kWfitVuhbVDaytkZ9JiQLY4bE51adLG5r8qkNcmqWK4UQgtF9KZCM-RmYQRJ28JMJIRHQs_1foCxdr3bvx_axJb5oqwGA5lPPjeJjnIY_m8OZ11r8dZuoPRqYFKtut1gop2i8I2eY3Qiq_sb4-DPBjWwl3ARoh-2ZNe3yTRdLYJZQav_xLPGb8SuxlOSTfpq4mA6cbx-JpjiNfvxzRhD8UOEtlPh-MbJFwLfAXRPXX13dgqoiRoK6pLhEQak3B4-XRbzrDx889XB-YeGB8yifJyhzjz19nut3gD3feCYTN9aXKtXh7wEX0VrzTE5ZOUMLETlF8ev90NUIxvdLG8C7nHHDDVL3lkb1tYmOAuxnoyH4EYNdqmcVcPccD0B1kHlFH1mt12AHYT8h-AQsKXvC9zdmvg4g0qeu83q2L3zB1TDboLvuzvaixrkzkQCUjXPFqbQXngeJjscP7Os0zN2q1l87P8uC3o9CgKVBCXv2eSqIFp-g8jidym3kruSbjsUcGtYB9xCSzWH34" style="width: 100%;">
+                        <p class="caption">Label embedding을 추가하여 학습하는 CGAN, 출처: CGAN 논문</p>
+                    </div>
+
+
+
+
+                    
+                    
+                    <p>
+                        <br><br><br>지금까지 CGAN의 아주 간단하고도 원하는 데이터를 생성할 수 있는 방법에 대해 살펴보았습니다.
+                        전체적으로 모델, 학습 방법은 vanilla GAN과 다를 것이 없지만 단지 label embedding을 concatenate하여 학습한다는 점이 다릅니다.
+                        다음글은 CGAN을 구현하여 실제로 특정 label에 해당하는 데이터를 생성해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#ConditionalGAN&emsp;#CGAN
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Conditional GAN 첫 게시물 입니다.\n\nThis is the first post of Conditional GAN.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('CGAN2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>MNIST와 CGAN을 이용한 원하는 데이터 생성</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
