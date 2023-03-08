@@ -256,7 +256,7 @@ lineMaking("code1", 50);
                 <span class="var">Dx</span> += <span class="var">output_real</span>.sum().item()
 
                 <span class="annot"># training discriminator for fake data</span>
-                <span class="var">fake_data</span> = <span class="var">self</span>.<span class="var">G_model</span>(<span class="clazz">torch</span>.<span class="method">randn</span>(<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">noise_init_size</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+                <span class="var">fake_data</span> = <span class="var">self</span>.<span class="var">G_model</span>(<span class="clazz">torch</span>.<span class="method">randn</span>(<span class="var">batch_size</span>, <span class="var">self</span>.<span class="var">noise_init_size</span>)).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
                 <span class="var">output_fake</span> = <span class="var">self</span>.<span class="var">D_model</span>(<span class="var">fake_data</span>.detach())  <span class="annot"># for ignoring backprop of the generator</span>
                 <span class="var">target</span> = <span class="clazz">torch</span>.<span class="method">zeros</span>(<span class="var">batch_size</span>, <span class="num">1</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
                 <span class="var">D_loss_fake</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output_fake</span>, <span class="var">target</span>)
