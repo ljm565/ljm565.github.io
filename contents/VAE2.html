@@ -161,7 +161,7 @@
     <span class="reserved">def</span> <span class="method">reparameterization_trick</span>(<span class="var">self</span>, <span class="var">encoded</span>):
         <span class="var">mu</span> = <span class="var">self</span>.<span class="var">fc_mu</span>(<span class="var">encoded</span>)
         <span class="var">log_var</span> = <span class="var">self</span>.<span class="var">fc_log_var</span>(<span class="var">encoded</span>)
-        <span class="var">std</span> = <span class="clazz">torch</span>.<span class="method"></span>(<span class="num">0.5</span>*<span class="var">log_var</span>)
+        <span class="var">std</span> = <span class="clazz">torch</span>.<span class="method">exp</span>(<span class="num">0.5</span>*<span class="var">log_var</span>)
         <span class="var">eps</span> = <span class="clazz">torch</span>.<span class="method">randn_like</span>(<span class="var">std</span>)
 
         <span class="return">return</span> <span class="var">mu</span> + <span class="var">std</span>*<span class="var">eps</span>, <span class="var">mu</span>, <span class="var">log_var</span>
