@@ -84,7 +84,7 @@
                         시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
                         
                         <br><br>이번 글의 주제는 Recurrent Neural Network (RNN) 입니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">RNN은 이미지 처럼 고정된 크기의 데이터가 아닌, 가변적인 길이를 가진 자연어를 처리하기 위해 등장한 모델입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">RNN은 이미지처럼 고정된 크기의 데이터가 아닌, 가변적인 길이를 가진 자연어를 처리하기 위해 등장한 모델입니다.
                         이러한 자연어 처리를 위한 RNN 모델 계열 중 유명한 unit들이 있는데, 바로 LSTM과 GRU 입니다.</span>
                         이러한 RNN 계열의 모델은 transformer가 나오기 전, 자연어 처리에 필수적으로 사용된 모델이었습니다.
                         그리고 현재까지도 Part-Of-Speech (POS) tagging, 텍스트 감성 분류 등 간단한 task에 대해서는 꽤나 좋은 성능을 보여주기도 합니다.
@@ -313,7 +313,7 @@
 
                         <br><br>또다른 하나의 예시를 들어보겠습니다.
                         "This movie is as impressive as a preschool Christmas play"의 문장을 수학적인 확률로써 나타내기 위해서는 어떻게 써야할까요?
-                        다른말로 아래의 확률을 구하는 것이지요.
+                        다른 말로 아래의 확률을 구하는 것이지요.
                     </p>
                     <div class="equation">
                         \[p(This\,movie\,is\,as\,impressive\,as\,a\,preschool\,Christmas\,play)\]
@@ -325,7 +325,7 @@
                         \[p(This)*p(movie|This)*p(is|This,movie)*...*p(play|This,movie,...,Christmas)\]
                     </div>
                     <p>
-                        <br>즉 다른말로 하면 어느 문장의 확률은 아래 수식과 같이 t번째 단어를 1 ~ t-1번째 단어들을 가지고 예측한 확률들의 곱셈이 됩니다.
+                        <br>즉 다른 말로 하면 어느 문장의 확률은 아래 수식과 같이 t번째 단어를 1 ~ t-1번째 단어들을 가지고 예측한 확률들의 곱셈이 됩니다.
                         이러한 확률 식이 나오게 되는 이유는 바로 Bayes' theorem을 이용하는 것입니다. 간단히 말해 조건부 확률 공식을 이용하여 나온 결과입니다.
                     </p>
                     <div class="equation">
@@ -334,7 +334,7 @@
                     <p>
                         <br>사실 과거에는 이러한 문장을 가지고 LM을 하기 위해서 bigram, trigram 등의 방법이 많이 쓰였습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">왜냐하면 실질적으로 모든 문장의 단어별로 조건부 확률을 계산하는 것은 자원의 낭비이고, 연산량이 많기 때문입니다.
-                        그래서 모든 문장의 단어를 확률로써 나타내는 대신 두 묶음 혹은 세 묶음 처럼 묶음 단위로 계산을 하였던 것입니다.</span>
+                        그래서 모든 문장의 단어를 확률로써 나타내는 대신 두 묶음 혹은 세 묶음처럼 묶음 단위로 계산을 하였던 것입니다.</span>
                         <ul>
                             <li>Bigram: \(p(w_t|w_{t-1})\)</li>
                             <li>Trigram: \(p(w_t|w_{t-2}, w_{t-1})\)</li>

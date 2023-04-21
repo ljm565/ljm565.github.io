@@ -340,7 +340,7 @@
                         </div>
 
                         <br><br>그럼 여기서 잠시 위의 인코더/디코더와 다르게 각각의 layer가 한 개 이상이라면 어떻게 될까요?
-                        위의 autoencoder 그림의 구조에서는 \(x\)에서 바로 잠재 변수로 압축되었지만 아래 그림 처럼 하나 이상의 hidden layer를 거친 후, 잠재 변수로 압축될 수 있습니다.
+                        위의 autoencoder 그림의 구조에서는 \(x\)에서 바로 잠재 변수로 압축되었지만 아래 그림처럼 하나 이상의 hidden layer를 거친 후, 잠재 변수로 압축될 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그럼 아래 그림처럼 인코더 \(f_\theta\)와 디코더 \(g_\phi\)가 두 개의 hidden layer를 가지고 있다고 가정을 한다면 이는 아래와 같이 쓸 수 있을 것입니다. 그리고 이를 응용한다면 multiple layers를 가진 모델에 대해서도 수학적으로 나타낼 수 있을 것입니다.</span>
                         <div class="equation">
                             \[h_1 = f_\theta(W^{\theta}_1x+b^{\theta}_1)\]
@@ -422,7 +422,7 @@
                         t-SNE와 UMAP은 다음 포스팅에서 더 자세히 다뤄볼 예정입니다.
                         <br><br><b>Isomap</b>은 모든 데이터에 대해 각각의 k개의 이웃한 정보와 graph를 구성합니다. 그리고 각 데이터 간의 거리를 graph의 최단 거리로 정의합니다.
                         그리고 각 데이터간의 거리 정보를 보존하면서 차원을 축소하는 기법입니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 그림에서 처럼 B와 A1의 직선 거리를 두 데이터간의 거리로 정의하는 것이 아니라, B와 A1을 잇는 빨간 선을 두 데이터간의 거리로 정의하여 학습을 하는 것이지요.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 그림에서처럼 B와 A1의 직선 거리를 두 데이터간의 거리로 정의하는 것이 아니라, B와 A1을 잇는 빨간 선을 두 데이터간의 거리로 정의하여 학습을 하는 것이지요.</span>
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AMPSemdFOLZn-ZOpFHNBMuU2xelIK8i6EeE7p9pdSSt6eaRhPcPxAqxNvoS71HkZviXyAqZZv6RyToC1oacxGOz9eofjH1xmfJa5AEnJ7OGCCmJRUb9aAEJFD6vlMB01W-4vLOgPwvSsoEig4qRywXtr_ZlbT5E6gTk4SX4rKh7GWMnwynU85lfO-fjfKd3rdoU0hudRhpGQxooby7FgkUErZ-o0zWh3O0bKWJAlaOppF31YF22Lai-h6FWMryaoIb6bC6Zg3P17cNGcOGYQY3fpgnCYIUyVDiauMuj6w3ybkVX4OwQ0lKGGXU-5NQCQC-C5WiNRsH8cwP34frtPRChcgsSfhLogJyg2a6LJ09DCCE_U8YohUyf1oIK6Z8Av_IXMg7lcwAkI7w_5UWnKAcGwQ_-yC_Tr3TpF4iQHtXqq6xeDfxBeh2gTt705HKIcUS-qfO02imdQ4fa2nXNkmhpxG4WImY309zNFFJIrWkIEYKRkcdRmesIDGgr5Npj0fnXCpNXWJFJg7kO21zsZIhU8GH24nG7e8mP0OnoK6FBUQsC3_HKrDyQ4161v4OT1vnIxCZdX_1qru1jq9IXB8AUe0q7gL2XypFznrnfGDevc2I6kwa0SlthLBXRCbQyG5lZ6QfO5VLH6PqUqbRWX2eYXFt5lKr9ec9S5P6ZJxTeqLQ6bRVDKNvEw3r36lyXiFrn2dsVh1xYazkxp6eHCaoh2fD2aM5ldEoBignV8295lphEk_abf4z36XLjnbqePePwZAvb3LVi-bImAihRGt3d0XfiGRb7eM31nDAdvz_4VTXFg3mR67HHInMqzBUkAXYAswcCyAklBqbmQNtIMAvk9K-I_DRoU6HfL0m_dKLAIH18iWQC_OqpIuqJLqlC9JlCqi66tNVr0eVdSGiNJWb0oPtjufiDBrgyVdRoXHbkSQt8cji3mqeDVucq17h0bXHWS_O5BE9faCK-uDFfVI6cz_c1Ql2fENJVRSieCLjgsh3A7NuefM7NZq-ya_F-DQliBihqemLyobKF5fWk2D8jKv7KF5tI50nA97ZJC5TRSwPpjns2imTc76i6eoVwocKXSZS62igxTYv3teK5SV0Xuk6TALV_DLWq6ThHzKyS8OZOiO5m1Ig3NrlXBGAzBlTTGP3lMVkwufmSCcqToAJAtVo7-mi79TGW1Qn-ylyP8tIo7ypQXAgwRxN-y-ZIyrzYXMxjACoeDpbQ_R05FTxOHQ285gHHmBgUti4_ySdWCBgHQN_iFMBJBMW7uW20YxQFrur88sGs8pB-vltDGGgfzzDe8Q5Q6tEdX2j8iViTiTnPwfJKrBHKpWt_2PKJBegCfkPUeKD9vAsMuK3hOcvLHyX9gL2i0uaQgrQPvENv17V7Oc0gLb61r0Oz_qysG_eV7FcbaZSeSrPWrVyNqhoiaqmpeUhJvoehSPRxRmzKeVmNNyC4frBjrjPkrNlySfB6wFfFbznWoNaKZtqwU9ziXZx0" style="width: 100%;">

@@ -227,7 +227,7 @@
                         <br><br><b>Segment embedding</b>은 이전에 BERT의 input은 두 문장이 들어간다고 했는데, 문장을 식별하기 위해 각 문장에 할당해주는 임베딩 값입니다.
                         아래 그림을 보면 \(E_{A}\)와 \(E_{B}\) 두 종류가 있는 것을 볼 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">즉 임베딩 lookup table에 0, 1의 임베딩 값이 존재하며 첫 번째 문장에는 0 임베딩 값을, 두 번째는 1의 임베딩 값을 거쳐서 더해주는 것입니다.</span>
-                        또한 위 처럼 2가지 임베딩이 아닌 3가지의 임베딩을 사용하기도 하는데, 0은 padding, 1은 첫 번째 문장, 2는 두 번째 문장의 임베딩을 의미하도록 하여 사용할 수도 있습니다.
+                        또한 위처럼 2가지 임베딩이 아닌 3가지의 임베딩을 사용하기도 하는데, 0은 padding, 1은 첫 번째 문장, 2는 두 번째 문장의 임베딩을 의미하도록 하여 사용할 수도 있습니다.
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AMPSemdGgM6Z4NhnWBoEqTkfnsktPpmPKkVMX_WCRY5FszaRwvlD_uRULFWb6uakk0hvjrYoho_oNl0XILOyQXClsbUBzS6cRhuduNalMj7LTuV037XT1EFSty4FwyVTf6GGafo4BYSah317zbdArxSVn7saQnARISH8m_593KuOQsyphKdpqQwY3r6Vi1xsaR1SwKPvIolQOlrZ3c5bajIfXanevt8mQBe4dOaIXFPGEpo3ph54ytzBXwCb8flcyjB04yud3TacoilT5p1EzTD24_sC0b3s1ks5lYHJPGDkEgV6aswWnMtPmEVFxkiVLXSXcpCex0S0U8I649ZCCuTf6EETRwAbFNKP37J3TCg8O_fYKL0URhP_Hpw2CopKD1yPT_hrC7Ft6mzjlxH-8DJglHrIpzow7mCfIlW1EZZPYrYqBHPHy7WMnnDnv68PAEvbGqXJ3J7ePkV3vNCVXs7UshK66-JvtLNFmqz1cETVH__c6P1cXGZgBqycDQEI_ORBQUSj6RjUJhFtoddVKRADrm9o075mI3UgCgpxyigOxrIsY6TaF7Wx_kC2Xi6FBgox57-uR32vKfE_iMYKjDwGAiDPMjUnE1Gev4Mba49kiXbMPB27WDhPoV94RZ3DT_lNyTYZpuSTKl6lPZRhLa2zkJMh6uCrdJSwx3v2CajUlySqr8ummW7e3tbIA_8dlFShLhQdV4kx9W6fmM19WVttq7DVb3sT-0cf02CDIflYuORUsxqFXn4xmPKSnkhKRWcFa5iSI3GoqG4ApwyCsLXq-YuRgrPb16RDV3VKCkhfD4i4o9iRR7z_pUFX4jI1LqWQ9jS4BLG5OxybIveWNadYBF2hHtxNGj5NH--B-nqtYaeGbpR9_uKOUkhRB0kjbNPxiJElEGkcs8PIp1s2vbUPRu6oXWu7LCN4HvUC8T-HHf36BAqg3cGvDkawtFOpEdodn69Jbx9N5E9QEuRdJBdB0Jjp3JIgdVK8pqEy_jk0oGRlf4DAPs5fBq6Rrpg3lJ5BNWQwn8hW6DLGSgVyNbRrS7S1-EFqnZnBgj3iHkveZEEbmwibLu6gv3lAiC57pcgX0Cz612KfIBl-mvK3-G2EJTw7wlC9ffkZPPKSVy4_FlJ6fMVFLuM2zZlFaIQuuoKWsSAUfRBpbLeteEHtT0So-l1Nqy-Nz5SA_YQSfB1FCFER4Hqezz6AgKQ7iFToF9KvlrWxBZ610CwrNF96iITcQIRUVXcc9dfrwllKouCyvAdzJn6vA2Y09--A4L5xtRMQc3-yjTnsup-sG1Lzf-JVH5uLA-lFbEscvUXvyX4fCQQBTmu3rCRquQAAD0YjxvWh3GyTR4BFixA2RDNkzDxOyZ_wocC9qKjqPvoUJiDillYwFCOq4_6MEEBEzbQKB1tK_7NpDRysR7BKodcZJyvVDso_nx4DiCuWen54p69Ui64WJE3FKzEiUuU4G4ovVBwFzF3a7sN5wU7KO8lzYD6MtTY" style="width: 100%;">
@@ -267,7 +267,7 @@
                         저자들은 모델이 text의 문맥과 함축하고 있는 의미를 잘 파악할 수 있도록 두 가지 학습 방법을 제안하는데 그중 하나가 바로 NSP입니다.
 
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 보면 두 문장이 들어간 후, 맨 앞의 [CLS] 토큰의 output을 바탕으로 두 문장이 이어지는 문장인지 아닌지 예측을 하도록 훈련합니다.</span>
-                        예를 들어 아래 예시와 같이 "I love girl friend", "And she is pretty"인 경우 연속된 두 문장이므로 1로 예측,  "I love girl friend", "My car is broken" 처럼 연속적인 문장이 아닌 경우 0으로 예측하게끔 하는 것입니다.
+                        예를 들어 아래 예시와 같이 "I love girl friend", "And she is pretty"인 경우 연속된 두 문장이므로 1로 예측,  "I love girl friend", "My car is broken"처럼 연속적인 문장이 아닌 경우 0으로 예측하게끔 하는 것입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그리고 sigmoid를 사용하여 0 ~ 1 사이의 score로 예측하기보다 0, 1의 2개의 label 예측하기 위한 cross entropy loss를 많이 사용합니다.</span>
                     </p>
                     <div class="contentImg">
@@ -359,7 +359,7 @@
                         <p class="caption">BERT의 NER Fine-tuning 방법, 출처: BERT 논문</p>
                     </div>
                     <p>
-                        <br>원래 NER 부분의 내용은 ELMo 처럼 파라미터를 고정하고 feature-based approach와 fine-tuning의 성능을 비교하는 ablation study에 등장합니다.
+                        <br>원래 NER 부분의 내용은 ELMo처럼 파라미터를 고정하고 feature-based approach와 fine-tuning의 성능을 비교하는 ablation study에 등장합니다.
                         Fine-tuning에 비해 feature-based approach의 성능이 조금 더 떨어지긴 하지만 <span class="highlight" style="color: rgb(0, 3, 206);">computational cost의 이점, BERT로 불가능한 NLP task를 위한 embedding으로써의 활용할 수 있다는 장점을 고려했을 때 feature-based approach도 절대 나쁜 성능을 보이는 것이 아닙니다.</span>
                         즉 저자들은 fine-tuning 뿐 아니라 feature-based 방법에도 BERT가 좋은 성능을 보인다고 주장하는 것이지요.
                     </p>

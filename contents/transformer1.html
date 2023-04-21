@@ -218,7 +218,7 @@
                             <li>문장의 길이를 0 ~ 1 사이로 정규화</li>
                             <b>train</b>: I(0) love(0.5) you(1) <br>
                             <b>test</b>: He(0) may(0.33) love(0.66) you(1)
-                            <br><span class="highlight" style="color: rgb(0, 3, 206);">이러한 경우도 test할 때 0.33, 0.66 처럼 training할 때 존재하지 않던 값이 등장할 가능성이 매우 높아집니다.</span><br><br>
+                            <br><span class="highlight" style="color: rgb(0, 3, 206);">이러한 경우도 test할 때 0.33, 0.66처럼 training할 때 존재하지 않던 값이 등장할 가능성이 매우 높아집니다.</span><br><br>
 
                             <li>이진법으로 표현</li>
                             <div class="contentImg">
@@ -229,7 +229,7 @@
                         </ol>
                     </p>
                     <p>
-                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 위의 이진법 인코딩에서 보는 것 처럼 각각의 hidden dimension (column)의 0과 1이 반복되는 주기가 다르다는 점에서 아이디어를 얻어 transformer는 \(sin\), \(cos\)에서 얻어지는 float를 이용해서 discrete하던 이진법 인코딩을 continuous하게 바꿈으로써 sparsity 문제를 해결한 것입니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 위의 이진법 인코딩에서 보는 것처럼 각각의 hidden dimension (column)의 0과 1이 반복되는 주기가 다르다는 점에서 아이디어를 얻어 transformer는 \(sin\), \(cos\)에서 얻어지는 float를 이용해서 discrete하던 이진법 인코딩을 continuous하게 바꿈으로써 sparsity 문제를 해결한 것입니다.</span>
                     </p>
 
 
@@ -396,7 +396,7 @@
                         <br>이제 layer normalization의 자세한 수식을 보겠습니다.
                         아래 수식에서 \(\mu\)는 각 feature 방향의 평균, \(\sigma^2\)은 각 feature 방향의 분산을 의미합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">그리고 분산이 0이 되면 분모가 0이 되는 것을방지하기 위해 아주 작은 값인 \(\epsilon\)을 더해준 값으로 나눠줍니다.</span>
-                        이러한 \(\epsilon\)은 보통 1e-5 혹은 1e-6 처럼 아주 작은 값으로 설정합니다.
+                        이러한 \(\epsilon\)은 보통 1e-5 혹은 1e-6처럼 아주 작은 값으로 설정합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">마지막으로 \(\gamma\)와 \(\beta\)는 훈련하면서 학습할 수 있는 parameter입니다.</span>
                     </p>
                     <div class="equation">
@@ -594,7 +594,7 @@
 
                         <br><br>이렇게 inductive bias는 모종의 가정이기 때문에 inductive bias가 강할수록 적은 데이터에 대해서 성능이 좋은 경향을 보입니다.
                         하지만 inductive bias가 너무 강하게 되면 훈련 시 보지 못했던 데이터가 들어왔을 때 대응 성능이 좋지 않을 수 있습니다.
-                        다른말로 모종의 가정을 하고 학습을 했는데, 가정과 약간 어긋나는 데이터가 test 시 들어올 때 성능이 안 좋다는 의미입니다.
+                        다른 말로 모종의 가정을 하고 학습을 했는데, 가정과 약간 어긋나는 데이터가 test 시 들어올 때 성능이 안 좋다는 의미입니다.
                         
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">Transformer가 이러한 inductive bias가 적은 모델입니다. 따라서 적은 데이터를 처리하는 데 성능 향상이 더딜 수 있지만, 빅데이터가 들어왔을 때 진가를 발휘하는 것이지요.</span>
                         즉 성능 향상을 위해 transformer는 CNN 보다 많은 데이터 필요하며, global feature를 추출해야한다면 transformer와 같이 inductive bias가 적은 모델을 사용하면 됩니다.
