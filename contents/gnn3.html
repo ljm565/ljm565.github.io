@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -132,15 +145,7 @@
                         COLLAB은 node feature가 기본으로 없기때문에 직접 제작해주어야합니다.
                         그리고 제작한 그래프 데이터를 PyTorch Geometric Dataloader로 만드는 과정을 거칩니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code0">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">import</span> <span class="clazz">torch_geometric</span>.<span class="clazz">transforms</span> <span class="return">as</span> <span class="clazz">T</span>
+<pre><code class="python"><span class="return">import</span> <span class="clazz">torch_geometric</span>.<span class="clazz">transforms</span> <span class="return">as</span> <span class="clazz">T</span>
 <span class="return">from</span> <span class="clazz">torch_geometric</span>.<span class="clazz">utils</span> <span class="return">import</span> <span class="method">degree</span>
 <span class="return">from</span> <span class="clazz">torch_geometric</span>.<span class="clazz">loader</span> <span class="return">import</span> <span class="clazz">DataLoader</span>
 <span class="return">from</span> <span class="clazz">torch_geometric</span>.<span class="clazz">datasets</span> <span class="return">import</span> <span class="clazz">TUDataset</span>
@@ -178,13 +183,7 @@
 <span class="var">dataloaders</span> = {
     <span class="var">s</span>: <span class="clazz">DataLoader</span>(<span class="var">d</span>, <span class="var">batch_size</span>, <span class="method">shuffle</span>=<span class="reserved">True</span>) <span class="return">if</span> <span class="var">s</span> == <span class="str">'train'</span> <span class="return">else</span> <span class="clazz">DataLoader</span>(<span class="var">d</span>, <span class="var"><span class="var">batch</span>_size</span>, <span class="method">shuffle</span>=<span class="reserved">False</span>)
     <span class="return">for</span> <span class="var">s</span>, <span class="var">d</span> <span class="return">in</span> <span class="var">dataset</span>.<span class="method">items</span>()}
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code0", 38);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>7 ~ 12번째 줄: TUDataset COLLAB 데이터 로드 부분.</li>
@@ -206,15 +205,7 @@ lineMaking("code0", 38);
                     <p>
                         여기서는 학습에 사용할 GCN 모듈과 모델을 구성하는 코드입니다.
                 </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code5">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">import</span> <span class="clazz">torch</span>.<span class="clazz">nn</span> <span class="return">as</span> <span class="clazz">nn</span>
+<pre><code class="python"><span class="return">import</span> <span class="clazz">torch</span>.<span class="clazz">nn</span> <span class="return">as</span> <span class="clazz">nn</span>
 <span class="return">from</span> <span class="clazz">torch_geometric</span>.<span class="clazz">nn</span> <span class="return">import</span> <span class="clazz">GCNConv</span>, <span class="method">global_mean_pool</span>
 
 
@@ -254,13 +245,7 @@ lineMaking("code0", 38);
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">node_feature</span>)
 
         <span class="return">return</span> <span class="var">output</span>, <span class="var">node_feature</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code5", 40);
-</script>
+</code></pre>
 
                     <p>
                         <ul>
@@ -287,15 +272,7 @@ lineMaking("code5", 40);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code7">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GCN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">num_node_features</span>, <span class="var">cls_num</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GCN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">num_node_features</span>, <span class="var">cls_num</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="var">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>, <span class="var">weight_decay</span>=<span class="num">5e-4</span>)
 
@@ -318,13 +295,7 @@ lineMaking("code5", 40);
                 <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
                     <span class="var">loss</span>.backward()
                     <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code7", 23);
-</script>
+</code></pre>
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

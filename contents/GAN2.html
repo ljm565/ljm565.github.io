@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -113,15 +126,7 @@
                         한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">Generator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">Generator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
         <span class="clazz">super</span>(<span class="clazz">Generator</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
@@ -171,13 +176,8 @@
         <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">discriminator</span>(<span class="var">x</span>)
         <span class="return">return</span> <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 50);
-</script>
+</code></pre>
+
                     <p>
                         <span style="font-size: 20px;"><b>Generator</b></span>
                         <br>먼저 generator 부분입니다.
@@ -214,15 +214,7 @@ lineMaking("code1", 50);
                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                        여기서는 무시해도 좋습니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">G_model</span> = <span class="clazz">Generator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">G_model</span> = <span class="clazz">Generator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">D_model</span> = <span class="clazz">Discriminator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>()
 <span class="var">self</span>.<span class="var">G_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">G_model</span>..<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
@@ -283,13 +275,8 @@ lineMaking("code1", 50);
 
             <span class="var">D_total_loss</span> += <span class="var">D_loss</span>.item() * <span class="var">batch_size</span>
             <span class="var">G_total_loss</span> += <span class="var">G_loss</span>.item() * <span class="var">batch_size</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 61);
-</script>
+</code></pre>
+
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

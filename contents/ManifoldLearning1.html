@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -99,7 +112,7 @@
                             <li>매니폴드</li>
                             <li>오토인코더</li>
                             <li>오토인코더의 구조</li>
-                            <li>매니폴드 학습을 위한 모델 & 오토인코더의 종류</li>
+                            <li>매니폴드 학습을 위한 모델 &amp; 오토인코더의 종류</li>
                             <li>오토인코더의 응용</li>
                         </ol>
                     </p>
@@ -272,7 +285,7 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">잠재 변수를 우리가 볼 수 있는 2, 3차원으로 그려보았을 때 비슷한 것끼리 군집이 잘 된다면, 특징 추출해주는 autoencoder 모델은 잘 학습 되었다고 판단할 수 있겠지요.</span>
 
                         <br><br>아래 그림은 실제 784차원의 MNIST 데이터를 저차원의 잠재 변수로 만든 후, t-SNE (t-distributed Stochastic Neighbor Embedding)라는 또다른 manifold learning을 통해 2차원의 데이터로 가시화한 모습입니다.
-                        Manifold Learning에는 이렇게 autoencoder뿐 아니라 t-SNE, UMAP (Uniform Manifold Approximation & Projection) 등 다양한 기법들이 있습니다.
+                        Manifold Learning에는 이렇게 autoencoder뿐 아니라 t-SNE, UMAP (Uniform Manifold Approximation &amp; Projection) 등 다양한 기법들이 있습니다.
                         그리고 데이터의 분포를 가시화하기 위해서는 이들을 섞어서 쓸 수도 있습니다(e.g. 잠재 변수는 autoencoder로 추출한 후, 잠재 변수를 다시 더 작은 차원인 2, 3차원으로 t-SNE 등으로 압축하여 가시화).
                         <span class="highlight" style="color: rgb(0, 3, 206);">이 글 마지막에는 manifold learning의 종류를 간단히 알아보고 t-SNE와 UMAP은 다음 포스팅에서 더 자세히 알아보도록 하겠습니다.</span>
                    </p>
@@ -376,8 +389,8 @@
 
                     <div class="doubleSubHead">
                         <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
-                        <span>매니폴드 학습을 위한 모델 & 오토인코더의 종류</span><br>
-                        <span>Models for Manifold Learning & Other Autoencoders</span>
+                        <span>매니폴드 학습을 위한 모델 &amp; 오토인코더의 종류</span><br>
+                        <span>Models for Manifold Learning &amp; Other Autoencoders</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
@@ -396,7 +409,7 @@
                                 <ol>
                                     <li>오토인코더(Autoencoder, AE)</li>
                                     <li>t-SNE (t-distributed Stochastic Neighbor Embedding)</li>
-                                    <li>UMAP (Uniform Manifold Approximation & Projection)</li>
+                                    <li>UMAP (Uniform Manifold Approximation &amp; Projection)</li>
                                     <li>Isomap</li>
                                     <li>LLE (Locally-linear Embedding)</li>
                                     <li>자기조직화 지도(Self-organizing Map, SOM)</li>

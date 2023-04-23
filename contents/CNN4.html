@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,13 +66,18 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
                 </script>
                 <div id="mainHeadWrapper">
                     <div id="mainHead">
-                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) & Residual Network (ResNet) / 4. ResNet 구현 및 CIFAR-10 분류</h1>
+                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) &amp; Residual Network (ResNet) / 4. ResNet 구현 및 CIFAR-10 분류</h1>
                     </div>
                 </div>
                 
@@ -127,15 +140,7 @@
                         한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">ResidualBlock</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">ResidualBlock</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">in_channels</span>, <span class="var">out_channels</span>, <span class="var">stride</span>, <span class="var">down_sample</span>, <span class="var">zero_padding</span>):
         <span class="clazz">super</span>(<span class="clazz">ResidualBlock</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">in_channels</span> = <span class="var">in_channels</span>
@@ -215,13 +220,7 @@
         <span class="var">out</span> = <span class="var">self</span>.<span class="var">relu</span>(<span class="var">out</span>)
 
         <span class="return">return</span> <span class="var">out</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 80);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>Residual Block</b></span>
                         <br>먼저 1 ~ 49번째 줄에 해당하는 Residual Block 부분입니다.
@@ -258,15 +257,7 @@ lineMaking("code1", 80);
                         이제 위에서 정의한 낱개의 Residual block을 여러개 쌓아 전체의 ResNet을 구현 하는 코드입니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>, <span class="var">num_layer</span>:<span class="clazz">int</span>, <span class="var">block</span>):
         <span class="clazz">super</span>(<span class="clazz">ResNet</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
@@ -325,13 +316,7 @@ lineMaking("code1", 80);
         <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">x</span>.size(<span class="num">0</span>), -<span class="num">1</span>)
         <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
         <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 59);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
                         <br>여기서 나오는 config 부분은 <a href="https://github.com/ljm565/ResNet" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 config.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
@@ -366,15 +351,7 @@ lineMaking("code2", 59);
                         아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다. 여기서는 무시해도 좋습니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">def</span> <span class="method">model_select</span>(<span class="var">config</span>, <span class="var">color_channel</span>, <span class="var">device</span>):
+<pre><code class="python"><span class="reserved">def</span> <span class="method">model_select</span>(<span class="var">config</span>, <span class="var">color_channel</span>, <span class="var">device</span>):
     <span class="return">if</span> <span class="var">config</span>.model_mode.lower() == <span class="str">'cnn'</span>:
         <span class="method">print</span>(<span class="str">'CNN<span class="reserved">{}</span> will be trained..'</span>.<span class="method">format</span>(<span class="clazz">int</span>(<span class="var">config</span>.num_layer*<span class="num">2</span>*<span class="num">3</span>+<span class="num">2</span>)))
         <span class="var">block</span> = <span class="clazz">CNNBlock</span>
@@ -416,13 +393,7 @@ lineMaking("code2", 59);
                     <span class="var">loss</span>.backward()
                     <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
                     <span class="var">self</span>.<span class="var">scheduler</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 42);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
                         <br>먼저 학습에 사용할 모델, optimizer, loss function을 선언합니다.

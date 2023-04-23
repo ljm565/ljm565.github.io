@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -116,15 +129,7 @@
                         한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>, <span class="var">phase</span>):
         <span class="clazz">random</span>.<span class="var">seed</span>(<span class="num">999</span>)
         <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
@@ -257,13 +262,7 @@
 
     <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
         <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 133);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>DUOR, MUR, NUG를 위한 데이터 제작</b></span>
                         <br>먼저 DUOR, MUR를 위한 데이터 제작하는 dataloader 코드입니다.
@@ -312,15 +311,7 @@ lineMaking("code1", 133);
                         <span class="highlight" style="color: rgb(0, 3, 206);">원래의 코드에서도 Hugging Face의 BERT 관련 모델을 썼기 때문에 여기서도 원래 코드에서 사용한 모델과 configuration을 그대로 사용했습니다.</span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">BertModel</span>, <span class="clazz">BertLMHeadModel</span>, <span class="clazz">BertConfig</span>, <span class="clazz">BertForPreTraining</span>
+<pre><code class="python"><span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">BertModel</span>, <span class="clazz">BertLMHeadModel</span>, <span class="clazz">BertConfig</span>, <span class="clazz">BertForPreTraining</span>
 
 
 <span class="annot"># utterance encoder</span>
@@ -506,13 +497,7 @@ lineMaking("code1", 133);
         <span class="var">nug</span>_<span class="var">output</span> = <span class="var">self</span>.<span class="var">nug</span>(<span class="var">output</span>[<span class="var">nug_id</span>], <span class="var">trg</span>[<span class="var">nug_id</span>], <span class="var">cntx_pad_<span class="var">mask</span></span>[<span class="var">nug_id</span>])
         
         <span class="return">return</span> (<span class="var">nug</span>_<span class="var">output</span>, <span class="var">trg</span>[<span class="var">nug_id</span>]), (<span class="var">mur</span>_<span class="var">output</span>, <span class="var">mur</span>_<span class="var">trg</span>), (<span class="var">duor</span>_<span class="var">output</span>, <span class="var">duor</span>_<span class="var">trg</span>)
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 186);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>5 ~ 17번째 줄: 문장을 encoding 하는 UtteranceEncoder 모델. BERT를 사용.</li>
@@ -543,15 +528,7 @@ lineMaking("code2", 186);
                         아래 코드에 self. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 method이기 때문에 있는 것입니다. 여기서는 무시해도 좋습니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">DialogBERT</span>(<span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">DialogBERT</span>(<span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">nug</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">pad_token_id</span>)
 <span class="var">self</span>.<span class="var">duor</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">KLDivLoss</span>()
 <span class="var">self</span>.<span class="var">mur</span>_<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">MSELoss</span>()
@@ -586,13 +563,7 @@ lineMaking("code2", 186);
                 <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
                     <span class="var">loss</span>.backward()
                     <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 35);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
                         <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.

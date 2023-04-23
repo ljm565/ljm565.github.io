@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <div id="mainHeadWrapper">
                     <div id="mainHead">
                         <h1 class="contentHead">여행 이야기 / 스페인, 파리 / 12. 왕의, 왕에 의한, 왕을 위한 도시, 스페인 마드리드 여행</h1>
@@ -90,7 +103,7 @@
                         <p class="caption">세비야 &rarr; 마드리드</p>
                     </div>
                     <p>
-                        <br>마드리드에서 저희는 <span class="highlight" style="color: rgb(0, 3, 206);">오리엔테 광장 &rarr; 알무데나 대성당 &rarr; 아르메리아 광장 & 마드리드 왕궁 &rarr; 프라도 미술관​</span> 순서로 움직였습니다.
+                        <br>마드리드에서 저희는 <span class="highlight" style="color: rgb(0, 3, 206);">오리엔테 광장 &rarr; 알무데나 대성당 &rarr; 아르메리아 광장 &amp; 마드리드 왕궁 &rarr; 프라도 미술관​</span> 순서로 움직였습니다.
                         왕의 도시이자 스페인의 수도, 마드리드 이야기를 시작하겠습니다.
                     </p>
 
@@ -295,8 +308,8 @@
 
                     <div class="doubleSubHead">
                         <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
-                        <span>아르메리아 광장 & 마드리드 왕궁</span><br>
-                        <span>Plaza de la Armería & Palacio Real de Madrid</span>
+                        <span>아르메리아 광장 &amp; 마드리드 왕궁</span><br>
+                        <span>Plaza de la Armería &amp; Palacio Real de Madrid</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
@@ -356,7 +369,7 @@
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/AMPSemesHo5qse-u_Td1AVCjSWRXeSOLbrSr96__THjjREj5mFx53eS6zujaJEa2LVZiuTaSH6k2niYqzKVaDfs-QejV6NJQbLSwdgDydcunPpk12yMoMLPWkHHeUa9ogLVEdzlExjAJ6EFP8P0qAqki7tAbz6gD3pKaIfmuBAnba4FRhrAA-xWAfTSJ38PmTpm0wYSGSEJbT1Z7YJPcmeSbAvZT6aW2gkkD2Rk4fsCrNXWbAXU9y840zZUH3M8q__iLebLvoLe6NFy5_NculSGm1jGXQ1PgZchyPRiRxvWFMl9lA0Ohs2Tj1b4snJpoQJQ6Ey0ZN2YR2Lw3CVhrJd9t4oYQxLgr5DG2R1neD-stWhjOoW77wk552OnHGdVcypEcVLpwDLHLaSbMmQAzONL4teLSXm78feIM762qobB6N8ci6tKJfXsDpz34CjJz557KtgUUrLkvLHXIOUaTKM18SUwz4I5X0BHeyCpTijUjeV8t3RHAp42fFktHPGsJMRiRfTpDBjjG6TM-6YoFCR4qL1nxUvuBOt7qmcTI4LKUKR6EX5lP2JGE505_xuhnOvl8pfWKf51kkEZeav22p96pUpqo5TD4yLQa6D0ea-LeoqqD0uKWzmourpX17MnMskPl8oovjhESfcMZFOYfhcMs2g3wQVfVMJbgRN8Z3mfni9JR34vljfF8pe2Cd_saQxVcMUPjLWM6cce5uU69PdzdogtcfO1Dhlj2K43Xq1X89iKAo8Brimt-HpszRaOqM4pUI3Fw3v2XSwHv7IQdLRnSr-qFD_i3m0Kz0LLJsLAI1lyrZiQFJBHsxHRiJfYG89-vYF94AE38bgoOAbEzLpN2I1aOsXXHM2ILJR6gnlyB4Gi00kXY5ZA3PWQZsLmhymE0OQH8pFIOs-NhZnZAgg5bRrOkde1_TNHMedFpVf1rJ6IkuAWod4vJJop-lvYeBpyzGahuUdZJXrpuuosAXIHFNmiZfuKW5Od2R5dm_KzJUhK7vya6cSqrrqv7cLhFQgWVCiZDFzJWsbrooegzY4M-USIXvOU2bdoHlN7T5QJWCI4M5DPgRoaLIYmioPrKUYS752HJdS4N74iedszy1BGluMMEnaiCSbbgAbEKpRVt62SKVoOr9r_PDNoqqKPwzWPEak2wK2o5Ya22pHtLJL13m2k2RKzNClpilps4m968U7eYtrdDCuBlEe4rf1LTiqvQOpY9rm5PuoAQarUMnsFb6E2f5Xup_pjjYX5PWrxIYLSpeCoyaksSDHoEfVvgdtXIAcw0bIi4cVyvKRElJo7GJ7grZN9dKkJQ-waEgKaaV04WXw6WAsLwLwF1lLezNTp0Nxh5zlmerMB3Q4EJ_QQnrZP_sCSyN_CivKkZEXw2wQTIGY4m7KauiW3zxCjr4TtKuhFZe00l1L-jA8c6o_JlOacKcB2Th-xSufxmOSBxwB3k-84sHFdUemb8uLyJw_v4NBBXR_soCITf98VBWdwEq5U" style="width: 100%;">
-                        <p class="caption">아르메리아 광장 & 마드리드 왕궁</p>
+                        <p class="caption">아르메리아 광장 &amp; 마드리드 왕궁</p>
                     </div>
                     <p>
                         <br>마드리드 왕궁은 실제 왕의 거처로 사용되었다고 합니다.

@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -113,79 +126,65 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">그리고 각 데이터가 어떤 숫자인지 판별해주는 label embedding을 이미지와 함께 concatenate하여 최종 데이터로 사용합니다.</span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">Generator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
-    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
-        <span class="clazz">super</span>(<span class="clazz">Generator</span>, <span class="var">self</span>).<span class="method">__init__</span>()
-        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
-        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
-        <span class="var">self</span>.<span class="var">class_num</span> = <span class="var">config</span>.class_num
-        <span class="var">self</span>.<span class="var">label_dim</span> = <span class="var">config</span>.label_dim
-        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
-        <span class="var">self</span>.<span class="var">noise_init_size</span> = <span class="var">config</span>.noise_init_size
-        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+<pre><code class="python">class Generator(nn.Module):
+    def __init__(self, config, color_channel):
+        super(Generator, self).__init__()
+        self.height = config.height
+        self.width = config.width
+        self.class_num = config.class_num
+        self.label_dim = config.label_dim
+        self.hidden_dim = config.hidden_dim
+        self.noise_init_size = config.noise_init_size
+        self.color_channel = color_channel
 
-        <span class="var">self</span>.<span class="var">emb</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>()
-        <span class="var">self</span>.<span class="var">generator</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(<span class="var">self</span>.<span class="var">class_num</span>, <span class="var">self</span>.<span class="var">label_dim</span>)
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">noise_init_size</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
-            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
-            <span class="clazz">nn</span>.<span class="clazz">ReLU</span>(),
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">color_channel</span>),
-            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        self.emb = nn.Embedding(self.class_num, self.label_dim)
+        self.generator = nn.Sequential(
+            nn.Linear(self.noise_init_size + self.label_dim, self.hidden_dim),
+            nn.ReLU(),
+            nn.Linear(self.hidden_dim, self.hidden_dim),
+            nn.ReLU(),
+            nn.Linear(self.hidden_dim, self.width*self.height*self.color_channel),
+            nn.Sigmoid()
         )
 
 
-    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">y</span>):
-        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
-        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">cat</span>((<span class="var">x</span>, <span class="var">self</span>.<span class="var">emb</span>(<span class="var">y</span>)), <span class="var">dim</span>=<span class="num">1</span>)
-        <span class="var">output</span> = <span class="var">self</span>.<span class="var">generator</span>(<span class="var">x</span>)
-        <span class="var">output</span> = <span class="var">output</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>, <span class="var">self</span>.<span class="var">height</span>, <span class="var">self</span>.<span class="var">width</span>)
-        <span class="return">return</span> <span class="var">output</span>
+    def forward(self, x, y):
+        batch_size = x.size(0)
+        x = torch.cat((x, self.emb(y)), dim=1)
+        output = self.generator(x)
+        output = output.view(batch_size, -1, self.height, self.width)
+        return output
 
 
 
-<span class="reserved">class</span> <span class="clazz">Discriminator</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
-    <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
-        <span class="clazz">super</span>(<span class="clazz">Discriminator</span>, <span class="var">self</span>).<span class="method">__init__</span>()
-        <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.height
-        <span class="var">self</span>.<span class="var">width</span> = <span class="var">config</span>.width
-        <span class="var">self</span>.<span class="var">class_num</span> = <span class="var">config</span>.class_num
-        <span class="var">self</span>.<span class="var">label_dim</span> = <span class="var">config</span>.label_dim
-        <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
-        <span class="var">self</span>.<span class="var">color_channel</span> = <span class="var">color_channel</span>
+class Discriminator(nn.Module):
+    def __init__(self, config, color_channel):
+        super(Discriminator, self).__init__()
+        self.height = config.height
+        self.width = config.width
+        self.class_num = config.class_num
+        self.label_dim = config.label_dim
+        self.hidden_dim = config.hidden_dim
+        self.color_channel = color_channel
 
-        <span class="var">self</span>.<span class="var">emb</span> = <span class="clazz">nn</span>.<span class="clazz">Embedding</span>()
-        <span class="var">self</span>.<span class="var">discriminator</span> = <span class="clazz">nn</span>.<span class="clazz">Sequential</span>(
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">width</span>*<span class="var">self</span>.<span class="var">height</span>*<span class="var">self</span>.<span class="var">color_channel</span>, <span class="var">self</span>.<span class="var">hidden_dim</span>),
-            <span class="clazz">nn</span>.<span class="clazz">LeakyReLU</span>(<span class="num">0.2</span>),
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>, <span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>/<span class="num">4</span>)),
-            <span class="clazz">nn</span>.<span class="clazz">LeakyReLU</span>(<span class="num">0.2</span>),
-            <span class="clazz">nn</span>.<span class="clazz">Linear</span>(<span class="clazz">int</span>(<span class="var">self</span>.<span class="var">hidden_dim</span>/<span class="num">4</span>), <span class="num">1</span>),
-            <span class="clazz">nn</span>.<span class="clazz">Sigmoid</span>()
+        self.emb = nn.Embedding(self.class_num, self.label_dim)
+        self.discriminator = nn.Sequential(
+            nn.Linear(self.width*self.height*self.color_channel + self.label_dim, self.hidden_dim),
+            nn.LeakyReLU(0.2),
+            nn.Linear(self.hidden_dim, int(self.hidden_dim/4)),
+            nn.LeakyReLU(0.2),
+            nn.Linear(int(self.hidden_dim/4), 1),
+            nn.Sigmoid()
         )
 
 
-    <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>, <span class="var">y</span>):
-        <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
-        <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">cat</span>((<span class="var">x</span>, <span class="var">self</span>.<span class="var">emb</span>(<span class="var">y</span>)), <span class="var">dim</span>=<span class="num">1</span>)
-        <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
-        <span class="var">output</span> = <span class="var">self</span>.<span class="var">discriminator</span>(<span class="var">x</span>)
-        <span class="return">return</span> <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 58);
-</script>
+    def forward(self, x, y):
+        batch_size = x.size(0)
+        x = x.view(batch_size, -1)
+        x = torch.cat((x, self.emb(y)), dim=1)
+        output = self.discriminator(x)
+        return output
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>Generator</b></span>
                         <br>먼저 generator 부분입니다.

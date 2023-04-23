@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -90,24 +103,10 @@
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-&lt;<span class="reserved">body</span>&gt;
-    &lt;<span class="reserved">script</span> <span class="var">src</span>=<span class="str">"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;&lt;/<span class="reserved">script</span>&gt;
-&lt;/<span class="reserved">body</span>&gt;
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 3);
-</script>
+<pre><code class="html">&lt;body&gt;
+    &lt;script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt;&lt;/script&gt;
+&lt;/body&gt;
+</code></pre>
                     <p>
                         <br>다른 페이지로 넘어갈 때마다 페이지를 새로 reload하는 웹페이지라면 위의 방법을 써도 무방합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">하지만 현재 저의 웹 페이지는 SPA 형식으로 되어있습니다.
@@ -120,51 +119,23 @@ lineMaking("code1", 3);
                         따라서 HTML body tag 안에 아래의 JavaScript 코드의 함수를 추가하여 해결했습니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># JavaScript code</span>
+<pre><code class="javascript"><span class="annot"># JavaScript code</span>
 <span class="reserved">function</span> <span class="method">initMathJax</span>() {
     <span class="var">MathJax</span> = <span class="reserved">null</span>;
     <span class="return">if</span>(<span class="reserved">typeof</span>(<span class="var">MathJax</span>) !== <span class="str">'undefined'</span>) {
         <span class="var">MathJax</span>.<span class="var">Hub</span>.<span class="method">Queue</span>([<span class="str">"Typeset"</span>, <span class="var">MathJax</span>.<span class="var">Hub</span>]);
     }
 }
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 7);
-</script>
+</code></pre>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># HTML code</span>
+<pre><code class="html"><span class="annot"># HTML code</span>
 &lt;<span class="reserved">body</span>&gt;
     &lt;<span class="reserved">script</span> <span class="var">src</span>=<span class="str">"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"</span>&gt;&lt;/<span class="reserved">script</span>&gt;
     &lt;<span class="reserved">script</span>&gt;
         <span class="method">initMathJax</span>()
     &lt;<span class="reserved">/script</span>&gt;
 &lt;/<span class="reserved">body</span>&gt;
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 7);
-</script>
+</code></pre>
 
 
 

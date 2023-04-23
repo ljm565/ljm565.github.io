@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -240,15 +253,7 @@
                         코드는 PyTorch로 작성 되었으며, 데이터 전처리 및 훈련 코드는 <a href="https://github.com/ljm565/chest-xray-multi-label-classification-ResNet" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하시기 바랍니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">ResNet</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">img_size</span>, <span class="var">label</span>):
         <span class="clazz">super</span>(<span class="clazz">ResNet</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">feature_size</span> = <span class="var">img_size</span> // <span class="num">32</span>
@@ -272,13 +277,7 @@
         <span class="var">x</span> = <span class="var">x</span>.view(<span class="var">batch_size</span>, <span class="num">-1</span>)
         <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
         <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 24);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>ResNet</b></span>
                         <ul>

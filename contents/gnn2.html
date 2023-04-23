@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -124,15 +137,7 @@
                     <p>
                         아래 코드는 graph node, edge 데이터와 node feature를 받아 adjacency matrix와 학습에 사용할 feature, label을 구성하는 코드입니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code0">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">def</span> <span class="method">load_data</span>(<span class="var">cite_data_path</span>, <span class="var">content_data_path</span>):
+<pre><code class="python"><span class="reserved">def</span> <span class="method">load_data</span>(<span class="var">cite_data_path</span>, <span class="var">content_data_path</span>):
     <span class="annot"># load edge information</span>
     <span class="var">cites</span> = <span class="clazz">pd</span>.<span class="method">read_csv</span>(<span class="var">cite_data_path</span>, <span class="var">sep</span>=<span class="str">'\t'</span>, <span class="var">header</span>=<span class="reserved">None</span>, <span class="var">names</span>=[<span class="str">'target'</span>, <span class="str">'source'</span>])
     
@@ -184,13 +189,7 @@
         <span class="var">D_inv</span> = <span class="clazz">torch</span>.<span class="clazz">linalg</span>.<span class="var">inv</span>(<span class="clazz">torch</span>.<span class="method">diag</span>(<span class="var">degree</span>))
         <span class="var">x</span> = <span class="clazz">torch</span>.<span class="method">mm</span>(<span class="var">D_inv</span>, <span class="var">x</span>)
     <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code0", 52);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>1 ~ 13번째 줄: cite라는 node, edge 그래프 데이터와 content라는 node feature, label 데이터를 구성하는 코드.</li>
@@ -219,15 +218,7 @@ lineMaking("code0", 52);
                     <p>
                         여기서는 학습에 사용할 GCN 모듈과 모델을 구성하는 코드입니다.
                 </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code5">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">GraphConv</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">GraphConv</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">in_size</span>, <span class="var">out_size</span>, <span class="var">dropout</span>=<span class="reserved">None</span>, <span class="var">activation</span>=<span class="reserved">False</span>):
         <span class="clazz">super</span>(<span class="clazz">GraphConv</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">in_size</span> = <span class="var">in_size</span>
@@ -290,13 +281,7 @@ lineMaking("code0", 52);
             <span class="var">x</span> = <span class="var">l</span>(<span class="var">adj</span>, <span class="var">x</span>)
 
         <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code5", 63);
-</script>
+</code></pre>
 
                     <p>
                         <ul>
@@ -322,15 +307,7 @@ lineMaking("code5", 63);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code7">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GCN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">input_dim</span>, <span class="var">class_num</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GCN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">input_dim</span>, <span class="var">class_num</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
@@ -353,13 +330,7 @@ lineMaking("code5", 63);
             <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
                 <span class="var">loss</span>.backward()
                 <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code7", 23);
-</script>
+</code></pre>
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

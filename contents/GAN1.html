@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -212,7 +225,7 @@
                         <p class="caption">GAN의 구조</p>
                     </div>
                     <p>
-                        <br><br><span style="font-size: 20px;"><b>GAN의 Loss Fucntion & Minimax Game</b></span>
+                        <br><br><span style="font-size: 20px;"><b>GAN의 Loss Fucntion &amp; Minimax Game</b></span>
                         <br>위에서 볼 수 있듯이, 두 모델이 경쟁하면서 학습하는 GAN의 학습방식은 minimax game이라고 볼 수 있습니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">이 부분을 loss function 측면에서 설명하자면, generator는 discriminator을 잘 속여 discriminator의 정확도를 최소화하는 것이고, discriminator는 가짜와 진짜 데이터를 잘 구분하여 정확도를 최대화 하는 것이기 때문입니다.</span>
                         그럼 이제 loss function의 수식적인 측면을 좀 더 파고들어가보겠습니다. Binary cross entropy (BCE) loss의 식은 아래와 같이 쓸 수 있습니다(loss는 예측값과 label이 다르면 커져야하므로 -가 앞에 붙음).

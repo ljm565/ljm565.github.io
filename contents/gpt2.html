@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -117,15 +130,7 @@
                     <p>
                         여기서는 multi-turn 챗봇 학습을 위해 어떻게 데이터를 구성하는지 알아보겠습니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code0">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>):
         <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
         <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
@@ -154,13 +159,7 @@
     
     <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
         <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code0", 29);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>3 ~ 9번째 줄: Multi-turn 챗봇 학습 데이터를 만들기 위해 필요한 데이터들 사전 정의.</li>
@@ -196,15 +195,7 @@ pip install transformers
                         <br>이제는 pre-trained 토크나이저를 가져오는 코드입니다.
                         <br><br><span style="font-size: 20px;"><b>Pre-trained 토크나이저</b></span>
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code5">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">GPT2Tokenizer</span>
+<pre><code class="python"><span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">GPT2Tokenizer</span>
 
 
 <span class="reserved">class</span> <span class="clazz">Tokenizer</span>:
@@ -238,13 +229,7 @@ pip install transformers
             <span class="return">except</span>:
                 <span class="return">pass</span>
         <span class="return">return</span> <span class="var">self</span>.<span class="var">tokenizer</span>.decode(<span class="var">tok</span>)
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code5", 34);
-</script>
+</code></pre>
 
                     <p>
                         <ul>
@@ -272,15 +257,7 @@ lineMaking("code5", 34);
                         <br><br><span style="font-size: 20px;"><b>Pre-trained GPT-2</b></span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code6">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">import</span> <span class="clazz">torch</span>
+<pre><code class="python"><span class="return">import</span> <span class="clazz">torch</span>
 <span class="return">import</span> <span class="clazz">torch</span>.<span class="clazz">nn</span> <span class="return">as</span> <span class="clazz">nn</span>
 <span class="return">from</span> <span class="clazz">transformers</span> <span class="return">import</span> <span class="clazz">GPT2LMHeadModel</span>
 
@@ -303,13 +280,7 @@ lineMaking("code5", 34);
         <span class="var">pad_mask</span> = <span class="var">self</span>.<span class="method">make_mask</span>(<span class="var">x</span>)
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">input_ids</span>=<span class="var">x</span>, <span class="var">attention_mask</span>=<span class="var">pad_mask</span>)
         <span class="return">return</span> <span class="var">output</span>.logits
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code6", 23);
-</script>
+</code></pre>
 
                     <p>
                         <ul>
@@ -338,15 +309,7 @@ lineMaking("code6", 23);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code7">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GPTChatbot</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">GPTChatbot</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var">tokenizer</span>.<span class="var">pad_token_id</span>)
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
@@ -360,13 +323,7 @@ lineMaking("code6", 23);
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
         <span class="var">loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">output</span>[:, :<span class="num">-1</span>, :].<span class="method">reshape</span>(<span class="num">-1</span>, <span class="var">output</span>.size(<span class="num">-1</span>)), <span class="var">x</span>[:, <span class="num">1</span>:].<span class="method">reshape</span>(<span class="num">-1</span>))
         <span class="var">loss</span>.backward()
-        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code7", 15);
-</script>
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</code></pre>
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

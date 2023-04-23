@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,13 +66,18 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
                 </script>
                 <div id="mainHeadWrapper">
                     <div id="mainHead">
-                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) & Residual Network (ResNet) / 2. CNN을 이용한 MNIST 분류</h1>
+                        <h1 class="contentHead">딥러닝 이야기 / Convolutional Neural Network (CNN) &amp; Residual Network (ResNet) / 2. CNN을 이용한 MNIST 분류</h1>
                     </div>
                 </div>
                 
@@ -114,15 +127,7 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">CNN 분류기 모델 자체는 매우 단순한 구조를 가지고 있지만, input 데이터에 대해 convolutional layer를 거친 후 나오는 결과의 크기를 계산할 수 있어야 이후 layer를 구성할 수 있다는 점 참고하시기 바랍니다.</span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">CNN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">CNN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
         <span class="clazz">super</span>(<span class="clazz">CNN</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.<span class="var">height</span>
@@ -149,10 +154,7 @@
         <span class="var">output</span> = <span class="clazz">torch</span>.<span class="method">flatten</span>(<span class="var">output</span>, 1)
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">output</span>)
         <span class="return">return</span> <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
+</code></pre>
 <script>
 lineMaking("code1", 27);
 </script>
@@ -165,7 +167,7 @@ lineMaking("code1", 27);
                             <li>7번째 줄: 이미지 전처리를 하였을 때, color channel 수(흑백으로 처리를 했다면 1, 칼라로 처리 했다면 3).</li>
                             <li>9 ~ 18번째 줄: 두 개의 convolutional layer 정의. <span class="highlight" style="color: rgb(0, 3, 206);">각 레이어에는 overfitting을 방지하기 위해 batch normalization이 사용됨. 또한 첫 번째 convolutional layer의 결과 크기를 알아야 두 번째 레이어를 구성할 수 있음.</span></li>
                             <li>19번째 줄: Convolutional layer를 나온 결과를 바탕으로 데이터를 분류해야하므로, label 수만큼 결과가 나오도록 fully-connected layer 구성.</li>
-                            <li>22 ~ 27번째 줄: 실제 학습할 때 거치는 부분. <span class="highlight" style="color: rgb(0, 3, 206);">25번째 줄에서 (batch * channel * height * width)의 4차원 데이터를 (batch * (channel * height * widt))의 2차원 데이터로 변환.</span></li>
+                            <li>22 ~ 27번째 줄: 실제 학습할 때 거치는 부분. <span class="highlight" style="color: rgb(0, 3, 206);">25번째 줄에서 (batch * channel * height * width)의 4차원 데이터를 (batch * (channel * height * width))의 2차원 데이터로 변환.</span></li>
                         </ul>
                     </p>
                 
@@ -180,15 +182,7 @@ lineMaking("code1", 27);
                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                        여기서는 무시해도 좋습니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">CNN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">CNN</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
@@ -214,10 +208,7 @@ lineMaking("code1", 27);
                 <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
                     <span class="var">loss</span>.backward()
                     <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
+</code></pre>
 <script>
 lineMaking("code2", 26);
 </script>

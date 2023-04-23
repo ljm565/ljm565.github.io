@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -117,15 +130,7 @@
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code0">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">DLoader</span>(<span class="clazz">Dataset</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">data</span>, <span class="var">tokenizer</span>, <span class="var">config</span>):
         <span class="var">self</span>.<span class="var">data</span> = <span class="var">data</span>
         <span class="var">self</span>.<span class="var">tokenizer</span> = <span class="var">tokenizer</span>
@@ -214,13 +219,7 @@
     
     <span class="reserved">def</span> <span class="method">__len__</span>(<span class="var">self</span>):
         <span class="return">return</span> <span class="var">self</span>.<span class="var">length</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code0", 89);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>3 ~ 16번째 줄: BERT 학습 데이터를 만들기 위해 필요한 데이터들 사전 정의.</li>
@@ -254,15 +253,7 @@ lineMaking("code0", 89);
                         <br><br><span style="font-size: 20px;"><b>Token, Positional, and Segment Embeddings</b></span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># word embedding layer</span>    
+<pre><code class="python"><span class="annot"># word embedding layer</span>    
 <span class="reserved">class</span> <span class="clazz">TokenEmbedding</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">vocab_size</span>, <span class="var">hidden_dim</span>, <span class="var">pad_token_id</span>):
         <span class="clazz">super</span>(<span class="clazz">TokenEmbedding</span>, <span class="var">self</span>).<span class="method">__init__</span>()
@@ -307,13 +298,7 @@ lineMaking("code0", 89);
     <span class="reserved">def</span> <span class="method">forward</span>(<span class="var">self</span>, <span class="var">x</span>):
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">emb_layer</span>(<span class="var">x</span>)
         <span class="return">return</span> <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 45);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>5 ~ 8번째 줄: Token embbeding을 위해 필요한 파라미터 정의.</li>
@@ -330,15 +315,7 @@ lineMaking("code1", 45);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># mulithead attention</span>
+<pre><code class="python"><span class="annot"># mulithead attention</span>
 <span class="reserved">class</span> <span class="clazz">MultiHeadAttention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">num_head</span>, <span class="var">bias</span>, <span class="var">self_attn</span>, <span class="var">causal</span>):
         <span class="clazz">super</span>(<span class="clazz">MultiHeadAttention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
@@ -390,13 +367,7 @@ lineMaking("code1", 45);
         <span class="var">attn_out</span> = <span class="var">self</span>.<span class="var">attn_proj</span>(<span class="var">self</span>.<span class="method">reshaping</span>(<span class="var">attn_out</span>))
 
         <span class="return">return</span> <span class="var">attn_wts</span>, <span class="var">attn_out</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 52);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>5 ~ 10번째 줄: Attention을 위해 필요한 파라미터 정의.</li>
@@ -415,15 +386,7 @@ lineMaking("code2", 52);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># postion wise feed forward</span>
+<pre><code class="python"><span class="annot"># postion wise feed forward</span>
 <span class="reserved">class</span> <span class="clazz">PositionWiseFeedForward</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">ffn_dim</span>, <span class="var">dropout</span>, <span class="var">bias</span>):
         <span class="clazz">super</span>(<span class="clazz">PositionWiseFeedForward</span>, <span class="var">self</span>).<span class="method">__init__</span>()
@@ -453,13 +416,7 @@ lineMaking("code2", 52);
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">FFN1</span>(<span class="var">x</span>)
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">FFN2</span>(<span class="var">output</span>)
         <span class="return">return</span> <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 30);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>5 ~ 8번째 줄: Feed forward network를 위해 필요한 파라미터 정의.</li>
@@ -475,15 +432,7 @@ lineMaking("code3", 30);
                         <br><br><span style="font-size: 20px;"><b>Encoder</b></span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code4">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># a single encoder layer</span>
+<pre><code class="python"><span class="annot"># a single encoder layer</span>
 <span class="reserved">class</span> <span class="clazz"><span class="clazz">Encoder</span>Layer</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_dim</span>, <span class="var">ffn_dim</span>, <span class="var">num_head</span>, <span class="var">bias</span>, <span class="var">dropout</span>, <span class="var">layernorm_eps</span>):
         <span class="clazz">super</span>(<span class="clazz"><span class="clazz">Encoder</span>Layer</span>, <span class="var">self</span>).<span class="method">__init__</span>()
@@ -548,13 +497,7 @@ lineMaking("code3", 30);
             <span class="var">all_<span class="var">attn_wts</span></span>.<span class="method">append</span>(<span class="var">attn_wts</span>.detach().cpu())
         
         <span class="return">return</span> <span class="var">all_<span class="var">attn_wts</span></span>, <span class="var">output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code4", 65);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>2 ~ 28번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">하나의 encoder block을 정의하는 코드</span>.</li>
@@ -576,15 +519,7 @@ lineMaking("code4", 65);
                         <br><br><span style="font-size: 20px;"><b>BERT</b></span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code6">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="annot"># BERT</span>
+<pre><code class="python"><span class="annot"># BERT</span>
 <span class="reserved">class</span> <span class="clazz">BERT</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">tokenizer</span>, <span class="var">device</span>):
         <span class="clazz">super</span>(<span class="clazz">BERT</span>, <span class="var">self</span>).<span class="method">__init__</span>()
@@ -612,13 +547,7 @@ lineMaking("code4", 65);
         <span class="var">mlm_output</span> = <span class="var">self</span>.<span class="var">mlm_fc</span>(<span class="var">x</span>)
 
         <span class="return">return</span> <span class="var">all_<span class="var">cross_<span class="var">attn_wts</span></span></span>, (<span class="var">nsp_output</span>, <span class="var">mlm_output</span>)
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code6", 28);
-</script>
+</code></pre>
 
                     <p>
                         <ul>
@@ -647,15 +576,7 @@ lineMaking("code6", 28);
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code7">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BERT</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">BERT</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">tokenizer</span>, <span class="var">self</span>.<span class="var">device</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">nsp_criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>()
 <span class="var">self</span>.<span class="var">mlm_criterion</span> = <span class="clazz">nn</span>.<span class="clazz">CrossEntropyLoss</span>(<span class="var">ignore_index</span>=<span class="var">self</span>.<span class="var"><span class="var">tokenizer</span></span>.<span class="var">pad_token_id</span>)
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>, <span class="var">betas</span>=(<span class="num">0.9</span>, <span class="num">0.999</span>))
@@ -672,13 +593,7 @@ lineMaking("code6", 28);
         <span class="var">mlm_loss</span> = <span class="var">self</span>.<span class="var">criterion</span>(<span class="var">mlm_output</span>.reshape(<span class="num">-<span class="num">1</span></span>, <span class="var">mlm_output</span>.size(<span class="num">-<span class="num">1</span></span>)), <span class="var">mlm_label</span>.reshape(<span class="num">-<span class="num">1</span></span>))
         <span class="var">loss</span> = <span class="var">nsp_loss</span> + <span class="var">mlm_loss</span>
         <span class="var">loss</span>.backward()
-        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code7", 18);
-</script>
+        <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()</code></pre>
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -115,15 +128,7 @@
                         이렇게 즉각적으로 모델이 선택한 action과 그에 대한 next state를 학습에 반영하지 않고 재현 메모리라는 버퍼에 담아둔 후 랜덤으로 batch 만큼 추출하여 학습하기 위한 코드입니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="return">import</span> <span class="clazz">torch</span>
+<pre><code><span class="return">import</span> <span class="clazz">torch</span>
 <span class="return">import</span> <span class="clazz">random</span>
 <span class="return">from</span> <span class="clazz">collections</span> <span class="return">import</span> <span class="clazz">deque</span>
 
@@ -144,13 +149,7 @@
 
     
 <span class="var">memory</span> = <span class="clazz">ReplayMemory</span>(<span class="num">10000</span>)
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 21);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>8번째 줄: 재현 메모리 버퍼의 크기 설정.</li>
@@ -176,15 +175,7 @@ lineMaking("code1", 21);
                         Cart pole 세우는 task는 그리 복잡하지 않기때문에 아주 간단한 MLP 모델로 구성합니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">DQN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code><span class="reserved">class</span> <span class="clazz">DQN</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">case_num</span>, <span class="var">device</span>):
         <span class="clazz">super</span>(<span class="clazz">DQN</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">hidden_dim</span> = <span class="var">config</span>.hidden_dim
@@ -201,13 +192,7 @@ lineMaking("code1", 21);
         <span class="var">x</span> = <span class="var">x</span>.<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
         <span class="var">x</span> = <span class="var">self</span>.<span class="var">model</span>(<span class="var">x</span>)
         <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 17);
-</script>
+</code></pre>
                     <p>
                         <ul>
                             <li>4번째 줄: 모델의 hidden dimension.</li>
@@ -233,15 +218,7 @@ lineMaking("code2", 17);
                         그리고 self. 이라고 나와있는 부분은 <a href="https://github.com/ljm565/cartpole-DQN" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">def</span> <span class="method">select_action</span>(<span class="var">self</span>, <span class="var">state</span>, <span class="var"><span class="var">phase</span></span>=<span class="str">'train'</span>):
+<pre><code><span class="reserved">def</span> <span class="method">select_action</span>(<span class="var">self</span>, <span class="var">state</span>, <span class="var"><span class="var">phase</span></span>=<span class="str">'train'</span>):
     <span class="var">eps_threshold</span> = <span class="var">self</span>.<span class="var">config</span>.eps_end + (<span class="var">self</span>.<span class="var">config</span>.eps_start - <span class="var">self</span>.<span class="var">config</span>.eps_end) * <span class="clazz">math</span>.<span class="method">exp</span>(<span class="var">-1</span> * <span class="var">self</span>.<span class="var">steps_done</span> / <span class="var">self</span>.<span class="var">config</span>.eps_decay)
     <span class="var">self</span>.<span class="var">steps_done</span> += <span class="num">1</span>
 
@@ -332,13 +309,7 @@ lineMaking("code2", 17);
 
 <span class="var">self</span>.<span class="var">env</span>.<span class="method">render</span>()
 <span class="var">self</span>.<span class="var">env</span>.<span class="method">close</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 91);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>Action 선택 함수</b></span>
                         <ul>

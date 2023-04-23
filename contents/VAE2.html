@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -115,15 +128,7 @@
                         한 줄씩 자세한 설명은 코드 아래쪽에 설명을 참고하시기 바랍니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">VAE</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">VAE</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>:<span class="clazz">Config</span>, <span class="var">color_channel</span>:<span class="clazz">int</span>):
         <span class="clazz">super</span>(<span class="clazz">VAE</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">height</span> = <span class="var">config</span>.<span class="var">height</span>
@@ -175,13 +180,8 @@
         <span class="var">output</span> = <span class="var">self</span>.<span class="var">decoder</span>(<span class="var">z</span>)
 
         <span class="return">return</span> <span class="var">output</span>, <span class="var">mu</span>, <span class="var">log_var</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 52);
-</script>
+</code></pre>
+
                     <p>
                         <span style="font-size: 20px;"><b>모델 초기화</b></span>
                         <br>먼저 모델의 고정된 값을 초기화하여 hidden layer까지 초기화하는 부분입니다.
@@ -233,15 +233,7 @@ lineMaking("code1", 52);
                         자세한 코드는 아래에서 확인해보겠습니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">decoder_loss</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>(<span class="var">reduction</span>=<span class="str">'sum'</span>)
+<pre><code class="python"><span class="var">decoder_loss</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>(<span class="var">reduction</span>=<span class="str">'sum'</span>)
 
 <span class="reserved">def</span> <span class="method">VAE_loss</span>(<span class="var">x</span>, <span class="var">output</span>, <span class="var">mu</span>, <span class="var">log_var</span>, <span class="var">decoder_loss</span>):
     <span class="var">batch_size</span> = <span class="var">x</span>.size(<span class="num">0</span>)
@@ -251,13 +243,8 @@ lineMaking("code1", 52);
     <span class="var">KLD_loss</span> = <span class="num">0.5</span> * <span class="clazz">torch</span>.<span class="method">sum</span>((<span class="clazz">torch</span>.<span class="method">square</span>(<span class="var">mu</span>) + <span class="clazz">torch</span>.<span class="method">exp</span>(<span class="var">log_var</span>) - <span class="var">log_var</span> - <span class="num">1</span>))
 
     <span class="return">return</span> <span class="var">BCE_loss</span> + <span class="var">KLD_loss</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 10);
-</script>
+</code></pre>
+
                     <p>
                         <ul>
                             <li>1번째 줄: deocoder를 Bernoulli distribution (베르누이 분포)으로 가정하였기 때문에 binary cross entropy (BCE) loss를 사용(<span class="highlight" style="color: rgb(0, 3, 206);">redunction sum을 하여 평균값을 내지 않고 loss를 더하도록 설정</span>).</li>

@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -117,15 +130,7 @@
                         <span class="highlight" style="color: rgb(0, 3, 206);">코드는 PyTorch로 작성 되었으며, 문장 데이터를 input을 받아서 0, 1 사이의 값으로 내어주는 모델을 구성합니다.</span>
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">SentimentLSTM</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">SentimentLSTM</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">config</span>, <span class="var">pad_token_id</span>, <span class="var">device</span>):
         <span class="clazz">super</span>(<span class="clazz">SentimentLSTM</span>, self).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">pad_token_id</span> = <span class="var">pad_token_id</span>
@@ -173,13 +178,7 @@
         <span class="var">x</span> = <span class="var">self</span>.<span class="var">fc</span>(<span class="var">x</span>)
 
         <span class="return">return</span> <span class="var">x</span>.squeeze(<span class="num">1</span>), <span class="var">attn_output</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 48);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>LSTM</b></span>
                         <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
@@ -211,15 +210,7 @@ lineMaking("code1", 48);
                         만약 attention을 선택하게 된다면 아래의 attention 모듈에 LSTM의 output이 들어가게 됩니다.
                     </p>
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">class</span> <span class="clazz">Attention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
+<pre><code class="python"><span class="reserved">class</span> <span class="clazz">Attention</span>(<span class="clazz">nn</span>.<span class="clazz">Module</span>):
     <span class="reserved">def</span> <span class="method">__init__</span>(<span class="var">self</span>, <span class="var">hidden_size</span>):
         <span class="clazz">super</span>(<span class="clazz">Attention</span>, <span class="var">self</span>).<span class="method">__init__</span>()
         <span class="var">self</span>.<span class="var">hidden_size</span> = <span class="var">hidden_size</span>
@@ -236,13 +227,7 @@ lineMaking("code1", 48);
         <span class="var">x</span> = <span class="var">x</span>.squeeze(<span class="num">2</span>)
         <span class="var">x</span> = <span class="clazz">F</span>.<span class="method">softmax</span>(<span class="var">x</span>, <span class="var">dim</span>=<span class="num">1</span>)
         <span class="return">return</span> <span class="var">x</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 17);
-</script>
+</code></pre>
                     <p>
                         <span style="font-size: 20px;"><b>Attention</b></span>
                         <br>위 코드에서 나오는 config 부분은 <a href="https://github.com/ljm565/sentiment-classification-LSTM" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>에 보면 <span class="var">config</span>.json이라는 파일에 존재하는 변수 값들을 모델에 적용하여 초기화 하는 것입니다.
@@ -266,15 +251,7 @@ lineMaking("code2", 17);
                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                        여기서는 무시해도 좋습니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code3">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">model</span> = <span class="clazz">SentimentLSTM</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+<pre><code class="python"><span class="var">self</span>.<span class="var">model</span> = <span class="clazz">SentimentLSTM</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>()
 <span class="var">self</span>.<span class="var">optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">model</span>.<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
 
@@ -300,13 +277,7 @@ lineMaking("code2", 17);
                 <span class="return">if</span> <span class="var">phase</span> == <span class="str">'train'</span>:
                     <span class="var">loss</span>.backward()
                     <span class="var">self</span>.<span class="var">optimizer</span>.<span class="method">step</span>()
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code3", 26);
-</script>
+</code></pre>
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>

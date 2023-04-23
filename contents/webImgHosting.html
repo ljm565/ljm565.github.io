@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -122,15 +135,7 @@
                     </p>
 
 
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code1">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="reserved">function</span> <span class="method">convertLink</span>() {
+<pre><code class="javascript"><span class="reserved">function</span> <span class="method">convertLink</span>() {
     <span class="reserved">var</span> <span class="var">obj</span> = <span class="var">document</span>.<span class="method">getElementById</span>(<span class="str">"googleDriveUrl"</span>)
     <span class="reserved">var</span> <span class="var">name</span> = <span class="var">obj</span>.<span class="var">value</span>;
     <span class="reserved">var</span> <span class="var">st</span> = <span class="str">'file/d/'</span>;
@@ -147,13 +152,7 @@
         <span class="var">obj</span>.<span class="var">value</span> = <span class="reserved">null</span>;
     }
 }
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code1", 17);
-</script>
+</code></pre>
 
 
                     

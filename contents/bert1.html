@@ -24,6 +24,14 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="init/index.js"></script>
         <script src="init/jquery.pjax.js"></script>
@@ -58,6 +66,11 @@
 
         <div id="container" onclick="reload();">
             <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
                 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
                 <script>
                     initMathJax();
@@ -380,7 +393,7 @@
                         <br>저자들은 NSP와 MLM의 성능을 측정하기 위해 아래 두 가지 케이스에 대해 실험을 진행하였습니다.
                         <ol>
                             <li>No NSP</li>
-                            <li>No NSP & left-to-right language modeling</li>
+                            <li>No NSP &amp; left-to-right language modeling</li>
                         </ol>
                         <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 보면 NSP가 없을 때 Natural Language Inference (NLI) 관련된 성능이 많이 하락하는 것을 볼 수 있습니다. 이를 통해 NSP가 문장을 이해하는 데 많은 역할을 하는 것을 알 수 있죠.</span>
                         
