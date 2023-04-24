@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Text-CLIP을 이용한 질의 응답 retrieval 모델 학습</title>
+        <meta name="description" content="들어온 질의에 대해 적절한 답을 retrieval 하기 위한 text-text CLIP 모델을 학습합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/clip2.html" />
+        <meta property="og:title" content="Text-CLIP을 이용한 질의 응답 retrieval 모델 학습" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="들어온 질의에 대해 적절한 답을 retrieval 하기 위한 text-text CLIP 모델을 학습합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/APg5EOYWDFPwpz0fUcTm8FuGJMr4z862i897mOr4LLHtC5_Tr2vpAi5IHSkdu23VErpJSKDDGXEGhHZ0mz10WLr_Dq8woR8BHrsDcOmETiKlkOBRRpGA-vmOUsvbpfCHj2MagfTLA5Y1lDQnmDdnNThql_UkW-e340IdLgJZNcwwdbd4IQ9HM4gAGkGQqHDv9aOwG7-p_Tdd6HlAxS7fcX5PmCjec6iO34N64bHnM2aPuBVQXaNI8fuO2ZyACaUJUcNdEmjEDc2vwl25mD91b2JT4ak5hacLAv6Jg93T33ZI0AyC-hcBnzCdO5m-4szeQF4dhB6kyXuwVzDeeBbePisj5b7Rc5bl6G_1NaQpY3VViA2E3QemPF90CbV_nloi9FwIOH1Tnq6vVKzRkTHTE25daIpKcXaSrlJmNQbhTpEjVCdmJVq15TQRIBBdce8OVEInMH1gHFhKqZ6y7vQ4LMnHFuq10UY4wWppQKT9NBQXL1xcfLDvIXjaV43emEiemOqA80_HMbdsMXW0ieek6S5NSyEwVv6rR_FWlrQcp0-8VihfLG0v5-1ApCMK_I31l7NsaEd_DUqqCWgtagl2Ajt4uYDANOvFjW9n78MvQO0pUmxfylsGgZyuF1HgYmohlYN6nxT1fmfa7ZPFrJLOYzdOH9o8OIOaj545zoNyNly5wfygW9Z1GkiCAwszYi7nZqC8ACPubGg3j7uQ6C8ech1nzoyNTy-yEA16YveSV92_knP19yIeKXPHh88uT9CJ6zEUW1WBvRRBAyWZZoGepE0mVPa6pmenj3d2DEg4ebOphyv4Qc3lrI8iQBMqufObYirp4WndEAlsb--hj1i5x_J9oSiihzEXhZ1YIoAQC93UKAaTRBNiqiRbJWTeIxqEGiZr5dnHcSA9LVm0g78uLuu5lL4x8uMxRG0NI80SsHfxpU5MPyG-GwEmreGA6qIGMbfDZHRGYmvYwITzHFmJZrbt5TFK8HAfjpHe5vU6yfovmHsNsrkWsVWSlBwoaHVkWQZ2Hxn2I4u48aMp2jBiBDJ5TeXsFzHXvCtPVEI5d0NmY5VpMsEH6pMm5bWleIYDg7VbesF9jeeqGTqF_-f9Geh40TG9s7YmIdhjJq_5sT0BKatCwej9xQLW20VqLW0jWcavkLfDp4NAUgdVMtFwm43JrZhPsg6ATcvA63FDLmHUA3OVGlZKsAzWOAaYX-J4s6SHFFF6XpFnmOKhZxkEokPIPAX5zmguT_RSwdC3Zb3xE3ljLe_jvPcHs_dErAMJh132CWWln2agShY4yjY0v2K4W1BZVRvmXF2nrbxPS1NL9c9NyTLH1lSZMLzEkrWu2IomtJRXu7koLJuxZG3XicfJMRkgHS6GgVpFT1cnvLE4_2gagECBKDAAf6JGBTUf-CegMm89IAiUS6xBxRwRstzmGMl9rJ56vQw6qze_vtATd1K8BQ1zLtyRQb9uhWsQeL0rUeNKRAivOm0rpFyGZl9QdME" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Contrastive Language-Image Pre-training (CLIP) / 2. Text-CLIP을 이용한 질의 응답 retrieval 모델 학습</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/APg5EOYWDFPwpz0fUcTm8FuGJMr4z862i897mOr4LLHtC5_Tr2vpAi5IHSkdu23VErpJSKDDGXEGhHZ0mz10WLr_Dq8woR8BHrsDcOmETiKlkOBRRpGA-vmOUsvbpfCHj2MagfTLA5Y1lDQnmDdnNThql_UkW-e340IdLgJZNcwwdbd4IQ9HM4gAGkGQqHDv9aOwG7-p_Tdd6HlAxS7fcX5PmCjec6iO34N64bHnM2aPuBVQXaNI8fuO2ZyACaUJUcNdEmjEDc2vwl25mD91b2JT4ak5hacLAv6Jg93T33ZI0AyC-hcBnzCdO5m-4szeQF4dhB6kyXuwVzDeeBbePisj5b7Rc5bl6G_1NaQpY3VViA2E3QemPF90CbV_nloi9FwIOH1Tnq6vVKzRkTHTE25daIpKcXaSrlJmNQbhTpEjVCdmJVq15TQRIBBdce8OVEInMH1gHFhKqZ6y7vQ4LMnHFuq10UY4wWppQKT9NBQXL1xcfLDvIXjaV43emEiemOqA80_HMbdsMXW0ieek6S5NSyEwVv6rR_FWlrQcp0-8VihfLG0v5-1ApCMK_I31l7NsaEd_DUqqCWgtagl2Ajt4uYDANOvFjW9n78MvQO0pUmxfylsGgZyuF1HgYmohlYN6nxT1fmfa7ZPFrJLOYzdOH9o8OIOaj545zoNyNly5wfygW9Z1GkiCAwszYi7nZqC8ACPubGg3j7uQ6C8ech1nzoyNTy-yEA16YveSV92_knP19yIeKXPHh88uT9CJ6zEUW1WBvRRBAyWZZoGepE0mVPa6pmenj3d2DEg4ebOphyv4Qc3lrI8iQBMqufObYirp4WndEAlsb--hj1i5x_J9oSiihzEXhZ1YIoAQC93UKAaTRBNiqiRbJWTeIxqEGiZr5dnHcSA9LVm0g78uLuu5lL4x8uMxRG0NI80SsHfxpU5MPyG-GwEmreGA6qIGMbfDZHRGYmvYwITzHFmJZrbt5TFK8HAfjpHe5vU6yfovmHsNsrkWsVWSlBwoaHVkWQZ2Hxn2I4u48aMp2jBiBDJ5TeXsFzHXvCtPVEI5d0NmY5VpMsEH6pMm5bWleIYDg7VbesF9jeeqGTqF_-f9Geh40TG9s7YmIdhjJq_5sT0BKatCwej9xQLW20VqLW0jWcavkLfDp4NAUgdVMtFwm43JrZhPsg6ATcvA63FDLmHUA3OVGlZKsAzWOAaYX-J4s6SHFFF6XpFnmOKhZxkEokPIPAX5zmguT_RSwdC3Zb3xE3ljLe_jvPcHs_dErAMJh132CWWln2agShY4yjY0v2K4W1BZVRvmXF2nrbxPS1NL9c9NyTLH1lSZMLzEkrWu2IomtJRXu7koLJuxZG3XicfJMRkgHS6GgVpFT1cnvLE4_2gagECBKDAAf6JGBTUf-CegMm89IAiUS6xBxRwRstzmGMl9rJ56vQw6qze_vtATd1K8BQ1zLtyRQb9uhWsQeL0rUeNKRAivOm0rpFyGZl9QdME);">
+                    <div>
+                        <span class="mainTitle">Text-CLIP을 이용한 질의 응답 retrieval 모델 학습</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.04.24</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이전글에서는 image와 text의 representation을 학습하기 위한 모델인 CLIP에 대해 알아보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">여기에서 아이디어를 얻어 어떤 답변이 들어왔을 때 적절한 답변을 retrieve하는 모델을 만들어보고자 text-text CLIP 모델을 학습해보겠습니다.</span>
+
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">학습에 사용한 데이터는 AI Hub에서 얻을 수 있는 한국어 일상 대화 데이터입니다. 구현은 python의 PyTorch를 이용하였습니다.</span>
+
+                        <br><br>그리고 CLIP에 대한 글은 <a onclick="pjaxPage('clip1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>을 참고하시기 바랍니다.
+                        본 글에서 설명하는 text-CLIP 학습 코드는 GitHub에 올려놓았으니 아래 링크를 참고하시기 바랍니다(본 글에서는 모델의 구현에 초점을 맞추고 있기 때문에 데이터 전처리, 토크나이저 학습 등 학습을 위한 전체 코드는 아래 GitHub 링크를 참고하시기 바랍니다).
+                        
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Text-CLIP 구현</li>
+                            <li>Text-CLIP 학습</li>
+                            <li>Text-CLIP 학습 결과</li>
+                        </ol>
+                    </p>
+                    <div class="link">
+                        <a href="https://github.com/ljm565/text-clip" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Text-CLIP GitHub 코드</a>
+                    </div>
+
+
+                    <h1 class="subHead">Text-CLIP</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Text-CLIP 구현</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        여기서는 text-CLIP 구현 코드를 살펴보겠습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">원래의 CLIP은 image encoder가 필요했기에 ResNet을 사용했었지만, 본 코드는 text-text 기반으로 학습을 진행하기 때문에 KoBERT를 사용합니다.</span>
+                    </p>
+
+<pre><code class="python"># KoBERT
+class BERT(nn.Module):
+    def __init__(self, config, tokenizer, device):
+        super(BERT, self).__init__()
+        self.tokenizer = tokenizer
+        self.device = device
+
+        self.model = BertModel.from_pretrained('skt/kobert-base-v1')
+
+        self.hidden_dim = self.model.config.hidden_size
+
+        self.layer_norm = nn.LayerNorm(self.hidden_dim, eps=config.layernorm_eps)
+        self.src_wts = nn.Linear(self.hidden_dim, self.hidden_dim)
+        self.trg_wts = nn.Linear(self.hidden_dim, self.hidden_dim)
+        self.temperature = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
+
+
+    def make_mask(self, x):
+        mask = torch.where(x==self.tokenizer.pad_token_id, 0, 1)
+        return mask
+
+    
+    def find_eos(self, x):
+        mask = torch.tensor(x == self.tokenizer.sep_token_id, dtype=torch.long)
+        mask = torch.argmax(mask, dim=1)
+        return mask
+        
+
+    def forward(self, src, trg):
+        batch_size = src.size(0)
+        src_mask, trg_mask = self.make_mask(src), self.make_mask(trg)
+        src_eos, trg_eos = self.find_eos(src), self.find_eos(trg)
+
+        src, trg = self.model(input_ids=src, attention_mask=src_mask)['last_hidden_state'], self.model(input_ids=trg, attention_mask=trg_mask)['last_hidden_state']
+        src, trg = self.layer_norm(src), self.layer_norm(trg)
+        src, trg = src[torch.arange(batch_size), src_eos], trg[torch.arange(batch_size), trg_eos]
+
+        src = F.normalize(self.src_wts(src))
+        trg = F.normalize(self.trg_wts(trg))
+        sim_output = torch.mm(src, trg.transpose(0, 1)) * self.temperature.exp()
+
+        return sim_output, src, trg
+</code></pre>
+                    <p>
+                        <ul>
+                            <li>8번째 줄: 한국어 text-CLIP 모델을 제작하기 때문에 pre-trained KoBERT를 불러옴.<span class="highlight" style="color: rgb(0, 3, 206);">강건한 모델을 학습하기 위해 source용 BERT, target용 BERT 모델을 따로 두지 않고 하나의 모델에서 source, target의 representation을 모두 학습하도록 하기 위해 하나의 모델만 로드.</span></li>
+                            <li>12 ~ 15째 줄: 학습에 사용될 레이어 및 가중치 초기화.</li>
+                            <li>18 ~ 20번째 줄: 텍스트 데이터의 [PAD] 토큰 마스킹.</li>
+                            <li>23 ~ 26번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">원래의 CLIP과 동일하게 text representation 중, [EOS] 토큰의 representation을 가져오는 함수(실제 CLIP도 text representation으로 [EOS] 토큰을 사용).</span></li>
+                            <li>31 ~ 32번째 줄: 텍스트 마스킹 및 각각의 [EOS] 토큰 위치를 찾음.</li>
+                            <li>34 ~ 36번째 줄: Source, target 텍스트를 KoBERT 기반 text-CLIP 모델의 결과 중 [EOS] 토큰의 결과들만 추출.</li>
+                            <li>38 ~ 42번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">[EOS] 토큰의 representation 결과를 바탕으로 레이어를 거친 후, 행렬곱으로 cosine similarity 계산, 여기서는 source, target간의 연관성을 학습하는 것이 목적.</span></li>
+                        </ul>
+                    </p>
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Text-CLIP 학습</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 Text-CLIP 모델을 학습해보겠습니다.
+                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
+                        여기서는 무시해도 좋습니다.
+                        <br><br>그리고 아래 학습 코드는 실제 학습 코드를 간소화한 것입니다. Scheduler 등 전체 학습 코드는 <a href="https://github.com/ljm565/text-clip" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub 코드</span></a>를 참고하면 됩니다.
+                    </p>
+
+
+<pre><code class="python">self.model = BERT(self.config, self.tokenizer, self.device).to(self.device)
+self.criterion = nn.CrossEntropyLoss()
+self.optimizer = optim.AdamW(self.model.parameters(), lr=self.lr)
+
+for src, trg in self.dataloaders[phase]:
+    self.optimizer.zero_grad()
+    src, trg = src.to(self.device), trg.to(self.device)
+
+    with torch.set_grad_enabled(phase=='train'):
+        sim_output, _, _ = self.model(src, trg)
+
+        label = torch.arange(batch_size).to(self.device)
+        loss = (self.criterion(sim_output, label) + self.criterion(sim_output.transpose(0, 1), label)) / 2
+        loss.backward()
+        self.optimizer.step()
+</code></pre>
+
+                    <p>
+                        <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
+                        <br>먼저 위에 코드에서 정의한 모델을 불러오고 학습에 필요한 loss function, optimizer 등을 선언하는 부분입니다.
+                        <ul>
+                            <li>1 ~ 3번째 줄: Loss function, transformer 모델 및 optimizer 선언.</li>
+                        </ul>
+
+                        <br><span style="font-size: 20px;"><b>모델 학습</b></span>
+                        <ul>
+                            <li>5 ~ 15번째 줄: Cross entropy loss를 이용하여 모델 학습하는 부분.</li>
+                            <li>13번째 줄: <span class="highlight" style="color: rgb(0, 3, 206);">모델에서 계산한 source, target representation의 결과가 diagonal 위치의 연관성이 1이 되고 나머지는 0이 되어야하므로 row, column 방향 모두 cross entropy를 이용하여 계산.</span></li>
+                        </ul>
+                    </p>
+
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Text-CLIP 학습 결과</span><br>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        총 100 epoch동안 학습하였으며, validation set의 loss도 계속 떨어지고 있었습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 마지막으로 어떤 질의에 대해 어떠한 답변이 유사성이 가장 높아서 retrieval 해주었는지, 문장의 연관성 score는 어떤지, 그리고 top-k accuracy도 살펴보겠습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/APg5EOYROdulVX_oQ8ZPWE8OVPLMtWqSV1BTfU9SaIEn70i7OobBbAtif-CMjDOHaGXuPM-shCNa4_KhULxDToGBKkpSBZ24Lmn6kGAeUWOth-RH1cLE1J-YYC3GBxc47sn8OFfGSRxbyqqeSw9TJrAOlvm8tQDx_nNDo7OJgu412xBubN1PSZRn8q1JZRqq3__GdtDtNFzqKgTRQXPNVj-iVawK7cE1v5FIjfUTvh_UKB0rE5jOCByHPM6zrX4iQ53wE2mQyQKWqAINUHh1FQIag6GA9uVs6d8EgVd2444Apz4G5fUn0BSaWF3XIdY9Eb4VGEkJFMHCJr-x1okXs42f6MHCQddBHENCpx7dif-C5iihDvYKPNrMAqsEzBhbMGrmbZkfXneuw5cnzTnYiavnYQmUf75HGgMrg6ffKsfKc3SY-0Hi4XXuq-YHszW_zDmsfYQEJzWes-_3q3ksL4uGVBAHfglyMwXZLNH28lvh9zjl4W8satp5U5WCaeLW2C-MiJcyZI7lMKMCIS0POQi0SqHUUAjRREw67cNEbXYo8hBIY1vjAii4wc_u_6UmUyCpHCHJKim5sGtkFMfDWxAchFhm3GnOmwFzbQOdlDER-BJvGWiscQvQhrnZW2o9t61TvPNENdWwv4j4A-fkUzVf3YSvLTDYNo3jz91zgKLPHcacHj7gOVq74hZRecSlqtOmD5GOlrxhgU2Olcov1EAsBBWFZPrrFTBz_8PupPuAUTntVYXnEy7M9uozmAo8KGuef-rpdzq6k4sfn13-zG7YxbHM6pMe-uSUvil3IG8iTY2S2Dk5vV3lknCDimT82xn7eAe2US0Pglnve0EBoR7qojOCn6RLdDLN0r5XkLwuu_Gl7KjcWeBQT37oF-g9sLqFgyF77mPsVq7fWXm_E5VL4Oa3QCxpRH9iNW5tEjnS21cVRjdUgSYONUzpU0Cr3Jbw2qPehAgXUAoaAmL5CjHsV4J0gBp-SuwN6Enup-sX_XYe_rtttNJl1O9gPlsZJowSqX2PGMXzQGpuxlAtJnECL1F5lyi8eZSE68hTLtqcUl027I1XOPq_O6UIjKMXrIB3xEcWBsRnff51exxavf25MSXMofU18_SdD3J3NzpiD6MMOI7fbFYdOfLZYgqHuJKaVxoYWITbXRpDOx2mgRiCe7Wjlr-jkpBWBrGFg2mDHuoNRDhMfMWsIdBQtEHn5ax0Nef15MqYv82dAZECUdk-QBlba91y5_F6DtdUxQ3LYoqADGr3rEiaklmp8XffNcFz3A6zmeVXVYw0nkeWsVpThutxh70XHs8rUq1lTjKuM9WsIKDMOMC-uTO21SdAPBYS7ik-3E0vutC5veMM3E7qTVdswm517-t7M8uzQopcgo3CWAHURCSduSnR0oxO4S48q9lgOCs390U0nLUJRyWPtE-7u_s9OCDSyvS-C9WrAY15FzPGLiU-CmaxfvzHVjjLsD8EXf-Zg-wWfZq7p2WLe7M" style="width: 100%;">
+                        <p class="caption">Text-CLIP Loss</p>
+                    </div>
+                    <p>
+                        <br>그리고 랜덤으로 query를 던졌을 때 어떤 답변을 학습한 데이터 중에서 선택하는지 보여드리겠습니다.
+                        아래 결과의 괄호 안의 숫자는 query에 대한 답변의 연관성 score입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Text-CLIP 모델을 한국어 대화로 학습하였기에 실제로 던진 query에 대해 이상하지 않은 답변을 골라서 보여주는 것을 확인할 수 있습니다.</span>
+                    </p>
+                    
+<pre>
+<div class="codeWrapper">
+<div class="code">
+<pre>
+src:  그러니까 요즘 티비 많이 없애기도 하더라고
+gt    (0.436461): 우리집도 엄마만 보고 거의 방치 중
+trg 0 (0.503683): 아 티비는 전화 오잖아 언제 온다고
+trg 1 (0.486441): 요즘 안 되는 게 어[UNK]어요 다들 그렇게 찾아서 봐요
+trg 2 (0.469811): 가족 다 같이 볼 수 있는 재미있는 예능이나 드라마가 나오면 좋겠네
+trg 3 (0.461624): 티비 채널은 많은데 볼 건 더럽게 없음 하하
+trg 4 (0.455565): 크롬캐스트 있으면 티비가 태블릿인데 필요없지
+trg 5 (0.452497): 근데 직캠으로 보는 게 더 편하긴 해
+trg 6 (0.452101): 어[UNK]지... 재방송을 이렇게 많이 하다니 했네
+trg 7 (0.441696): 음... 아니면 넷플이나 유튜브 어때!
+trg 8 (0.437568): 웅 요즘 어린이들도 봐줬으면 좋겠다... [UNK]
+trg 9 (0.436461): 우리집도 엄마만 보고 거의 방치 중
+--------------------------------------------------
+
+src:  하하 맞아 별보면서 누워서 애기하고!
+gt    (0.374822): 히히 담에 계획에 추가!
+trg 0 (0.625003): 밤에는 별도 볼 수 있어가지고
+trg 1 (0.541977): 맛있는거 먹고 해안도로 드라이브하고 오면 좋을 것 같아 하하
+trg 2 (0.522523): 자연을 볼 수 있어서 좋은 것 같아 하하
+trg 3 (0.521262): 그래 별도 보고 맛난거도 싸가서 먹고!
+trg 4 (0.517485): 하하 그치 우리는 눈이 즐거워지니까!
+trg 5 (0.496617): 웅웅 근데 밤이라고 생각을 안하는건가?
+trg 6 (0.493339): 응응 하하 생각만 해도 좋다
+trg 7 (0.488552): 도시락싸들고 수목원에 가고 싶어
+trg 8 (0.482880): 하하 전에 친구가 갔는데 부럽더라고
+trg 9 (0.480914): 응응 여름에 노을지는 하늘도 예뻤는데 요즘 구름 장난없더라 하하
+--------------------------------------------------
+
+src:  응응 우리 둘 다 그거 마셔 보자!
+gt    (0.530809): 좋아~! 근데 맛은 있을까...
+trg 0 (0.582727): 엉~ 한 박스는 엄마랑 같이 나눠 마시자
+trg 1 (0.553225): 좋아좋아 우리 다음 달에 먹으면 되겠다!
+trg 2 (0.549304): 같이 사서 나눠 먹자!
+trg 3 (0.538502): 좋지 그럼 내일 너네 집으로 갈게~
+trg 4 (0.534017): 완전 좋아~!
+trg 5 (0.530809): 좋아~! 근데 맛은 있을까...
+trg 6 (0.520944): 응 집에 갈 때 음료수 사갈까?
+trg 7 (0.484110): 응 그래 주면 나야 고맙지 [UNK]
+trg 8 (0.480300): 그래 완전 좋아
+trg 9 (0.478684): 응 좋아!
+--------------------------------------------------
+</pre>
+</div>
+</div>
+</pre>
+                    <p>
+                        <br>그리고 test set에 대해 source를 넣었을 때 골라주는 10개의 답변 중에 ground truth가 있는지 확인하기 위해 top-k accuracy도 측정해보았습니다.
+                        그 결과 10개의 질의 중 24.5%가 모델이 retrieve 했던 답변 중에 ground truth가 존재했습니다.
+                        <ul>
+                            <li>Top-1 accuracy: 9.59%</li>
+                            <li>Top-5 accuracy: 19.36%</li>
+                            <li>Top-10 accuracy: 24.52%</li>
+                        </ul>
+                    </p>
+                
+                    
+                    
+                                       
+                    <p>
+                        <br><br><br>지금까지 CLIP 아이디어를 통해 들어온 query에 대해서 적절한 답변을 내어주는 text-CLIP 모데을 학습해보았습니다.
+                        학습 과정에 대한 전체 코드는 <a href="https://github.com/ljm565/text-clip" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>에 있으니 참고하시면 될 것 같습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">적지 않은 데이터를 학습했음에도 불구하고 100 epoch동안 validation set의 loss가 아주 천천히 떨어지고 있었습니다.</span>
+                        그만큼 CLIP의 아이디어는 강건하며, representation을 학습하기에 아주 적절한 모델이 아닐까 싶습니다.
+                    </p>
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#Text-CLIP&emsp;#CLIP&emsp;#TextRepresentation
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('clip1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Contrastive Language-Image Pre-training (CLIP)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('CLIP 마지막 게시물 입니다.\n\nThis is the last post of CLIP.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
