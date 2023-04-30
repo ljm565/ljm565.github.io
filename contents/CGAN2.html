@@ -223,15 +223,8 @@ class Discriminator(nn.Module):
                        아래 코드에 <span style="color:rgb(86, 155, 214);">self</span>. 이라고 나와있는 부분은 GitHub 코드에 보면 알겠지만 학습하는 코드가 class 내부의 변수이기 때문에 있는 것입니다.
                        여기서는 무시해도 좋습니다.
                     </p>
-<pre>
-<div class="codeWrapper">
-<div class="lineNo">
-<pre id="code2">
-</pre>
-</div>
-<div class="code">
-<pre>
-<span class="var">self</span>.<span class="var">G_model</span> = <span class="clazz">Generator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
+
+<pre><code class="python"><span class="var">self</span>.<span class="var">G_model</span> = <span class="clazz">Generator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">D_model</span> = <span class="clazz">Discriminator</span>(<span class="var">self</span>.<span class="var">config</span>, <span class="var">self</span>.<span class="var">color_channel</span>).<span class="method">to</span>(<span class="var">self</span>.<span class="var">device</span>)
 <span class="var">self</span>.<span class="var">criterion</span> = <span class="clazz">nn</span>.<span class="clazz">BCELoss</span>()
 <span class="var">self</span>.<span class="var">G_optimizer</span> = <span class="clazz">optim</span>.<span class="clazz">Adam</span>(<span class="var">self</span>.<span class="var">G_model</span>..<span class="method">parameters</span>(), <span class="var">lr</span>=<span class="var">self</span>.<span class="var">lr</span>)
@@ -292,13 +285,8 @@ class Discriminator(nn.Module):
 
             <span class="var">D_total_loss</span> += <span class="var">D_loss</span>.item() * <span class="var">batch_size</span>
             <span class="var">G_total_loss</span> += <span class="var">G_loss</span>.item() * <span class="var">batch_size</span>
-</pre>
-</div>
-</div>
-</pre>
-<script>
-lineMaking("code2", 61);
-</script>
+</code></pre>
+
 
                     <p>
                         <span style="font-size: 20px;"><b>학습에 필요한 것들 선언</b></span>
