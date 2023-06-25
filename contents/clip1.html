@@ -172,7 +172,7 @@
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        이제 4억개의 image-text 쌍 데이터를 수집했으니 pre-training 방법을 정해야합니다.
+                        이제 4억개의 image-text 쌍 데이터를 수집했으니 pre-training 방법을 정해야 합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">원래 저자들은 VirTex 모델처럼 CNN 기반 image encoder와 transformer 기반 decoder를 이용하여 image captioning 방법으로 학습을 수행하고자 했습니다.
                         다만 복잡한 transformer 언어모델은 아래 그림처럼 같은 accuracy를 확보하는 데 다른 모델에 비해 그 효율성이 엄청 낮은 것을 볼 수 있습니다.</span>
                         실제로 최종 선택한 CLIP 모델보다는 4배나 비효율적인 것을 볼 수 있습니다.
@@ -255,7 +255,7 @@
                         <p class="caption">CLIP zero-shot task, 출처: CLIP 논문</p>
                     </div>
                     <p>
-                        <br><span class="highlight" style="color: rgb(0, 3, 206);">CLIP은 분류 모델이 아니며, zero-shot이기 때문에 한 번도 모델이 참조한적 없는 데이터를 이용해야합니다.
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">CLIP은 분류 모델이 아니며, zero-shot이기 때문에 한 번도 모델이 참조한적 없는 데이터를 이용해야 합니다.
                         이 과정을 수행하기 위해 CLIP을 이미지와 더불어 class를 문장(프롬프트)으로 넣어주는 방법을 채택한 것이죠.</span>
                         그리고 이 task를 27개의 데이터셋에서 수행한 결과 baseline 모델인 ImageNet pre-trained ResNet-50의 linear probe(pre-trained ResNet-50 이미지를 분류하는 top layer만 학습시킨 모델) 결과에 비해 16개의 데이터셋에 대해 더 좋은 결과를 보였으며 STL10 데이터셋에 대해서는 SOTA를 달성하기도 했습니다.
                         하지만 일반적인 분류 이미지 데이터가 아닌(e.g. EuroSAT 등은 인공위성 이미지 분류 데이터) 데이터셋에 대해서는 baseline보다 성능이 떨어졌으며, 이는 어찌보면 당연한 결과일 것입니다.

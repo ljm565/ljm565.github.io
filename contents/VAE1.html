@@ -145,7 +145,7 @@
                     <p>
                         <b>그럼 autoencoder (AE)와 variational autoencoder의 차이는 무엇일까요?</b>
                         <span class="highlight" style="color: rgb(0, 3, 206);">이 둘의 가장 큰 차이점은 바로 목적에 있습니다. AE는 manifold learning을 위한 모델이고 VAE는 새로운 데이터 생성을 위한 모델입니다.
-                        그리고 두 모델은 encoder, decoder로 이루어져있다는 부분은 동일합니다만 위에서 언급하였듯이 그 목적이 다르기 때문에 encoder와 decoder의 비중이 서로 다르다는 것을 인지해야합니다.</span>
+                        그리고 두 모델은 encoder, decoder로 이루어져있다는 부분은 동일합니다만 위에서 언급하였듯이 그 목적이 다르기 때문에 encoder와 decoder의 비중이 서로 다르다는 것을 인지해야 합니다.</span>
 
                         <br><br><span style="font-size: 20px;"><b>Autoencoder (AE) 특징</b></span>
                         <br>먼저 <a onclick="pjaxPage('ManifoldLearning1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">이전글</span></a>에서 설명하였지만 AE의 목적인 manifold learning은 무엇인지 상기해본다면, 그것은 데이터의 특징을 추출하는 것입니다.
@@ -673,7 +673,7 @@
                         \[reconstruction\,term\,=\,\log{P_{\phi}(x_{i}|z)}\]
                     </div>
                     <p>
-                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 우리는 여기서 decoder의 확률분포를 가정해주어야합니다.</span> 
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 우리는 여기서 decoder의 확률분포를 가정해주어야 합니다.</span> 
                         먼저 decoder가 베르누이 분포(Bernoulli distribution)를 따른다고 가정해보겠습니다.
                         그럼 reconstruction term은 아래와 같이 쓸 수 있습니다. 
                         <span class="highlight" style="color: rgb(0, 3, 206);">즉 아래 식은 cross entropy를 의미하는 식으로 바뀌고, decoder가 베르누이 분포를 따른다고 가정하면 binary cross entropy loss function을 사용하면 됩니다.</span>

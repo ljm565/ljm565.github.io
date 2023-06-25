@@ -220,7 +220,7 @@
                     <p>
                         <br><br><br><span style="font-size: 20px;"><b>2. Embeddings</b></span>
                         <br>이제 BERT가 왜 encoder 구조를 사용하였는지 알아봤으니, 위 그림에서 embedding 부분을 살펴보겠습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 embedding을 살펴보기 전, BERT는 대량의 text를 pre-training하기 위해 두 문장을 한 쌍으로하는 데이터가 들어가는 것을 염두하여야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">먼저 embedding을 살펴보기 전, BERT는 대량의 text를 pre-training하기 위해 두 문장을 한 쌍으로하는 데이터가 들어가는 것을 염두하여야 합니다.
                         그 이유는 아래 BERT의 학습 부분에서 설명하고 있으며, 여기서는 두 문장이 들어가는 것만 염두하시기 바랍니다.</span>
 
                         <br><br>먼저 BERT의 embedding은 3가지 종류가 있습니다.
@@ -276,7 +276,7 @@
                     </div>
                     <p>
                         <br><span style="font-size: 20px;"><b>3. Next Sentence Prediction (NSP)</b></span>
-                        <br>이제 BERT의 구조와 input data 형식을 알았으니 모델을 학습해야합니다.
+                        <br>이제 BERT의 구조와 input data 형식을 알았으니 모델을 학습해야 합니다.
                         저자들은 모델이 text의 문맥과 함축하고 있는 의미를 잘 파악할 수 있도록 두 가지 학습 방법을 제안하는데 그중 하나가 바로 NSP입니다.
 
                         <br><br><span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 보면 두 문장이 들어간 후, 맨 앞의 [CLS] 토큰의 output을 바탕으로 두 문장이 이어지는 문장인지 아닌지 예측을 하도록 훈련합니다.</span>
@@ -298,7 +298,7 @@
                             <li>15%에 해당하는 토큰 중 10%를 랜덤 토큰으로 변경.</li>
                             <li>15%에 해당하는 토큰 중 10%를 변경하지 않음.</li>
                         </ol>
-                        <span class="highlight" style="color: rgb(0, 3, 206);">위와 같은 방법으로 마스킹을 진행하며, 1, 2번 케이스를 포함하여 3번의 변경하지 않는 케이스의 경우도 모델이 자기 자신 토큰을 예측 해야합니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위와 같은 방법으로 마스킹을 진행하며, 1, 2번 케이스를 포함하여 3번의 변경하지 않는 케이스의 경우도 모델이 자기 자신 토큰을 예측 해야 합니다.</span>
                         아래는 위 3가지 경우를 모두 적용한 예시의 그림입니다.
                         <br><br>첫 번째는 1번의 케이스로 바뀐 모습이고, 두 번째도 friend라는 토큰에서 juice라는 랜덤 토큰으로 바뀐 모습입니다.
                         마지막으로 is 토큰은 그대로 유지 되는 것을 볼 수 있지만 MLM layer의 마지막 결과를 통해 자기 자신을 그대로 예측 해야하는 것을 확인할 수 있습니다.

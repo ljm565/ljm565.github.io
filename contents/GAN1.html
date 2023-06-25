@@ -210,7 +210,7 @@
                         <br>먼저 generator는 새로운 데이터를 생성하는 모델입니다.
                         즉 generator가 생성한 데이터는 실제 데이터가 아니라 fake sample이라고 불리는 가짜 데이터입니다.
                         이렇게 생성된 가짜 데이터는 discriminator 모델로 전달이 됩니다.
-                        그럼 discriminator는 진짜 우리가 가지고 있는 학습 데이터와 generator가 생성한 가짜 데이터를 구분해야합니다.
+                        그럼 discriminator는 진짜 우리가 가지고 있는 학습 데이터와 generator가 생성한 가짜 데이터를 구분해야 합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">즉 generator는 진짜 같은 가짜 데이터를 만들어서 discriminator를 속여야하고, discriminator는 진짜 데이터를 바탕으로 가짜 데이터에 속지 않으려고 하는 것입니다.</span>
                         즉 속이려는 모델과 속지 않으려는 모델 사이에서 경쟁을 하면서 생성 모델이 학습 되는 것입니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">좀 더 쉬운 예를 들자면, generator는 위조 지폐를 잘 찍어내는 위조 지폐범이고, discriminator는 위조 지폐와 진짜 지폐를 잘 골라내는 경찰의 역할로 비유할 수 있습니다.</span>
@@ -245,7 +245,7 @@
                     </div>
                     <p>
                         <br><span class="highlight" style="color: rgb(0, 3, 206);">그렇다면 우리는 먼저 discriminator 입장에서 식을 한 번 써보겠습니다.
-                        Discriminator는 이것이 진짜 데이터인지 가짜 데이터인지 잘 구분을 해야합니다.
+                        Discriminator는 이것이 진짜 데이터인지 가짜 데이터인지 잘 구분을 해야 합니다.
                         즉 실제로 BCE loss 값이 작아져야 discriminator는 잘 학습이 되었다고 말할 수 있으며, -를 뺀 식같은 경우는 최대화를 해야되는 것이겠죠.</span>
                         아래 식은 discriminator의 입장에서 진짜 데이터와 가짜 데이터에 대한 loss function이 되겠습니다.
                         그리고 수학적으로 expectation을 나타내는 식으로 바꿔서 적어보겠습니다.
@@ -371,7 +371,7 @@
                     <p>
                         <br><br>정리해보자면 discriminator와 generator의 학습 난이도로 보면은 생성보다 구분이 상대적으로 쉽기 때문에 discriminator의 성능이 generator를 압도하게 됩니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">이런 상황에서 기존의 loss function을 사용한다면 가뜩이나 성능이 안 좋은 generator에 영향을 주는 gradient가(0인 부분) 더 작기 때문에 generator는 학습이 제대로 일어나지 못하고 discriminator만 학습이 잘 되버리고 학습이 끝나는 경우가 발생하게 됩니다.
-                        하지만 우리의 목적은 데이터를 생성하는 것이기 때문에 generator의 성능이 더 잘나와야합니다.
+                        하지만 우리의 목적은 데이터를 생성하는 것이기 때문에 generator의 성능이 더 잘나와야 합니다.
                         따라서 loss function을 generator에 영향을 주는 gradient가(0인 부분) 크게 바꾸는 것입니다.</span>
                         그리고 최종적으로 변형된 식은 아래와 같습니다.
                     </p>
@@ -435,7 +435,7 @@
                         만약 정말 잘 학습된 모델이라면 \(P(y)\)의 분포는 균등해야할 것입니다.
                         즉 y가 나올 확률이 각각의 10가지의 label에 대해서 모두 0.1이 나와야 이상적일 것입니다. 
                         <span class="highlight" style="color: rgb(0, 3, 206);">이는 정보 이론 관점에서 엔트로피가 높다고 표현합니다(모든 발생할 확률이 균등하면 다양성이 높아지는 것이고 정보 엔트로피가 크다는 뜻).</span>
-                        즉 이미지의 질, 이미지의 다양성의 관점에서 등장하는 각각의 확률 분포 \(P(y|x)\)와 \(P(y)\)는 정보 엔트로피 측면에서 한쪽은 작아야하고, 한쪽은 커야합니다.
+                        즉 이미지의 질, 이미지의 다양성의 관점에서 등장하는 각각의 확률 분포 \(P(y|x)\)와 \(P(y)\)는 정보 엔트로피 측면에서 한쪽은 작아야하고, 한쪽은 커야 합니다.
                         따라서 두 분포가 정반대의 형태를 지니고 있어야하죠. 반대의 분포를 가져야한다는 지표로는 바로 Kullback-Leibler divergence (KLD)를 사용합니다.
                         최종적인 IS의 식은 아래와 같습니다.
                     </p>

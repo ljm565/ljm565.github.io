@@ -206,7 +206,7 @@
                     <p>
                         <br><span class="highlight" style="color: rgb(0, 3, 206);">위의 식에서 결국 모델 \(f(\cdot)\)이 의미하는 것은 \(H(x)-x\)인 잔차(Residual)를 의미합니다.
                         즉 모델은 잔차를 학습하는 것이며, 따라서 이름이 ResNet이라고 붙게 된 것입니다.</span>
-                        <br><br>여기서 우리는 등장 배경에서 언급했던 기존 깊은 모델들이 가지는 문제점에 대한 해결 방법을 상기해야합니다.
+                        <br><br>여기서 우리는 등장 배경에서 언급했던 기존 깊은 모델들이 가지는 문제점에 대한 해결 방법을 상기해야 합니다.
                         <span class="highlight" style="color: rgb(0, 3, 206);">분명 위에서 얕은 레이어 레벨에서 나온 특징을 깊은 레이어를 통과했을 때도 결과가 크게 변하지 않고 그대로 유지해야한다고 했습니다.
                         이것을 저자들은 identity mapping이라고 부릅니다.</span>
                         즉 identity mapping을 위해서 ResNet의 식은 아래와 같이 해석할 수 있습니다.
@@ -218,7 +218,7 @@
                     <p>
                         <br>여기서 아주 중요한 결론이 나옵니다.
                         결국 깊은 모델이 가지던 문제점을 해결하기 위해서는 identity mapping이 필요합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">이를 위해서 ResNet \(f(x)\)는 0이 되도록 학습이 진행되고, \(H(x)=x\)가 되도록 학습이 되어야합니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이를 위해서 ResNet \(f(x)\)는 0이 되도록 학습이 진행되고, \(H(x)=x\)가 되도록 학습이 되어야 합니다.</span>
 
                         그리고 이렇게 잔차를 학습함으로써 얻는 장점은 이렇습니다.
                         <ul>
