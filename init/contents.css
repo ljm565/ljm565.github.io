@@ -226,6 +226,62 @@ pre .annot{
 }
 
 
+
+#container .portfolio_name{
+    display: block;
+    font-size: 40px;
+    text-align: center;
+}
+
+#container .portfolio_intro{
+    font-size: 16px;
+    width: 100%
+    
+}
+
+#container .portfolio_about{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 80px;
+}
+
+#container .portfolio_contact{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 80px;
+}
+
+#container .portfolio_researchArea{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+#container .portfolio_education{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+#container .portfolio_work{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+#container .portfolio_researchContrib{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+#container .portfolio_publication{
+    font-size: 16px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+
 /* @media(min-width: 1500px){ 
     #content, .tag, .pageTurner, #disqus_thread{
         margin: 8% 30%;
