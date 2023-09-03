@@ -146,16 +146,17 @@
                     <p>
                         <span style="font-size: 20px;"><b>1. OFA 구조</b></span>
                         <br>OFA의 구조는 놀라울만큼 간단합니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림처럼 단순한 Seq2Seq Transformer 구조를 사용합니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림처럼 단순한 Transformer Seq2Seq encoder-decoder 구조를 사용합니다.</span>
                     </p>
                     <div class="contentImg">
                         <img src="" style="width: 100%;">
                         <p class="caption">OFA 구조, 출처: OFA 논문</p>
                     </div>
                     <p>
-                        <br>이렇게 너무나도 비효율적인 언어 모델 때문에 저자들은 contrastive learning을 사용하기로 합니다(contrastive learning은 실제로 현재까지도 많이 사용되는 기법입니다).
-                        <span class="highlight" style="color: rgb(0, 3, 206);">그리고 contrastive learning을 사용하면 아래 그림처럼 하나의 batch에 \(n\)개의 image-text 쌍이 있다고 가정하면 총 \(n\)개의 positive pair, \(n^2-n\)개의 negative pair를 얻을 수 있습니다.</span>
-                        즉 하나의 batch로 두 종류의 데이터를 얻을 수 있고, 총 \(n^2\)개의 데이터 정보를 얻을 수 있다는 점에서 데이터 효율성이 엄청난 것이죠.
+                        <br><span style="font-size: 20px;"><b>2. OFA Tasks</b></span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">위 그림처럼 OFA는 다양한 task로 학습을 수행하는데, 텍스트 뿐 아니라 이미지, object location (bounding box)까지 모두 토큰화하여 unified vocab을 구성하여 학습을 수행합니다.
+                        이는 다양한 modality를 하나의 공간에 표현하도록 학습하기에 용이하고, 모든 학습을 cross-entropy loss로 가능하기 때문에 학습이 매우 간단해집니다.</span>
+
                     </p>
                     <div class="contentImg">
                         <img src="https://lh3.googleusercontent.com/fife/APg5EOYag2YLKwg4Hkl3OPI4MS58D5L4JcI9sguJ0vR2v335Fzn_tCz5-sBu0RxMDTCbAPTQeKLTGL1IhqTpgbhL9Yg0vUQ-DPotQb9fF6YhCrgjG4gFMZWJqx_CrCIkF_OgdbQIuLOPNybLkHwhIgZia82nsYb4MmSzeIrwQ4J9Lf1B9aUfGitEw10CvEEjjMshPpNOU_0Im_wFcYMcivRUQib_Y5RkXe4CFhCGoPl3JB0wn1No1nv1GX_u2j9A8oCp-GWShaMW97LHl1jEVRL0hvbRn3YrgkzT0dibsG3lB_PAOX_v5AKixkmZ-D9c7bSXF5YdbCfzVcbgXAAZ3VNkfamGUe6zkfflOGbzn_jDtxhaOh7Iw_fF0tSfIE7fmoS3dqbmed34cVwvpyNNvaWhlosI4wC3gaOTlQhGNRf_2E0FM2gnsNaQuHv3TPIhU9EM-tkfV3ecdB5mc5wXURD6Ify9NPOHmjPRW4mJPL_v_5MoLPanUz4T9MZPO9yTF4oDHZ9AZKhXRggeACjyktVtahRgIY6Sqvq-FxGe5X-_lRaiW5VUnYU9VK7OMteloDYOWvDS1Z3PDdV0KiP-zxd5H2sG688Sxy1U_2-DVexznnyRzBlgVootfbhP3hHpXWh6Ud_rnpTIywe-ZDMN-x717YhKiruIP3yvws65mrPRSXY_rrpKIjXjjWblbaaFjalaJmKAYX6JhZp4tQj42Bhac1mckaYw_2wqPOpncAhADxI98r-KMkN0ZJzfNuKGT3bkeaeejdugrwWJDrLTUvqQwF5uFeSCccHbFzNXCzvZwYymZvpK5zNhofldhzcH-VA6twcjWp49SVHzvwwPEDjgu0F0MfGfZnS_FGgS_s2GfRQCYS5JNXA-b3qc0b1lr68pzcxPgJqzgCSHJ_h6ac2U_us1kDwKOfs3cXnvzvMSzIi8Lkex0w2DjodKNUV8HCauYYhOns2LxbnLQuS8ThlbYm9WR9BhVpqvv8FfzdakZJQZnm5X8r7yDM7lYYVw1Elc3zmpjOX67-DmAO5JjNZ5_Dhn1vLWlG82mV8RCdyXZtZrAkbNIlSRQU5h4WBfzC546zYzKpo34z9EvlHyAcUvs6ukAui82sqt1h16JBp_LLIZrm4tq2FAYtvqec98K5q0KXsSgpbZYws2QTNBJurhQvTtUlAIcJ_o08gVS-6QZF7Q1ZRJLYfPqnMSJK8mx91v77Gb_oVLEuZc5FPaTu4ZoIM5T0YvO7E3JQ--5CSrst4xDwijNDrHVJIfO4fF29Ugm30s7_aAfKGs2eZUpPkMAKNFJ7glrRv9MYk0r7qnK5aOLRUCQdygkZ7nOv8VG5qFHfwM-C8pyvwyHC4bD-JjDgxXyP50iYUMXgKtzbZn9Jz3dzKaF_VY0AxURXyVHDmCYTrYIpQ1bz3yFf8hhXpQYm_DXBKBIBIDPRgyQPV9RFWk2XXYq7kzd6fiCoqYO916c98gHrvHDusLzX4r1aWDWsA" style="width: 100%;">
