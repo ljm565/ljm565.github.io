@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bidirectional Encoder representation from Image Transformers (BEIT)</title>
+        <meta name="description" content="BEIT 모델에 대해 설명합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/beit1.html" />
+        <meta property="og:title" content="Bidirectional Encoder representation from Image Transformers (BEIT)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="BEIT 모델에 대해 설명합니다." />
+        <meta property="og:image" content="https://lh3.googleusercontent.com/fife/AKsag4NC-Em3ejbcfYwZFFGsG8kKvz12-pxcTyCIYev04GcPmAha_bh0NnT3i0dI8T7mWNQdqyVvOTxSUX7Lyo_gxBEBZbvPTfCM0x7QjcqApvWjAAe0FhaQuWTgXaghvCgAu9aQ2jZI-JJdUCWW6xA-hdJNaJhhD-jRLPClGaXEDZipdYg9IIyZtd_Fcph2hnBBu1qEcVgKCiSNJ2e-Co3B25mP5ePKdrYN-46nQqWEk9Bk2sXyGe2oxWhh8llhgg9S8DPqLJqLzqGan8XQOvIcG1-e5jCA1-oxL5ehspTImaJnuElCJ1AsRaT4gJqQIYAVurmpoUkQWfWfWFUP78BEYl6VdjSSDXMA6vxN6K5o_4HAK7CMdV2f7jH4Pw0YpCRF6xiF2ID4hnyo-4Meb2pTMb9gszpFY9OG9MKzbYkxfx4gdGqFW3cDvd7oxbwhuAbBgW_KYShG3atmGN5opsfnyPWU4NeRBCNSsOLVKUPHq_VC17QSKHhgmjJj-1ElrRO6g1o0zt7fOebrJoBvOZmlUnTayX_HBd84GfRrrBpFK_iw_dA9PlVa50F7_cugj2dG0IVZtj2peklMqM6am5dG9tjrv1XBdQOaTj0pXfGmlf66EDg_xbydjMr03sG49gILjTsJCUTdGu6VOR1FF-5DJHlrebDi-PnJaIml9tBCnBo3fhysyTV9NtuzuLc8iEYAPiS2uf8wdW4RMp9s0gJpMgIPivnHl2YgL9XVLKL-CZrhrgplpfVGAWvJDisK1XmzPbIQ_By4A4iXn99Fd94tWZ4G7Z6vp1y46Lxp8pQ7tP5CKT5-bqqmTx77ZcXk7TO3o98rVwtId1bOjP-SIWrVPoydrC858JlCVQmbQnScqJiNDuoTleuzBI12auHAa5CPAO6ta6WalTrufkWXyhexHXA2pBdDxfERxWfoszW_P9fs-iplflyFKinRwgoSDZcjo_hUJpfd4vcyK8SIMIyZ3U2louHA1Y0-2Tw5CcWm8pPIhxu9DaFGfbDmlfrW06_bA7FisKGddtYKzKyIwAH7wZ_kNBTBJ8I61XtNse4vR_BLYVly36SaXAVOcnwPG27r7fP56l48R4WcZjTxnRTn-JdhtUP2HGwNPf9SGE7x-Gi1QeFhmLbU731LTiV2ArYCTrIaqpK9ybc19HX7kvB_RQP_7i2NgKh34mLGejvn8tUADZlnTKoT-5X5f7L3t6aiS7Jy8K9Zb-my4iruOlKGC8H-uJD2SiNQyGNsSTs63MP0KsKAcl9tT-Spt7jJBLGMTS9wkcXoKcz2GTJh2S256XKYDbGcNQHTecJBlAWzFT_WuHydqNkMzJtWtVDvZ2DEAjJSBbdJ3wFfWcWbjWQ1yT783_J3UMc_8ktN4NumeQTJYgjnSHLIIO8LTzlUjDPkaJfjHV9J6GCPQpnejfvzumXfOh9qT0w4DaOiUd72kfmQCBluomK3yiTOxJjuIAcXjgvbC-5B5iJUDmb_cFGS0YWQOOCbgo9r2Xrpth3gDb4I1W6nhD-KE3bTtNSCbnd5hEcKCIModk-ky15o6Q" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Bidirectional Encoder representation from Image Transformers (BEIT) / 1. Bidirectional Encoder representation from Image Transformers (BEIT)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url(https://lh3.googleusercontent.com/fife/AKsag4NC-Em3ejbcfYwZFFGsG8kKvz12-pxcTyCIYev04GcPmAha_bh0NnT3i0dI8T7mWNQdqyVvOTxSUX7Lyo_gxBEBZbvPTfCM0x7QjcqApvWjAAe0FhaQuWTgXaghvCgAu9aQ2jZI-JJdUCWW6xA-hdJNaJhhD-jRLPClGaXEDZipdYg9IIyZtd_Fcph2hnBBu1qEcVgKCiSNJ2e-Co3B25mP5ePKdrYN-46nQqWEk9Bk2sXyGe2oxWhh8llhgg9S8DPqLJqLzqGan8XQOvIcG1-e5jCA1-oxL5ehspTImaJnuElCJ1AsRaT4gJqQIYAVurmpoUkQWfWfWFUP78BEYl6VdjSSDXMA6vxN6K5o_4HAK7CMdV2f7jH4Pw0YpCRF6xiF2ID4hnyo-4Meb2pTMb9gszpFY9OG9MKzbYkxfx4gdGqFW3cDvd7oxbwhuAbBgW_KYShG3atmGN5opsfnyPWU4NeRBCNSsOLVKUPHq_VC17QSKHhgmjJj-1ElrRO6g1o0zt7fOebrJoBvOZmlUnTayX_HBd84GfRrrBpFK_iw_dA9PlVa50F7_cugj2dG0IVZtj2peklMqM6am5dG9tjrv1XBdQOaTj0pXfGmlf66EDg_xbydjMr03sG49gILjTsJCUTdGu6VOR1FF-5DJHlrebDi-PnJaIml9tBCnBo3fhysyTV9NtuzuLc8iEYAPiS2uf8wdW4RMp9s0gJpMgIPivnHl2YgL9XVLKL-CZrhrgplpfVGAWvJDisK1XmzPbIQ_By4A4iXn99Fd94tWZ4G7Z6vp1y46Lxp8pQ7tP5CKT5-bqqmTx77ZcXk7TO3o98rVwtId1bOjP-SIWrVPoydrC858JlCVQmbQnScqJiNDuoTleuzBI12auHAa5CPAO6ta6WalTrufkWXyhexHXA2pBdDxfERxWfoszW_P9fs-iplflyFKinRwgoSDZcjo_hUJpfd4vcyK8SIMIyZ3U2louHA1Y0-2Tw5CcWm8pPIhxu9DaFGfbDmlfrW06_bA7FisKGddtYKzKyIwAH7wZ_kNBTBJ8I61XtNse4vR_BLYVly36SaXAVOcnwPG27r7fP56l48R4WcZjTxnRTn-JdhtUP2HGwNPf9SGE7x-Gi1QeFhmLbU731LTiV2ArYCTrIaqpK9ybc19HX7kvB_RQP_7i2NgKh34mLGejvn8tUADZlnTKoT-5X5f7L3t6aiS7Jy8K9Zb-my4iruOlKGC8H-uJD2SiNQyGNsSTs63MP0KsKAcl9tT-Spt7jJBLGMTS9wkcXoKcz2GTJh2S256XKYDbGcNQHTecJBlAWzFT_WuHydqNkMzJtWtVDvZ2DEAjJSBbdJ3wFfWcWbjWQ1yT783_J3UMc_8ktN4NumeQTJYgjnSHLIIO8LTzlUjDPkaJfjHV9J6GCPQpnejfvzumXfOh9qT0w4DaOiUd72kfmQCBluomK3yiTOxJjuIAcXjgvbC-5B5iJUDmb_cFGS0YWQOOCbgo9r2Xrpth3gDb4I1W6nhD-KE3bTtNSCbnd5hEcKCIModk-ky15o6Q);">
+                    <div>
+                        <span class="mainTitle">Bidirectional Encoder representation from Image Transformers (BEIT)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.09.05</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 바로 2021년도에 공개된 vision task와 BERT의 아이디어를 결합하여 탄생한 Bidirectional Encoder representation from Image Transformers (BEIT)입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">BEIT의 아이디어와 구조는 정말 간단하기 때문에 이번에는 아주 간결하게 설명해볼까 합니다.</span>
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2106.08254.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BEIT 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>BEIT의 목적</li>
+                            <li>BEIT 구조</li>
+                            <li>BEIT 결과</li>
+                        </ol>
+                        <br><br>
+                        그리고 아래는 BERT 설명글입니다.
+                    </p>
+                    <div class="link">
+                        <a onclick="pjaxPage('bert1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">BERT 설명글</a>
+                    </div>
+
+
+
+                    <h1 class="subHead">BEIT</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>BEIT의 목적</span><br>
+                        <span>Objective of the BEIT</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        BEIT는 이미지의 visual representation을 효과적으로 할 수 있는 모델을 만들고자 했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">따라서 당시에 자연어 처리 분야에서 가장 많이 쓰인 BERT의 Masked Language Modeling (MLM) pre-training에서 영감을 얻어 Masked Image Modeling (MIM)을 제안합니다.
+                        하지만 이때 MAE 처럼 masked 된 이미지의 영역을 픽셀로써 예측하는 것이 아닌, visusal token을 예측하는 방식으로 수행됩니다.</span>
+                        
+                        <br><br>자세한 학습 방법과 구조는 아래에서 보겠습니다.
+                    </p>
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BEIT 구조</span><br>
+                        <span>BEIT Architecture</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래는 BEIT의 구조입니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AKsag4NC-Em3ejbcfYwZFFGsG8kKvz12-pxcTyCIYev04GcPmAha_bh0NnT3i0dI8T7mWNQdqyVvOTxSUX7Lyo_gxBEBZbvPTfCM0x7QjcqApvWjAAe0FhaQuWTgXaghvCgAu9aQ2jZI-JJdUCWW6xA-hdJNaJhhD-jRLPClGaXEDZipdYg9IIyZtd_Fcph2hnBBu1qEcVgKCiSNJ2e-Co3B25mP5ePKdrYN-46nQqWEk9Bk2sXyGe2oxWhh8llhgg9S8DPqLJqLzqGan8XQOvIcG1-e5jCA1-oxL5ehspTImaJnuElCJ1AsRaT4gJqQIYAVurmpoUkQWfWfWFUP78BEYl6VdjSSDXMA6vxN6K5o_4HAK7CMdV2f7jH4Pw0YpCRF6xiF2ID4hnyo-4Meb2pTMb9gszpFY9OG9MKzbYkxfx4gdGqFW3cDvd7oxbwhuAbBgW_KYShG3atmGN5opsfnyPWU4NeRBCNSsOLVKUPHq_VC17QSKHhgmjJj-1ElrRO6g1o0zt7fOebrJoBvOZmlUnTayX_HBd84GfRrrBpFK_iw_dA9PlVa50F7_cugj2dG0IVZtj2peklMqM6am5dG9tjrv1XBdQOaTj0pXfGmlf66EDg_xbydjMr03sG49gILjTsJCUTdGu6VOR1FF-5DJHlrebDi-PnJaIml9tBCnBo3fhysyTV9NtuzuLc8iEYAPiS2uf8wdW4RMp9s0gJpMgIPivnHl2YgL9XVLKL-CZrhrgplpfVGAWvJDisK1XmzPbIQ_By4A4iXn99Fd94tWZ4G7Z6vp1y46Lxp8pQ7tP5CKT5-bqqmTx77ZcXk7TO3o98rVwtId1bOjP-SIWrVPoydrC858JlCVQmbQnScqJiNDuoTleuzBI12auHAa5CPAO6ta6WalTrufkWXyhexHXA2pBdDxfERxWfoszW_P9fs-iplflyFKinRwgoSDZcjo_hUJpfd4vcyK8SIMIyZ3U2louHA1Y0-2Tw5CcWm8pPIhxu9DaFGfbDmlfrW06_bA7FisKGddtYKzKyIwAH7wZ_kNBTBJ8I61XtNse4vR_BLYVly36SaXAVOcnwPG27r7fP56l48R4WcZjTxnRTn-JdhtUP2HGwNPf9SGE7x-Gi1QeFhmLbU731LTiV2ArYCTrIaqpK9ybc19HX7kvB_RQP_7i2NgKh34mLGejvn8tUADZlnTKoT-5X5f7L3t6aiS7Jy8K9Zb-my4iruOlKGC8H-uJD2SiNQyGNsSTs63MP0KsKAcl9tT-Spt7jJBLGMTS9wkcXoKcz2GTJh2S256XKYDbGcNQHTecJBlAWzFT_WuHydqNkMzJtWtVDvZ2DEAjJSBbdJ3wFfWcWbjWQ1yT783_J3UMc_8ktN4NumeQTJYgjnSHLIIO8LTzlUjDPkaJfjHV9J6GCPQpnejfvzumXfOh9qT0w4DaOiUd72kfmQCBluomK3yiTOxJjuIAcXjgvbC-5B5iJUDmb_cFGS0YWQOOCbgo9r2Xrpth3gDb4I1W6nhD-KE3bTtNSCbnd5hEcKCIModk-ky15o6Q" style="width: 100%;">
+                        <p class="caption">BEIT 구조, 출처: BEIT 논문</p>
+                    </div>
+                    <p>
+                        <br><span style="font-size: 20px;"><b>1. Backbone</b></span>
+                        <br>먼저 위 그림에서 보듯이 BEIT는 ViT처럼 16x16 patch로 이미지를 일정하게 나누어 encoder 모델의 input으로 사용됩니다.
+                        먼저 encoder input으로 이미지를 넣기 전 자세한 과정을 설명하면 이렇습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이미지를 backbone 모델에 태워 이미지를 임베딩을 한 후, 나온 결과를 patch로 나누게 됩니다.
+                        이렇게 나온 patch들은 순서대로 position embedding과 더해져서 최종 encoder input이 됩니다.</span>
+                        그리고 이때 사용한 이미지 backbone 모델은 ViT에서 사용한 모델과 동일한 모델을 사용했다고 합니다.
+                        
+
+                        <br><br><span style="font-size: 20px;"><b>2. Visual Token</b></span>
+                        <br>이제는 continuous한 이미지라는 데이터를 자연어 토큰처럼 discrete하게 변경해야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이때 이미지를 이산화하기 위해서는 visual tokenizer가 사용되는데, 본 논문에서는 DALL-E의 dVAE tokenizer를 사용했다고 합니다.</span>
+                        여담으로 visual tokenizer를 이용한 이미지 생성은 아주 효과적임을 최근에 여러 연구들을 통해 증명되었고, 유명한 연구가 DALL-E, VQ-VAE, VQGAN 등이 있습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이렇게 이미지 patch의 개수와 같은 크기로 이미지를 이산화하여 8,192개의 vocab 중 각 patch가 할당받은 tokenizer token을 BERT의 MLM 처럼 BEIT encoder가 예측하도록 pre-training을 수행합니다.</span>
+
+                        <br><br><span style="font-size: 20px;"><b>3. BEIT Encoder</b></span>
+                        <br>BEIT의 encoder는 transformer block을 사용하며, 마지막에 나온 encoder hidden state로 8,192개의 vocab 중 하나를 예측할 수 있도록 일반적인 언어 모델처럼 LM head를 달아서 모델을 구성합니다.
+
+                        <br><br><span style="font-size: 20px;"><b>4. BEIT Pre-training</b></span>
+                        <br>BEIT는 약 40%에 해당하는 patch를 masking 한 후 MIM pre-training을 했습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">이미지의 label 등 이미지의 부수적인 정보 없이 이미지 그 자체만으로 pre-training을 수행했기 때문에 self-supervised learning이라고 저자는 주장합니다.</span>
+                        추가로 patch를 masking할 때 랜덤으로 하지 않고, 일정 크기의 block을 모으는 block-wise로 patch를 뭉쳐 masking을 수행했다고 합니다.
+                    </p>
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>BEIT 결과</span><br>
+                        <span>Results of BEIT</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        BEIT는 위에서 설명한 MIM 방법으로 모델을 pre-training 한 후, downstream task를 통해 모델을 성능을 확인합니다.
+                        BEIT는 기존 ViT 모델의 성능을 능가하였고, 이미지 representation에 효과적이다는 것을 입증하였습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AKsag4P6oqN_hChKe_dgg6UVzCDN8H8chQ54v3q95yXBecKchdNe_xx6uTTgzwOK7VvwPhAtGxhixvj1FrZoLIhBHxnyqhL7qdB7GiR0o-NqZYWh4rzYgytDm1TL1qphy40wD5deEn4YxiW464q2cKBfJy5beiNfuXmIvyCohvwdQ7sAZEgUpdBxmprPrXyR2NQhC7SV26bUaHFcJU6QkkSSzJF7XI9q614kxHouNKZNxC_Va-gEEQ2w-Y1NnbvKsADeJkowFozUR_Fb7Db1G9Tojx8tMeZ3pPUvAMpKNYPIpwPmP2ExC2hgDKZ9zo0KhEE2cuhavwywwNBqw64NuuNHSEfopkl3SsZLt00JIiNLBuTdBCWxxgP8XJ_XMDfjf3JN3DNleMaCMEOK6AfVM_CkmM-E2jlqPcY18J5q4L_F0jPY7lIAXIPb3w2HH1pzcGspvk_AP3v4zDd-w9_p1cLwjwlYIKWRetFlXZ6RRZ0EThEYnD4o0BEv2KE4TPOB0GkjAn8kqrQBtG2v9DbljIXBzo-odrKJxuYfnnMAyX-1vUxGHR85jtdNB0RId5zDF2xe8icPd9xXHYJNDZAULldCQSZIxVTxDKm0v-LCcwWTpilFlF5MzUwy4rFnZzZZXxHjRHKta5QYIhtOqbdOtUtzq-DgtYAE1dKAbwsIh8L3F8BhbDGV4UMMsw1zW00OVSP955KwaaMfjx04y0e8uOMy-hpRiWHvf656A__my---cvQX-IVPzJtdNQuoR7DTknmpbj0QE5m1Cn6qfATduMbqPeJZA2QdJhlzpxvQEDua957QW7HA62FAC2h7YGqdQG1IRiKXdEizimrPbXBX8bxzGXHvOK7OegmyuwarRTC0akHzybGaKydH2Jo1TxpZbSu7guXzQ2YkFKFo1HlDcn6n4smjaG_yKU5CpRFYXNXOWclu1OB0tVjPhddX9bHOMWXQhgvWsEkpKmZpgbMLi9TUXejM95tuudOxiWk0Sv-_dAe-X2gR-oxGGUTFYOqTyt7njvXCe62F2fVnod9XZENr5dZ__ZaN2S8IEzbPYvESrDJ2pwcM_q639iRxNofWSiL3NgBdlSJRW3Oct8tBNfOrlH8WqfFz0cELRdDhIJR6mXCHVjbkaRuBeWwXHwhVv9SpdCyWQuIxCfX0Wp8RZpv7mLlHovdBUfUKxwl1-MFUcdU6OUaiqK_4YSkS76GC1_k9v1AGNLX_4KkF13R4WcOeT8rEan6hPoikTE23PoGtJiRn2oZYAfVzDGGLUcWGlHE3gcx8kXG8ia-npTsDUtQ93M3C9z7ESY-5oF5Fy-oQYxGM87isJ0dJ3M3w3NTmwYnjmMVRGPsP66DpVmplm0uLIV2LRstCmvgE6WGbIV-DXRi6f9CNxhS1s-YeMnViM-VQsSSqJrgguGLsmVRekKsrHBDf4amVWnUkSkDBYlJDPOp6zCl3fwYNGAz_GgH_udZnn8t5e6k3qKaZzHURRI9BhejeRzUlRH0V68845gMexl8W33TtowTiOe7CYDuVC5MEDDizgaJch1UXlWnfPQ" style="width: 100%;">
+                        <p class="caption">BEIT image classification 결과, 출처: BEIT 논문</p>
+                    </div>
+                    
+
+
+                    
+                    <p>
+                        <br><br><br>BEIT는 있는 모델들과 아이디어를 잘 조합하여 이미지 representation의 또 하나의 방법을 제안한 모델이라고 생각합니다.
+                        이후에 나온 MAE 논문은 discrete visual token을 예측하는 방식이 아닌 픽셀 단위로 예측을한 연구에 대해서도 조만간 설명해보도록 하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#BEIT&emsp;#MIM
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('BEIT 첫 게시물 입니다.\n\nThis is the first post of BEIT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="alert('BEIT 마지막 게시물 입니다.\n\nThis is the last post of BEIT.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br></span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
