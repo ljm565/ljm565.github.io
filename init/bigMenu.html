@@ -227,7 +227,13 @@
                 <li><a onclick="alert('게시물 준비중입니다.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">InstructBLIP</a></li>
             </ol>
         </li>
-        <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">ViT</a></li>
+        <li>
+            <input type="checkbox" id="Big_vit" checked>
+            <label for="Big_vit"><div style="display:inline-block; width: 90%; vertical-align: text-top;">Vision Transformer (ViT)</div></label>
+            <ol>
+                <li><a onclick="pjaxPage('contents/vit1.html', 'vit1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Vision Transformer (ViT)</a></li>
+            </ol>
+        </li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">MAE</a></li>
     </ul>
 </li>
