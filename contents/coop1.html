@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Context Optimization (CoOp)</title>
+        <meta name="description" content="CLIP이 가지던 human crafted prompt의 단점을 해결한 CoOp를 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/bert1.html" />
+        <meta property="og:title" content="Context Optimization (CoOp)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="CLIP이 가지던 human crafted prompt의 단점을 해결한 CoOp를 소개합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Context Optimization (CoOp) / 1. Context Optimization (CoOp)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">Context Optimization (CoOp)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.11.21</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 Context Optimization (CoOp) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">기존 CLIP이 가지던 사람이 직접 prompt를 제작해야했던 불편함과 단점을 해소시킨 논문입니다.</span>
+
+                        <br><br>실제로 아주 간단하게 문제를 해결했으며, 모델도 정말 심플하기 때문에 이해하는 데 어려움이 없을 것이라 생각됩니다.
+                        다만 CLIP에 대한 이해가 필요하므로, 잘 모르신다면 <a onclick="pjaxPage('clip1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">CLIP 설명글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br>아래는 CoOp 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2109.01134.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">CoOp 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>CoOp의 동기</li>
+                            <li>CoOp의 구조 및 학습</li>
+                            <li>CoOp의 결과</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">CoOp</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>CoOp의 동기</span><br>
+                        <span>Motivation of CoOp</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        CoOp의 동기는 CLIP으로부터 비롯되었습니다.
+                        먼저 CLIP이 등장하게 되어 Vision-language Pre-training (VLP) 관련된 모델이 많이 나오게 되었고, <span class="highlight" style="color: rgb(0, 3, 206);">특히 CLIP-like 모델이 등장하면서 feature representation의 성능이 증대되었습니다.</span>
+                        다만 CLIP의 zero-shot transfer 성능이 좋음에도 불구하고, 몇가지 문제점이 존재했습니다.
+
+                        <ol>
+                            <li>VLP 모델들을 classification에 zero-shot transfer를 위해서는 사람이 직접 prompt를 제작해야했음.</li>
+                            <li>같은 내용이지만 prompt 형태가 달라지면 성능 차이가 많이 나는 경우도 존재.</li>
+                        </ol>
+
+                        <br>실제로 아래의 경우처럼, <span class="highlight" style="color: rgb(0, 3, 206);">CLIP을 바탕으로 zero-shot classification을 위해서는 사람이 직접 자연어 prompt를 구성해야했으며, 같은 문맥의 prompt임에도 불구하고 그 형태가 다르면 그림처럼 정확도 결과가 달라지는 문제점이 있었습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CLIP의 prompting을 통한 zero-shot classification, 출처: CoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>따라서 저자들은 이러한 문제점은 자연어의 discrete한 부분에서 온다고 생각한 것인지, <span class="highlight" style="color: rgb(0, 3, 206);">soft-prompting (learnable query)라고 현재 많이 부르는 방식을 도입하여 해결하였습니다.
+                        실제로 이러한 방식은 LLM에서도 많이 활용하는 방식이었으며, 이 논문은 초기에 이러한 learnable 연속 공간의 임베딩을 활용하여 해결하고자 하였습니다.</span>
+                    </p>
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CoOp의 구조 &amp; 학습</span><br>
+                        <span>CoOp Architecture &amp; Traning</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. CoOp 구조</b></span>
+                        <br>CoOp의 구조는 CLIP과 완전히 동일합니다. 심지어 모델또한 CLIP의 pre-trained 모델만을 사용합니다.
+                        <ul>
+                            <li>Image Encoder: Pre-trained CLIP encoder (ViT-like, ResNet-50의 두 가지 모델로 실험)</li>
+                            <li>Text Encoder: Pre-trained CLIP encoder (Transformer-like 모델)</li>
+                            <li>Tokenizer: BPE Tokenizer (vocab: 49,152)</li>
+                        </ul>
+ 
+                        <br><br><span style="font-size: 20px;"><b>2. CoOp 학습</b></span>
+                        <br>학습 방법도 정말 간단합니다. 심지어 저자들은 pre-training을 직접 수행하지도 않고, fine-tuning만 진행합니다.
+                        <ol>
+                            <li>Phase 1: CLIP pre-training</li>
+                            <li>Phase 2</li>
+                            <ul>
+                                <li>M x D 크기의 soft prompt를 초기화 (M은 hyperparameter).</li>
+                                <li>CLIP zero-shot task 수행 방법 처럼, \(cat([soft\ prompt], [CLASS])\)로 최종 prompt 제작.</li>
+                                <ul>
+                                    <li>저자는 중간에 넣는 방법도 제안<br>(e.g. \(cat([soft\ prompt]_{:M/2}, [CLASS], [soft\ prompt]_{M/2:})\)).</li>
+                                    <li>Soft prompt는 모든 클래스와 동시에 공유하는 것과, class-specific하게 정의한 soft prompt로 실험을 수행.</li>
+                                </ul>
+                                <li>Pre-trained 모델을 freeze 한 후, soft prompt만 fine-tuning.</li>
+                            </ul>
+                        </ol>
+
+                        추가로 text representation 결과는 sequence wise로 크기가 나오게 되므로, text를 representation하는 feature를 선택해야합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저자들은 CLIP에서 그랬던 것 처럼, 제작한 promt 끝에 \([EOS]\) 토큰을 추가하여 학습한 후 \([EOS]\)의 feature를 text representation으로 사용했습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CoOp의 구조 및 학습, 출처: CoOp 논문</p>
+                    </div>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CoOp 결과</span><br>
+                        <span>Results of CoOp</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래는 위에서 봤던 결과입니다.
+                        실제로 자연어 prompt를 사용했을 때보다 학습 가능한 learnable query를 활용한 soft prompt가 더 좋은 결과를 보여주는 것을 확인할 수 있습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CLIP과 CoOp의 결과 비교, 출처: CoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>그리고 아래 결과의 end, mid는 각각 soft prompt를 처음, 중간에 넣은 결과입니다.
+                        또한 CSC는 class-specific context라고 하여, 각각의 class에 대해 다르게 학습한 soft prompt를 바탕으로(개별 class에 할당되는 별도의 soft prompt를 넣음) zero-shot transfer를 수행한 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 미루어봤을 때, class specific하지 않게 모든 class에 같은 learnable query를 공유하는 방식의 성능이 더 좋고, learnable query의 위치는 결과에 큰 영향을 주지 않는 것으로 보입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CoOp의 학습 결과, 출처: CoOp 논문</p>
+                    </div>
+
+
+
+
+                    
+                    <p>
+                        <br><br><br>이번에는 아주 간단한 컨셉의 CoOp를 리뷰해보았습니다.
+                        다음에는 같은 저자가 쓴 CoOp의 문제점을 해결한 Conditional Context Optimization (CoCoOp) 논문을 리뷰해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CoOp&emsp;#CLIP
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('CoOp 첫 게시물 입니다.\n\nThis is the first post of CoOp.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('coop2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Conditional Context Optimization (CoCoOp)</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>

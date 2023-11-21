@@ -232,6 +232,15 @@
             </ol>
         </li>
         <li><a onclick="alert('게시물 준비중입니다.')" onmouseover="colorOn(this);" onmouseout="colorOff(this);">MAE</a></li>
+        <li>
+            <input type="checkbox" id="coop" checked>
+            <label for="coop"><div style="display:inline-block; width: 90%; vertical-align: text-top;">Context Optimization (CoOp)</div></label>
+            <ol>
+                <li><a onclick="pjaxPage('contents/coop1.html', 'coop1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Context Optimization (CoOp)</a></li>
+                <li><a onclick="pjaxPage('contents/coop2.html', 'coop2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Conditional Context Optimization (CoCoOp)</a></li>
+                <li><a onclick="pjaxPage('contents/coop3.html', 'coop3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Knowledge-guided Context Optimization (KgCoOp)</a></li>
+            </ol>
+        </li>
     </ul>
 </li>
 <li>
