@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Conditional Context Optimization (CoCoOp)</title>
+        <meta name="description" content="CoOp가 가지던 overfitting의 단점을 해결한 CoCoOp를 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/coop2.html" />
+        <meta property="og:title" content="Conditional Context Optimization (CoCoOp)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="CoOp가 가지던 overfitting의 단점을 해결한 CoCoOp를 소개합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Context Optimization (CoOp) / 2. Conditional Context Optimization (CoCoOp)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">Conditional Context Optimization (CoCoOp)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.11.21</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 Conditional Context Optimization (CoCoOp) 입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">기존 CoOp가 가지던 overfitting의 문제점을 해결하기 위해 등장한 모델입니다.</span>
+
+                        <br><br>이 논문도 CoOp와 동일한 저자가 저술하였으며, 구조는 CoOp와 동일하지만 image representation을 추가로 받는다는 차이점이 있습니다.
+                        CoOp에 대해 잘 모르신다면 <a onclick="pjaxPage('coop1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">CoOp 설명글</span></a>을 참고하시기 바랍니다.
+
+                        <br><br>아래는 CoCoOp 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2203.05557.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">CoCoOp 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>CoCoOp의 동기</li>
+                            <li>CoCoOp의 구조 및 학습</li>
+                            <li>CoCoOp의 결과</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">CoCoOp</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>CoCoOp의 동기</span><br>
+                        <span>Motivation of CoCoOp</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        CoCoOp는 CoOp의 일반화 성능을 지적하고 overfitting 문제점을 해결하고자 동일 저자가 제시한 방법입니다.
+
+                        <ol>
+                            <li>Soft prompt를 downstream task에 대해서 적용하다보니 in-class에서는 우수한 성능을 보이지만, unseen class에 대해 일반화가 되지 않음.</li>
+                            <li>예측하는 데 있어 overfitting이 발생함(위와 같은 맥락).</li>
+                        </ol>
+
+                        <br>실제로 아래의 경우처럼, <span class="highlight" style="color: rgb(0, 3, 206);">모델이 학습한 in-class에 대해서는 CoOp와 CoCoOp가 비슷한 성능을 보여주고 CLIP보다 좋은 결과를 보여줍니다.
+                        다만 zero-shot classification을 수행할 때 학습하지 않았던 unseen class에 대해서는 CoOp는 오히려 CLIP보다 낮은 성능을 보이지만 CoCoOp는 CLIP보다 더 나은 일반화 성능을 보여줍니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CLIP, CoOp, CoCoOp의 일반화 성능, 출처: CoCoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>저자가 일반화 성능이 떨어지는 원인으로써 제시한 증거가 바로 CoOp 논문의 nearest neighbor word 결과이고, 이 결과가 상당히 문맥적이지 않으며 text domain을 전혀 이해하지 못한다고 언급합니다.
+                        저자는 이렇게 일반화 성능이 약하고 overfitting이 발생한 이유가 <span class="highlight" style="color: rgb(0, 3, 206);">CoOp의 static 설계 때문에 발생했다고 판단하여, dynamic한 soft prompting이 가능하도록 light weight network를 추가하여 학습하는 방법을 제안합니다.</span>
+                    </p>
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CoCoOp의 구조 &amp; 학습</span><br>
+                        <span>CoCoOp Architecture &amp; Traning</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        <span style="font-size: 20px;"><b>1. CoCoOp 구조</b></span>
+                        <br>CoOp의 구조는 CoOp와 동일합니다. 다만 <span class="highlight" style="color: rgb(0, 3, 206);">Meta-Net이라는 새로운 모델이 추가가 됐을 뿐입니다.</span>
+                        CoOp의 구조는 <a onclick="pjaxPage('coop1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">CoOp 설명글</span></a>을 참고하시고, 여기서는 Meta-Net의 구조만 설명하도록 하겠습니다.
+                        
+                        <br><br>저자가 Meta-Net을 도입한 이유는 이 모델을 도입함으로써 <span class="highlight" style="color: rgb(0, 3, 206);">기존 text에 붙어서 text encoder로만 들어가던 soft prompting 방식에 image-guide를 더해줄 수 있기 때문입니다.</span>
+                        그리고 Meta-Net이 뭔가 엄청난 모델이 아닌, 단순히 2개의 레이어를 사용한 아주 단순한 모델입니다.
+                        <ul>
+                            <li>Meta-Net: 2-layered MLP (Linear-ReLU-Linear)</li>
+                            <ul>
+                                <li>기존 prompt를 최적화하는 과정에서 image representation이 약할 수 있던 문제점을 보완.</li>
+                                <li>Context overfitting을 줄이기 위해 특정 class에 집중하는 것 대신 input 전체에 초점을 맞출 수 있어서 일반화가 잘 됨.</li>
+                            </ul>
+                        </ul>
+                        처음에 저자는 단순히 M개의(sequence-wise) context token을 각각 학습하는 M개의 neural network들을 두자고 했지만, CoOp와 비교하여 너무 무거워져서 context token에 공통으로 더해질 Meta-Net 하나만 구성하는 concept으로 구성했다고 합니다.
+                        
+ 
+                        <br><br><span style="font-size: 20px;"><b>2. CoOp 학습</b></span>
+                        <br>학습 방법도 정말 간단합니다. 심지어 저자들은 pre-training을 직접 수행하지도 않고, fine-tuning만 진행합니다.
+                        <ol>
+                            <li>Phase 1: CLIP pre-training</li>
+                            <li>Phase 2</li>
+                            <ul>
+                                <li>M x D 크기의 soft prompt를 초기화 (M은 hyperparameter).</li>
+                                <li>Meta-Net을 초기화.</li>
+                                <li>Pre-trained 모델을 freeze 한 후, soft prompt와 Meta-Net만 학습.</li>
+                            </ul>
+                        </ol>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CoCoOp의 구조 및 학습, 출처: CoCoOp 논문</p>
+                    </div>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CoCoOp 결과</span><br>
+                        <span>Results of CoCoOp</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        저자들은 CLIP, CoOp, CoCoOp의 3가지 모델에 대해서 in-class (학습 때 사용한 클래스), unseen class (zero-shot)에 대해 실험을 수행하여 성능을 비교합니다.
+                        아래 결과 표에서 Base, New, H는 각각 in-class, unseen class, in-class + unseen class의 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">실제로 unseen class의 zero-shot에서는 CoCoOp가 CoOp보다 좋지만 여전히 CLIP이 우세합니다.
+                        다만 저자는 in-class + unseen class의 결과가 CLIP보다 CoCoOp가 더 좋아서 CLIP보다 사용성이 더 좋다고 주장합니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CLIP, CoOp, CoCoOp의 결과 비교, 출처: CoCoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>또한 저자는 cross-dataset transfer 테스트를 수행하여 일반화 성능을 평가합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 미루어봤을 때, source 데이터에 대해 학습한 모델을 다른 dataset에 적용한 결과, CoOp보다 일반화가 더 잘되는 것을 확인할 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CoCoOp의 cross-dataset 실험 결과, 출처: CoCoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 저자는 같은 종류의 dataset이지만, 그 스타일이 다른 다양한 ImageNet 데이터에 대해서 domain 일반화 실험을 수행합니다.
+                        모델을 평범한 ImagNet에 대해 학습하고, 다른 스타일의 ImageNet 데이터로 평가한 결과 CoOp보다도 CoCoOp의 domain 일반화 성능이 더 좋았다고 합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">CoCoOp의 domain generalization 결과, 출처: CoCoOp 논문</p>
+                    </div>
+
+
+
+
+                    
+                    <p>
+                        <br><br><br>이번에는 CoOp에서 아주 간단한 Meta-Net만을 추가하여 학습한 CoCoOp에 대해 알아보았습니다.
+                        다음에는 비교적 최근에 등장한 KgCoOp 리뷰를 해보겠습니다. 이 모델은 CoOp와 CoCoOp가 여전히 일반화에 문제가 있다고 주장하여 개선된 방법론을 제안합니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CoOp&emsp;#CoCoOp
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="pjaxPage('coop1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br>Context Optimization (CoCoOp)</span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('coop3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Knowledge-guided Context Optimization (KgCoOp)</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
