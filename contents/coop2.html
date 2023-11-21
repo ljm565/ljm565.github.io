@@ -155,7 +155,7 @@
                     </div>
                     <p>
                         <span style="font-size: 20px;"><b>1. CoCoOp 구조</b></span>
-                        <br>CoOp의 구조는 CoOp와 동일합니다. 다만 <span class="highlight" style="color: rgb(0, 3, 206);">Meta-Net이라는 새로운 모델이 추가가 됐을 뿐입니다.</span>
+                        <br>CoCoOp의 구조는 CoOp와 동일합니다. 다만 <span class="highlight" style="color: rgb(0, 3, 206);">Meta-Net이라는 새로운 모델이 추가가 됐을 뿐입니다.</span>
                         CoOp의 구조는 <a onclick="pjaxPage('coop1.html');"><span class="highlight" style="color: rgb(0, 3, 206);">CoOp 설명글</span></a>을 참고하시고, 여기서는 Meta-Net의 구조만 설명하도록 하겠습니다.
                         
                         <br><br>저자가 Meta-Net을 도입한 이유는 이 모델을 도입함으로써 <span class="highlight" style="color: rgb(0, 3, 206);">기존 text에 붙어서 text encoder로만 들어가던 soft prompting 방식에 image-guide를 더해줄 수 있기 때문입니다.</span>
@@ -170,7 +170,7 @@
                         처음에 저자는 단순히 M개의(sequence-wise) context token을 각각 학습하는 M개의 neural network들을 두자고 했지만, CoOp와 비교하여 너무 무거워져서 context token에 공통으로 더해질 Meta-Net 하나만 구성하는 concept으로 구성했다고 합니다.
                         
  
-                        <br><br><span style="font-size: 20px;"><b>2. CoOp 학습</b></span>
+                        <br><br><span style="font-size: 20px;"><b>2. CoCoOp 학습</b></span>
                         <br>학습 방법도 정말 간단합니다. 심지어 저자들은 pre-training을 직접 수행하지도 않고, fine-tuning만 진행합니다.
                         <ol>
                             <li>Phase 1: CLIP pre-training</li>
@@ -227,7 +227,6 @@
 
 
 
-                    
                     <p>
                         <br><br><br>이번에는 CoOp에서 아주 간단한 Meta-Net만을 추가하여 학습한 CoCoOp에 대해 알아보았습니다.
                         다음에는 비교적 최근에 등장한 KgCoOp 리뷰를 해보겠습니다. 이 모델은 CoOp와 CoCoOp가 여전히 일반화에 문제가 있다고 주장하여 개선된 방법론을 제안합니다.
@@ -242,7 +241,7 @@
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
                         <span><a style="position: absolute; left: 0;" onclick="pjaxPage('coop1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
-                        <br>Context Optimization (CoCoOp)</span>
+                        <br>Context Optimization (CoOp)</span>
                     </div>
                     <div class="pageTurnerRight">
                         <span><a style="position: absolute; right: 0;" onclick="pjaxPage('coop3.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
