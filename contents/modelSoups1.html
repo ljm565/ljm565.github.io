@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Model Soups</title>
+        <meta name="description" content="모델의 성능을 높이기 위한 방법 중 하나인 model merging 기법의 model soup를 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/modelSoup1.html" />
+        <meta property="og:title" content="Model Soups" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="모델의 성능을 높이기 위한 방법 중 하나인 model merging 기법의 model soup를 소개합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Deep Model Fusion / 1. Model Soups</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">Model Soups</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.11.21</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 모델 merging 기법으로 소개된 Model Soup의 논문입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">현재 LLM이 각광받고, LLM open leader board에서 SOTA를 차지하기 위해 최근 model merging 기법을 많이 사용하는데, 그중  model soup는 시초가 되는 방법입니다.</span>
+
+                        <br><br>실제로 model merging을 하는 기법은 간단하기 때문에 쉽게 따라올 수 있을 듯 합니다.
+
+                        <br><br>아래는 Model Soups 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2203.05482.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">Model Soups 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>Model Soups의 동기</li>
+                            <li>Model Soups의 방법</li>
+                            <li>Model Soups의 결과</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">Model Soups</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>Model Soups의 동기</span><br>
+                        <span>Motivation of Model Soups</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        Model Soups의 동기는 fine-tuning process로부터 비롯되었습니다.
+                        먼저 우리가 어떤 특정 domain의 모델을 학습하기 위해서 보통 pre-trained model을 fine-tuning하여 사용하는 것이 일반적이며, 아래와 같은 과정을 거칩니다.
+                        <ol>
+                            <li>Pre-trained model을 다양한 hyperparameter로 여러 fine-tuned 모델을 확보.</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">그후 validation set에서 가장 높은 accuracy를 보인 모델을 선택 후, 나머지 모델들은 모두 버림.</span></li>
+                        </ol>
+
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">저자들은 이렇게 fine-tuning하는 과정 중, 위의 2번의 방법에 문제를 제기합니다.
+                        2번 방법의 문제점과 이 문제점을 해결하기 위한 ensemble (앙상블) 과정을 아래와 같이 주장합니다.</span>
+                        <ul>
+                            <li>Out of distribution dataset에 대한 성능이 보장 안 됨.</li>
+                            <li>여러 model을 ensemble하여 성능을 높일 수 있지만, inference cost가 \(n\) 모델일 경우 \(\mathcal{O}(n)\)으로 증가.</li>
+                        </ul>
+                        
+                        <br>따라서 저자들은 위에서 설명한 fine-tuning의 두 단계 중, 2단계를 개선합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">저자들은 여러 hyperparameter로 fine-tuned 모델들을 merging하는 방법으로 개선할 수 있다고 생각하는데, 이에 대한 근거는 아래와 같습니다.</span>
+                        <ul>
+                            <li>같은 pre-trained model에서 파생된 fine-tuned model들은 비슷한 loss basin (landscape)를 가짐.</li>
+                            <li>Ensemble, weight averaging은 좋은 성능을 보여준 사례가 많음.</li>
+                        </ul>
+
+                        <br>그리고 저자들은 model soups를 사용하면 추가적인 학습이 필요없고, inference cost도 \(\mathcal{O}(1)\)이라서 추가적인 inference cost가 필요없다고 주장합니다.
+                    </p>
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>Model Soups의 방법</span><br>
+                        <span>Methodology of Model Soups</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 논문에서는 아래와같이 표현을 정의합니다.
+                    </p>
+                    <div class="equation">
+                        \[f(x, \theta) = Neural\,Network\]
+                        \[\theta_0: pre\mbox{-}trained\,model\,parameters\]
+                        \[h_i: i\mbox{-}th\,hyperparameter\,configuration\]
+                        \[\theta_{i}=FineTune(\theta_0, h_i)\,model\,parameters\]
+                    </div>
+                    <p>
+                        <br>그리고 아래 표는 우리가 일반적으로 fine-tuning하는 과정, ensemble, 논문에서 제안하는 방법 3가지를 제시합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">Fine-tuning 후 모델을 선택하는 다양한 방법론, 출처: Model Soups 논문</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 표에서 가장 첫 번째 방법은 우리가 흔히 사용하는 validation accuracy가 가장 높은 모델 1개를 선택하는 방법입니다.</span>
+                        그리고 표의 두 번째 방법론은 \(f(x, \theta)\)로 표현되는 tuning 된 모델들을 voting하는 방식등의 앙상블 방식이며, 이는 여러개의 모델이 필요하다는 단점이 있습니다.
+                        마지막으로 나머지 3개의 방법론은 이 논문에서 실험을 수행한 방식들입니다.
+
+                        <br><br><span style="font-size: 20px;"><b>1. Uniform Soup</b></span>
+                        <br>이 방법은 아주 간단합니다. 같은 pre-trained 모델에서 fine-tuning된 모델들은 그 구조가 같을 것입니다. 따라서 각 fine-tuning 된 모델의 parameter들을 모두 평균을 내는 방법입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 이 방법론은 n개의 모델을 평균을 내다보니까, 오히려 성능 하락을 내는 모델이 많이 있어서 greedy soup의 방법을 제안합니다.</span>
+
+                        <br><br><span style="font-size: 20px;"><b>2. Greedy Soup</b></span>
+                        <br>Greedy soup의 방법도 아주 간단합니다. 이 방법은 아래와같이 수행합니다.
+                        <ol>
+                            <li>Validataion set에 대한 accuracy에 대해 model들을 내림차순으로 정렬.</li>
+                            <li>연속된 모델을 하나씩 parameter의 평균을 내면서 성능이 하락하는 모델을 버림.</li>
+                        </ol>
+                        이 과정에 대한 pseudocode는 아래와 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">Greedy Soup Pseudocode, 출처: Model Soups 논문</p>
+                    </div>
+                    
+                    <p>
+
+                        <br><br><span style="font-size: 20px;"><b>3. Learned Soup</b></span>
+                        <br>Learned soup는 greedy soup에서 순차적인 실행을 제거한 방법론입니다.
+                        이 방법은 gradient-based mini-batch를 이용하여 각 모델의 parameter가 merging 될 때 coefficient를 학습을 통해 정하는 방식입니다.
+                    </p>
+                    <div class="equation">
+                        \[ argmin \]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 이 방법론은 n개의 모델을 모두 메모리에 올려야하기 때문에 현재 나오는 거대 모델들에게 적용하기에는 한계가 있어서 저자들은 논문에서 greedy soup를 중점적으로 다룹니다.</span>
+                    </p>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>CoOp 결과</span><br>
+                        <span>Results of CoOp</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        아래는 위에서 봤던 결과입니다.
+                        실제로 자연어 prompt를 사용했을 때보다 학습 가능한 learnable query를 활용한 soft prompt가 더 좋은 결과를 보여주는 것을 확인할 수 있습니다.
+                    </p>
+                    <p>
+                        <br>그리고 아래 결과의 end, mid는 각각 soft prompt를 처음, 중간에 넣은 결과입니다.
+                        또한 CSC는 class-specific context라고 하여, 각각의 class에 대해 다르게 학습한 soft prompt를 바탕으로(개별 class에 할당되는 별도의 soft prompt를 넣음) zero-shot transfer를 수행한 결과입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 미루어봤을 때, class specific하지 않게 모든 class에 같은 learnable query를 공유하는 방식의 성능이 더 좋고, learnable query의 위치는 결과에 큰 영향을 주지 않는 것으로 보입니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AK0iWDzFbyTiLUUiQ5PvsEtal55EJITIG7LKgOoXtMx9i2I95dEfVU84vNOGnFZTbxUKqS8t7un6WF3NzIF4mDm2nc0R3NAT4pimG3-U9fvx1DFZSGrHABGikhXy3lWYyHdqlry91GMkAn9fbihFif12BSlt5pB3K3A6F_hLF5NsM8pheP7meoJYbQ6BYgEUkuY55JL9zeYm0PByjuYy4KmBxvEdW3tjWUiif1QzAj9ORgePc57D1-ZbZJGGZbiaWmNc96KHY6Y_CgwIGfjiciKfLXvhSh9cT199fPvD-Zl69e3Yxugu5fNAAr9SFwsFPYhY56kd2P0LDLJXxj5pZRoBALmcF4_Iow803QUYKfoX9O9FKNCa8QvPX-bcw57gr2OHOSFF3MkUHvIpXpHLKJgRWVQuHsB42SVWgM50mrYt-91vgy09AjMTFxoGLAFmpEm-mzu2-1ym_Pc1hTi5a-h1xX8AJ6BuzRu6MpWz5M3rvwzd0DpV7Wm09EN5MWmU98rlaC3ZN08TZSpsnvLlm62yvzvXjLpyFu9oaLtmOv_6d2lnVNvqcC2Lcvnj9u7Zcdxz-T-HpwLIDexnFW2gvnuziszPkm6gLD_SbCQeNA8mtpy4PCc6RNe0qO6S2KpSPoiu1g2zD-Ys_WNLM-sZOGIeGlmRL1MTiOruoWystCI-4P4kDogUIwThmoW4BQdnkJM0VDtnOzYnlpJxND0V9UjRv__vZqtbALLW3S4aK_ZuIqdpKwg_YayUnUo10fYnWlDvDAlY45LQEUbAZx_o3-TCvjV624PYrqIdvNhRHCJubj6PxJdSxYXU0u02sfrLTkb2zSt9gFKEwORkazcdFz5rfgcZyShjdH946zIMHG71seauxbBnwpLWIyDgIS0i3vjEOUMOePhFq1wbJfVhTUu6YBxC1IPEggmpHB7j96Rulm69FIThF7CuKU0yuAYI7V4pZfvNbPIQHwb0eNBXxXyPv73_vDY5qtHKB0ldZ5-84rVb23haG7tkUG7iLIMVu5faxAMIQE7OWg87QI0dcYFezUWivdun0MjdG2TcLL7e2Kg5n_QudLksj3UGzMfVQVqeI1aKoTSGzH7iwmLyKNRdtW-sr1FbHuZqTKbYh3hDAqJsvu-iL_pZHi5JzL3ENlQIlQODxsoYVvSyZpKc3o4B7HQDVfQhKTorVNZvLzUY_r4ECNpBPbmiqty0x5E9aa_M8m3eOy8_FPko3_l-O9G-B1SECSHhYBso7XejtbyJ_k_l2_CFuVXEk_anA9vyT9iWc7AE5W97NbAMQi8r7xjk9gqHPqSnEOyuhD_MRP3KQhZNF_vC1AeqBsmGl64DgNvA8KJzFd06LKEttz3k87Xtx2ylZmCbX3PJGau0BQjGdwufaQscb3p5ScUZw4GrwVaVW9bwM5uNySeDWwcBHp0j366bQs6ELddvUBvhKpfXniiTNonSqyqQI5yPweRA73smGv4FoBSLIhkC4MuVHcxoVh0eq_4gRdtvw0HrRkWiqYQTOwb6VPSD35d1gomjRIhMmaLhfCFh" style="width: 100%;">
+                        <p class="caption">CoOp의 학습 결과, 출처: CoOp 논문</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 저자는 학습된 soft prompt와 text word embedding간의 거리를 측정해보았습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">Soft prompt의 크기가 M x D라고 했는데, 저자는 M을 16으로 두고 각각의 embedding과 text word embedding을 비교해서 각각 가장 가까운 거리의 단어를 뽑은 결과인 것이지요.</span>
+                        저자는 그 결과 어떠한 상관관계를 찾지 못했다고 주장하고 이것이 한계라고 언급합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AK0iWDwrI4xWn-9LmS5QPvuXwCEBKNKXaK3cpqTkk_Rir2pK34r_fMXtVXEApQRJBUdsG-uODdVGZfZ3Ul8ztgtNDVZn5uiwF0DrExQedoIWOKuouq317ZBPxoDvuTeJYOmlR5UJZJbstsaBmqtiJkvJWcYvlXvBsSyoKC6WjcVubrkSNW_frYqMF7jrKb18zOUlhzJQtG56yFxt6EpJIoMZW5loFHwO92hHnSq7QrGnxKahyOWSUI81Ldclykbi1Ew3LRI1m5OOMIE8KMZGldeaQe1JqTkUQ_YlncFcksgwuiOzMKAIsn5CjbHbeknonYEph_yM_WuRDgb7Pm9qobo1Z6DRa1TNXtHWyWNd7PIudXu5gCYJL-aLWqnf3Nd5_p_Vy7AQaWKxSSfgzdIa8YF3Qh1Uq0Gtud_xixuvElxaTBEUjwlwg-NOCLmRT-8dG37iV76rocSFhQrbCNV-IuPU4GU3WMDd7PkvxB0bN7kaajRl6O7boSmWhNbZRtxg790sFPHFqUH9E5C_Px4K3D-XdEd2QgoZ-33Hj2TELNFormupjIlKrmnbF12ns5M5oo3II6Obr55zM4fi8agQKM0eKiZiqKLBkhUDq_hufE3ncGMTW6ZSpnadoglwIkWsF1Eyz94TgvQ4FPZQAmRuAGy1nvoUxsxMYwzktLYmSGvRt6LYeZRFY9gxpyYiAmf4qLQl5l269G-Rr9OmOQZefXQJik0ktnjlpBLxvwW7DR_Bp8iWYVRsep4lNo5GWpXeO9p_3LMavkoBCFoJtYIMiMkOL7R8E5NKI2bujAavIcDYSKpyAmtrEJPmfcVh3y5UMACKMCHe1gCAsw_se0i7XJNqOCebpTYkGkb1DpAld3sso8P6iNMdpUD9W8AWb7OKCo__MyegASQqpAL4rb-mv60KlQDvF4k9z-noamFAidfRsSyR_BMGLbsTFDulTNZmenOY6-yIXc2kZ-rnsVmvSmxUhEEVYsNN14pQ7K7UqEROcw4mVxDaNF1hsuw1Zf3gx154vFK_imecKH-wzt0AyM9J0gfsYnOY0NfVL9bMkYw6BMO94leeO5_quogfu5K8f2rxG_QnC9-oK-SiWfPymiTTYYjp1o5BmqtDqBOiOmPMWwZkEUqiSZxGDmWBoXP0D17F0-_S-rUlGPZ488-QnL7kltNT9RAsFQOr8iXkuDscc3O5D24ZRT42FZIY9sfrp6n-AYumeU_LerHO7vXyDrUCHcTM6a8cZQRQUK3f0KGgRXJnimnPLa5R_leMYd3LVl2ubm02urftHbclr2kU5gmqMnYjSgSkDY6eQWzaXr_n5KCK0O94ddAYJvoiFuDnroQrEjmd1a4zIia66nTRw0_RmzvduH_csjp1KSTerJ92CZhK9BFCUR14lsEfebBLETjDUidT6vkknB1DAHEPDr7B4wNOxHaEEGNgE441YnOl5y9ddzGWTJxFo9POR8HI_QbZLOh67UQOwmq9qrxbdjfRMPzfqZTbiw8V-PWNOzSoVtsRynCnwB5rVfi42566yv_MNQ2Rn1fb" style="width: 100%;">
+                        <p class="caption">CoOp의 soft prompt와 word embedding 최소 거리 단어 결과, 출처: CoOp 논문</p>
+                    </div>
+
+
+
+
+                    
+                    <p>
+                        <br><br><br>이번에는 아주 간단한 컨셉의 CoOp를 리뷰해보았습니다.
+                        다음에는 같은 저자가 쓴 CoOp의 문제점을 해결한 Conditional Context Optimization (CoCoOp) 논문을 리뷰해보겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#CoOp&emsp;#CLIP
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('CoOp 시리즈 첫 게시물 입니다.\n\nThis is the first post of CoOp series.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('coop2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>Conditional Context Optimization (CoCoOp)</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
