@@ -88,7 +88,7 @@
                         <div style="display: table-cell; margin: 0;">
                             <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
                         </div>
-                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2023.11.21</span>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2024.01.17</span>
                     </div>
                 </div>
 
@@ -147,6 +147,32 @@
                         </ul>
 
                         <br>그리고 저자들은 model soups를 사용하면 추가적인 학습이 필요없고, inference cost도 \(\mathcal{O}(1)\)이라서 추가적인 inference cost가 필요없다고 주장합니다.
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>Intuition</b></span>
+                        <br>먼저 저자들은 다양한 hyperparameter로 모델들을 학습한 후 아래의 loss landscape를 그렸습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">Loss Landscape, 출처: Model Soups 논문</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 그림에서는 3가지의 다른 방법으로 학습하는 방식을 가지고 학습한 모델의 loss landsacpe로 그린 것인데, 빨간색의 부분이 오차율이 가장 낮고 loss가 가장 적은 좋은 지점으로 볼 수 있습니다.</span>
+                        따라서 저자들은 저렇게 optimal하지 않은 두 모델 사이의 가중치를 interpolation하면 정확도가 향상될 수 있음을 시사합니다.
+                        
+                        <br><br><span class="highlight" style="color: rgb(0, 3, 206);">그리고 모델의 loss landscape에서 보여주는 각도 \(\phi\)가 90도에 가까울수록 uncorrelate하다고 볼 수 있습니다
+                        따라서 저자들은 각도에 따라서 실제로 가중치를 merging 했을 때 정확도가 얼마나 향상될 수 있는지 경향성의 그래프를 보여줍니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 80%;">
+                        <p class="caption">Loss Landscape 모델 각도에 따른 가중치 merging 시 개선률, 출처: Model Soups 논문</p>
+                    </div>
+                    <p>
+                        <br>위 그래프의 y축을 보면 두개의 모델의 가중치를 평균내어 merging 했을 때의 정확도가 각각의 모델의 정확도를 평균냈을 때 정확도 차이를 의미합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">즉 y축 값이 커질수록 모델의 가중치가 합쳐졌을 때 정확도 개선이 큰 것이죠.</span>
+                        결론적으로 그래프를 보면 두 모델이 이루는 각도 \(\phi\)가 커질수록 모델 가중치를 merging 했을 때 개선이 많이 일어난다는 것을 시사합니다.
+
+                        <br><br><br>위와 같은 이유 때문에 저자들은 model의 가중치를 merging하는 기법들을 제시합니다.
                     </p>
          
 
@@ -170,7 +196,7 @@
                         <br>그리고 아래 표는 우리가 일반적으로 fine-tuning하는 과정, ensemble, 논문에서 제안하는 방법 3가지를 제시합니다.
                     </p>
                     <div class="contentImg">
-                        <img src="" style="width: 100%;">
+                        <img src="" style="width: 80%;">
                         <p class="caption">Fine-tuning 후 모델을 선택하는 다양한 방법론, 출처: Model Soups 논문</p>
                     </div>
                     <p>
@@ -191,7 +217,7 @@
                         이 과정에 대한 pseudocode는 아래와 같습니다.
                     </p>
                     <div class="contentImg">
-                        <img src="" style="width: 100%;">
+                        <img src="" style="width: 80%;">
                         <p class="caption">Greedy Soup Pseudocode, 출처: Model Soups 논문</p>
                     </div>
                     
@@ -202,7 +228,7 @@
                         이 방법은 gradient-based mini-batch를 이용하여 각 모델의 parameter가 merging 될 때 coefficient를 학습을 통해 정하는 방식입니다.
                     </p>
                     <div class="equation">
-                        \[ argmin \]
+                        \[ argmin_{\alpha \in \mathbb{R}^k, \beta \in \mathbb{R}} \sum^{n}_{j=1} l \Big(\beta \cdot f(x_j, \sum^k_{i=1} \alpha_i \theta_i), y_j \Big) \]
                     </div>
                     <p>
                         <br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 이 방법론은 n개의 모델을 모두 메모리에 올려야하기 때문에 현재 나오는 거대 모델들에게 적용하기에는 한계가 있어서 저자들은 논문에서 greedy soup를 중점적으로 다룹니다.</span>
@@ -214,56 +240,70 @@
 
                     <div class="doubleSubHead">
                         <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
-                        <span>CoOp 결과</span><br>
-                        <span>Results of CoOp</span>
+                        <span>Model Soups의 결과</span><br>
+                        <span>Results of Model Soups</span>
                         <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
                     </div>
                     <p>
-                        아래는 위에서 봤던 결과입니다.
-                        실제로 자연어 prompt를 사용했을 때보다 학습 가능한 learnable query를 활용한 soft prompt가 더 좋은 결과를 보여주는 것을 확인할 수 있습니다.
-                    </p>
-                    <p>
-                        <br>그리고 아래 결과의 end, mid는 각각 soft prompt를 처음, 중간에 넣은 결과입니다.
-                        또한 CSC는 class-specific context라고 하여, 각각의 class에 대해 다르게 학습한 soft prompt를 바탕으로(개별 class에 할당되는 별도의 soft prompt를 넣음) zero-shot transfer를 수행한 결과입니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 결과를 미루어봤을 때, class specific하지 않게 모든 class에 같은 learnable query를 공유하는 방식의 성능이 더 좋고, learnable query의 위치는 결과에 큰 영향을 주지 않는 것으로 보입니다.</span>
+                        이제 실제로 위에서 소개한 merging 기법들을 적용했을 때의 결과를 보여드리겠습니다.
+
+                        <br>아래는 ViT-B/32 모델을 fine-tuning한 결과와 merging의 결과입니다.
+                        저자들은 greedy soup을 적용했을 때 72개의 fine-tuned 모델 중 5개가 merging 되었다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 봤을 때 x축의 ImageNet 결과와 y축의 ImageNet의 distribution shifted 된 5개의 데이터의 평균 결과가 두루두루 좋은 것이 greedy soup인 것을 볼 수 있습니다.</span>
                     </p>
                     <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AK0iWDzFbyTiLUUiQ5PvsEtal55EJITIG7LKgOoXtMx9i2I95dEfVU84vNOGnFZTbxUKqS8t7un6WF3NzIF4mDm2nc0R3NAT4pimG3-U9fvx1DFZSGrHABGikhXy3lWYyHdqlry91GMkAn9fbihFif12BSlt5pB3K3A6F_hLF5NsM8pheP7meoJYbQ6BYgEUkuY55JL9zeYm0PByjuYy4KmBxvEdW3tjWUiif1QzAj9ORgePc57D1-ZbZJGGZbiaWmNc96KHY6Y_CgwIGfjiciKfLXvhSh9cT199fPvD-Zl69e3Yxugu5fNAAr9SFwsFPYhY56kd2P0LDLJXxj5pZRoBALmcF4_Iow803QUYKfoX9O9FKNCa8QvPX-bcw57gr2OHOSFF3MkUHvIpXpHLKJgRWVQuHsB42SVWgM50mrYt-91vgy09AjMTFxoGLAFmpEm-mzu2-1ym_Pc1hTi5a-h1xX8AJ6BuzRu6MpWz5M3rvwzd0DpV7Wm09EN5MWmU98rlaC3ZN08TZSpsnvLlm62yvzvXjLpyFu9oaLtmOv_6d2lnVNvqcC2Lcvnj9u7Zcdxz-T-HpwLIDexnFW2gvnuziszPkm6gLD_SbCQeNA8mtpy4PCc6RNe0qO6S2KpSPoiu1g2zD-Ys_WNLM-sZOGIeGlmRL1MTiOruoWystCI-4P4kDogUIwThmoW4BQdnkJM0VDtnOzYnlpJxND0V9UjRv__vZqtbALLW3S4aK_ZuIqdpKwg_YayUnUo10fYnWlDvDAlY45LQEUbAZx_o3-TCvjV624PYrqIdvNhRHCJubj6PxJdSxYXU0u02sfrLTkb2zSt9gFKEwORkazcdFz5rfgcZyShjdH946zIMHG71seauxbBnwpLWIyDgIS0i3vjEOUMOePhFq1wbJfVhTUu6YBxC1IPEggmpHB7j96Rulm69FIThF7CuKU0yuAYI7V4pZfvNbPIQHwb0eNBXxXyPv73_vDY5qtHKB0ldZ5-84rVb23haG7tkUG7iLIMVu5faxAMIQE7OWg87QI0dcYFezUWivdun0MjdG2TcLL7e2Kg5n_QudLksj3UGzMfVQVqeI1aKoTSGzH7iwmLyKNRdtW-sr1FbHuZqTKbYh3hDAqJsvu-iL_pZHi5JzL3ENlQIlQODxsoYVvSyZpKc3o4B7HQDVfQhKTorVNZvLzUY_r4ECNpBPbmiqty0x5E9aa_M8m3eOy8_FPko3_l-O9G-B1SECSHhYBso7XejtbyJ_k_l2_CFuVXEk_anA9vyT9iWc7AE5W97NbAMQi8r7xjk9gqHPqSnEOyuhD_MRP3KQhZNF_vC1AeqBsmGl64DgNvA8KJzFd06LKEttz3k87Xtx2ylZmCbX3PJGau0BQjGdwufaQscb3p5ScUZw4GrwVaVW9bwM5uNySeDWwcBHp0j366bQs6ELddvUBvhKpfXniiTNonSqyqQI5yPweRA73smGv4FoBSLIhkC4MuVHcxoVh0eq_4gRdtvw0HrRkWiqYQTOwb6VPSD35d1gomjRIhMmaLhfCFh" style="width: 100%;">
-                        <p class="caption">CoOp의 학습 결과, 출처: CoOp 논문</p>
+                        <img src="" style="width: 80%;">
+                        <p class="caption">ViT-B/32 merging 결과, 출처: Model Soups 논문</p>
                     </div>
                     <p>
-                        <br>마지막으로 저자는 학습된 soft prompt와 text word embedding간의 거리를 측정해보았습니다.
-                        <span class="highlight" style="color: rgb(0, 3, 206);">Soft prompt의 크기가 M x D라고 했는데, 저자는 M을 16으로 두고 각각의 embedding과 text word embedding을 비교해서 각각 가장 가까운 거리의 단어를 뽑은 결과인 것이지요.</span>
-                        저자는 그 결과 어떠한 상관관계를 찾지 못했다고 주장하고 이것이 한계라고 언급합니다.
+                        <br>아래는 ALIGN 모델을 fine-tuning한 결과와 merging의 결과입니다.
+                        저자들은 greedy soup을 적용했을 때 12개의 fine-tuned 모델 중 5개가 merging 되었다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 봤을 때 x축의 ImageNet 결과와 y축의 ImageNet의 distribution shifted 된 5개의 데이터의 평균 결과 모두 greedy soup이 높은 것을 볼 수 있습니다.</span>
                     </p>
                     <div class="contentImg">
-                        <img src="https://lh3.googleusercontent.com/fife/AK0iWDwrI4xWn-9LmS5QPvuXwCEBKNKXaK3cpqTkk_Rir2pK34r_fMXtVXEApQRJBUdsG-uODdVGZfZ3Ul8ztgtNDVZn5uiwF0DrExQedoIWOKuouq317ZBPxoDvuTeJYOmlR5UJZJbstsaBmqtiJkvJWcYvlXvBsSyoKC6WjcVubrkSNW_frYqMF7jrKb18zOUlhzJQtG56yFxt6EpJIoMZW5loFHwO92hHnSq7QrGnxKahyOWSUI81Ldclykbi1Ew3LRI1m5OOMIE8KMZGldeaQe1JqTkUQ_YlncFcksgwuiOzMKAIsn5CjbHbeknonYEph_yM_WuRDgb7Pm9qobo1Z6DRa1TNXtHWyWNd7PIudXu5gCYJL-aLWqnf3Nd5_p_Vy7AQaWKxSSfgzdIa8YF3Qh1Uq0Gtud_xixuvElxaTBEUjwlwg-NOCLmRT-8dG37iV76rocSFhQrbCNV-IuPU4GU3WMDd7PkvxB0bN7kaajRl6O7boSmWhNbZRtxg790sFPHFqUH9E5C_Px4K3D-XdEd2QgoZ-33Hj2TELNFormupjIlKrmnbF12ns5M5oo3II6Obr55zM4fi8agQKM0eKiZiqKLBkhUDq_hufE3ncGMTW6ZSpnadoglwIkWsF1Eyz94TgvQ4FPZQAmRuAGy1nvoUxsxMYwzktLYmSGvRt6LYeZRFY9gxpyYiAmf4qLQl5l269G-Rr9OmOQZefXQJik0ktnjlpBLxvwW7DR_Bp8iWYVRsep4lNo5GWpXeO9p_3LMavkoBCFoJtYIMiMkOL7R8E5NKI2bujAavIcDYSKpyAmtrEJPmfcVh3y5UMACKMCHe1gCAsw_se0i7XJNqOCebpTYkGkb1DpAld3sso8P6iNMdpUD9W8AWb7OKCo__MyegASQqpAL4rb-mv60KlQDvF4k9z-noamFAidfRsSyR_BMGLbsTFDulTNZmenOY6-yIXc2kZ-rnsVmvSmxUhEEVYsNN14pQ7K7UqEROcw4mVxDaNF1hsuw1Zf3gx154vFK_imecKH-wzt0AyM9J0gfsYnOY0NfVL9bMkYw6BMO94leeO5_quogfu5K8f2rxG_QnC9-oK-SiWfPymiTTYYjp1o5BmqtDqBOiOmPMWwZkEUqiSZxGDmWBoXP0D17F0-_S-rUlGPZ488-QnL7kltNT9RAsFQOr8iXkuDscc3O5D24ZRT42FZIY9sfrp6n-AYumeU_LerHO7vXyDrUCHcTM6a8cZQRQUK3f0KGgRXJnimnPLa5R_leMYd3LVl2ubm02urftHbclr2kU5gmqMnYjSgSkDY6eQWzaXr_n5KCK0O94ddAYJvoiFuDnroQrEjmd1a4zIia66nTRw0_RmzvduH_csjp1KSTerJ92CZhK9BFCUR14lsEfebBLETjDUidT6vkknB1DAHEPDr7B4wNOxHaEEGNgE441YnOl5y9ddzGWTJxFo9POR8HI_QbZLOh67UQOwmq9qrxbdjfRMPzfqZTbiw8V-PWNOzSoVtsRynCnwB5rVfi42566yv_MNQ2Rn1fb" style="width: 100%;">
-                        <p class="caption">CoOp의 soft prompt와 word embedding 최소 거리 단어 결과, 출처: CoOp 논문</p>
+                        <img src="" style="width: 80%;">
+                        <p class="caption">ALIGN merging 결과, 출처: Model Soups 논문</p>
                     </div>
+                    <p>
+                        <br>아래는 ViT/G-14 모델에 대한 결과이고 greedy soup을 사용했을 때 58개의 모델 중 14개가 merging 되었다고 합니다.
+                        실제로 greedy soup 결과가 ImageNet과 distribution shifted ImageNet 데이터에서 가장 좋은 결과를 보여줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">ViT/G-14 merging 결과, 출처: Model Soups 논문</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 BERT와 T5의 text classification 결과인데, GLUE benchmark의 4개의 데이터셋을 fine-tuning한 후 greedy soup으로 merging 했을 때 두 모델 모두 기존 fine-tuning 한 모델보다 좋은 결과를 보여줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">BERT, T5 merging 결과, 출처: Model Soups 논문</p>
+                    </div>
+
 
 
 
 
                     
                     <p>
-                        <br><br><br>이번에는 아주 간단한 컨셉의 CoOp를 리뷰해보았습니다.
-                        다음에는 같은 저자가 쓴 CoOp의 문제점을 해결한 Conditional Context Optimization (CoCoOp) 논문을 리뷰해보겠습니다.
+                        <br><br><br>이번에는 model merging 기법 중 model soups를 소개했습니다.
+                        다음에는 실제로 LLM leader board에서 1등을 차지한 기법 중 하나인 LLM TIES merging 기법에 대해 소개하겠습니다.
                     </p>
 
 
                     
                 </div> 
                 <div class="tag">
-                    <b>태그</b>&emsp;#CoOp&emsp;#CLIP
+                    <b>태그</b>&emsp;#ModelSoups
                 </div>
                 <div class="pageTurner">
                     <div class="pageTurnerLeft">
-                        <span><a style="position: absolute; left: 0;" onclick="alert('CoOp 시리즈 첫 게시물 입니다.\n\nThis is the first post of CoOp series.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Deep Model Fusion 시리즈 첫 게시물 입니다.\n\nThis is the first post of Deep Model Fusion series.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
                         <br></span>
                     </div>
                     <div class="pageTurnerRight">
-                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('coop2.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
-                        <br>Conditional Context Optimization (CoCoOp)</span>
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('ties1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>TIES-merging (TrIm, Elect Sign &amp; Merge)</span>
                     </div>
                 </div>
                 <span id="readNum"></span>
