@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TIES-merging (TrIm, Elect Sign &amp; Merge)</title>
+        <meta name="description" content="추가적인 학습 없이 LLM의 성능을 높이기 위한 방법 중 하나인 TIES model merging 기법에 대해 소개합니다.">
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="init/index.css">
+        <link rel="stylesheet" href="init/contents.css">
+        <link rel="stylesheet" href="init/index_img/icons/css/fontello.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="init/highlight/styles/github-dark.min.css">
+        <script src="init/highlight/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+        <script src="init/highlight/highlights_line.js"></script>
+        <script>initNumber(window, document);</script>
+        <script>hljs.initLineNumbersOnLoad();</script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="init/index.js"></script>
+        <script src="init/jquery.pjax.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=0.8, max-width=1">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-219110982-1"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-219110982-1');
+        </script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7745178886614102"
+        crossorigin="anonymous"></script>
+
+        <meta property="og:url" content="https://ljm565.github.io/contents/ties1.html" />
+        <meta property="og:title" content="TIES-merging (TrIm, Elect Sign &amp; Merge)" />
+        <meta property="og:type" content="website">
+        <meta property="og:description" content="추가적인 학습 없이 LLM의 성능을 높이기 위한 방법 중 하나인 TIES model merging 기법에 대해 소개합니다." />
+        <meta property="og:image" content="" />
+    </head>   
+    <body>
+        <div id="modeButton">
+            <button type="button" value="dark" onclick="darkMode(this)" onmouseover="hoveringOn(this)" onmouseout="hoveringOff(this)">
+                <div class="modeImg"><img id="modeImg" src="init/index_img/moon_off.png"></div>
+                <div id="modeState">다크 모드로 보기</div>
+            </button>
+        </div>
+
+        <div id="container" onclick="reload();">
+            <article>
+                <script src="init/highlight/highlight.min.js"></script>
+                <script>hljs.highlightAll();</script>
+                <script src="init/highlight/highlights_line.js"></script>
+                <script>initNumber(window, document);</script>
+                <script>hljs.initLineNumbersOnLoad();</script>
+                <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+                <script>
+                    initMathJax();
+                </script>
+                <div id="mainHeadWrapper">
+                    <div id="mainHead">
+                        <h1 class="contentHead">딥러닝 이야기 / Deep Model Fusion / 2. TIES-merging (TrIm, Elect Sign &amp; Merge)</h1>
+                    </div>
+                </div>
+                
+                <div class="title" style="background-image:url();">
+                    <div>
+                        <span class="mainTitle">TIES-merging (TrIm, Elect Sign &amp; Merge)</span>
+                        <br><br>
+                        <div style="display: table-cell; margin: 0;">
+                            <img src="init/index_img/profile.png" style="width: 30px; cursor: pointer;" onclick="pjaxPage('/');">
+                        </div>
+                        <span class="subTitle" style="display: table-cell; text-align: left; vertical-align: middle; padding-left: 20px; line-height: 125%;">작성자: 여행 초짜<br>작성일: 2024.01.17</span>
+                    </div>
+                </div>
+
+                <div id="content">
+                    <p>
+                        시작하기 앞서 틀린 부분이 있을 수 있으니, 틀린 부분이 있다면 지적해주시면 감사하겠습니다.
+                        
+                        <br><br>이번에 소개할 논문은 LLM을 학습 없이 merging할 수 있는 기법인 TIES-merging (TrIm, Elect Sign &amp; Merge)입니다.
+                        이 기법도 fine-tuning한 모델만 여러개 가지고 있다면 모델을 merging할 수 있는 기법입니다.
+                        실제로 그 원리도 간단하니 살펴보면 좋을 듯 합니다.
+
+                        <br><br>아래는 TIES-merging 논문 링크입니다.
+                    </p>
+                    <div class="link">
+                        <a href="https://arxiv.org/pdf/2306.01708.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</a>
+                    </div>
+                    <p>
+                        <br><br>오늘의 컨텐츠입니다.
+                        <ol>
+                            <li>TIES-merging의 동기</li>
+                            <li>TIES-merging의 방법</li>
+                            <li>TIES-merging의 결과</li>
+                        </ol>
+                    </p>
+
+
+
+                    <h1 class="subHead">TIES-merging</h1>
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center;">&ldquo;</span>
+                        <span>TIES-merging의 동기</span><br>
+                        <span>Motivation of TIES-merging</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        TIES-merging의 동기는 이전글인 model soup과 동일한 관점인, fine-tuning process로부터 비롯되었습니다.
+                        먼저 우리가 어떤 특정 domain의 모델을 학습하기 위해서 보통 pre-trained model을 fine-tuning하여 사용하는 것이 일반적이며, fine-tuning의 아래와 같은 문제점이 있다고 시사합니다.
+                        <ol>
+                            <li>각 application들을 위한 모델을 저장하고 배포하여야만 함</li>
+                            <li><span class="highlight" style="color: rgb(0, 3, 206);">독립적으로 학습된 모델에 대해서는 관련 task의 다른 정보들을 활용할 수 없다 &rarr; in-domain performance를 늘리기 어렵고 out-domain 일반화가 불가능</span></li>
+                            <li>Multi-task로 위와 같은 문제점을 다룰 수 있지만, 모든 작업에 대해 공수가 들고 훈련 cost가 높고, 모든 task에 대해 좋은 결과를 얻기 위한 data mixture 과정이 힘듦</li>
+                        </ol>
+
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">따라서 저자들은 이렇게 여러개의 fine-tuned 된 모델들을 효과적으로 merging하여 성능을 여러 task에 대해 고루고루 향상시킬 수 있는 TIES-merging 기법에 대해 소개합니다.</span>
+
+
+                        <br><br><br><span style="font-size: 20px;"><b>Intuition</b></span>
+                        <br>먼저 저자들은 여러 merging 기법들이 불러올 수 있는 악효과를 제시합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 80%;">
+                        <p class="caption">모델 merging의 위험성, 출처: TIES-merging 논문</p>
+                    </div>
+                    <p>
+                        <br>위 그림은 두 종류의 모델을 합칠 때 발생할 수 있는 영향을 가시화한 그림입니다.
+                        위의 그림에서는 발생할 수 있는 상황을 3가지로 분류하며, 첫 번째 경우는 weight의 크기가 비슷하고 부호가 같아 mean-merging과 TIES-merging 후에도 거의 영향을 주지 않습니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">다만 2, 3번째의 경우는 각각 부호가 다르거나, 부호는 같지만 크기 차이가 많이 나는 경우인데, 이러한 경우는 mean-merging을 수행하면 merged weight가 매우 작아져서 전체적으로 악영향이 있을 수 있음을 시사합니다.
+                        즉 특정 모델에서 중요하게 작용하는 파라미터가 일반적인 interpolation merging을 하게 된다면 다른 불필요한 파라미터 때문에 간섭을 받을 수 있다고 주장합니다.</span>
+
+                        <br><br><br>더 나아가서 저자들은 11개 task에 대해 fine-tuning한 모델에 대해 top-k%의 절댓값이 큰 모델 parameter만 남겨두고, 나머지는 기존 학습을 시작했던 initial state인 pre-trained weight로 돌렸을 때 성능이 얼마나 하락되었는지 실험을 수행했습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 80%;">
+                        <p class="caption">Top-k% weight 유지했을 때 성능 하락 비율, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    <p>
+                        <br>위 결과는 fine-tuned 된 11개의 task에 대한 평균 성능 결과이고, <span class="highlight" style="color: rgb(0, 3, 206);">약 20%정도만 fine-tuned weight로 유지했을 때 100%를 유지했을 때 보다 큰 성능 하락이 없다는 것을 보여줍니다.
+                        이는 pre-trained weight를 특정 task에 대해 fine-tuning 하는 과정에서 학습되는 parameter들 중에 redundant parameter가 많다는 것을 시사합니다.</span>
+
+                        <br><br><br>마지막으로 저자는 model을 merging할 때 치명적인 부호 충돌(sign conflict) 비율을 제시합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="" style="width: 80%;">
+                        <p class="caption">11개의 fine-tuned 모델 부호 충돌 비율, 출처: TIES-merging 논문</p>
+                    </div>
+                    <div class="contentImg">
+                        <img src="" style="width: 100%;">
+                        <p class="caption">같은 task 학습한 여러 모델의 부호 충돌 비율, 출처: TIES-merging 논문</p>
+                    </div>
+                    <p>
+                        <br>위 두 그림 중 첫 번째 그림은 위에서 언급한 11개의 task에 대해 fine-tuned 된 모델 중 <span class="highlight" style="color: rgb(0, 3, 206);">top-20%의 parameter에 대해 부호 충돌이 일어나는 비율입니다.
+                        Top-20%를 trimming 한 후에도 sign conflict가 많이 일어나는 것을 볼 수 있습니다.</span>
+                        <span class="highlight" style="color: rgb(0, 3, 206);">심지어는 두 번째 그림의 결과처럼 같은 task를 수행하는 여러 fine-tuned 모델에서도 parameter sign conflict가 일어난다고 합니다.</span>
+                        그리고 당연하겠지만 sign conflict는 merging할 모델이 많아질수록 conflict 비율이 높아지는 경향이 있었다고 합니다.
+
+
+                        <br><br><br>따라서 저자는 top-k% parameter를 trim 하고, 부호를 정하는 election sign 과정을 거쳐 merging하는 기법인 TIES-merging 기법을 소개합니다.
+                    </p>
+         
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>TIES-merging의 방법</span><br>
+                        <span>Methodology of TIES-merging</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        먼저 논문에서는 아래와같이 표현을 정의합니다.
+                    </p>
+                    <div class="equation">
+                        \[f(x, \theta) = Neural\,Network\]
+                        \[\theta_0: pre\mbox{-}trained\,model\,parameters\]
+                        \[h_i: i\mbox{-}th\,hyperparameter\,configuration\]
+                        \[\theta_{i}=FineTune(\theta_0, h_i)\,model\,parameters\]
+                    </div>
+                    <p>
+                        <br>그리고 아래 표는 우리가 일반적으로 fine-tuning하는 과정, ensemble, 논문에서 제안하는 방법 3가지를 제시합니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDki5yoq_0_QgAOKpIiDALDDjKLh257hT3RON41GQo6tbSWcNNl2JKZ22VvjCFr47ifDudjP6Kd_Y0e4cisznOxjBCYL7c5_dAjoCSM2lt_lqkeBMbPAEo9TNRLmI5D74-vkWR5lLhMA3mTGZPlvx2pUD7pA4FH-ammUdMfbw4dBWBunD6PIbGIcCIOnQTaoH09Hs7meYO_5V2LGE7ZuHPHjGVinwx_-UqX0Mveq-iv4WWFVQsMyjV3RToj14_DAhMjB5wEkMbTDZaySgO1t1F7SE1tcyEM9156ABIJYo7gTt427NI77BNlxaFYzc6LqG07pzGQIAIwFdsfXWgj3RCdR6rnPd6FUZn4y6ggxtWJWYXwoYlkPR6oEgE67csum-AVkUj7-H_0eY8fqIKng2ErAaHCnY25dRsZJWduQP_SinI1ghNrqKgKoGE9t68sx3omW0ejBe2DTidOTdKgNSlCfFSn-o3j6cKeR5MoKnv20gn9jy-3DD6ItrgU84EXjDFN99Pj3jRxyLhTOlsKx8efa-KV3JisAw51b0xqqdBLDySRSgL8-ZeMbmZ3fs-FHKtZLIGRooa1cnVO8YmhWnK3Vzkhv93zpF_E5tERdHau04Rt_Jxu3RlRkbAMt2CEIqP9gl4o4aBaib2dOt4tu8pGNgE8yMJcD5M_0xb74crELF1xeNdJZrbXOaHp6KD-KFxpODGvGxHFcHwWB3zHsvw6g7W5HEivVyJLFeSPjpA5gYVoQ2w_od6VT_qi5W8KME45LLh5FfalbkBVbGogay2coz-jW8M93JBTTz0WZzWC0QKjaGBOCcLpaHd5tLJ51Vyswrl1L-C6g0M1u83eoHlVcvNUBoJZzUsgUZs-Fl34X13x8eBMaTWN3kGki87V9AjlWIQgXY4BF4lftTwBgojW3i1oUjZV5mDOq3Bux26XdiZU579z1u9Q6T8KCqHKV4p82u8sZYdV-T8fkxiSv-6nfYUIr4PgJCu0ZDHto3IDu49YwLsIGQzKSR44YNn-egqkQeMdM3yL48FhTR9yU0niryQPMQlIABcsuq5WPy8we43RuRsZbNzhqOMeKJB4WXRb_Ds1EhgJU4BeQEoA_qsvPWpsSfSaX7ZHYxcAT-X4fNVje4s2N6fbT4rqT5iRSXtqFuJXaB4iHap5J2yu3CfWZ-kaMVpjC7DwQn0L4uq0fV1W9vcrBwDYqpny6p-bzuvTvabqBGiqOxQRvdMA6q0AUmOxE7Phwr_IkJ8Ny2VePADLTQT6hlc-zuixAoni8j5Ynj4hJfSzo8SVU8feIM1Q99j1wZ581mcn4FucviNs_vKZXb7c13NVdBTS_jaUnPVco2sNCmNRS0w5ZU0ZEWwKjt3TdNSPP1ZbIKgS-myEu3qQgcGtVnKwz6fLQxIVo54qUW3-vUuBKblUZOWNtADyhgL0J8QOuayMcFNy8dmXTqelWSlK8SRrBbWDR2FaJUQU-eklshl__KP6hHISRJ9tHWn_SbgoNd9cpnAJPVuoz9Dp5ltiA" style="width: 80%;">
+                        <p class="caption">Fine-tuning 후 모델을 선택하는 다양한 방법론, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">위 표에서 가장 첫 번째 방법은 우리가 흔히 사용하는 validation accuracy가 가장 높은 모델 1개를 선택하는 방법입니다.</span>
+                        그리고 표의 두 번째 방법론은 \(f(x, \theta)\)로 표현되는 tuning 된 모델들을 voting하는 방식등의 앙상블 방식이며, 이는 여러개의 모델이 필요하다는 단점이 있습니다.
+                        마지막으로 나머지 3개의 방법론은 이 논문에서 실험을 수행한 방식들입니다.
+
+                        <br><br><span style="font-size: 20px;"><b>1. Uniform Soup</b></span>
+                        <br>이 방법은 아주 간단합니다. 같은 pre-trained 모델에서 fine-tuning된 모델들은 그 구조가 같을 것입니다. 따라서 각 fine-tuning 된 모델의 parameter들을 모두 평균을 내는 방법입니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">하지만 이 방법론은 n개의 모델을 평균을 내다보니까, 오히려 성능 하락을 내는 모델이 많이 있어서 greedy soup의 방법을 제안합니다.</span>
+
+                        <br><br><span style="font-size: 20px;"><b>2. Greedy Soup</b></span>
+                        <br>Greedy soup의 방법도 아주 간단합니다. 이 방법은 아래와같이 수행합니다.
+                        <ol>
+                            <li>Validataion set에 대한 accuracy에 대해 model들을 내림차순으로 정렬.</li>
+                            <li>연속된 모델을 하나씩 parameter의 평균을 내면서 성능이 하락하는 모델을 버림.</li>
+                        </ol>
+                        이 과정에 대한 pseudocode는 아래와 같습니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDl66IZDwNoPqv57y8rSh2BY_SqFMDy7Lcg_PC8Aqsf0AfeNyUGdEN4fUIIGpFVT301QixF0d8dQR2HhDPIsudJTheZ9VaDyul8o182tXDjSoqtQBfw1EBuCQ1Hg-iN9bDJbDgyESwM_UNi_exsdBzptQ08sTplrZNABwiH_D8MA-qe2iVgw-jcH1cPJui7laLYiIL3WPz3dcDAr-zoL4jfGCj-DRjSP31fiOScg5z-BuKPiB30o2oax4mffIKqkefyBwwXdPwAZ0DOMPHRi1QNRaQ96t2XlsiGAPjJV91rJ2WFjH3zRwUa4ZJLZPClpwnnnEpRA6zPCqw2RPWleFnVf2T39i0TPfbM0K7dL7EsZs-9-Jhb-Muh7KvkxyKjYcoiAqW9M6XwOrpVP8s4umNDHUrercK2OyDHPB-RuiAD_89PBCptyOBd5VTQVkeIvcGXCHgyXuUQDeAbooPt5ydT0xNAoZO8j7VjU9tt1nkfkd-58M97oJkDoCigX4muRwruMVPcGwn8El7ZNl_LUm1hKjNGp-AHLYrXDBVgpgUSUrc57Mc_O9ExKzZcTxJ1R8GbWor0SBkOPYEinOzyoz6uvUH0U32HuoggeZaBqjxLzFQT6AFiD_FBNQg3j-iPTfEBMy1AimBs5ElOpdYaJRJWlfBUKXAN4b_kMUWH-DpnyToCrFvvn0y8RufthCdqlALeFy2EnW1m3UmI6xjdXeHWia-Dwqc_i_GdnQ6QWtYoBSGhEoU7235q-aLeKequwFMlirw3TR0VO8K1P8li-dCGDm838zUDmP__RAJqMx5fXbk3SZjC4w9tY8EadKKJHnivbylHYGiaQnBUmt8Pf04N9RUl1nrapmWlQkQoXIFEvu7wMi_BLkrAnsvZQOCcDAWl1rl9-536QJyRqnGOtxXsyJ8Dnf64yJNlkSgucLOrN5oLjGuzTGUJBfEBTk-WbH8wdGwnRyQMSZ9We_eJofJVaLSYqKFRJI3OVwRTZVyoH_4LpAxS2zP42mwNPWzct_M1ObLuzICD-osrQOn_o3rilf3yE4wJjQyfq-bQUMv9Ok3GlYk4FKe2ycGnFh8B_zsIpjfN-EI820TsBGeFdvROFoyYFbOEuf1X6RlCGuh_vGXln1ZJahMJvQC8wghDE7FN0GftAF2duB_2BbjAED-3QwtS4Ag3WJWKCUVxCMA2HXPO3V0Fq6tUCLgK5N83LDqyqXuc0LJyrVj-0SDjLqAv8ri6Y3RMV9Sn0x6PcFnEgjBrq7D0g9hKevxWPAT-yZ8PS1UkkmNMu7QoD_PpRZmgbJ1cvN_8wiuO0ZDFDV3P91EKZRkroeCWKRZTTFFQfUrXrjlavItel3VBxU8Zp26IoFJAAfZiwFYaEb1fBZsWjThEbqozuo_KdHWcyIKHuUvbjGMS8q3-uFHvRyj6MW30-XXPrgP7TaeW4U7rFPUkDzWPcghbpZpdBRqUc4YbzyoAHQuKAkvNKK9O7na4UdlPyzcBDWT6NjS_lli1pg5OTmbt-_J8O" style="width: 80%;">
+                        <p class="caption">Greedy Soup Pseudocode, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    
+                    <p>
+
+                        <br><br><span style="font-size: 20px;"><b>3. Learned Soup</b></span>
+                        <br>Learned soup는 greedy soup에서 순차적인 실행을 제거한 방법론입니다.
+                        이 방법은 gradient-based mini-batch를 이용하여 각 모델의 parameter가 merging 될 때 coefficient를 학습을 통해 정하는 방식입니다.
+                    </p>
+                    <div class="equation">
+                        \[ argmin_{\alpha \in \mathbb{R}^k, \beta \in \mathbb{R}} \sum^{n}_{j=1} l \Big(\beta \cdot f(x_j, \sum^k_{i=1} \alpha_i \theta_i), y_j \Big) \]
+                    </div>
+                    <p>
+                        <br><span class="highlight" style="color: rgb(0, 3, 206);">하지만 이 방법론은 n개의 모델을 모두 메모리에 올려야하기 때문에 현재 나오는 거대 모델들에게 적용하기에는 한계가 있어서 저자들은 논문에서 greedy soup를 중점적으로 다룹니다.</span>
+                    </p>
+                    
+
+
+
+
+                    <div class="doubleSubHead">
+                        <span style="display: block; text-align: center; margin-top: 150px;">&ldquo;</span>
+                        <span>TIES-merging (TrIm, Elect Sign &amp; Merge)의 결과</span><br>
+                        <span>Results of TIES-merging (TrIm, Elect Sign &amp; Merge)</span>
+                        <span style="display: block; text-align: center; margin-top: 13px;">&rdquo;</span>
+                    </div>
+                    <p>
+                        이제 실제로 위에서 소개한 merging 기법들을 적용했을 때의 결과를 보여드리겠습니다.
+
+                        <br>아래는 ViT-B/32 모델을 fine-tuning한 결과와 merging의 결과입니다.
+                        저자들은 greedy soup을 적용했을 때 72개의 fine-tuned 모델 중 5개가 merging 되었다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 봤을 때 x축의 ImageNet 결과와 y축의 ImageNet의 distribution shifted 된 5개의 데이터의 평균 결과가 두루두루 좋은 것이 greedy soup인 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDlO8v-6nYqw-CxvsQJJ0qyxYHrZIxZjFsHk9Z5DLyCbOmDg8YPw7cyAxu7o3FtNhJJ4x0awtjQb6acfbSfeeumAqqvhoAeXSdXoMmGyeg8NkeG96XvWVOVAdxdxCREByaNPoI4HffLZovf2-EutCckeLZopKmiMlRcPFRbr_TeimZssqm78NQa6e7QCwNAlcg_BhPRMHEVWnOLgkz6ZdxCcighMpfiZj3_jA_8Ak4Bsx47b91sXbLiz6QjudqRGSG3rrReZmygP4BkRuAZvgJFRp4eau-J2SPPHH0xCFmSGjBGqrK6GAH8rhYXZ5jAzqKYkiPZaLmkRuNy-XBlDPq7InuE1BqA2XWptZS0_Bj-fE5fvv_gUzkBxYp1Hwty2jOwjl4pR6saB86gkePiEdbP7uzaN9R5yzw7ILGe_UVZjPonSX8J8GeZ7kqFbQ-ldfHBu9WkAy1A0vWmqRDLwO79wJfXCvnEeMO_78zWMT29CDCgo7D6JDY-GDdcOn-CqGAa9BmeDzVBLKiAa0vwf1ZR5OJ3VVr-QFO6IF2jLPm95uSjqDK7djXXJLhfMnoKrPT8u7KuqCyC-CgmZcaqut4U4UmoaYwOHDeFHN6Do0QSu2HKAqOQli-wxsTXD9fUQpp8EAqmjvlDUdGql7GMIRBZ7rQwAZ8h-VLpPEnSW0iUxac6gfD-MiUGZ0T7sYS-DzRObEsf_9Lb-Sr2Gfowv4QZJU0GKI5KN6Ox29DHw-Nvd2j3GCLZU2ePSUPAal7Fs7mfoEtbrdLOelztZthDwLS4__AeS2mLTEL-V4r-erpT-KWdAa_g2A8y8Nbv6KGTBdIj9hEelxiGKucNJJDYH5ieOd6Xy0K058U116Nv2XEz0NP048E3Mno6cOjSK1nvTq1MJmfHtD_xwvcBteNyjUYOzdTg3qY5Og47S-hwKHxeizylB747ILSDFAKr57OCCScfYbnzX3ZTn839KnOIpHG-plGelVgYon4eaK3Jb-cX_-ina4xVnhntGLGnnBz0pcL9F7VivmsUY5cjeKBFR6B5ASuuDve9uWICpEkgcCKShvVLvXjuHLuvipoyC2_FD0mSgi6uclMNTPtngSkYdKbTxqJ66748bi9M7qGgkYU43MVu56daUk0nY4-eS9026qf6BsnPpUf2Al_gWP0a7zehGic-19YyXJ2Kdj030lUaNlGUar7LCG4Dy9jGetL-oxKkrVCmtjf-C_JJzOkwyFmL5LEuze6-HJs9cWlRqVluvpGiYk5dViFEWXmAqErZ57gbvENypB-UJkJQCGAuXP6haAyJTZC-GtiqoqL4uOGG5mS-08tjhIQxHTycZRfRYJXjd9nbFmmeqSXgeOE9uFjCnycfGrGO4hGAr0HSyr8Pn-xvTJzDY4MM0znSb_uyjOjSmXU0nS9UrsBi80JbAY4oA-uutkWvNVzJsf7H9vlyHfWmdP80AVISu-K4MRhiIDee_POc8DRvBekSlzefYeZvxG0-vj_Xr4w11zMVFebNg_hBjbRar" style="width: 80%;">
+                        <p class="caption">ViT-B/32 merging 결과, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    <p>
+                        <br>아래는 ALIGN 모델을 fine-tuning한 결과와 merging의 결과입니다.
+                        저자들은 greedy soup을 적용했을 때 12개의 fine-tuned 모델 중 5개가 merging 되었다고 합니다.
+                        <span class="highlight" style="color: rgb(0, 3, 206);">아래 그림을 봤을 때 x축의 ImageNet 결과와 y축의 ImageNet의 distribution shifted 된 5개의 데이터의 평균 결과 모두 greedy soup이 높은 것을 볼 수 있습니다.</span>
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDmt9xRZ070Pz1XRd90eaogm111xyBT-HkgZPuACeHvAROZmXXEte_3Wu7miyoobD2CIulfLo1qMKfTySOGM1Ur0lsEl9MMqLPDMItP3G9ywKXpv8Va0YTQuBT3F_aq7YCzxML1IeUcrOkn-BBfDQZBk-71FnTPSl9ZqalyZitxvSH8oNEh9s6jvuG3N73gmsQgLQpKxtWD07Ja0fg6gXmWln7R8lVpUG1S07TozFnDbCRm_F8qFUzNUFHyjsOUubnis2ZxEEphO6xz1qXUrRYLfrhqnfyJISDg_xopQoJ5_NnK7660bPuAWGedNYt9QONLRD9eQhrlLFi4vJqFUd1nkslEdheph8e0m2Q46UT3ATid2OWBw4bvpymTz_Buvs-f9nOcFXvd3O9VrH-cDjHjn9y5TNlgpbtCfxP31JoPX1ZBPfWHTGp6r6xwg-sTZlii0pfPDWssbIt-CNflOseDLhbk755VFm3NrZRu_eT6eFzgHsBwrJyEnSyhxsKKjumfKDF93mhapKYSwGX9RAcE_fBcdRWOlGRHylAsVcPKvwGuMUaykRg5lgBnNZJbghVx5nYIcBfIJ08yXDHJA58QQZrLCAx7EWOcq0BqaLFYODQQXP1kyJa7TMNhh3Tk-E1csts8vNPLdinte5rMmM-LiR-QY0qHl5S1dx40wKct-9Ru3EFoLgSmcYpjHgRC4mNrjMzBjKs1I3w0bxEJLiIRIzYSdrRTTXiAuRCATXaK8dZSXmhAIEztB1QUgHoIaaWdMWdmgMLgwoHFX5X-a-wr4G6hjqAj48XbOE1Z96KaW3OX1TqazpaJv5DtebAXJqDusWfqdHn-VVjPOOWgI3LVnIlvf3VDIzWxzT4wAT8pBcXfVYuv8EzcDpVna-OSv3jt7Iun49LCyljqpexSuGhuqYYQinrl0QdvkcP1PYhH_bzKnTSh1PjfgSri87cmezIX7K6xbGpeS-RPKmGkwja1d2kFqrT3QaTbHme-aG5vxj8zRsFjVMAknBAZFOxqsyFh05RrtQjFJWaqE7POkHZTsyFGFUWjgAQce4BOSVf_M3JqIgAFzvNlfR6mfuLuN5GvAWj0tX2gSAa81xNCOaHHxsHv_xG1sglQBOSXV3DsOgRSGIecotjKak1Rvb2pdRBfIy_ZgU3IR79zIiDTDzYFjcSga6gGPN69exOGwgzKK4JBJwXFAasxHiQRllPxgoqv0_5tGWBK7sT0X1s0T1djmKllc8IS5JzBF4YenCJapAFFujdC504ZK6oOyAY1VHj55iO8xrD2REf4F6LQtN3n8YZ-8ElAPhrBhSs_6mjBOBPIefIvMKd2aAF3n5UPblQGy_NCdOxZjzUHptIBaKg4XPeIvK4IaTdGHCGyTKuuEoBF_iM6vMyV157pYCSpNbk2OpQqOlnl4mW1LAr8KkkJHwjK-Y6-7b8iGFuictNUBmVA4zEbAEsv7arzzVRbmF-O9RA27oIaRDYUVrx1sFXykNI0nrdrMLFLgOSPJS_vy4bCxdmAr" style="width: 80%;">
+                        <p class="caption">ALIGN merging 결과, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    <p>
+                        <br>아래는 ViT/G-14 모델에 대한 결과이고 greedy soup을 사용했을 때 58개의 모델 중 14개가 merging 되었다고 합니다.
+                        실제로 greedy soup 결과가 ImageNet과 distribution shifted ImageNet 데이터에서 가장 좋은 결과를 보여줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDlk6BwgCqoAupSK2U5HGHJymXTCO6YcNYnYvFE2ypcm95LrNyvp9i1zlPCTiYf8OIFBhbhvIIc12FUOusVQq-jRMty3MrGgZbX3ao0yYBZwXuBIF-1q_JbAm_nOUJkiV-_MguylW7ZB1BHyucQuWjC4sGdioxmj7YY0I4t9f2uueNbNoCWwyw26JQ7oDB1ckvdKFbQLfunk377xSqHcYK5tVLFGlYrVfEgFM-PKiOz8KnIvOxGah1H_KyIoyjrHki4v-u4uljsOSqK9ajRhhT01SympfFh2AyY6_2WFjFcX77o5cbRR0CtNchxIkkH5ibgqGE_GuY5xLQaJUX1igf8smnxgN5PJlup_IQLdKg-aCcWsyLtq9j0p5tEQnqbbmfYzEZYCWjMlwuc5YUlE5pfv9eZQQCAbYrrBhh3PQiHBu67rn2j-55FH6Pmnhztb1Ob1WPD2By4EeIuD1uHu1vGuYu99dYwVTtFKDvbiGIbOXX3C5AadzktlSdKIc7Fe4VxMTemmQJNeQnfgweA6pVweL8qyjPTJLBwbGDbDRH3iwX1aI00kstLaZjc4PDl77CZ8JzuxUayb9IchzqYKrg3qHI8DiI4L4xgfCk7xonaLRl90Q8XWeG72D5mGNK5126sxBC5fVwiFGIVA2MVy7n0iBEsrHHGoVhLN5sWLdMWX2NTxEiDpgAW6qkbyaCnYm3izwTdQmKjnIdg_mvR1Hc1RAqF_GNF4UH1JUFvL9iU5lgtxqRFOB1D416pSL2jhryo3LvmHk5wTvawegHbcVibsdFKmsYdcaiefzwxHoqIcA-4YnsPzIyP3SIk1tYsTpFpFA9xm3y4kNrsZaPAg9y9V1tYJQHI8TRN8JYmb6J9X2xKMj-IFNkiCVWeiUCqdUUcZLiRhabzBQ2dn_KW1hXpYemy13Hu1BVSd4oK80C_TjiAzoIL-MFYOXc0jbQ1lk-S-zX_keaT6sjCCsQZjQ87m2XmRIeHwGCM1NoC4EK8XLshgq7I4HswupYvIY8PIKiEnnSNTfTQLUyZ_1jsGH6nNlfZ_7TrFNqJYPpUWXdb_6IcXONb0vCbYmrXpFoPxvqV8iwQ1jik38h1X8iZaciFupZoJsrHThmrOGHde9bLjyTPqS_HRWt6UZVpy6rzqkQR0xd3LpvCuUHNUeOsW_v2dFjB172QAgR4Xz05mfd0PmcuXGQ6WsMMvV0eaiFWJ7xxs-n362NsaCDKx3bYCo5C0lLD5jqxxvrcxF-aQ8VqBvcBMhVYv9aG2Ov5I9xREL7kc-d6XRhd-izPkJ6d4GexVnbAkSGE-YCAEib1PSW7V4u_BzNt5F4fXUNjB-Qwkes2Y6AldsViaUbLkoBTXeZh8GggQynq7MH5jzANed2f77HkeTIH5F_YNBaYe03KnP4gA4eOv4_-LwU20fcXHXOEndWWCL3vfxOw1oyIQsbe5Eq_qht8t10JQBZaMriX4BvBwg6-i83C5XA9IgnQuo78QN4JjZjUr_kH1tYkhv7ZN8i9kjsUa" style="width: 100%;">
+                        <p class="caption">ViT/G-14 merging 결과, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+                    <p>
+                        <br>마지막으로 BERT와 T5의 text classification 결과인데, GLUE benchmark의 4개의 데이터셋을 fine-tuning한 후 greedy soup으로 merging 했을 때 두 모델 모두 기존 fine-tuning 한 모델보다 좋은 결과를 보여줍니다.
+                    </p>
+                    <div class="contentImg">
+                        <img src="https://lh3.googleusercontent.com/fife/AGXqzDkQu43wAOSWowmh_9zMSa7L63Xu9KPnZtkbAwkDZ_44OHg7O6PhezrOJAkROymuuWG9MsTQ0gkExmod5d3ymMSjBljTe2Z6SqGo1Gt6DFhrZfZjd0xIq2VWOXRQqGSXQtw7J-tQixpkuYDTFOgfVfm0X4p2okLO7hUfyioTP0W8V_Uiirap8w1cpoqYe1cBx-1UvgHdbPJ_XHYpC5Atb2BlWAqDCBMJwHw362EuVLWpy53X3Z0_qbT_jCyfqy0SD27zax4ar5pQV31hBNazTgXTaY7tIEpdQr5WGi1CPmD8qu2-OUIX4cqOOaBYk8iR91xjiikHMrP6K3HZxH-LDAykjXoNbLgFrQWgmOnTnowiasih2Pfsq5aFhyU7rp8I2bWX6rrFTlf7tQN5qhfEK2oQ-LI5H6mM6-ko0aNf8gu2oXA5lao7I1tY33at3f_Q5VXgUJLxBwFNGfRYrFJmQpTL4itw-fv2Ikn9FI4Telme5d2zdTT88EjBMSv8uOoq06Dq73C8vBYBlLqRe5_uTjoVchlbhLAJt8FN7s-KtiUEXfYtTNLVTN17fEn9Llc1kS3elGsVS6l0O5HjuD9X71yK00wHcEMmoif7JI1TO0LUV2xChe3uQluK6bsPX0ljemazZKkVFU9f7XFiCXhywvUu8cO-Pnid4bHK0N0ZhJ6fEIOyiv24FSoU4F7uQw8z22hwXESvJWJojgznYoM_VB68cGplhei39vlsKET9bbO8AXM5m-OlkYwyP3_cgL582R2j3QDzGpgZSsBI1KHzmzEE46W7QAZ_ihc3o-S5cdMRXYZbmmi57b_kqW5-5tScNDN208AGY-cAGxgUe7gmt_S8u8UMYXs3Dd_2q1gWKGtv5U3kdkQMWFqqXgJ_XflflMv8UVD-F6vEK3e1xqm3hq5a5_UIlEATlz1ohrz257oJQ8nkovZ9ZwScqY1kWwpjPryP0b1dRA6QKxX0ZGG2LBQGm-Odz42nL_OUvPAjPlzz1MEmTl6jNtTSQSaJj4XrEsPaw7ejAvEKr68kClGz2gQeVNWVeD8GEcIomDlmPVQ7gGiw-nP0VsXZXCfVgsvuUV6bDk8ZdTd4iGBn_wAYN3tYwR6ihE8CI9-2XpatY3jpyKOHLb8Lz89pNVfQ3NEsESm9jwsRQC-fR_uYGX-cy54XBC4bpw6OU4b_7FC1oHoHYW42nVDdpORAYEncl3vNiqjxvsHqjFEuLhyJW01GgfxkSripfao7xS6XbULSmLw8lcAr6q5UZbeFuRotCewdaNCtQBaqOhVosijCZmTvyRrOhBbgZ9fOsXUSvUiAdikGyesCwx7d4mt2en3inR85MPoj3mK25ICiWUKunBt7bSBhwplEGor1VuzRTtVifhTd4OfRhbjmfep0vq-ax9Devh-JG8-819qeixYGW-vhH7xAznQJQwIGYdM2KunM9KFnAyHm1Di46ON1D_MWeBc4YauTSgkVHmNvss5kwIBRk0rtAhquGSUD1MmmLsZK3AFDZNLTgWc4" style="width: 100%;">
+                        <p class="caption">BERT, T5 merging 결과, 출처: TIES-merging (TrIm, Elect Sign &amp; Merge) 논문</p>
+                    </div>
+
+
+
+
+
+                    
+                    <p>
+                        <br><br><br>이번에는 model merging 기법 중 TIES-merging (TrIm, Elect Sign &amp; Merge)를 소개했습니다.
+                        다음에는 실제로 LLM leader board에서 1등을 차지한 기법 중 하나인 LLM TIES merging 기법에 대해 소개하겠습니다.
+                    </p>
+
+
+                    
+                </div> 
+                <div class="tag">
+                    <b>태그</b>&emsp;#ModelSoups
+                </div>
+                <div class="pageTurner">
+                    <div class="pageTurnerLeft">
+                        <span><a style="position: absolute; left: 0;" onclick="alert('Deep Model Fusion 시리즈 첫 게시물 입니다.\n\nThis is the first post of Deep Model Fusion series.');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">&lang; 이전글</a>
+                        <br></span>
+                    </div>
+                    <div class="pageTurnerRight">
+                        <span><a style="position: absolute; right: 0;" onclick="pjaxPage('ties1.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">다음글 &rang;</a>
+                        <br>TIES-merging (TrIm, Elect Sign &amp; Merge)</span>
+                    </div>
+                </div>
+                <span id="readNum"></span>
+                <div id="disqus_thread"></div>
+
+                <script>
+                    headHighlightColorChanger();
+                    (function() { // DON'T EDIT BELOW THIS LINE
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://novicetraveler.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                    })(); 
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            </article>
+        </div>
+
+        <div id="menuRelated">
+            <div class="menuButton">
+                <img id="menuImg" src="init/index_img/menu_black.png" onclick="openMenu(this);">
+            </div>
+            <div class="menu">
+                <img id="menuExtension" title="메뉴를 확장합니다." src="init/index_img/extension_black.png" onclick="extendMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+            <div class="bigMenu">
+                <img id="menuCompression" title="메뉴를 축소합니다." src="init/index_img/compression_black.png" onclick="compressMenu(this);">
+                <div class="profile">
+                </div>
+                <ul class="tree">
+                </ul>
+                <p class="copyrights">
+                    © 2022. 여행 초짜. All rights reserved.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            detectScroll();
+            pushFunc();
+            detectSize();
+        </script>
+    </body>
+</html>
