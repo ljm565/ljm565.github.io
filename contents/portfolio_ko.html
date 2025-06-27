@@ -96,9 +96,10 @@
                             <span style="font-size: 20px;"><b>Skills</b></span>
                         </p>
                         <ul>
-                            <li><b>Programming Language</b>: Python, Java (Spring), JavaScript, FastAPI</li>
-                            <li><b>Tools</b>: PyTorch, PyTorch Lightning, LLM Training &amp; Serving (Triton-client, TensorRT-LLM, TensorRT-LLM Backend, vLLM, ollama), PEFT, RAG, Docker, Git, Elasticsearch (ELK)</li>
+                            <li><b>Programming Language</b>: Python, Java (Spring)</li>
+                            <li><b>Tools</b>: FastAPI, PyTorch, PyTorch Lightning, LLM Training &amp; Serving (Triton-client, TensorRT-LLM, TensorRT-LLM Backend, vLLM, ollama), PEFT, RAG, Docker, Git, Elasticsearch, GCP</li>
                             <li><b>Environment Preferences</b>: Linux, Mac</li>
+                            <li><b>Others</b>: PostgreSQL, HTML, CSS, JavaScript</li>
                         </ul>
                     </div>
                     <div class="portfolio_contact">
@@ -129,8 +130,8 @@
                         </p>
                         <ul>
                             <li>Ph.D. in KAIST Graduate School of AI, 2021 ~ present</li>
-                            <li>M.S. in KAIST Aerospace Engineering, 2019 ~ 2021 (GPA: 3.75 / 4.3, Topic: Generative Models)</li>
-                            <li>B.S. in Aerospace Engineering in KAIST, 2015 ~ 2019 (GPA: 3.3 / 4.3)</li>
+                            <li>M.S. in KAIST Aerospace Engineering, 2019 ~ 2021</li>
+                            <li>B.S. in Aerospace Engineering in KAIST, 2015 ~ 2019</li>
                         </ul>
                     </div>
                     <div class="portfolio_work">
@@ -138,9 +139,29 @@
                             <span style="font-size: 20px;"><b>Work</b></span>
                         </p>
                         <ul>
-                            <li>Kakao Healthcare, 2024.10. ~ 2025.04. (DS/IX, 대학원생 인턴)</li>
-                            <li>Lomin, 2023.04. ~ 2024.09. (ML team, 전문연구요원)</li>
-                            <li>IBRICKS, 2021.09. ~ 2023.04. (AI Tech, 전문연구요원)</li>
+                            <li>Kakao Healthcare, 2024.10. - 2025.04. (DS/IX, 대학원생 인턴)</li>
+                            <ul>
+                                <li>의료 NER(개체명 인식)에 특화된 LLM을 PEFT와 전체 학습 방식 모두로 학습시켰으며, vLLM을 사용해 여러 의료 전문 기관에 모델을 배포함.</li>
+                                <li>RAG(Retrieval-Augmented Generation)을 통합하여 정확하고 문맥을 반영한 건강 상담을 제공하는 GCP 기반 헬스케어 상담 챗봇을 구축함.</li>
+                            </ul>
+                            <li>Lomin, 2023.04. - 2024.09. (ML team, 전문연구요원 병역특례)</li>
+                            <ul>
+                                <li>문서 이해 과제를 위한 문서 특화 LLM을 학습하고, TensorRT-LLM 및 TensorRT-LLM Backend를 활용해 엔터프라이즈 온프레미스 환경에 최적화된 추론 형태로 배포함.</li>
+                                <li>텍스트 검출, 인식, 분류 등을 포함한 다양한 딥러닝 모델을 BentoML과 Triton client를 활용해 여러 기업의 온프레미스 환경에 배포함.</li>
+                                <li>문서 이미지에 특화된 텍스트 검출 모델의 성능, 속도, 견고성을 향상시키기 위해 YOLOv8을 커스터마이징함.</li>
+                                <li>특정 태스크에 대한 파인튜닝 없이도 미지의 문서 유형에 일반화할 수 있는 문서 임베딩 모델을 개발하여 zero-shot 문서 분류 시스템을 구축함.</li>
+                                <li>기존의 2단계 OCR 방식에서 벗어나 텍스트 검출과 인식을 통합한 엔드투엔드 파이프라인을 설계 및 구현하여 운영 효율성을 높임.</li>
+                                <li>브라우저 내에서 실시간 처방전 인식이 가능한 경량 Autoscan 모델을 개발하고, 서버 측 연산 없이 다양한 약국에서 사용할 수 있도록 TensorFlow.js로 배포함.</li>
+                            </ul>
+                            <li>IBRICKS, 2021.09. - 2023.04. (AI Tech, 전문연구요원 병역특례)</li>
+                            <ul>
+                                <li>Java로 개발된 문서 분석 제품을 유지 보수하고 신규 기능을 추가하여 안정성과 기능성을 지속적으로 개선함.</li>
+                                <li>GPT-2, DialoGPT, BART 등의 모델을 활용하여 LLM 등장 이전에 오픈 도메인 챗봇 시스템을 설계하고 구현함.</li>
+                                <li>긴 문서에서 핵심 문장을 식별하고 추출하여 간결하고 적절한 요약을 생성하는 BERT 기반 추출 요약 모델을 구축함.</li>
+                                <li>전통적인 sequence-to-sequence 구조를 shared encoder-decoder 모델로 대체하여 모델 크기와 복잡도를 줄이고 성능을 유지하면서 효율성을 향상시킴.</li>
+                                <li>LLM 등장 이전에 설계된 텍스트 데이터 증강을 위한 임베딩 공간 기반 비지도 GAN 모델인 TESGAN(Text Embedding Space GAN)을 개발함.</li>
+                                <li>온라인 홈쇼핑 광고 이미지에서 텍스트를 추출하는 데 특화된 OCR 모델을 개발함.</li>
+                            </ul>
                         </ul>
                     </div>
                     <div class="portfolio_researchContrib">
@@ -160,41 +181,23 @@
                             <span style="font-size: 20px;"><b>Publication</b></span>
                         </p>
                         <ul>
-                            <li>(preprint) <span style="font-family: 'Times New Roman', serif;"><b>End-to-end Documents Information Extraction and Detection using Documents Recognition-Detection Transformer</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee*</b></span>, I.P. Hong*, J.W. Kim* (*: equal contribution)
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Unsupervised Text Embedding Space Generation Using Generative Adversarial Networks for Text Synthesis</b> </span><a href="https://arxiv.org/abs/2306.17181" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and T.B. Ha<br>
-                                Northern European Journal of Language Technology (NEJLT), 2023
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Open-Domain Dialogue Generation using Pre-trained Language Models in Korean</b> </span><a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee*</b></span>, H.S. Kim*, T.B. Ha, H.J. Park and Y.M. Ahn (*: equal contribution)<br>
-                                Conference of Korea Computer Congress, 2022
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Laser structural training, artificial intelligence-based acoustic emission localization and structural/noise signal distinguishment in a thick FCEV fuel tank</b> </span><a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span>, Y.S. Choi, and J.R. Lee<br>
-                                International Journal of Hydrogen Energy (IJHE), 2022
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Acoustic emission localization on composite hydrogen storage tank and feature analysis of acoustic emission and noise signals</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and J.R. Lee<br>
-                                Conference of The Korean Society for Aeronautical and Space Sciences (KSAS), 2021
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Nondestructive Testing and Structural Health Monitoring for Pressure Vessels of FCEV using Guided-Wave Ultrasonic Propagation Imager</b></span><br>
-                                Y.S. Choi, <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and J.R. Lee<br>
-                                Conference of The Korean Society for Composite Materials (KSCM), 2020
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Structural Health Monitoring of Hydrogen Pressure Vessel using Artificial Intelligence</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span>, Y.S. Choi, and J.R. Lee<br>
-                                Conference of The Korean Society for Nondestructive Testing (KSNT), 2020 (<span style="font-family: 'Times New Roman', serif;"><b>Award</b></span>)
-                            </li>
+                            <li>[P7] Geun Hyeong Lee*, <b>Jun-Min Lee</b>*, Kihoon Sung, Ji Young Min, Jae Won Jang, Eun Jin Ahn, Yun Ah Baek, Hyun Jung Kim, Ji Yeon Park, Min Young An, Yu Ri Cho, Hye Yeong Kim, Dosang Cho, Choongki Kim, Hong Seok Park, Kyung-Jae Lee, Joo Heung Yoon, Hyo Jung Kim, and Soo-Yong Shin (2025), Large Language Model-based Named Entity Recognition for Unstructured Clinical Test Reports: Multi-centre Implementation and Validation, <i>Preprint</i> (*: equal contribution). (under review)</li>
+                            <li>[C2] Jiyoung Lee*, Seungho Kim*, Jieun Han, <b>Jun-Min Lee</b>, Kitaek Kim, Alice Oh, and Edward Choi (2025), Trans-EnV: A Framework for Evaluating the Linguistic Robustness of LLMs Against English Varieties, <i>Preprint</i> (*: equal contribution). <a href="https://arxiv.org/abs/2505.20875" target="_blank">[pdf]</a></li>
+                            <li>[P6] <b>Jun-Min Lee</b> and Tae-Bin Ha (2023), Unsupervised Text Embedding Space Generation Using Generative Adversarial Networks for Text Synthesis, <i>Northern European Journal of Language Technology (NEJLT), 9(1)</i>. <a href="https://arxiv.org/abs/2306.17181" target="_blank">[pdf]</a></li>
+                            <li>[P5] <b>Jun-Min Lee</b>*, Hyun-Soo Kim*, Tae-Bin Ha, Hojin Park, and Youngmin Ahn (2021), Open-Domain Dialogue Generation using Pre-trained Language Models in Korean, <i>Conference of Korea Computer Congress (KCC)</i> (*: equal contribution). <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank">[pdf]</a></li>
+                            <li>[P4] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2022), Laser structural training, artificial intelligence-based acoustic emission localization and structural noise signal distinguishment in a thick FCEV fuel tank, <i>International Journal of Hydrogen Energy (IJHE), 47(6), 4236-4254</i>. <a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank">[pdf]</a></li>
+                            <li>[P3] <b>Jun-Min Lee</b>, and Jung-Ryul Lee (2021). Acoustic emission localization on composite hydrogen storage tank and feature analysis of acoustic emission and noise signals. <i>Conference of The Korean Society for Aeronautical and Space Sciences (KSAS)</i>. <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE10613500" target="_blank">[pdf]</a></li>
+                            <li>[C1] Yunshil Choi, <b>Jun-Min Lee</b> and Jung-Ryul Lee (2020), Nondestructive Testing and Structural Health Monitoring for Pressure Vessels of FCEV using Guided-Wave Ultrasonic Propagation Imager, <i>Conference of The Korean Society for Composite Materials (KSCM)</i>.</li>
+                            <li>[P2] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2020), Structural Health Monitoring of Hydrogen Pressure Vessel using Artificial Intelligence, <i>Conference of The Korean Society for Nondestructive Testing (KSNT)</i> (<b>Award</b>).</li>
+                            <li>[P1] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2019), Acoustic Emission Simulation using Pulse Laser-induced Wave with Considering Arrival Time for Quantification, <i>The 1st Korea-China-Japan Joint Symposium on Composite Materials</i>.</li>
                         </ul>
                     </div>
                     <div class="portfolio_project">
                         <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Projects</b></span>
+                            <span style="font-size: 20px;"><b>Work Projects</b></span>
                         </p>
                         <ul>
-                            <li><span style="font-size: 18px;"><b>LLM Training &amp; Serving (2023.12 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>LLM Training &amp; Serving (2023.12 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: 채팅과 문서 이해를 위해 LLM을 훈련합니다. 이 과정에서 다양한 학습 방법론과 LoRA, DoRA, MoRa와 같은 최신 PEFT 기법을 포함한 최신 LLM 모델을 사용합니다. 또한 이러한 모델들에 대해 성능 실험을 수행합니다. 훈련된 모델을 온프라미스 환경에서 서빙하기 위해 TensorRT-LLM, TensorRTLLM-Backend, vLLM, Ollama 등의 도구를 사용합니다.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
@@ -206,7 +209,7 @@
                                     <li>TensorRT-LLM, TensorRTLLM-Backend, vLLM, ollam를 이용한 LLM 모델 변환 및 서빙.</li>
                                 </ul>
                             </ul><br>
-                            <li><span style="font-size: 18px;"><b>BentoML &amp; Triton Serving (2023.08 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>BentoML &amp; Triton Serving (2023.08 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: On-premises 사업에 제품을 서빙하기 위해 BentoML과 Triton inference server를 사용합니다. 그리고 지속적으로 모델의 성능 개선과 고객의 요구를 들어주기 위해서 유지보수를 수행합니다.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 5개의 사업을 맡았으며, 3개는 현재까지도 진행 중입니다.</li>
@@ -217,7 +220,7 @@
                                     <li>Trition inference server 서빙.</li>
                                 </ul>
                             </ul><br>
-                            <li><span style="font-size: 18px;"><b>Document Detection Model Enhancement (2023.11 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>Document Detection Model Enhancement (2023.11 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: 본 프로젝트는 문서 탐지 모델의 성능 개선을 위해 시작되었습니다. 문서 탐지 모델을 경량화하여 속도를 개선하고 성능을 높이기 위해 커스텀 모델을 제작했습니다. 뿐만 아니라 다양한 class로 분류하여 예측할 수 있도록 모델을 개선하여 도입하였습니다.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
@@ -392,13 +395,11 @@
                         </p>
                         <span>* 더 자세한 내용은 <a href="https://github.com/ljm565" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>을 참고해주세요.</span>
                         <ul>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Manifold Learning</span>: Autoencoders</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Computer Vision</span>: Image Classification, Image Generation (GAN, VAE), Image Captioning</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Natural Language Processing</span>: Neural Machine Translator, Chatbot, Sentiment Classification, Language Model Pretraining</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">LLM</span>: Universal LLM Trainer, LLM Serving, RAG</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Healthcare</span>: Mortality Prediction, Chest X-ray, Automatic Coding</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Graph</span>: Graph Neural Network, Graph Convolutional Network</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Reinforcement Learning</span>: DQN</li>
+                            <li><b>Universal LLM Trainer</b> <a href="https://github.com/ljm565/universal-llm-trainer" target="_blank">[link]</a></li>
+                            <ul>
+                                <li>오픈소스 LLM을 손쉽게 파인튜닝할 수 있는 모듈형 학습 프레임워크. Instruction tuning, 전체 파인튜닝, LoRA, QLoRA를 지원하며, DDP, FSDP, gradient checkpointing 등의 학습 전략을 제공함. 간단한 모델 래퍼 통합만으로 자가회귀(pretraining) 방식의 사전학습 및 SFT 기반 instruction tuning이 가능함.</li>
+                                <li>Tools Used: Python, PyTorch</li>
+                            </ul>
                         </ul>
                     </div>
                 </div>

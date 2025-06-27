@@ -101,9 +101,10 @@
                             <span style="font-size: 20px;"><b>Skills</b></span>
                         </p>
                         <ul>
-                            <li><b>Programming Language</b>: Python, Java (Spring), JavaScript, FastAPI</li>
-                            <li><b>Tools</b>: PyTorch, PyTorch Lightning, LLM Training &amp; Serving (Triton-client, TensorRT-LLM, TensorRT-LLM Backend, vLLM, ollama), PEFT, RAG, Docker, Git, Elasticsearch (ELK)</li>
+                            <li><b>Programming Language</b>: Python, Java (Spring)</li>
+                            <li><b>Tools</b>: FastAPI, PyTorch, PyTorch Lightning, LLM Training &amp; Serving (Triton-client, TensorRT-LLM, TensorRT-LLM Backend, vLLM, ollama), PEFT, RAG, Docker, Git, Elasticsearch, GCP</li>
                             <li><b>Environment Preferences</b>: Linux, Mac</li>
+                            <li><b>Others</b>: PostgreSQL, HTML, CSS, JavaScript</li>
                         </ul>
                     </div>
                     <div class="portfolio_contact">
@@ -134,8 +135,8 @@
                         </p>
                         <ul>
                             <li>Ph.D. in KAIST Graduate School of AI, 2021 ~ present</li>
-                            <li>M.S. in KAIST Aerospace Engineering, 2019 ~ 2021 (GPA: 3.75 / 4.3, Topic: Generative Models)</li>
-                            <li>B.S. in Aerospace Engineering in KAIST, 2015 ~ 2019 (GPA: 3.3 / 4.3)</li>
+                            <li>M.S. in KAIST Aerospace Engineering, 2019 ~ 2021</li>
+                            <li>B.S. in Aerospace Engineering in KAIST, 2015 ~ 2019</li>
                         </ul>
                     </div>
                     <div class="portfolio_work">
@@ -143,9 +144,29 @@
                             <span style="font-size: 20px;"><b>Work</b></span>
                         </p>
                         <ul>
-                            <li>Kakao Healthcare, 2024.10. ~ 2025.04. (DS/IX, 대학원생 인턴)</li>
-                            <li>Lomin, 2023.04. ~ 2024.09. (ML team, 전문연구요원)</li>
-                            <li>IBRICKS, 2021.09. ~ 2023.04. (AI Tech, 전문연구요원)</li>
+                            <li>Kakao Healthcare, 2024.10. - 2025.04. (DS/IX, Student internship)</li>
+                            <ul>
+                                <li>Performed both PEFT and full training of a medical NER-specialized LLM, and deployed the model to multiple specialized medical centers using vLLM for inference.</li>
+                                <li>Built a GCP-based healthcare counselor chatbot by integrating RAG to provide accurate and context-aware health consultations.</li>
+                            </ul>
+                            <li>Lomin, 2023.04. - 2024.09. (ML team, Military service replacement)</li>
+                            <ul>
+                                <li>Trained a document-specialized LLM for document understanding tasks and deployed it on-premises to enterprise environments using TensorRT-LLM and TensorRT-LLM Backend for optimized inference.</li>
+                                <li>Deployed various deep learning models—including text detection, recognition, and classification—to multiple enterprises in on-premises environments using BentoML and Triton client.</li>
+                                <li>Customized YOLOv8 to improve the performance, speed, and robustness of the text detection model specifically for document images.</li>
+                                <li>Built a zero-shot document classification system by developing a document embedding model capable of generalizing to unseen document types without task-specific fine-tuning.</li>
+                                <li>Departed from the conventional two-stage OCR approach by designing and implementing an end-to-end pipeline that unifies text detection and recognition, resulting in enhanced management efficiency.</li>
+                                <li>Developed a lightweight Autoscan model capable of real-time prescription detection, and deployed it using TensorFlow.js for in-browser inference across multiple pharmacies without the need for server-side computation.</li>
+                            </ul>
+                            <li>IBRICKS, 2021.09. - 2023.04. (AI Tech, Military service replacement)</li>
+                            <ul>
+                                <li>Maintained and added new features to a document analysis product developed in Java, ensuring its stability and continuous improvement in functionality.</li>
+                                <li>Designed and implemented an open-domain chatbot system using models like GPT-2, DialoGPT, and BART prior to the rise of LLMs.</li>
+                                <li>Built a BERT-based extractive summarization model for long documents by identifying and extracting key sentences, enabling concise and relevant summaries.</li>
+                                <li>Reduced model size and complexity by replacing traditional sequence-to-sequence architecture with a shared encoder-decoder model, improving efficiency while maintaining performance.</li>
+                                <li>Developed TESGAN (Text Embedding Space GAN), an unsupervised GAN-based model that generates rich embedding space for text data augmentation, designed prior to the advent of LLMs.</li>
+                                <li>Developed an OCR model specialized for extracting text from online home shopping advertisement images.</li>
+                            </ul>
                         </ul>
                     </div>
                     <div class="portfolio_researchContrib">
@@ -165,41 +186,23 @@
                             <span style="font-size: 20px;"><b>Publication</b></span>
                         </p>
                         <ul>
-                            <li>(preprint) <span style="font-family: 'Times New Roman', serif;"><b>End-to-end Documents Information Extraction and Detection using Documents Recognition-Detection Transformer</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee*</b></span>, I.P. Hong*, J.W. Kim* (*: equal contribution)
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Unsupervised Text Embedding Space Generation Using Generative Adversarial Networks for Text Synthesis</b> </span><a href="https://arxiv.org/abs/2306.17181" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and T.B. Ha<br>
-                                Northern European Journal of Language Technology (NEJLT), 2023
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Open-Domain Dialogue Generation using Pre-trained Language Models in Korean</b> </span><a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee*</b></span>, H.S. Kim*, T.B. Ha, H.J. Park and Y.M. Ahn (*: equal contribution)<br>
-                                Conference of Korea Computer Congress, 2022
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Laser structural training, artificial intelligence-based acoustic emission localization and structural/noise signal distinguishment in a thick FCEV fuel tank</b> </span><a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank">[pdf]</a><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span>, Y.S. Choi, and J.R. Lee<br>
-                                International Journal of Hydrogen Energy (IJHE), 2022
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Acoustic emission localization on composite hydrogen storage tank and feature analysis of acoustic emission and noise signals</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and J.R. Lee<br>
-                                Conference of The Korean Society for Aeronautical and Space Sciences (KSAS), 2021
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Nondestructive Testing and Structural Health Monitoring for Pressure Vessels of FCEV using Guided-Wave Ultrasonic Propagation Imager</b></span><br>
-                                Y.S. Choi, <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span> and J.R. Lee<br>
-                                Conference of The Korean Society for Composite Materials (KSCM), 2020
-                            </li>
-                            <li><span style="font-family: 'Times New Roman', serif;"><b>Structural Health Monitoring of Hydrogen Pressure Vessel using Artificial Intelligence</b></span><br>
-                                <span style="font-family: 'Times New Roman', serif;"><b>J.M. Lee</b></span>, Y.S. Choi, and J.R. Lee<br>
-                                Conference of The Korean Society for Nondestructive Testing (KSNT), 2020 (<span style="font-family: 'Times New Roman', serif;"><b>Award</b></span>)
-                            </li>
+                            <li>[P7] Geun Hyeong Lee*, <b>Jun-Min Lee</b>*, Kihoon Sung, Ji Young Min, Jae Won Jang, Eun Jin Ahn, Yun Ah Baek, Hyun Jung Kim, Ji Yeon Park, Min Young An, Yu Ri Cho, Hye Yeong Kim, Dosang Cho, Choongki Kim, Hong Seok Park, Kyung-Jae Lee, Joo Heung Yoon, Hyo Jung Kim, and Soo-Yong Shin (2025), Large Language Model-based Named Entity Recognition for Unstructured Clinical Test Reports: Multi-centre Implementation and Validation, <i>Preprint</i> (*: equal contribution). (under review)</li>
+                            <li>[C2] Jiyoung Lee*, Seungho Kim*, Jieun Han, <b>Jun-Min Lee</b>, Kitaek Kim, Alice Oh, and Edward Choi (2025), Trans-EnV: A Framework for Evaluating the Linguistic Robustness of LLMs Against English Varieties, <i>Preprint</i> (*: equal contribution). <a href="https://arxiv.org/abs/2505.20875" target="_blank">[pdf]</a></li>
+                            <li>[P6] <b>Jun-Min Lee</b> and Tae-Bin Ha (2023), Unsupervised Text Embedding Space Generation Using Generative Adversarial Networks for Text Synthesis, <i>Northern European Journal of Language Technology (NEJLT), 9(1)</i>. <a href="https://arxiv.org/abs/2306.17181" target="_blank">[pdf]</a></li>
+                            <li>[P5] <b>Jun-Min Lee</b>*, Hyun-Soo Kim*, Tae-Bin Ha, Hojin Park, and Youngmin Ahn (2021), Open-Domain Dialogue Generation using Pre-trained Language Models in Korean, <i>Conference of Korea Computer Congress (KCC)</i> (*: equal contribution). <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank">[pdf]</a></li>
+                            <li>[P4] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2022), Laser structural training, artificial intelligence-based acoustic emission localization and structural noise signal distinguishment in a thick FCEV fuel tank, <i>International Journal of Hydrogen Energy (IJHE), 47(6), 4236-4254</i>. <a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank">[pdf]</a></li>
+                            <li>[P3] <b>Jun-Min Lee</b>, and Jung-Ryul Lee (2021). Acoustic emission localization on composite hydrogen storage tank and feature analysis of acoustic emission and noise signals. <i>Conference of The Korean Society for Aeronautical and Space Sciences (KSAS)</i>. <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE10613500" target="_blank">[pdf]</a></li>
+                            <li>[C1] Yunshil Choi, <b>Jun-Min Lee</b> and Jung-Ryul Lee (2020), Nondestructive Testing and Structural Health Monitoring for Pressure Vessels of FCEV using Guided-Wave Ultrasonic Propagation Imager, <i>Conference of The Korean Society for Composite Materials (KSCM)</i>.</li>
+                            <li>[P2] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2020), Structural Health Monitoring of Hydrogen Pressure Vessel using Artificial Intelligence, <i>Conference of The Korean Society for Nondestructive Testing (KSNT)</i> (<b>Award</b>).</li>
+                            <li>[P1] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2019), Acoustic Emission Simulation using Pulse Laser-induced Wave with Considering Arrival Time for Quantification, <i>The 1st Korea-China-Japan Joint Symposium on Composite Materials</i>.</li>
                         </ul>
                     </div>
                     <div class="portfolio_project">
                         <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Projects</b></span>
+                            <span style="font-size: 20px;"><b>Work Projects</b></span>
                         </p>
                         <ul>
-                            <li><span style="font-size: 18px;"><b>LLM Training &amp; Serving (2023.12 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>LLM Training &amp; Serving (2023.12 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: I train LLMs for chat and document understanding. This involves using various training methodologies and the latest LLM models, including cutting-edge PEFT techniques like LoRA, DoRA, and MoRa. I also conduct performance experiments on these models. To serve the trained models on-premises, I use tools such as TensorRT-LLM, TensorRTLLM-Backend, vLLM, and ollama.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
@@ -211,7 +214,7 @@
                                     <li>LLM serving via TensorRT-LLM, TensorRTLLM-Backend, vLLM, and ollam.</li>
                                 </ul>
                             </ul><br>
-                            <li><span style="font-size: 18px;"><b>BentoML &amp; Triton Serving (2023.08 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>BentoML &amp; Triton Serving (2023.08 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: BentoML and Triton Inference Server are used to serve products in on-premises. Additionally, I continuously perform maintenance to improve model performance and meet customer requirements.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: I managed five projects, three of which are still ongoing.</li>
@@ -222,7 +225,7 @@
                                     <li>Trition inference server serving.</li>
                                 </ul>
                             </ul><br>
-                            <li><span style="font-size: 18px;"><b>Document Detection Model Enhancement (2023.11 ~ present)</b></span></li>
+                            <li><span style="font-size: 18px;"><b>Document Detection Model Enhancement (2023.11 ~ 2024.09)</b></span></li>
                             <ul>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project was initiated to improve the performance of the documents detection model. To enhance speed and performance, I created a custom model by making the detection model more lightweight. Additionally, I improved and implemented the model to classify and predict various classes.</li>
                                 <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
@@ -397,13 +400,11 @@
                         </p>
                         <span>* For more details, please refer to <a href="https://github.com/ljm565" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>.</span>
                         <ul>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Manifold Learning</span>: Autoencoders</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Computer Vision</span>: Image Classification, Image Generation (GAN, VAE), Image Captioning</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Natural Language Processing</span>: Neural Machine Translator, Chatbot, Sentiment Classification, Language Model Pretraining</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">LLM</span>: Universal LLM Trainer, LLM Serving, RAG</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Healthcare</span>: Mortality Prediction, Chest X-ray, Automatic Coding</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Graph</span>: Graph Neural Network, Graph Convolutional Network</li>
-                            <li><span class="highlight" style="color: rgb(0, 3, 206);">Reinforcement Learning</span>: DQN</li>
+                            <li><b>Universal LLM Trainer</b> <a href="https://github.com/ljm565/universal-llm-trainer" target="_blank">[link]</a></li>
+                            <ul>
+                                <li>A modular training framework for easily fine-tuning open-source LLMs. Supports instruction tuning, full fine-tuning, LoRA, QLoRA, and training strategies like DDP, FSDP, and gradient checkpointing. Enables autoregressive pre-training and SFT-based instruction tuning with simple model wrapper integration.</li>
+                                <li>Tools Used: Python, PyTorch</li>
+                            </ul>
                         </ul>
                     </div>
                 </div>
