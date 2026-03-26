@@ -417,9 +417,9 @@ function darkMode(self){
     if (self.value === 'dark'){
         self.value = 'light';
         document.getElementById('modeState').innerHTML = '라이트 모드로 보기';
-        document.getElementById('menuImg').src = 'init/index_img/menu_white.png';
-        document.getElementById('menuExtension').src = 'init/index_img/extension_white.png';
-        document.getElementById('menuCompression').src = 'init/index_img/compression_white.png';
+        document.getElementById('menuImg').src = '/init/index_img/menu_white.png';
+        document.getElementById('menuExtension').src = '/init/index_img/extension_white.png';
+        document.getElementById('menuCompression').src = '/init/index_img/compression_white.png';
         $('body').css('color', 'white');
         $('body').css('background-color', 'rgb(50, 50, 50)');
         $('#mainHead h1').css('color', 'rgb(200, 200, 200)');
@@ -438,9 +438,9 @@ function darkMode(self){
     } else{
         self.value = 'dark'
         document.getElementById('modeState').innerHTML = '다크 모드로 보기';
-        document.getElementById('menuImg').src = 'init/index_img/menu_black.png';
-        document.getElementById('menuExtension').src = 'init/index_img/extension_black.png';
-        document.getElementById('menuCompression').src = 'init/index_img/compression_black.png';
+        document.getElementById('menuImg').src = '/init/index_img/menu_black.png';
+        document.getElementById('menuExtension').src = '/init/index_img/extension_black.png';
+        document.getElementById('menuCompression').src = '/init/index_img/compression_black.png';
         $('body').css('color', 'black');
         $('body').css('background-color', 'white');
         $('#mainHead h1').css('color', 'rgb(82, 82, 82)');
@@ -460,11 +460,11 @@ function darkMode(self){
 
 function hoveringOn(self){
     if (self.value === 'dark'){
-        document.getElementById('modeImg').src = 'init/index_img/moon_on.png';
+        document.getElementById('modeImg').src = '/init/index_img/moon_on.png';
         $(self).css('background-color', 'rgb(80, 80, 80)');
         $(self).css('color', 'white');
     } else{
-        document.getElementById('modeImg').src = 'init/index_img/sun_on.png';
+        document.getElementById('modeImg').src = '/init/index_img/sun_on.png';
         $(self).css('background-color', 'rgb(224, 224, 224)');
         $(self).css('color', 'black');
     }
@@ -472,11 +472,11 @@ function hoveringOn(self){
 
 function hoveringOff(self){
     if (self.value === 'dark'){
-        document.getElementById('modeImg').src = 'init/index_img/moon_off.png';
+        document.getElementById('modeImg').src = '/init/index_img/moon_off.png';
         $(self).css('background-color', 'rgb(224, 224, 224)');
         $(self).css('color', 'black');
     } else{
-        document.getElementById('modeImg').src = 'init/index_img/sun_off.png';
+        document.getElementById('modeImg').src = '/init/index_img/sun_off.png';
         $(self).css('background-color', 'rgb(80, 80, 80)');
         $(self).css('color', 'white');
     }
@@ -641,10 +641,10 @@ function headHighlightColorChanger(){
 }
 
 function pushFunc(){
-    fetchPage('init/profile.html', '.menu .profile');
-    fetchPage('init/menu.html', '.menu .tree');
-    fetchPage('init/profile.html', '.bigMenu .profile');
-    fetchPage('init/bigMenu.html', '.bigMenu .tree');
+    fetchPage('/init/profile.html', '.menu .profile');
+    fetchPage('/init/menu.html', '.menu .tree');
+    fetchPage('/init/profile.html', '.bigMenu .profile');
+    fetchPage('/init/bigMenu.html', '.bigMenu .tree');
     window.onpopstate = function(event){
         $('iframe').not('iframe.map').remove(); // for disqus
         reload();
