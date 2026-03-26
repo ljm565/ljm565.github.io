@@ -183,6 +183,7 @@ article{
     font-size: 14px;
     overflow: auto;
     z-index: 5;
+    box-shadow: 4px 0 28px rgba(0,0,0,0.18);
 }
 #menuRelated .bigMenu{
     position: fixed;
@@ -195,6 +196,7 @@ article{
     overflow: auto;
     z-index: 6;
     display: none;
+    box-shadow: 4px 0 28px rgba(0,0,0,0.18);
 }
 #menuRelated .menu .profileImg{
     top: 5%;
@@ -243,6 +245,9 @@ article{
 }
 #menuRelated .menu .tree label{
     cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    font-weight: 600;
 }
 #menuRelated .menu .tree ol{
     padding-left: 30px;
@@ -250,6 +255,10 @@ article{
 #menuRelated .menu .tree ul{
     padding-left: 10px;
     list-style: none;
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    display: block;
 }
 #menuRelated .menu .tree input[type="checkbox"]{
     display: none;
@@ -261,10 +270,12 @@ article{
     width: 13px;
 }
 #menuRelated .menu .tree input[type="checkbox"]:checked~ul{
-    display: none;
+    max-height: 0 !important;
+    display: block !important;
 }
 #menuRelated .menu .tree input[type="checkbox"]:checked~ol{
-    display: none;
+    max-height: 0 !important;
+    display: block !important;
 }
 #menuRelated .menu .tree input[type="checkbox"]:checked+label:before{
     content: '\e803';
@@ -274,8 +285,27 @@ article{
 }
 #menuRelated .menu li{
     width:100%;
-    margin-top: 20px;
+    margin-top: 14px;
     word-break: keep-all;
+}
+#menuRelated .menu .tree > li {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(128,128,128,0.18);
+}
+#menuRelated .menu .tree > li:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+#menuRelated .menu .tree a{
+    display: block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+    font-size: 13px;
+}
+#menuRelated .menu .tree a:hover{
+    background-color: rgba(128,128,128,0.13);
 }
 #menuRelated .menu .copyrights{
     font-size: 12px;
@@ -327,6 +357,9 @@ article{
 }
 #menuRelated .bigMenu .tree label{
     cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    font-weight: 600;
 }
 #menuRelated .bigMenu .tree ol{
     padding-left: 30px;
@@ -334,6 +367,10 @@ article{
 #menuRelated .bigMenu .tree ul{
     padding-left: 10px;
     list-style: none;
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    display: block;
 }
 #menuRelated .bigMenu .tree input[type="checkbox"]{
     display: none;
@@ -345,10 +382,12 @@ article{
     width: 13px;
 }
 #menuRelated .bigMenu .tree input[type="checkbox"]:checked~ul{
-    display: none;
+    max-height: 0 !important;
+    display: block !important;
 }
 #menuRelated .bigMenu .tree input[type="checkbox"]:checked~ol{
-    display: none;
+    max-height: 0 !important;
+    display: block !important;
 }
 #menuRelated .bigMenu .tree input[type="checkbox"]:checked+label:before{
     content: '\e803';
@@ -358,8 +397,27 @@ article{
 }
 #menuRelated .bigMenu li{
     width:100%;
-    margin-top: 20px;
+    margin-top: 14px;
     /* word-break: keep-all; */
+}
+#menuRelated .bigMenu .tree > li {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(128,128,128,0.18);
+}
+#menuRelated .bigMenu .tree > li:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+#menuRelated .bigMenu .tree a{
+    display: block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+    font-size: 13px;
+}
+#menuRelated .bigMenu .tree a:hover{
+    background-color: rgba(128,128,128,0.13);
 }
 #menuRelated .bigMenu .copyrights{
     font-size: 12px;

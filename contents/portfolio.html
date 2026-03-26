@@ -75,348 +75,386 @@
                 </div>
                 
                 <div id="content">
-                    <div class="portfolio_name">
-                        <span><b>Jun-Min Lee</b></span>
-                    </div>
-                    <br><br>
-                    <div class="portfolio_ko">
-                        <p style="padding-top: 40px;">
-                            한국어 페이지는 <a onclick="pjaxPage('portfolio_ko.html');"><span class="highlight" style="color: rgb(0, 3, 206);">[여기]</span></a>를 참고해주세요.
-                        </p>
-                    </div>
-                    <div class="portfolio_intro">
-                        <img src="init/index_img/profile3.png" style="width:25%; float: right; margin-left: 60px; padding-top: 40px; padding-bottom: 30px;">
-                        <p style="padding-top: 40px;">
-                            I am an AI developer who wants to make the world a better place through artificial intelligence.
+                    <!-- Hero -->
+                    <div class="pf-hero">
+                        <img class="pf-avatar" src="init/index_img/profile3.png" alt="Jun-Min Lee">
+                        <div class="pf-hero-text">
+                            <h1 class="pf-name">Jun-Min Lee</h1>
+                            <p class="pf-tagline">AI Researcher &amp; Engineer · KAIST Graduate School of AI</p>
+                            <p class="pf-lang-link">한국어 페이지는 <a onclick="pjaxPage('portfolio_ko.html');" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[여기]</a>를 참고해주세요.</p>
+                            <p>I am an AI developer who wants to make the world a better place through artificial intelligence.
                             I believe that AI can play a significant role in various fields, such as saving lives and increasing work efficiency.
-                            When I first started studying AI, I couldn't have imagined such a future, but now, with the development of technologies like LLM and MLLM, AI is able to perform many tasks that only humans could do. 
-                            I am thrilled that we are getting closer to the ideal AI I have envisioned.
-                            This naturally led me to take an interest in LLM, and I am currently studying and working with it.
-                            I am continuously striving to gain diverse experiences to become an AI researcher and engineer who contributes to making the world a better place.
-                        </p>
+                            With the development of technologies like LLM and MLLM, AI is able to perform many tasks that only humans could do.
+                            I am currently focused on LLM research and engineering, continuously striving to become an AI researcher and engineer who contributes to making the world a better place.</p>
+                        </div>
                     </div>
-                    
-                    <div class="portfolio_about">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Skills</b></span>
-                        </p>
-                        <ul>
-                            <li><b>Programming Language</b>: Python, Java (Spring)</li>
-                            <li><b>Tools</b>: FastAPI, PyTorch, PyTorch Lightning, LLM Training &amp; Serving (Triton-client, TensorRT-LLM, TensorRT-LLM Backend, vLLM, ollama), PEFT, RAG, Docker, Git, Elasticsearch, GCP</li>
-                            <li><b>Environment Preferences</b>: Linux, Mac</li>
-                            <li><b>Others</b>: PostgreSQL, HTML, CSS, JavaScript</li>
+
+                    <!-- Skills -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Skills</h2>
+                        <p class="pf-card-label">Programming Language</p>
+                        <div class="pf-tags">
+                            <span class="pf-tag">Python</span>
+                            <span class="pf-tag">Java (Spring)</span>
+                        </div>
+                        <p class="pf-card-label">Tools &amp; Frameworks</p>
+                        <div class="pf-tags">
+                            <span class="pf-tag pf-tag--hl">PyTorch</span>
+                            <span class="pf-tag pf-tag--hl">PyTorch Lightning</span>
+                            <span class="pf-tag pf-tag--hl">TensorRT-LLM</span>
+                            <span class="pf-tag pf-tag--hl">vLLM</span>
+                            <span class="pf-tag pf-tag--hl">ollama</span>
+                            <span class="pf-tag pf-tag--hl">PEFT</span>
+                            <span class="pf-tag pf-tag--hl">RAG</span>
+                            <span class="pf-tag">FastAPI</span>
+                            <span class="pf-tag">Docker</span>
+                            <span class="pf-tag">Git</span>
+                            <span class="pf-tag">Elasticsearch</span>
+                            <span class="pf-tag">GCP</span>
+                        </div>
+                        <p class="pf-card-label">Environment</p>
+                        <div class="pf-tags">
+                            <span class="pf-tag">Linux</span>
+                            <span class="pf-tag">Mac</span>
+                        </div>
+                        <p class="pf-card-label">Others</p>
+                        <div class="pf-tags">
+                            <span class="pf-tag">PostgreSQL</span>
+                            <span class="pf-tag">HTML</span>
+                            <span class="pf-tag">CSS</span>
+                            <span class="pf-tag">JavaScript</span>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Contact</h2>
+                        <ul class="pf-contact-list">
+                            <li>✉ ljm56897@gmail.com</li>
+                            <li>⌥ GitHub: <a href="https://github.com/ljm565" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">github.com/ljm565</a></li>
+                            <li>⌘ Blog: <a href="https://ljm565.github.io" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">ljm565.github.io</a></li>
+                            <li>📄 CV: <a href="init/cv.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[PDF]</a></li>
                         </ul>
                     </div>
-                    <div class="portfolio_contact">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Contact</b></span>
-                        </p>
-                        <ul>
-                            <li><b>Mail</b>: ljm56897@gmail.com</li>
-                            <li><b>GitHub</b>: <a href="https://github.com/ljm565" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">https://github.com/ljm565</a></li>
-                            <li><b>Blog</b>: <a href="https://ljm565.github.io" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">https://ljm565.github.io</a></li>
-                            <li><b>CV</b>: <a href="init/cv.pdf" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[PDF file]</a></li>
+
+                    <!-- Research Area -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Research Area</h2>
+                        <div class="pf-tags">
+                            <span class="pf-tag pf-tag--hl">LLM / MLLM Tuning &amp; Serving</span>
+                            <span class="pf-tag pf-tag--hl">PEFT</span>
+                            <span class="pf-tag">Healthcare AI</span>
+                            <span class="pf-tag">Natural Language Processing</span>
+                            <span class="pf-tag">Document Understanding</span>
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Education</h2>
+                        <div class="pf-timeline">
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2021 ~ present</div>
+                                <div class="pf-timeline-title">Ph.D. · KAIST Graduate School of AI</div>
+                            </div>
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2019 ~ 2021</div>
+                                <div class="pf-timeline-title">M.S. · KAIST Aerospace Engineering</div>
+                            </div>
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2015 ~ 2019</div>
+                                <div class="pf-timeline-title">B.S. · KAIST Aerospace Engineering</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Work Experience</h2>
+                        <div class="pf-timeline">
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2024.10 ~ 2025.04</div>
+                                <div class="pf-timeline-title">Kakao Healthcare <span style="font-weight:400;font-size:13px;opacity:0.6;">· DS/IX, Student Internship</span></div>
+                                <ul class="pf-timeline-bullets">
+                                    <li>Performed both PEFT and full training of a medical NER-specialized LLM, deployed using vLLM to multiple specialized medical centers.</li>
+                                    <li>Built a GCP-based healthcare counselor chatbot integrating RAG for accurate health consultations.</li>
+                                </ul>
+                            </div>
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2023.04 ~ 2024.09</div>
+                                <div class="pf-timeline-title">Lomin <span style="font-weight:400;font-size:13px;opacity:0.6;">· ML Team, Military Service Replacement</span></div>
+                                <ul class="pf-timeline-bullets">
+                                    <li>Trained a document-specialized LLM and deployed it on-premises using TensorRT-LLM and TensorRT-LLM Backend.</li>
+                                    <li>Deployed text detection, recognition, and classification models via BentoML and Triton client to enterprise environments.</li>
+                                    <li>Customized YOLOv8 for document image text detection; built zero-shot document classification system.</li>
+                                    <li>Designed an end-to-end pipeline unifying text detection and recognition, reducing maintenance overhead.</li>
+                                    <li>Developed lightweight Autoscan model deployed via TensorFlow.js for in-browser real-time prescription detection.</li>
+                                </ul>
+                            </div>
+                            <div class="pf-timeline-item">
+                                <div class="pf-timeline-dot"></div>
+                                <div class="pf-timeline-period">2021.09 ~ 2023.04</div>
+                                <div class="pf-timeline-title">IBRICKS <span style="font-weight:400;font-size:13px;opacity:0.6;">· AI Tech, Military Service Replacement</span></div>
+                                <ul class="pf-timeline-bullets">
+                                    <li>Maintained and extended a Java-based document analysis product.</li>
+                                    <li>Designed an open-domain chatbot system using GPT-2, DialoGPT, and BART prior to the LLM era.</li>
+                                    <li>Built a BERT-based extractive summarization model for long documents using sentence n-grams.</li>
+                                    <li>Developed TESGAN — an unsupervised GAN model for text embedding space augmentation.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Research Contribution -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Research Contribution</h2>
+                        <ul class="pf-contact-list">
+                            <li>2025 PC Member — AAAI</li>
+                            <li>2023, 2024 PC Member — AAAI</li>
+                            <li>2023 Industry Track Committee — EMNLP</li>
+                            <li>2023 PC Member — EMNLP</li>
+                            <li>2023 PC Member — ACL</li>
                         </ul>
                     </div>
-                    <div class="portfolio_researchArea">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Research Area</b></span>
-                        </p>
-                        <ul>
-                            <li>Healthcare</li>
-                            <li>Natural language processing</li>
-                            <li>Document Understanding</li>
-                            <li>LLM, MLLM tuning and serving, PEFT</li>
+
+                    <!-- Publication -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Publication</h2>
+                        <ul class="pf-pub-list">
+                            <li><span class="pf-pub-num">[P8]</span> Geun Hyeong Lee*, <b>Jun-Min Lee</b>*, et al. (2025), Large Language Model-based Named Entity Recognition for Unstructured Clinical Test Reports, <i>Preprint</i> (*: equal contribution). (under review)</li>
+                            <li><span class="pf-pub-num">[P7]</span> <b>Jun-Min Lee</b>, Meong Hi Son, and Edward Choi (2026), H-AdminSim: A Multi-Agent Simulator for Realistic Hospital Administrative Workflows with FHIR Integration, <i>Preprint</i>. <a href="https://arxiv.org/abs/2602.05407" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[C2]</span> Jiyoung Lee*, Seungho Kim*, Jieun Han, <b>Jun-Min Lee</b>, et al. (2025), Trans-EnV: A Framework for Evaluating the Linguistic Robustness of LLMs Against English Varieties, <i>NeurIPS</i> (*: equal contribution). <a href="https://arxiv.org/abs/2505.20875" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[P6]</span> <b>Jun-Min Lee</b> and Tae-Bin Ha (2023), Unsupervised Text Embedding Space Generation Using GANs for Text Synthesis, <i>NEJLT 9(1)</i>. <a href="https://arxiv.org/abs/2306.17181" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[P5]</span> <b>Jun-Min Lee</b>*, Hyun-Soo Kim*, et al. (2021), Open-Domain Dialogue Generation using Pre-trained Language Models in Korean, <i>KCC</i> (*: equal contribution). <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[P4]</span> <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2022), AI-based acoustic emission localization in a thick FCEV fuel tank, <i>IJHE 47(6)</i>. <a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[P3]</span> <b>Jun-Min Lee</b> and Jung-Ryul Lee (2021). Acoustic emission localization on composite hydrogen storage tank, <i>KSAS</i>. <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE10613500" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[pdf]</a></li>
+                            <li><span class="pf-pub-num">[C1]</span> Yunshil Choi, <b>Jun-Min Lee</b> and Jung-Ryul Lee (2020), Nondestructive Testing for Pressure Vessels using Guided-Wave Ultrasonic Propagation Imager, <i>KSCM</i>.</li>
+                            <li><span class="pf-pub-num">[P2]</span> <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2020), Structural Health Monitoring of Hydrogen Pressure Vessel using AI, <i>KSNT</i> (<b>Award</b>).</li>
+                            <li><span class="pf-pub-num">[P1]</span> <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2019), Acoustic Emission Simulation using Pulse Laser-induced Wave, <i>Korea-China-Japan Symposium on Composite Materials</i>.</li>
                         </ul>
                     </div>
-                    <div class="portfolio_education">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Education</b></span>
-                        </p>
-                        <ul>
-                            <li>Ph.D. in KAIST Graduate School of AI, 2021 ~ present</li>
-                            <li>M.S. in KAIST Aerospace Engineering, 2019 ~ 2021</li>
-                            <li>B.S. in Aerospace Engineering in KAIST, 2015 ~ 2019</li>
-                        </ul>
+
+                    <!-- Work Projects -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Work Projects</h2>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">LLM Training &amp; Serving</span>
+                                <span class="pf-card-period">2023.12 ~ 2024.09</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Train LLMs for chat and document understanding using cutting-edge PEFT (LoRA, DoRA, MoRa) and full-parameter tuning. Serve trained models on-premises via TensorRT-LLM, vLLM, and ollama.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span><span class="pf-tag">TensorRT-LLM</span><span class="pf-tag">vLLM</span><span class="pf-tag">ollama</span><span class="pf-tag">Deepspeed</span></div>
+                                <p class="pf-card-label">Contribution</p><p>100%</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">BentoML &amp; Triton Serving</span>
+                                <span class="pf-card-period">2023.08 ~ 2024.09</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Served on-premises products using BentoML and Triton Inference Server; maintained 5 projects, 3 of which are ongoing.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">BentoML</span><span class="pf-tag">Triton Client</span><span class="pf-tag">Triton Inference Server</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Document Detection Model Enhancement</span>
+                                <span class="pf-card-period">2023.11 ~ 2024.09</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Improved performance and speed of a document detection model by lightweighting and adding multi-class classification. Supported ONNX and TensorRT export.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                                <p class="pf-card-label">Contribution</p><p>100%</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Zero-shot Document Classifier</span>
+                                <span class="pf-card-period">2023.06 ~ 2023.12</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Built a document embedding model that generalizes to unseen document types without per-task fine-tuning, reducing labeling overhead per project.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                                <p class="pf-card-label">Contribution</p><p>70% (two individuals)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">End-to-end Document OCR Model</span>
+                                <span class="pf-card-period">2023.06 ~ 2023.11</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Replaced the conventional two-stage detection-recognition pipeline with a single end-to-end model predicting text content and bounding boxes simultaneously. Benchmarked against popular detection and recognition baselines.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                                <p class="pf-card-label">Contribution</p><p>65% (three individuals)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Autoscan Model Serving</span>
+                                <span class="pf-card-period">2023.04 ~ 2023.05</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Trained a lightweight ResNet variant for real-time document detection, converted to TensorFlow.js, and deployed via WebGL for in-browser inference across multiple pharmacies — no server required.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">JavaScript</span><span class="pf-tag">PyTorch</span><span class="pf-tag">TensorFlow.js</span><span class="pf-tag">WebGL</span></div>
+                                <p class="pf-card-label">Contribution</p><p>100%</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">KEIT Text Analytic, Classifier, Clustering</span>
+                                <span class="pf-card-period">2022.03 ~ 2023.04</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Maintained a Java-based document analysis product; improved the document embedding model; implemented FastText classification handler, node-based load balancing server, and K-medoid text cloud generation.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Java (Spring)</span><span class="pf-tag">FastText</span><span class="pf-tag">Apache JMeter</span><span class="pf-tag">Postman</span></div>
+                                <p class="pf-card-label">Contribution</p><p>35–45% (3–4 members)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Open-domain Chat System Modeling</span>
+                                <span class="pf-card-period">2022.03 ~ 2023.04</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Built a daily-conversation chatbot using DialoGPT, KoGPT, and BART. Developed a Text-CLIP retrieval model. Implemented async token streaming via Uvicorn, WebSocket, and FastAPI.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span><span class="pf-tag">Hugging Face</span><span class="pf-tag">FastAPI</span><span class="pf-tag">WebSocket</span></div>
+                                <p class="pf-card-label">Contribution</p><p>75% (two individuals)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Document Extractive Summarization</span>
+                                <span class="pf-card-period">2022.06 ~ 2022.08</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Developed a KoBERT-based extractive summarization model for long documents using sentence n-grams to handle large sentence counts.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span><span class="pf-tag">Hugging Face</span></div>
+                                <p class="pf-card-label">Contribution</p><p>50% (two individuals)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Language Model Lightweighting</span>
+                                <span class="pf-card-period">2022.06 ~ 2022.12</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Reduced model size by sharing encoder-decoder weights in a seq2seq architecture; designed the model to support multiple tasks via mask switching. Outperformed conventional models on semantic tasks; adaptable for multi-modal (text-text, image-text) scenarios.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                                <p class="pf-card-label">Contribution</p><p>98% (two individuals)</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Text Augmentation using GAN (TESGAN)</span>
+                                <span class="pf-card-period">2022.01 ~ 2022.12</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Developed TESGAN — an unsupervised GAN that learns the text embedding space to overcome data memorization issues in supervised autoregressive text augmentation. Published as a research paper.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                                <p class="pf-card-label">Contribution</p><p>95% · <a href="https://arxiv.org/abs/2306.17181" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[paper]</a></p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Online Commercial Advertisement OCR</span>
+                                <span class="pf-card-period">2021.09 ~ 2021.12</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Evaluated OCR models trained on Korean text-in-wild and AI Hub data against Tesseract and ABBYY. Trained CRAFT and transformer-based models.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">OpenCV</span><span class="pf-tag">PyTorch</span><span class="pf-tag">Tesseract</span></div>
+                                <p class="pf-card-label">Contribution</p><p>100%</p>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">Document Inverted Indexing</span>
+                                <span class="pf-card-period">2021.09</span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>Built an inverted indexing program considering word frequency and lexicographic order; generates index within 3 seconds for 300,000 documents using StringBuffer.</p>
+                                <p class="pf-card-label">Tech Stack</p>
+                                <div class="pf-tags"><span class="pf-tag">Java</span></div>
+                                <p class="pf-card-label">Contribution</p><p>100%</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="portfolio_work">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Work</b></span>
-                        </p>
-                        <ul>
-                            <li>Kakao Healthcare, 2024.10. - 2025.04. (DS/IX, Student internship)</li>
-                            <ul>
-                                <li>Performed both PEFT and full training of a medical NER-specialized LLM, and deployed the model to multiple specialized medical centers using vLLM for inference.</li>
-                                <li>Built a GCP-based healthcare counselor chatbot by integrating RAG to provide accurate and context-aware health consultations.</li>
-                            </ul>
-                            <li>Lomin, 2023.04. - 2024.09. (ML team, Military service replacement)</li>
-                            <ul>
-                                <li>Trained a document-specialized LLM for document understanding tasks and deployed it on-premises to enterprise environments using TensorRT-LLM and TensorRT-LLM Backend for optimized inference.</li>
-                                <li>Deployed various deep learning models—including text detection, recognition, and classification—to multiple enterprises in on-premises environments using BentoML and Triton client.</li>
-                                <li>Customized YOLOv8 to improve the performance, speed, and robustness of the text detection model specifically for document images.</li>
-                                <li>Built a zero-shot document classification system by developing a document embedding model capable of generalizing to unseen document types without task-specific fine-tuning.</li>
-                                <li>Departed from the conventional two-stage OCR approach by designing and implementing an end-to-end pipeline that unifies text detection and recognition, resulting in enhanced management efficiency.</li>
-                                <li>Developed a lightweight Autoscan model capable of real-time prescription detection, and deployed it using TensorFlow.js for in-browser inference across multiple pharmacies without the need for server-side computation.</li>
-                            </ul>
-                            <li>IBRICKS, 2021.09. - 2023.04. (AI Tech, Military service replacement)</li>
-                            <ul>
-                                <li>Maintained and added new features to a document analysis product developed in Java, ensuring its stability and continuous improvement in functionality.</li>
-                                <li>Designed and implemented an open-domain chatbot system using models like GPT-2, DialoGPT, and BART prior to the rise of LLMs.</li>
-                                <li>Built a BERT-based extractive summarization model for long documents by identifying and extracting key sentences, enabling concise and relevant summaries.</li>
-                                <li>Reduced model size and complexity by replacing traditional sequence-to-sequence architecture with a shared encoder-decoder model, improving efficiency while maintaining performance.</li>
-                                <li>Developed TESGAN (Text Embedding Space GAN), an unsupervised GAN-based model that generates rich embedding space for text data augmentation, designed prior to the advent of LLMs.</li>
-                                <li>Developed an OCR model specialized for extracting text from online home shopping advertisement images.</li>
-                            </ul>
-                        </ul>
-                    </div>
-                    <div class="portfolio_researchContrib">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Research Contribution</b></span>
-                        </p>
-                        <ul>
-                            <li>2025 PC Member, Association for the Advancement of Artificial Intelligence (AAAI)</li>
-                            <li>2023, 2024 PC Member, Association for the Advancement of Artificial Intelligence (AAAI)</li>
-                            <li>2023 Industry Track Committee, Empirical Methods in Natural Language Processing (EMNLP)</li>
-                            <li>2023 PC Member, Empirical Methods in Natural Language Processing (EMNLP)</li>
-                            <li>2023 PC Member, Association for Computational Linguistics (ACL)</li>
-                        </ul>
-                    </div>
-                    <div class="portfolio_publication">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Publication</b></span>
-                        </p>
-                        <ul>
-                            <li>[P8] Geun Hyeong Lee*, <b>Jun-Min Lee</b>*, Kihoon Sung, Ji Young Min, Jae Won Jang, Eun Jin Ahn, Yun Ah Baek, Hyun Jung Kim, Ji Yeon Park, Min Young An, Yu Ri Cho, Hye Yeong Kim, Dosang Cho, Choongki Kim, Hong Seok Park, Kyung-Jae Lee, Joo Heung Yoon, Hyo Jung Kim, and Soo-Yong Shin (2025), Large Language Model-based Named Entity Recognition for Unstructured Clinical Test Reports: Multi-centre Implementation and Validation, <i>Preprint</i> (*: equal contribution). (under review)</li>
-                            <li>[P7] <b>Jun-Min Lee</b>, Meong Hi Son, and Edward Choi (2026), H-AdminSim: A Multi-Agent Simulator for Realistic Hospital Administrative Workflows with FHIR Integration, <i>Preprint</i>. <a href="https://arxiv.org/abs/2602.05407" target="_blank">[pdf]</a></li>
-                            <li>[C2] Jiyoung Lee*, Seungho Kim*, Jieun Han, <b>Jun-Min Lee</b>, Kitaek Kim, Alice Oh, and Edward Choi (2025), Trans-EnV: A Framework for Evaluating the Linguistic Robustness of LLMs Against English Varieties, <i>Conference on Neural Information Processing System (NeurIPS)</i> (*: equal contribution). <a href="https://arxiv.org/abs/2505.20875" target="_blank">[pdf]</a></li>
-                            <li>[P6] <b>Jun-Min Lee</b> and Tae-Bin Ha (2023), Unsupervised Text Embedding Space Generation Using Generative Adversarial Networks for Text Synthesis, <i>Northern European Journal of Language Technology (NEJLT), 9(1)</i>. <a href="https://arxiv.org/abs/2306.17181" target="_blank">[pdf]</a></li>
-                            <li>[P5] <b>Jun-Min Lee</b>*, Hyun-Soo Kim*, Tae-Bin Ha, Hojin Park, and Youngmin Ahn (2021), Open-Domain Dialogue Generation using Pre-trained Language Models in Korean, <i>Conference of Korea Computer Congress (KCC)</i> (*: equal contribution). <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE11113420" target="_blank">[pdf]</a></li>
-                            <li>[P4] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2022), Laser structural training, artificial intelligence-based acoustic emission localization and structural noise signal distinguishment in a thick FCEV fuel tank, <i>International Journal of Hydrogen Energy (IJHE), 47(6), 4236-4254</i>. <a href="https://www.sciencedirect.com/science/article/abs/pii/S036031992104372X" target="_blank">[pdf]</a></li>
-                            <li>[P3] <b>Jun-Min Lee</b>, and Jung-Ryul Lee (2021). Acoustic emission localization on composite hydrogen storage tank and feature analysis of acoustic emission and noise signals. <i>Conference of The Korean Society for Aeronautical and Space Sciences (KSAS)</i>. <a href="https://www.dbpia.co.kr/journal/articleDetail?nodeId=NODE10613500" target="_blank">[pdf]</a></li>
-                            <li>[C1] Yunshil Choi, <b>Jun-Min Lee</b> and Jung-Ryul Lee (2020), Nondestructive Testing and Structural Health Monitoring for Pressure Vessels of FCEV using Guided-Wave Ultrasonic Propagation Imager, <i>Conference of The Korean Society for Composite Materials (KSCM)</i>.</li>
-                            <li>[P2] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2020), Structural Health Monitoring of Hydrogen Pressure Vessel using Artificial Intelligence, <i>Conference of The Korean Society for Nondestructive Testing (KSNT)</i> (<b>Award</b>).</li>
-                            <li>[P1] <b>Jun-Min Lee</b>, Yunshil Choi, and Jung-Ryul Lee (2019), Acoustic Emission Simulation using Pulse Laser-induced Wave with Considering Arrival Time for Quantification, <i>The 1st Korea-China-Japan Joint Symposium on Composite Materials</i>.</li>
-                        </ul>
-                    </div>
-                    <div class="portfolio_project">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Work Projects</b></span>
-                        </p>
-                        <ul>
-                            <li><span style="font-size: 18px;"><b>LLM Training &amp; Serving (2023.12 ~ 2024.09)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: I train LLMs for chat and document understanding. This involves using various training methodologies and the latest LLM models, including cutting-edge PEFT techniques like LoRA, DoRA, and MoRa. I also conduct performance experiments on these models. To serve the trained models on-premises, I use tools such as TensorRT-LLM, TensorRTLLM-Backend, vLLM, and ollama.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch, TensorRT-LLM, TensorRTLLM-Backend, vLLM, ollama, Deepspeed</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Full-parameter tuning of LLM with AMP and deepspeed.</li>
-                                    <li>Cutting-edge PEFT application.</li>
-                                    <li>LLM serving via TensorRT-LLM, TensorRTLLM-Backend, vLLM, and ollam.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>BentoML &amp; Triton Serving (2023.08 ~ 2024.09)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: BentoML and Triton Inference Server are used to serve products in on-premises. Additionally, I continuously perform maintenance to improve model performance and meet customer requirements.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: I managed five projects, three of which are still ongoing.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>:Python, BentoML, Triton Client, Trition Inference Server</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>BentoML serving.</li>
-                                    <li>Trition inference server serving.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Document Detection Model Enhancement (2023.11 ~ 2024.09)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project was initiated to improve the performance of the documents detection model. To enhance speed and performance, I created a custom model by making the detection model more lightweight. Additionally, I improved and implemented the model to classify and predict various classes.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Improved speed.</li>
-                                    <li>Improved performance.</li>
-                                    <li>Supported various model transformations including ONNX and TensorRT.</li>
-                                </ul>
-                            </ul><br>
-                            <!-- <li><span style="font-size: 18px;"><b>Lina (2024.01 ~ present)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>MRAS (2024.03 ~ present)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>보건연구원 (2023.11 ~ present)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Jeekim (2023.09 ~ present)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                            </ul><br> -->
-                            <li><span style="font-size: 18px;"><b>Zero-shot Document Classifier (2023.06 ~ 2023.12)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project was initiated to reduce the effort of training for each document every time document classification is performed for each business.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 70% (Two individuals involved)</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Trained model.</li>
-                                    <li>Quantitative evaluation (Contribution: 40%).</li>
-                                </ul>
-                            </ul><br>
-                            <!-- <li><span style="font-size: 18px;"><b>Hanwha Aerospace (2023.08 ~ 2023.09)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: It was a project to extract table data from English documents. We developed an end-to-end model that takes document images and outputs table data.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 30% (Two individuals involved)</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Trained model (20%).</li>
-                                    <li>Post-processing of model results (Contribution: 80%)</li>
-                                </ul>
-                            </ul><br> -->
-                            <li><span style="font-size: 18px;"><b>End-to-end Document OCR Model Development (2023.06 ~ 2023.11)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: For document OCR models, the process typically involves two stages: detection and recognition. These stages are interdependent, leading to maintenance challenges and instability in training. To address this, we developed an end-to-end model capable of predicting both the text content and its bounding boxes in documents. We then compared the quantitative performance of this model at each stage with that of several popular detection and recognition models.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 65% (Three individuals involved) </li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Developed end-to-end document OCR model (Contribution: 50%)</li>
-                                    <li>Quantitative evaluation of the developed model compared to several baselines (Contribution: 60%).</li>
-                                    <li>Wrote technical report.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Autoscan Model Serving (2023.04 ~ 2023.05)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: Autoscan is a technology that automatically takes a photo when a document enters the camera scanner. To achieve this, a model is needed to determine whether a document has been inserted, and this model must be lightweight enough to run on the frontend. I modified ResNet to train a lightweight model and converted the PyTorch model to TensorFlow.js to serve it using WebGL in JavaScript.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, JavaScript, PyTorch, Tensorflow.js, WebGL</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Collected over 5,000 document images and developed augmentation logic to mimic real scanning environments.</li>
-                                    <li>Created and trained a custom model in PyTorch and converted it to TensorFlow.js.</li>
-                                    <li>Developed a smoothing logic in JavaScript to determine scan status, prioritizing the reduction of false positives over false negatives.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>KEIT Text Analytic, Classifier, Clustering (2022.03 ~ 2023.04)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: Maintained a document analysis product built in Java and improved the performance of the document embedding model.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 35 ~ 45% (This project involved ongoing maintenance of the company's product and 3 ~ 4 memebers involved).</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Java (Spring), Postman, Apache JMeter, FastText</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Improved document embedding model performance and evaluated the model via text cloud project.</li>
-                                    <li>Implemented a document classification handler using FastText (Contribution: 80%).</li>
-                                    <li>Developed API communication using Java Spring and performed testing with Postman (Contribution: 20%).</li>
-                                    <li>Developed a server capable of node-based load distribution for multiple requests (Contribution: 45%).</li>
-                                    <li>Conducted server load testing using Apache JMeter (Contribution: 30%).</li>
-                                    <li>Created category-specific text clouds through K-medoid model training (Contribution: 50%).</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Open-domain Chat System Modeling (2022.03 ~ 2023.04)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project was to build a daily conversation chatbot model using anonymized Korean data. For generative models, we used DialoGPT, GPT-2, and BART as baselines and I was responsible for training the DialoGPT and KoGPT models. Additionally, inspired by the CLIP model, I developed a Text-CLIP model utilizing embeddings of sequential text and this model retrieves appropriate responses from a database based on previous sentences.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 75% (Two individuals involved).</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch, Hugging Face, Uvicorn, Websocket, FastAPI</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Built a generative chatbot based on DialoGPT and KoGPT.</li>
-                                    <li>Demonstrated the developed generative chatbot model at a public institution and continued to collect additional chat log data provided by the institution for further training (Contribution: 50%).</li>
-                                    <li>Developed the Text-clip model and created a chatbot that provides appropriate responses from a database.</li>
-                                    <li>Implemented token streaming using Uvicorn, WebSocket, and FastAPI in an asynchronous manner, allowing multiple chatbot models to generate sentences simultaneously in real-time.</li>
-                                    <li>Performed morphological analysis to convert data into the '해요체' (polite informal) form and used it for training the chatbot (Contribution: 50%).</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Document Extractive Summarization (2022.06 ~ 2022.08)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project was conducted at the request of a public institution. To extract summaries, we trained models and used KoBERT and Sentence BERT (SBERT) as baselines for experimentation. Specifically, I developed a model for extractive summarization using KoBERT. Given the large number of sentences in each document, I employed the sentence n-grams technique to address this challenge.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 50% (Two individuals involved)</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch, Hugging Face</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Developed KoBERT-based extractive summarization model.</li>
-                                    <li>Developed a large-scale document summarization technique based on n-grams.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Language Model Lightweighting (2022.06 ~ 2022.12)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: During the development of an open-domain chat model, I conducted language model lightweighting to enhance training resource efficiency and scalability for various auxiliary tasks. I achieved lightweighting by sharing weights between the encoder and decoder of the existing seq2seq-based model. Additionally, I designed the model to perform various tasks by simply changing its masks. The resulting model demonstrated exceptional performance in semantic tasks compared to conventional models, and it was versatile for multi-modal applications such as text-text and image-text scenarios.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 98% (Two individuals involved)</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Implemented and trained custom model.</li>
-                                    <li>Quantitative and qualitative evaluation.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Text Augmentation using GAN (2022.01 ~ 2022.12)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: Before the emergence of LLMs, I developed a model for text data augmentation. At that time, text augmentation techniques relied on supervised learning-based autoregressive methods to generate sentences. However, this approach led to data memorization, where the model simply reproduced the training data. To address this issue, I introduced an unsupervised GAN approach to learn the text embedding space and convert it into sentences.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 95% (Two individuals involved)</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, PyTorch</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Paper</span>: <a href="https://arxiv.org/abs/2306.17181" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">https://arxiv.org/abs/2306.17181</a></li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Developed and trained a model for idea validation.</li>
-                                    <li>Wrote a research paper.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Online Commercial Advertisement OCR (2021.09 ~ 2021.12)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: This project evaluated the performance of an online advertising OCR model trained on publicly available Korean text-in-the-wild data and open document OCR data sources such as AI Hub. The trained model's results were compared with major OCR services like Tesseract and ABBYY.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Python, OpenCV, PyTorch, Tesseract</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Performance</span></li>
-                                <ul>
-                                    <li>Processed text-in-wild &amp; document OCR data using OpenCV.</li>
-                                    <li>Trained and tested OCR models based on CRAFT and transformers.</li>
-                                    <li>Tested various commercial OCR platforms.</li>
-                                </ul>
-                            </ul><br>
-                            <li><span style="font-size: 18px;"><b>Document Inverted Indexing (2021.09 ~ 2021.09)</b></span></li>
-                            <ul>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Description</span>: I developed an inverted indexing program that considers word frequency and lexicographic order in documents. Using StringBuffer, I implemented the program to generate the inverted index within 3 seconds for 300,000 documents.</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Contribution</span>: 100%</li>
-                                <li><span class="highlight" style="color: rgb(0, 3, 206);">Tech Stacks</span>: Java</li>
-                            </ul>
-                        </ul>
-                    </div>
-                    <div class="portfolio_individual_project">
-                        <p style="border-bottom: solid rgb(199, 199, 199) 1.5px;">
-                            <span style="font-size: 20px;"><b>Individual Projects</b></span>
-                        </p>
-                        <span>* For more details, please refer to <a href="https://github.com/ljm565" target="_blank"><span class="highlight" style="color: rgb(0, 3, 206);">GitHub</span></a>.</span>
-                        <ul>
-                            <li><b>UnivLT</b> <a href="https://github.com/ljm565/UnivLT" target="_blank">[GitHub]</a></li>
-                            <ul>
-                                <li>A modular training framework for easily fine-tuning open-source LLMs. Supports instruction tuning, full fine-tuning, LoRA, QLoRA, and training strategies like DDP, FSDP, and gradient checkpointing. Enables autoregressive pre-training and SFT-based instruction tuning with simple model wrapper integration.</li>
-                                <li>Tools Used: Python, PyTorch</li>
-                            </ul>
-                            <li><b>PatientSim-pkg</b> <a href="https://pypi.org/project/patientsim/" target="_blank">[PyPI]</a> <a href="https://github.com/ljm565/patientsim-pkg" target="_blank">[GitHub]</a></li>
-                            <ul>
-                                <li>This is a package project that allows you to set up a patient persona and run simulations in emergency department and outpatient scenarios based on a built patient agent.</li>
-                                <li>Tools Used: Python, Poetry</li>
-                            </ul>
-                            <li><b>H-AdminSim</b> <a href="https://pypi.org/project/h-adminsim/" target="_blank">[PyPI]</a> <a href="https://github.com/ljm565/H-AdminSim" target="_blank">[GitHub]</a></li>
-                            <ul>
-                                <li>H-AdminSim, a simulation framework for evaluating LLM-based hospital administrative agents on patient intake and appointment scheduling across multi-hospital, FHIR-integrated environments.</li>
-                                <li>Tools Used: Python, Poetry</li>
-                            </ul>
-                        </ul>
+
+                    <!-- Individual Projects -->
+                    <div class="pf-section">
+                        <h2 class="pf-section-title">Individual Projects</h2>
+                        <p class="pf-note">For more details, see <a href="https://github.com/ljm565" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">GitHub</a>.</p>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">UnivLT</span>
+                                <span class="pf-card-period"><a href="https://github.com/ljm565/UnivLT" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[GitHub]</a></span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>A modular training framework for fine-tuning open-source LLMs. Supports instruction tuning, full fine-tuning, LoRA, QLoRA, DDP, FSDP, and gradient checkpointing.</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">PyTorch</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">PatientSim-pkg</span>
+                                <span class="pf-card-period">
+                                    <a href="https://pypi.org/project/patientsim/" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[PyPI]</a>
+                                    <a href="https://github.com/ljm565/patientsim-pkg" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"> [GitHub]</a>
+                                </span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>A package for setting up patient personas and running simulations in emergency department and outpatient scenarios using a built patient agent.</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">Poetry</span></div>
+                            </div>
+                        </div>
+
+                        <div class="pf-card">
+                            <div class="pf-card-header">
+                                <span class="pf-card-title">H-AdminSim</span>
+                                <span class="pf-card-period">
+                                    <a href="https://pypi.org/project/h-adminsim/" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);">[PyPI]</a>
+                                    <a href="https://github.com/ljm565/H-AdminSim" target="_blank" onmouseover="colorOn(this);" onmouseout="colorOff(this);"> [GitHub]</a>
+                                </span>
+                            </div>
+                            <div class="pf-card-body">
+                                <p>A simulation framework for evaluating LLM-based hospital administrative agents on patient intake and appointment scheduling in multi-hospital, FHIR-integrated environments.</p>
+                                <div class="pf-tags"><span class="pf-tag">Python</span><span class="pf-tag">Poetry</span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

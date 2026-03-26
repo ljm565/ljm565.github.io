@@ -243,6 +243,170 @@ pre .annot{
 
 
 
+/* ===== Portfolio redesign ===== */
+/* Hero */
+.pf-hero {
+    display: flex;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 48px 0 32px;
+}
+.pf-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+}
+.pf-hero-text { flex: 1; }
+.pf-name {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-tagline {
+    font-size: 14px;
+    opacity: 0.55;
+    margin: 0 0 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-lang-link {
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+/* Section */
+.pf-section { margin: 52px 0 0; }
+.pf-section-title {
+    font-size: 19px;
+    font-weight: 600;
+    font-family: 'Noto Sans KR', sans-serif;
+    border-bottom: 2px solid rgba(128,128,128,0.25);
+    padding-bottom: 8px;
+    margin: 0 0 20px;
+}
+
+/* Tag pills */
+.pf-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; }
+.pf-tag {
+    padding: 4px 12px;
+    border: 1px solid rgba(128,128,128,0.35);
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-tag--hl {
+    background: rgba(100,130,255,0.10);
+    border-color: rgba(100,130,255,0.45);
+}
+
+/* Contact row */
+.pf-contact-list { list-style: none; padding: 0; margin: 0; }
+.pf-contact-list li { margin-bottom: 6px; font-size: 15px; }
+
+/* Timeline */
+.pf-timeline { padding-left: 24px; position: relative; margin-top: 8px; }
+.pf-timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px; top: 8px; bottom: 0;
+    width: 2px;
+    background: rgba(128,128,128,0.2);
+}
+.pf-timeline-item { position: relative; margin-bottom: 28px; }
+.pf-timeline-dot {
+    position: absolute;
+    left: -21px; top: 5px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(128,128,128,0.45);
+    border: 2px solid rgba(128,128,128,0.7);
+}
+.pf-timeline-period {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-bottom: 2px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-timeline-title {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-timeline-bullets {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+    font-size: 14px;
+    line-height: 170%;
+}
+
+/* Cards */
+.pf-card {
+    border: 1px solid rgba(128,128,128,0.18);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.pf-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.pf-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.pf-card-period {
+    font-size: 12px;
+    opacity: 0.5;
+    white-space: nowrap;
+}
+.pf-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+    margin: 12px 0 4px;
+}
+.pf-card-body { font-size: 14px; line-height: 170%; }
+.pf-card-body ul { margin: 4px 0; padding-left: 18px; }
+
+/* Publication list */
+.pf-pub-list { list-style: none; padding: 0; margin: 0; }
+.pf-pub-list li {
+    padding: 8px 0 8px 0;
+    border-bottom: 1px solid rgba(128,128,128,0.12);
+    font-size: 14px;
+    line-height: 170%;
+}
+.pf-pub-list li:last-child { border-bottom: none; }
+.pf-pub-num {
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    opacity: 0.5;
+    margin-right: 4px;
+}
+
+/* Individual project links */
+.pf-proj-links { font-size: 13px; opacity: 0.7; margin-left: 8px; }
+.pf-note { font-size: 13px; opacity: 0.65; margin-bottom: 16px; }
+
+/* Responsive */
+@media(max-width: 750px) {
+    .pf-hero { flex-direction: column; align-items: center; text-align: center; }
+    .pf-avatar { width: 90px; height: 90px; }
+    .pf-card-header { flex-direction: column; }
+}
+
+/* Legacy portfolio classes — kept for backward compat but unused by new layout */
 #container .portfolio_name{
     display: block;
     font-size: 40px;
@@ -316,17 +480,61 @@ pre .annot{
 }
 
 
-/* @media(min-width: 1500px){ 
+/* Pagination strip (5-item prev/next) */
+.pageTurnerStrip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 0;
+}
+.ptsItem {
+    padding: 5px 14px;
+    border: 1px solid rgba(128,128,128,0.3);
+    border-radius: 20px;
+    font-size: 13px;
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ptsCurrent {
+    background-color: rgba(128,128,128,0.18);
+    font-weight: 600;
+    border-color: rgba(128,128,128,0.5);
+}
+
+/* License footer */
+.licenseFooter {
+    margin: 8% auto;
+    width: 720px;
+    padding: 20px 0;
+    border-top: solid rgb(199, 199, 199) 1.5px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 180%;
+    opacity: 0.8;
+}
+.licenseFooter img {
+    display: block;
+    margin: 0 auto 10px;
+}
+
+/* @media(min-width: 1500px){
     #content, .tag, .pageTurner, #disqus_thread{
         margin: 8% 30%;
-    } 
+    }
 } */
 
-@media(max-width: 1000px){ 
+@media(max-width: 1000px){
     #content, .tag, .pageTurner, #disqus_thread{
         margin: 8% 10%;
         width: 80%;
-    } 
+    }
+    .licenseFooter {
+        margin: 8% 10%;
+        width: 80%;
+    }
 }
 
 /* for mobile */
