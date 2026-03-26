@@ -430,6 +430,8 @@ function darkMode(self){
         $('#menuRelated .bigMenu').css('background-color', 'rgb(22, 22, 22)');
         $('a').css('color', 'white');
         $('.highlight').css('color', 'rgb(159, 204, 255)');
+        $('#scrollButtons button').css('background-color', 'rgb(80, 80, 80)');
+        $('#scrollButtons button').css('color', 'white');
         hoveringOn(self);
         // $('#modeButton').on('touchstart', function(){
         //     // hoveringOff(self);
@@ -451,6 +453,8 @@ function darkMode(self){
         $('#menuRelated .bigMenu').css('background-color', 'rgb(233, 233, 233)');
         $('a').css('color', 'black');
         $('.highlight').css('color', 'rgb(0, 3, 206)');
+        $('#scrollButtons button').css('background-color', 'rgb(224, 224, 224)');
+        $('#scrollButtons button').css('color', 'black');
         hoveringOn(self);
         // $('#modeButton').on('touchstart', function(){
         //     alert("off");
@@ -581,6 +585,24 @@ function injectLicenseFooter() {
     if (anchor) anchor.after(footer);
 }
 
+function scrollToTop() {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function scrollToBottom() {
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+
+function injectScrollButtons() {
+    if (document.getElementById('scrollButtons')) return;
+    var div = document.createElement('div');
+    div.id = 'scrollButtons';
+    div.innerHTML =
+        '<button type="button" onclick="scrollToTop()" title="맨 위로">▲</button>'
+        + '<button type="button" onclick="scrollToBottom()" title="맨 아래로">▼</button>';
+    document.body.appendChild(div);
+}
+
 function pjaxPage(url, url2=false){
     $.ajax({
         url: url,
@@ -650,6 +672,7 @@ function pushFunc(){
         reload();
     };
     document.addEventListener('DOMContentLoaded', function(){
+        injectScrollButtons();
         injectPagination();
         injectLicenseFooter();
     });
