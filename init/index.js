@@ -576,7 +576,7 @@ function injectLicenseFooter() {
         '<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">'
         + '<img alt="CC BY-NC-SA 4.0" style="border-width:0;height:31px;" '
         + 'src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"></a>'
-        + '<p>이 저작물은 <strong>Jun-Min Lee</strong>가 작성하였으며 '
+        + '<p>이 저작물은 <strong>여행 초짜</strong>가 작성하였으며 '
         + '<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank"'
         + ' onmouseover="colorOn(this);" onmouseout="colorOff(this);">'
         + 'Creative Commons BY-NC-SA 4.0</a> 라이선스를 따릅니다.</p>';
