@@ -320,7 +320,8 @@ const ARTICLE_GROUPS = (function() {
         // Japan Sapporo 2025
         makeGroup([
             ['japan_sapporo_2025_1.html', '삿포로 2025 (1)'],
-            ['japan_sapporo_2025_2.html', '홋카이도 비에이 여행']
+            ['japan_sapporo_2025_2.html', '홋카이도 비에이 여행'],
+            ['japan_sapporo_2025_3.html', '오타루 골목골목 디저트 투어']
         ]),
         // Kazakhstan
         makeGroup([
