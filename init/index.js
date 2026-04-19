@@ -319,9 +319,10 @@ const ARTICLE_GROUPS = (function() {
         ]),
         // Japan Sapporo 2025
         makeGroup([
-            ['japan_sapporo_2025_1.html', '삿포로 2025 (1)'],
+            ['japan_sapporo_2025_1.html', '1년만에 다시 찾은 삿포로'],
             ['japan_sapporo_2025_2.html', '홋카이도 비에이 여행'],
-            ['japan_sapporo_2025_3.html', '오타루 골목골목 디저트 투어']
+            ['japan_sapporo_2025_3.html', '오타루 골목골목 디저트 투어'],
+            ['japan_sapporo_2025_4.html', '조잔케이 스이잔테이 료칸']
         ]),
         // Kazakhstan
         makeGroup([
