@@ -324,6 +324,10 @@ const ARTICLE_GROUPS = (function() {
             ['japan_sapporo_2025_3.html', '오타루 골목골목 디저트 투어'],
             ['japan_sapporo_2025_4.html', '조잔케이 스이잔테이 료칸']
         ]),
+        // Japan Oita
+        makeGroup([
+            ['japan_oita1.html', '유후인 료칸, 먹거리 정복'],
+        ]),
         // Kazakhstan
         makeGroup([
             ['kazakhstan1.html', '카자흐스탄 여행 준비'],
